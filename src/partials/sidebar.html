@@ -9,12 +9,8 @@
   >
     <a href="index.html">
       <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
-        <img class="dark:hidden" src="./images/logo/logo.svg" alt="Logo" />
-        <img
-          class="hidden dark:block"
-          src="./images/logo/logo-dark.svg"
-          alt="Logo"
-        />
+        <img class="dark:hidden w-40" src="./images/logo/SMILES LOGISTICS LOGO DARK.PNG" alt="Logo" />
+        <img class="hidden dark:block w-40" src="./images/logo/SMILES LOGISTICS LOGO LIGHT.PNG" alt="Logo"/>
       </span>
 
       <img
@@ -64,13 +60,13 @@
           <!-- Menu Item Dashboard -->
           <li>
             <a
-              href="#"
-              @click.prevent="selected = (selected === 'Dashboard' ? '':'Dashboard')"
+              href="index.html"
+              @click="selected = (selected === 'Dashboard' ? '':'Dashboard')"
               class="menu-item group"
-              :class=" (selected === 'Dashboard') || (page === 'ecommerce' || page === 'analytics' || page === 'marketing' || page === 'crm' || page === 'stocks') ? 'menu-item-active' : 'menu-item-inactive'"
+              :class=" (selected === 'Dashboard') || (page === 'dashboard' || page === 'analytics' || page === 'marketing' || page === 'crm' || page === 'stocks') ? 'menu-item-active' : 'menu-item-inactive'"
             >
               <svg
-                :class="(selected === 'Dashboard') || (page === 'ecommerce' || page === 'analytics' || page === 'marketing' || page === 'crm' || page === 'stocks') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+                :class="(selected === 'Dashboard') || (page === 'dashboard' || page === 'analytics' || page === 'marketing' || page === 'crm' || page === 'stocks') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -92,9 +88,47 @@
                 Dashboard
               </span>
 
+            </a>
+
+          
+          <!-- Menu Item Dashboard -->
+          <!-- Menu Item Business Management -->
+          <li>
+            <a
+              href="#"
+              @click.prevent="selected = (selected === 'Business Management' ? '':'Business Management')"
+              class="menu-item group"
+              :class=" (selected === 'Business Management') || (page === 'Users' || page === 'formLayout' || page === 'proFormElements' || page === 'proFormLayout') ? 'menu-item-active' : 'menu-item-inactive'"
+            >
+            
+            <svg
+            :class="(selected === 'Business Management') || (page === 'Users' || page === 'formLayout' || page === 'proFormElements' || page === 'proFormLayout') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <!-- Briefcase Handle -->
+            <path 
+              fill-rule="evenodd" 
+              clip-rule="evenodd" 
+              d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V6H18C19.6569 6 21 7.34315 21 9V18C21 19.6569 19.6569 21 18 21H6C4.34315 21 3 19.6569 3 18V9C3 7.34315 4.34315 6 6 6H9V4ZM10.5 5.5V6H13.5V5.5H10.5ZM4.5 9V11H19.5V9C19.5 8.17157 18.8284 7.5 18 7.5H6C5.17157 7.5 4.5 8.17157 4.5 9ZM19.5 12.5H4.5V18C4.5 18.8284 5.17157 19.5 6 19.5H18C18.8284 19.5 19.5 18.8284 19.5 18V12.5ZM10.75 14.5C10.75 14.0858 11.0858 13.75 11.5 13.75H12.5C12.9142 13.75 13.25 14.0858 13.25 14.5V15.5C13.25 15.9142 12.9142 16.25 12.5 16.25H11.5C11.0858 16.25 10.75 15.9142 10.75 15.5V14.5Z" 
+              fill="currentColor"
+            />
+          </svg>
+          
+
+              <span
+                class="menu-item-text"
+                :class="sidebarToggle ? 'lg:hidden' : ''"
+              >
+              Business Management
+              </span>
+
               <svg
-                class="menu-item-arrow"
-                :class="[(selected === 'Dashboard') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
+                class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                :class="[(selected === 'Business Management') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
@@ -114,7 +148,7 @@
             <!-- Dropdown Menu Start -->
             <div
               class="overflow-hidden transform translate"
-              :class="(selected === 'Dashboard') ? 'block' :'hidden'"
+              :class="(selected === 'Business Management') ? 'block' :'hidden'"
             >
               <ul
                 :class="sidebarToggle ? 'lg:hidden' : 'flex'"
@@ -122,18 +156,314 @@
               >
                 <li>
                   <a
-                    href="index.html"
+                    href="users.html"
                     class="menu-dropdown-item group"
-                    :class="page === 'ecommerce' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    :class="page === 'Users' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
                   >
-                    eCommerce
+                    All Businesses
                   </a>
                 </li>
               </ul>
             </div>
             <!-- Dropdown Menu End -->
           </li>
-          <!-- Menu Item Dashboard -->
+
+          <!-- Business Management Ends -->
+
+          <!-- Menu Item Business and Invoices -->
+          <li>
+            <a
+              href="#"
+              @click.prevent="selected = (selected === 'Business and Invoices' ? '':'Business and Invoices')"
+              class="menu-item group"
+              :class=" (selected === 'Business and Invoices') || (page === 'Users') ? 'menu-item-active' : 'menu-item-inactive'"
+            >
+              <svg
+                :class="(selected === 'Business and Invoices') || (page === 'Users') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path 
+                fill-rule="evenodd" 
+                clip-rule="evenodd" 
+                d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V6H18C19.6569 6 21 7.34315 21 9V18C21 19.6569 19.6569 21 18 21H6C4.34315 21 3 19.6569 3 18V9C3 7.34315 4.34315 6 6 6H9V4ZM10.5 5.5V6H13.5V5.5H10.5ZM4.5 9V11H19.5V9C19.5 8.17157 18.8284 7.5 18 7.5H6C5.17157 7.5 4.5 8.17157 4.5 9ZM19.5 12.5H4.5V18C4.5 18.8284 5.17157 19.5 6 19.5H18C18.8284 19.5 19.5 18.8284 19.5 18V12.5ZM10.75 14.5C10.75 14.0858 11.0858 13.75 11.5 13.75H12.5C12.9142 13.75 13.25 14.0858 13.25 14.5V15.5C13.25 15.9142 12.9142 16.25 12.5 16.25H11.5C11.0858 16.25 10.75 15.9142 10.75 15.5V14.5Z" 
+                fill="currentColor"
+              />
+              </svg>
+
+              <span
+                class="menu-item-text"
+                :class="sidebarToggle ? 'lg:hidden' : ''"
+              >
+              Business and Invoices
+              </span>
+
+              <svg
+                class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                :class="[(selected === 'Business and Invoices') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
+                  stroke=""
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+
+            <!-- Dropdown Menu Start -->
+            <div
+              class="overflow-hidden transform translate"
+              :class="(selected === 'Business and Invoices') ? 'block' :'hidden'"
+            >
+              <ul
+                :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9"
+              >
+                <li>
+                  <a
+                    href="users.html"
+                    class="menu-dropdown-item group"
+                    :class="page === 'Users' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                  >
+                    SAAS Pricing Plans
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- Dropdown Menu End -->
+          </li>
+
+          <!-- Business and Invoices Ends -->
+
+           <!-- Menu Item Multitenancy -->
+           <li>
+            <a
+              href="#"
+              @click.prevent="selected = (selected === 'Settings' ? '':'Settings')"
+              class="menu-item group"
+              :class=" (selected === 'Settings') || (page === 'Settings') ? 'menu-item-active' : 'menu-item-inactive'"
+            >
+            <svg
+            :class="(selected === 'Settings') || (page === 'Settings') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currenColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            </svg>
+            
+          
+
+
+              <span
+                class="menu-item-text"
+                :class="sidebarToggle ? 'lg:hidden' : ''"
+              >
+              Multitenancy Setup
+              </span>
+
+              <svg
+                class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                :class="[(selected === 'Settings') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
+                  stroke=""
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+
+            <!-- Dropdown Menu Start -->
+            <div
+              class="overflow-hidden transform translate"
+              :class="(selected === 'Settings') ? 'block' :'hidden'"
+            >
+              <ul
+                :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9"
+              >
+                <li>
+                  <a
+                    href="settings.html"
+                    class="menu-dropdown-item group"
+                    :class="page === 'Users' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                  >
+                    Settings
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- Dropdown Menu End -->
+          </li>
+
+          <!-- Multitenancy Ends -->
+
+            <!-- Menu Item Financials -->
+            <li>
+              <a
+                href="#"
+                @click.prevent="selected = (selected === 'Financials' ? '':'Financials')"
+                class="menu-item group"
+                :class=" (selected === 'Financials') || (page === 'Users') ? 'menu-item-active' : 'menu-item-inactive'"
+              >
+              <svg
+              :class="(selected === 'Financials') || (page === 'Users') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"           >
+              <!-- Document Shape -->
+              <path
+                fill-rule="evenodd" clip-rule="evenodd" d="M6 2C5.44772 2 5 2.44772 5 3V21C5 21.5523 5.44772 22 6 22H18C18.5523 22 19 21.5523 19 21V8.41421C19 8.149 18.8946 7.89464 18.7071 7.70711L14.2929 3.29289C14.1054 3.10536 13.851 3 13.5858 3H6ZM7 4H13V8H17V20H7V4Z"
+                fill="currentColor"/>
+              
+              <!-- Dollar Sign ($) -->
+              <path
+                d="M12 16C10.8954 16 10 15.1046 10 14H8C8 16.2091 9.79086 18 12 18V20H14V18.4142C15.1652 18.149 16 17.0609 16 15.8284C16 14.4927 14.6569 13.5 13 13.5H12C11.4477 13.5 11 13.0523 11 12.5C11 11.9477 11.4477 11.5 12 11.5H13C14.1046 11.5 15 12.3954 15 13.5H17C17 11.2909 15.2091 9.5 13 9.5V8H11V9.58579C9.83481 9.85098 9 10.9391 9 12.1716C9 13.5073 10.3431 14.5 12 14.5H13C13.5523 14.5 14 14.9477 14 15.5C14 16.0523 13.5523 16.5 13 16.5H12Z" fill="currentColor"/>
+            </svg>
+                <span
+                  class="menu-item-text"
+                  :class="sidebarToggle ? 'lg:hidden' : ''"
+                >
+                Financials
+                </span>
+  
+                <svg
+                  class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                  :class="[(selected === 'Financials') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
+                    stroke=""
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </a>
+  
+              <!-- Dropdown Menu Start -->
+              <div
+                class="overflow-hidden transform translate"
+                :class="(selected === 'Financials') ? 'block' :'hidden'"
+              >
+                <ul
+                  :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                  class="flex flex-col gap-1 mt-2 menu-dropdown pl-9"
+                >
+                  <li>
+                    <a
+                      href="users.html"
+                      class="menu-dropdown-item group"
+                      :class="page === 'Revenue' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    >
+                      Revenue
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <!-- Dropdown Menu End -->
+            </li>
+  
+            <!-- Financials Ends -->
+
+              <!-- Menu Item Miscellanious -->
+              <li>
+                <a
+                  href="#"
+                  @click.prevent="selected = (selected === 'Miscellanious' ? '':'Miscellanious')"
+                  class="menu-item group"
+                  :class=" (selected === 'Miscellanious') || (page === 'Users') ? 'menu-item-active' : 'menu-item-inactive'"
+                >
+                <svg
+                :class="(selected === 'Miscellanious') || (page === 'Users') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"           >
+                <!-- Document Shape -->
+                <path
+                  fill-rule="evenodd" clip-rule="evenodd" d="M6 2C5.44772 2 5 2.44772 5 3V21C5 21.5523 5.44772 22 6 22H18C18.5523 22 19 21.5523 19 21V8.41421C19 8.149 18.8946 7.89464 18.7071 7.70711L14.2929 3.29289C14.1054 3.10536 13.851 3 13.5858 3H6ZM7 4H13V8H17V20H7V4Z"
+                  fill="currentColor"/>
+                
+                <!-- Dollar Sign ($) -->
+                <path
+                  d="M12 16C10.8954 16 10 15.1046 10 14H8C8 16.2091 9.79086 18 12 18V20H14V18.4142C15.1652 18.149 16 17.0609 16 15.8284C16 14.4927 14.6569 13.5 13 13.5H12C11.4477 13.5 11 13.0523 11 12.5C11 11.9477 11.4477 11.5 12 11.5H13C14.1046 11.5 15 12.3954 15 13.5H17C17 11.2909 15.2091 9.5 13 9.5V8H11V9.58579C9.83481 9.85098 9 10.9391 9 12.1716C9 13.5073 10.3431 14.5 12 14.5H13C13.5523 14.5 14 14.9477 14 15.5C14 16.0523 13.5523 16.5 13 16.5H12Z" fill="currentColor"/>
+              </svg>
+                  <span
+                    class="menu-item-text"
+                    :class="sidebarToggle ? 'lg:hidden' : ''"
+                  >
+                  Miscellanious
+                  </span>
+    
+                  <svg
+                    class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                    :class="[(selected === 'Miscellanious') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
+                      stroke=""
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </a>
+    
+                <!-- Dropdown Menu Start -->
+                <div
+                  class="overflow-hidden transform translate"
+                  :class="(selected === 'Miscellanious') ? 'block' :'hidden'"
+                >
+                  <ul
+                    :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                    class="flex flex-col gap-1 mt-2 menu-dropdown pl-9"
+                  >
+                    <li>
+                      <a
+                        href="users.html"
+                        class="menu-dropdown-item group"
+                        :class="page === 'Revenue' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                      >
+                        Email Templates
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+                <!-- Dropdown Menu End -->
+              </li>
+    
+              <!-- Financials Ends -->
+
 
           <!-- Menu Item Calendar -->
           <li>

@@ -87,3 +87,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+// Prevent non-numeric input
+document.querySelectorAll(".numberOnly").forEach(function (input) {
+    input.addEventListener("input", function () {
+        this.value = this.value.replace(/\D/g, "");
+    });
+});
+
+//chosen js
+$(document).ready(function() {
+  $(".chosen-select").chosen({
+    no_results_text: "No currency found!",
+    width: "100%"
+  });
+});

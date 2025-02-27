@@ -1,0 +1,816 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>New Load | smileslogistics</title>
+    <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'>
+     
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+        </script>
+     
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js">
+        </script>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" />
+  </head>
+  <body
+    x-data="{ page: 'newload', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
+            <!-- Breadcrumb Start -->
+            <div x-data="{ pageName: `New Load`}">
+              <include src="./partials/breadcrumb.html" />
+            </div>
+            <!-- Breadcrumb End -->
+
+            <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+              <div x-data="stepperForm()" class="w-full mx-auto px-4">
+                <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xs dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 rtl:space-x-reverse">
+                    <template x-for="(heading, index) in ['Basic Info', 'Charges', 'Dispatch', 'Backup Docs', 'Expenses']" :key="index">
+                        <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === index + 1, 'text-gray-500 dark:text-gray-400': step !== index + 1 }">
+                            <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                                :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === index + 1, 'border-gray-500 dark:border-gray-400': step !== index + 1 }">
+                                <span x-text="index + 1"></span>
+                            </span>
+                            <span class="ml-2 hidden sm:inline" x-text="heading"></span>
+                        </li>
+                    </template>
+                </ol>
+            
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit">
+                    <!-- Step 1: Basic Info -->
+                    <div x-show="step === 1" >
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Office</label>
+                                <input type="text" x-model="formData.office" name="office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter your name">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Load Type</label>
+                                <select x-model="formData.load_type" onchange="handleLoadTypeChange(this.value)" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="" selected disabled>Select Load Type</option>
+                                <option value="import">Import</option>
+                                <option value="export">Export</option>
+                                <option value="one_way">One Way</option>
+                                <option value="truckload">Truckload</option>
+                                <option value="ltl">Less Than Truck Load</option>
+                                <option value="chasisReposition">Chasis Reposition</option>
+                            </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Load Note</label>
+                                <input type="text" x-model="formData.load_type_note" name="load_type_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Notes">
+                            </div>
+                           <!-- Load Note Radio Buttons and Checkbox -->
+                            <div>
+                                <!-- <label class="block text-gray-700 dark:text-gray-300">Load Note</label> -->
+                                <div class="flex items-center space-x-4">
+                                    <!-- Radio Option 1 -->
+                                    <label class="flex items-center space-x-2">
+                                        <input type="radio" x-model="formData.load_type_note_r" name="load_type_note_r" value="Left" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                        <span class="text-gray-700 dark:text-gray-300">L</span>
+                                    </label>
+
+                                    <!-- Radio Option 2 -->
+                                    <label class="flex items-center space-x-2">
+                                        <input type="radio" x-model="formData.load_type_note_r" name="load_type_note_r" value="Right" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                        <span class="text-gray-700 dark:text-gray-300">R</span>
+                                    </label>
+
+                                    <!-- Checkbox Option -->
+                                    <label class="flex items-center space-x-2">
+                                        <input type="checkbox" x-model="formData.isBroker" name="isBroker" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                        <span class="text-gray-700 dark:text-gray-300">Broker</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- bill to -->
+                         <div>
+                            <div id="billto">
+                                <span onclick="duplicateBillto()" 
+                                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                    +
+                                </span>
+                                <span onclick="removeBillto(this)" 
+                                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
+                                    x
+                                     <!-- 🗑 -->
+                                </span>
+
+                                <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Bill to</label>
+                                        <input type="text" x-model="formData.office" name="bill_to[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Quick Note</label>
+                                        <input type="text" x-model="formData.load_type_note" name="load_type_note[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Notes">
+                                    </div>
+                                </div>
+                            </div>
+                        <div id="billtoList"></div>
+                        </div>
+
+                        <!-- container and chassis -->
+                        <div>
+                            <!-- Hidden Container (Template for Cloning) -->
+                            <div id="container" style="display: none;">
+                                <span onclick="duplicateContainer()" 
+                                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                    +
+                                </span>
+                                <span onclick="removeContainer(this)" 
+                                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
+                                    x
+                                     <!-- 🗑 -->
+                                </span>
+
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Container</label>
+                                    <input type="text" x-model="formData.container" name="containe[]r" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Size</label>
+                                    <select x-model="formData.container_size" name="container_size[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select Size</option>
+                                    <option value="20">20<sup>'</sup></option>
+                                    <option value="40">40<sup>'</sup></option>
+                                    <option value="45">45<sup>'</sup></option>
+                                    <option value="48">48<sup>'</sup></option>
+                                    <option value="53">53<sup>'</sup></option>
+                                    <option value="20/40">20<sup>'</sup>/40<sup>'</sup></option>
+                                    <option value="40/45">40<sup>'</sup>/45<sup>'</sup></option>
+                                    <option value="other">Other</option>
+                                </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Type</label>
+                                    <select x-model="formData.container_type" name="container_type[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select Type</option>
+                                    <option value="ST">ST</option>
+                                    <option value="HC">HC</option>
+                                    <option value="RF">RF</option>
+                                    <option value="truckload">Truckload</option>
+                                    <option value="RHC">RHC</option>
+                                    <option value="OT">OT</option>
+                                    <option value="FR">FR</option>
+                                    <option value="Tank">Tank</option>
+                                    <option value="ISO Tank">ISO Tank</option>
+                                    <option value="FB">FB</option>
+                                    <option value="Stepdeck">Stepdeck</option>
+                                    <option value="Dounble drop RGN">Dounble drop RGN</option>
+                                </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Chasis</label>
+                                    <input type="text" x-model="formData.chasis" name="chasis[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                </div>
+                            </div>
+    
+    
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Loaded/Empty? Flio Chasis</label>
+                                    <textarea type="text" x-model="formData.isLoaded" name="isLoaded[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Size</label>
+                                    <select x-model="formData.chasis_size" name="chasis_size" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select Size</option>
+                                    <option value="20">20<sup>'</sup></option>
+                                    <option value="40">40<sup>'</sup></option>
+                                    <option value="45">45<sup>'</sup></option>
+                                    <option value="48">48<sup>'</sup></option>
+                                    <option value="53">53<sup>'</sup></option>
+                                    <option value="20/40">20<sup>'</sup>/40<sup>'</sup></option>
+                                    <option value="40/45">40<sup>'</sup>/45<sup>'</sup></option>
+                                    <option value="other">Other</option>
+                                </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Type</label>
+                                    <select x-model="formData.chasis_type" name="chasis_type[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select Type</option>
+                                    <option value="Tri-axle">Tri-axle</option>
+                                    <option value="8-pin">8-pin</option>
+                                    <option value="Flatbed">Flatbed</option>
+                                    <option value="Deck combo chasis">Deck combo chasis</option>
+                                    <option value="Drop Deck">Drop Deck</option>
+                                    <option value="ISO Chasis">ISO Chasis</option>
+                                    <option value="Slider Chasis">Slider Chasis</option>
+                                    <option value="Gooseneck">Gooseneck</option>
+                                    <option value="Dolly">Dolly</option>
+                                    <option value="Reefer">Reefer</option>
+                                    <option value="2 axle p/u">2 axle p/u</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Chasis Vendor</label>
+                                    <input type="text" x-model="formData.chasis_vendor" name="chasis_vendor[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                </div>
+                            </div>
+                            </div>
+                            
+                        
+                            <!-- Duplicated Containers Appear Here -->
+                            <div id="containerList"></div>
+                        </div>
+                        
+                    <!-- numbers -->
+                    <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Reference #</label>
+                            <input type="text" x-model="formData.reference_number" name="reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Booking #</label>
+                            <input type="text" x-model="formData.booking_number" name="booking_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">BOL #</label>
+                            <input type="text" x-model="formData.bill_of_laden_number" name="bill_of_laden_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                        </div>
+                       <!-- Load Note Radio Buttons and Checkbox -->
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">PO #</label>
+                            <input type="text" x-model="formData.po_number" name="po_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                        </div>
+                    </div>
+
+                    <!-- numbers -->
+                    <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Load Weight</label>
+                            <input type="text" x-model="formData.load_weight" name="load_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Commodity</label>
+                            <input type="text" x-model="formData.commodity" name="commodity" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Pieces</label>
+                            <input type="text" x-model="formData.pieces" name="pieces" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                        </div>
+                       <!-- Load Note Radio Buttons and Checkbox -->
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Pick up #</label>
+                            <input type="text" x-model="formData.pick_up" name="pick_up" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                        </div>
+                        
+                        <!-- <div>
+                            <label class="block text-gray-700 dark:text-gray-300">PO #</label>
+                            <input type="text" x-model="formData.po_num" name="po_num" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                        </div> -->
+                    </div>
+
+                    <style>
+                        .chosen-container-single .chosen-single {
+                            height: 40px !important;
+                            background: none !important;
+                            border: none !important;
+                            vertical-align: middle !important;
+                          }
+                    </style>
+
+                    <!-- numbers -->
+                    <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                        <div id="chosen-select">
+                            <label class="block text-gray-700 dark:text-gray-300">OverWeight/Hazmat etc</label>
+                            <select x-model="formData.over_weight" name="over_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select" multiple>
+                                <!-- <option value="" selected disabled>Select Type</option> -->
+                                <option value="Tri-axle">Tri-axle</option>
+                                <option value="8-pin">8-pin</option>
+                                <option value="Flatbed">Flatbed</option>
+                                <option value="Deck combo chasis">Deck combo chasis</option>
+                                <option value="Drop Deck">Drop Deck</option>
+                                <option value="ISO Chasis">ISO Chasis</option>
+                                <option value="Slider Chasis">Slider Chasis</option>
+                                <option value="Gooseneck">Gooseneck</option>
+                                <option value="Dolly">Dolly</option>
+                                <option value="Reefer">Reefer</option>
+                                <option value="2 axle p/u">2 axle p/u</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Tags</label>
+                            <input type="text" x-model="formData.tags" name="tags" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Genset #</label>
+                            <input type="text" x-model="formData.genset_number" name="genset_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                        </div>
+                       <!-- Load Note Radio Buttons and Checkbox -->
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Refeer Temp</label>
+                            <input type="text" x-model="formData.reefer_temp" name="reefer_temp" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Seal #</label>
+                            <input type="text" x-model="formData.seal_number" name="seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                        </div>
+                    </div>
+                    <!-- Pick up Deliveries -->
+                    <div>
+                        <h6 class="text-md font-medium mb-3 dark:text-white">Pickup / Deliveries</h6>
+                            <div id="pickUPP">
+                                <span onclick="duplicatePickup()" 
+                                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                    +
+                                </span>
+                                <span onclick="removePickup(this)" 
+                                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
+                                    x
+                                    <!-- 🗑 -->
+                                </span>
+                        <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Pick up</label>
+                                <select x-model="formData.pick_up" name="pick_up" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled></option>
+                                    <option value="pickup">Pickup</option>
+                                    <option value="pickup loaded">Pickup Loaded</option>
+                                    <option value="pickup empty">Pickup Empty</option>
+                                    <hr class="mt-3 mb-3 text-white">
+                                    <option value="deliver">Deliver</option>
+                                    <option value="load_at">Load at</option>
+                                    <hr>
+                                    <option value="drop_at">Drop at</option>
+                                    <option value="drop_empty">Drop Empty</option>
+                                    <option value="drop_loaded">Drop Loaded</option>
+                                    <option value="stop_off">Stop off</option>
+                                    <option value="scale_stop">Scale Stop</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Quick lookup</label>
+                                <select x-model="formData.look_up" name="look_up" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled></option>
+                                   
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
+                                <input type="text" x-model="formData.pick_up_location_name" name="pick_up_location_name[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Address</label>
+                                <input type="text" x-model="formData.pick_up_address" name="pick_up_address[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">City</label>
+                                <input type="text" x-model="formData.pick_up_city" name="pick_up_city[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Zip</label>
+                                <input type="text" x-model="formData.zip" name="zip[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                        </div>
+                            <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300"> Appt</label>
+                                    <input type="text" x-model="formData.appt_date" name="appt_date[]" id="appt_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">From</label>
+                                    <select x-model="formData.from" name="from[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <option value="" selected disabled></option>
+                                    
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">To</label>
+                                    <input type="text" x-model="formData.to" name="to[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">No latter than</label>
+                                    <input type="text" x-model="formData.no_latter_than_date" name="no_latter_than_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Time</label>
+                                    <input type="text" x-model="formData.no_latter_than_time" name="no_latter_than_time[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="pickupList"></div>
+                    </div>
+
+                    <div>
+                        <h6 class="text-md font-medium mb-3 dark:text-white">Drop Location</h6>
+                            <div id="dropAt">
+                                <span onclick="duplicateDropAt()" 
+                                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                    +
+                                </span>
+                                <span onclick="removeDropAt(this)" 
+                                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
+                                    x
+                                    <!-- 🗑 -->
+                                </span>
+                                <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Drop At</label>
+                                        <select x-model="formData.drop_at" name="drop_at" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <option value="" selected disabled></option>
+                                            <option value="pickup">Pickup</option>
+                                            <option value="pickup loaded">Pickup Loaded</option>
+                                            <option value="pickup empty">Pickup Empty</option>
+                                            <hr class="mt-3 mb-3 text-white">
+                                            <option value="deliver">Deliver</option>
+                                            <option value="load_at">Load at</option>
+                                            <hr>
+                                            <option value="drop_at">Drop at</option>
+                                            <option value="drop_empty">Drop Empty</option>
+                                            <option value="drop_loaded">Drop Loaded</option>
+                                            <option value="stop_off">Stop off</option>
+                                            <option value="scale_stop">Scale Stop</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Quick lookup</label>
+                                        <select x-model="formData.drop_at_look_up" name="drop_at_look_up[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <option value="" selected disabled></option>
+                                        
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
+                                        <input type="text" x-model="formData.drop_at_location_name" name="drop_at_location_name[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Address</label>
+                                        <input type="text" x-model="formData.drop_at_address" name="drop_at_address[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">City</label>
+                                        <input type="text" x-model="formData.drop_at_city" name="drop_at_city[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Zip</label>
+                                        <input type="text" x-model="formData.drop_at_zip" name="drop_at_zip[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                </div>
+                        
+                                <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300"> Appt</label>
+                                        <input type="text" x-model="formData.drop_at_appt_date" name="drop_at_appt_date[]" id="appt_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">From</label>
+                                        <select x-model="formData.drop_at_from" name="drop_at_from[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <option value="" selected disabled></option>
+                                        
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">To</label>
+                                        <input type="text" x-model="formData.drop_at_to" name="drop_at_to[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">No latter than</label>
+                                        <input type="text" x-model="formData.drop_at_no_latter_than_date" name="drop_at_no_latter_than_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Time</label>
+                                        <input type="text" x-model="formData.drop_at_no_latter_than_time" name="drop_at_no_latter_than_time[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                        <div id="dropAtList"></div>
+                    </div>
+                    <script>
+                        $(document).ready(function () {
+                 
+                            $(function () {
+                                $("#appt_date").
+                                datepicker();
+                            });
+                        }) 
+                    </script>
+                        <div>
+                            <h4 class="mt-4 mb-3 block text-gray-700 dark:text-gray-300">Freight broker info ( if different from bill-to party )</h4>
+                            <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Broker Name</label>
+                                    <input type="text" x-model="formData.broker_name" name="broker_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Broker Email</label>
+                                    <input type="email" x-model="formData.broker_email" name="broker_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Phone No</label>
+                                    <input type="text" x-model="formData.broker_number" name="broker_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                                </div>
+                            <!-- Load Note Radio Buttons and Checkbox -->
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Broker Ref #</label>
+                                    <input type="text" x-model="formData.reefer_temp" name="reefer_temp" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Batch #</label>
+                                    <input type="text" x-model="formData.batch_number" name="batch_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                </div>
+                            </div>
+                            <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Batch Req</label>
+                                    <input type="text" x-model="formData.batch_req" name="batch_req" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Sales Rep</label>
+                                    <select x-model="formData.sales_rep" name="sales_rep" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <!-- <option value="" selected disabled>Select Type</option> -->
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">EDI/API Shipment #</label>
+                                    <input type="text" x-model="formData.edi_number" name="edi_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                </div>
+                            <!-- Load Note Radio Buttons and Checkbox -->
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Note</label>
+                                    <textarea type="text" x-model="formData.note" name="note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""></textarea>
+                                </div>
+                                
+                                <!-- <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Seal #</label>
+                                    <input type="text" x-model="formData.seal_number" name="seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Step 2: Charges -->
+                    <div x-show="step === 2" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Charge Amount</label>
+                            <input type="number" x-model="formData.charge_amount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Charge Type</label>
+                            <select x-model="formData.charge_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="">Select</option>
+                                <option>Fixed</option>
+                                <option>Variable</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Currency</label>
+                            <input type="text" x-model="formData.currency" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="USD, EUR, NGN">
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Dispatch -->
+                    <div x-show="step === 3" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                          <label class="block text-gray-700 dark:text-gray-300">Charge Amount</label>
+                          <input type="number" x-model="formData.charge_amount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount">
+                      </div>
+                      <div>
+                          <label class="block text-gray-700 dark:text-gray-300">Charge Type</label>
+                          <select x-model="formData.charge_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              <option value="">Select</option>
+                              <option>Fixed</option>
+                              <option>Variable</option>
+                          </select>
+                      </div>
+                      <div>
+                          <label class="block text-gray-700 dark:text-gray-300">Currency</label>
+                          <input type="text" x-model="formData.currency" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="USD, EUR, NGN">
+                      </div>
+                    </div>
+
+                    <!-- Step 4: Backup Docs -->
+                    <div x-show="step === 4" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                          <label class="block text-gray-700 dark:text-gray-300">Charge Amount</label>
+                          <input type="number" x-model="formData.charge_amount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount">
+                      </div>
+                      <div>
+                          <label class="block text-gray-700 dark:text-gray-300">Charge Type</label>
+                          <select x-model="formData.charge_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              <option value="">Select</option>
+                              <option>Fixed</option>
+                              <option>Variable</option>
+                          </select>
+                      </div>
+                      <div>
+                          <label class="block text-gray-700 dark:text-gray-300">Currency</label>
+                          <input type="text" x-model="formData.currency" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="USD, EUR, NGN">
+                      </div>
+                    </div>
+
+                    <!-- Step 5: Expenses -->
+                    <div x-show="step === 5" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                          <label class="block text-gray-700 dark:text-gray-300">Charge Amount</label>
+                          <input type="number" x-model="formData.charge_amount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount">
+                      </div>
+                      <div>
+                          <label class="block text-gray-700 dark:text-gray-300">Charge Type</label>
+                          <select x-model="formData.charge_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              <option value="">Select</option>
+                              <option>Fixed</option>
+                              <option>Variable</option>
+                          </select>
+                      </div>
+                      <div>
+                          <label class="block text-gray-700 dark:text-gray-300">Currency</label>
+                          <input type="text" x-model="formData.currency" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="USD, EUR, NGN">
+                      </div>
+                  </div>
+            
+                    <!-- Navigation Buttons -->
+                    <div class="flex justify-between mt-6">
+                        <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white"
+                            x-show="step > 1" @click="prevStep">
+                            Previous
+                        </button>
+                        <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
+                            x-show="step < 8" @click="nextStep">
+                            Next
+                        </button>
+                        <button type="button" class="px-4 py-2 bg-yellow-500 text-white rounded dark:bg-yellow-400"
+                            @click="saveProgress">
+                            Save & Continue Later
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
+                            x-show="step === 5">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+           
+            </div>
+
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+
+    <script>
+      function stepperForm() {
+          return {
+              step: localStorage.getItem('step') ? parseInt(localStorage.getItem('step')) : 1,
+              formData: JSON.parse(localStorage.getItem('formData')) || {
+                  full_name: '',
+                  email: '',
+                  phone: '',
+                  charge_amount: '',
+                  charge_type: '',
+                  currency: '',
+              },
+              nextStep() {
+                  this.step++;
+                  localStorage.setItem('step', this.step);
+              },
+              prevStep() {
+                  this.step--;
+                  localStorage.setItem('step', this.step);
+              },
+              saveProgress() {
+                  localStorage.setItem('formData', JSON.stringify(this.formData));
+                  localStorage.setItem('step', this.step);
+                  alert("Progress saved successfully!");
+              },
+              saveAndSubmit() {
+                  localStorage.removeItem('formData');
+                  localStorage.removeItem('step');
+                  alert("Form submitted successfully!");
+              }
+          }
+      }
+
+
+      function handleLoadTypeChange(value) {
+    if (value === 'import') {
+        console.log(`Load type changed to ${value}`);
+        // You can add specific logic for import/export here
+        // For example, show/hide specific form sections
+        document.getElementById('container').style.display = '';
+        // Example: Show a message or change UI elements
+        //alert(`Selected load type: ${value}`);
+        
+        // You could show/hide specific form sections
+        // document.getElementById('importSection').style.display = value === 'import' ? 'block' : 'none';
+        // document.getElementById('exportSection').style.display = value === 'export' ? 'block' : 'none';
+    }
+    
+    // Trigger auto-save when selection changes
+    //handleInputChange();
+}
+      </script>
+      <script>
+        function duplicateContainer() {
+            var container = document.getElementById("container");
+            var containerList = document.getElementById("containerList");
+    
+            // Clone container and remove display:none
+            var newContainer = container.cloneNode(true);
+            newContainer.style.display = "block";
+    
+            // Append new container
+            containerList.appendChild(newContainer);
+        }
+
+        function removeContainer(element) {
+            element.parentElement.parentElement.remove();
+        }
+
+        function duplicateBillto()
+        {
+            var billto = document.getElementById("billto");
+            var billtoList = document.getElementById("billtoList");
+            var newBillto = billto.cloneNode(true);
+            billtoList.appendChild(newBillto);
+        }
+
+        function removeBillto(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+        //
+
+        function duplicatePickup()
+        {
+            var pickup = document.getElementById("pickUPP");
+            var pickupList = document.getElementById("pickupList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removePickup(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        
+        function duplicateDropAt()
+        {
+            var pickup = document.getElementById("dropAt");
+            var pickupList = document.getElementById("dropAtList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removeDropAt(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+    </script>
+      
+  </body>
+</html>

@@ -98,7 +98,16 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 //chosen js
 $(document).ready(function() {
   $(".chosen-select").chosen({
-    no_results_text: "No currency found!",
+    no_results_text: "No result found!",
     width: "100%"
   });
 });
+
+// $(document).ready(function() {
+//   $("#chosen-selekt").chosen({
+//     no_results_text: "No currency found!",
+//     width: "100%"
+//   });
+// });
+
+

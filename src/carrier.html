@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Invoice | smileslogistics</title>
+    <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'>
+     
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+        </script>
+     
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js">
+        </script>
+        
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- jQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" />
+  </head>
+  <body
+    x-data="{ page: 'carrier', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
+            <!-- Breadcrumb Start -->
+            <div x-data="{ pageName: `Carrier`}">
+              <include src="./partials/breadcrumb.html" />
+            </div>
+            <!-- Breadcrumb End -->
+
+            <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+              <div x-data="stepperForm()" class="w-full mx-auto px-4">
+                <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xs dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 rtl:space-x-reverse">
+                    <!-- Step 1 -->
+                    <li class="flex-1 flex items-center justify-center"
+                        :class="{ 'text-blue-600 dark:text-blue-500': step === 1, 'text-gray-500 dark:text-gray-400': step !== 1 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 1, 'border-gray-500 dark:border-gray-400': step !== 1 }">
+                            1
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Basic Info</span>
+                    </li>
+                
+                    <!-- Step 2 -->
+                    <li class="flex-1 flex items-center justify-center"
+                        :class="{ 'text-blue-600 dark:text-blue-500': step === 2, 'text-gray-500 dark:text-gray-400': step !== 2 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 2, 'border-gray-500 dark:border-gray-400': step !== 2 }">
+                            2
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Recieve Payments</span>
+                    </li>
+                
+                    <!-- Step 3 -->
+                    <li class="flex-1 flex items-center justify-center"
+                        :class="{ 'text-blue-600 dark:text-blue-500': step === 3, 'text-gray-500 dark:text-gray-400': step !== 3 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 3, 'border-gray-500 dark:border-gray-400': step !== 3 }">
+                            3
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Backup Docs</span>
+                    </li>
+                </ol>
+                
+                
+            
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data">
+                    <!-- Step 1: Basic Info -->
+                    <div x-show="step === 1">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Carrier Name</label>
+                                <input type="text" x-model="formData.name" name="name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">State served</label>
+                                <input type="text" x-model="formData.state_served" name="state_served" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Carrier Code</label>
+                                <input type="text" x-model="formData.code" name="code" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Offices</label>
+                                <select x-model="formData.offices" name="offices" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select </option>
+                                    <option value="IN">IN</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Carrier #</label>
+                                <input type="text" x-model="formData.carrier_number" name="carrier_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Carrier Type</label>
+                                <select x-model="formData.type" name="type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select </option>
+                                    <option value="IN">IN</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">USDOT #</label>
+                                <input type="text" x-model="formData.usdot_number" name="usdot_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">MC #</label>
+                                <input type="text" x-model="formData.mc_number" name="mc_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">SCAC</label>
+                                <input type="text" x-model="formData.scac" name="scac" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Tax ID / EIN</label>
+                                <input type="text" x-model="formData.tax_id" name="tax_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Cell Phone</label>
+                                <input type="text" x-model="formData.cell_phone" id="cell_phone" name="cell_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Cell Carrier</label>
+                                <select x-model="formData.cell_carrier" name="cell_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select </option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Carrier Access to Mobile app</label>
+                                <select x-model="formData.carrier_access" name="carrier_access" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select </option>
+                                    <option value="activate_access">Activate Access</option>
+                                    <option value="deactivate_access">Deactivate Access</option>
+                                    <option value="resend_pin">Resend PIN</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Office Phone No</label>
+                                <input type="text" x-model="formData.office_phone" id="office_phone" name="office_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                        </div>
+                    
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+                            <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Contact Name</label>
+                            <input type="text" x-model="formData.contact_name" id="contact_name" name="contact_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Mobile app settings</label>
+                                <label for="show_payment_in_mobile_app">
+                                <input type="checkbox" x-model="formData.show_payment_in_mobile_app" id="show_payment_in_mobile_app" name="show_payment_in_mobile_app" class="w-2 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> <span class="text-gray-700 dark:text-gray-300">Show payment in mobile app</span> </label>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Email</label>
+                                <input type="email" x-model="formData.email" id="email" name="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Address 1</label>
+                                <input type="text" x-model="formData.primary_address" id="primary_address" name="primary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Address 2</label>
+                                <input type="text" x-model="formData.secondary_address" name="secondary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                        </div>
+
+                    <script>
+                        $(function() {
+                            $("#move_date_datepicker").datepicker({
+                                
+                            });
+                        });
+                    </script>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">City</label>
+                            <input type="text" x-model="formData.city" id="city" name="city" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">State / Province</label>
+                            <input type="text" x-model="formData.state" id="state" name="state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Zip / Postal Code</label>
+                            <input type="text" x-model="formData.zip" name="zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Country</label>
+                            <input type="text" x-model="formData.country" name="country" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-2">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Fax No</label>
+                            <input type="text" x-model="formData.fax_no" id="" name="fax_no" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Toll Free No</label>
+                            <input type="text" x-model="formData.toll_free_number" id="toll_free_number" name="toll_free_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Other Contact Info</label>
+                            <textarea type="text" cols="1" rows="1" x-model="formData.other_contact_info" name="other_contact_info" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> </textarea>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-2">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">No of Drivers</label>
+                            <input type="text" x-model="formData.no_of_drivers" id="no_of_drivers" name="no_of_drivers" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Power Units (Truck)</label>
+                            <input type="text" x-model="formData.power_units" id="power_units" name="power_units" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Other equipment (chassis, reefers, vans etc)</label>
+                            <input type="text" x-model="formData.other_equipments" id="other_equipments" name="other_equipments" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Carrier profile / options</label>
+                            <select x-model="formData.profile_photo" name="profile_photo" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="" selected disabled>Select </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-2">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">( rating )Carrier belongs to these pay categories</label>
+                            <select x-model="formData.rating" name="rating" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="" selected disabled>Select </option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Note about the choices made</label>
+                            <textarea cols="1" rows="1" type="text" x-model="formData.note_about_choices" id="" name="note_about_choices" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> </textarea>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Carries these cargo</label>
+                            <select x-model="formData.carries_this_cargo" name="carries_this_cargo" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="" selected disabled>Select </option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Start Date</label>
+                            <input type="text" x-model="formData.start_date" id="carrier_start_date" name="start_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                    </div>
+                    <script>
+                        $(function() {
+                            $('#carrier_start_date').datepicker({
+                                //dateFormat: 'dd-mm-yy'
+                            });
+                        })
+                    </script>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-2">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300"> Flash note to dispatchers about this carrier</label>
+                            <textarea cols="1" rows="1" type="text" x-model="formData.flash_note_to_riders_about_this_carrier" id="" name="flash_note_to_riders_about_this_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> </textarea>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300"> Flash note to payroll</label>
+                            <textarea cols="1" rows="1" type="text" x-model="formData.flash_note_to_payroll_about_this_carrier" id="" name="flash_note_to_payroll_about_this_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> </textarea>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300"> Internal note</label>
+                            <textarea cols="1" rows="1" type="text" x-model="formData.internal_note" id="" name="internal_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> </textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    function calculate() {
+            $(".chargecalc").each(function() {
+                let units = parseFloat($(this).find(".unit").val()) || 0;
+                let rate = parseFloat($(this).find(".rate").val()) || 0;
+                let discount = parseFloat($(this).find(".discount").val()) || 0;
+
+                let total = units * rate;
+                let netTotal = total - discount;
+
+                $(this).find(".amount").val(total);
+                $(this).find(".total").val(total);
+                $(this).find(".net_total").val(netTotal);
+            });
+        }
+
+        // Trigger calculation on input change
+        $(document).on("input", ".calc-field", function() {
+            calculate();
+        });
+                //     function calculate() {
+                //     let units = parseFloat($("#unit").val()) || 0;
+                //     let rate = parseFloat($("#rate").val()) || 0;
+                //     let discount = parseFloat($("#discount").val()) || 0;
+
+                //     let total = units * rate;
+                //     let netTotal = total - discount;
+                //     console.log("Net total is",netTotal)
+
+                //     $("#amount").val(total);
+                //     $("#total").val(total);
+                //     $("#net_total").val(netTotal);
+                //     $("#total_discount").val(discount);
+                // }
+
+                //     $(".calc-field").on("input", function() {
+                //         calculate();
+                //     });
+
+                //     calculate();
+                </script>
+                    
+                    
+                    
+                    <!-- Step 2: Backup Docs -->
+                    <div x-show="step === 2">
+                       <div>
+                           <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
+                           <div id="RecieveRepay">
+                                <span onclick="duplicateRecieve()" 
+                                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                    +
+                                </span>
+                                <span onclick="removeRecieve(this)" 
+                                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
+                                    x
+                                    <!-- 🗑 -->
+                                </span>
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Credit Memo</label>
+                                        <input type="text" x-model="formData.credit_memo" name="credit_memo[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Credit Amount</label>
+                                        <input type="email" x-model="formData.credit_amount" name="credit_amount[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white " placeholder="">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Note</label>
+                                        <textarea type="text" cols="1" rows="1" x-model="formData.credit_note" name="credit_note[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder=""> </textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Date</label>
+                                        <input type="text" x-model="formData.credit_date" name="credit_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                </div>
+                           </div>
+                           <div id="RecieveRepayList"></div>
+
+                           
+
+                           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Balance Before Credit</label>
+                                <input type="text" x-model="formData." name="[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Total Credit Applied</label>
+                                <input type="email" x-model="formData." name="[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white " placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Final Invoice Bal</label>
+                                <input type="email" x-model="formData." name="[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white " placeholder="">
+                            </div>
+                        </div>
+                       </div>
+                    </div>
+                
+                    <!-- Step 3: Review & Submit -->
+                    <div x-show="step === 3">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
+                            <input type="file" x-model="formData.file_path" multiple name="file_path" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        </div>
+                    </div>
+                
+                    <!-- Navigation Buttons -->
+                    <div class="flex justify-between mt-6">
+                        <!-- Previous Button -->
+                        <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white"
+                            x-show="step > 1" @click="prevStep">
+                            Previous
+                        </button>
+                
+                        <!-- Next Button -->
+                        <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
+                            x-show="step < 3" @click="nextStep">
+                            Next
+                        </button>
+                
+                        <!-- Save & Continue Later -->
+                        <button type="button" class="px-4 py-2 bg-yellow-500 text-white rounded dark:bg-yellow-400"
+                            @click="saveProgress">
+                            Save & Continue Later
+                        </button>
+                
+                        <!-- Submit Button (Only shows on Step 3) -->
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
+                            x-show="step === 3">
+                            Submit
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+            </div>
+
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+
+    <script>
+            function stepperForm() {
+            return {
+                step: localStorage.getItem('carrier_step') ? parseInt(localStorage.getItem('carrier_step')) : 1,
+                formData: JSON.parse(localStorage.getItem('formData')) || {
+                    full_name: '',
+                    email: '',
+                    phone: '',
+                    charge_amount: '',
+                    charge_type: '',
+                    currency: '',
+                },
+                totalSteps: 3, // Adjust based on actual number of steps
+                nextStep() {
+                    if (this.step < this.totalSteps) {
+                        this.step++;
+                        this.saveProgress();
+                    }
+                },
+                prevStep() {
+                    if (this.step > 1) {
+                        this.step--;
+                        this.saveProgress();
+                    }
+                },
+                saveProgress() {
+                    localStorage.setItem('carrier_step', this.step);
+                    localStorage.setItem('formData', JSON.stringify(this.formData));
+                },
+                saveAndSubmit() {
+                    // Submit form (implement actual submission logic here)
+                    alert("Form submitted successfully!");
+
+                    // Clear stored data after submission
+                    localStorage.removeItem('formData');
+                    localStorage.removeItem('carrier_step');
+
+                    // Reset form data
+                    this.formData = {
+                        full_name: '',
+                        email: '',
+                        phone: '',
+                        charge_amount: '',
+                        charge_type: '',
+                        currency: '',
+                    };
+                    this.step = 1;
+                }
+            }
+        }
+
+
+
+      function handleLoadTypeChange(value) {
+    if (value === 'import') {
+        console.log(`Load type changed to ${value}`);
+        // You can add specific logic for import/export here
+        // For example, show/hide specific form sections
+        document.getElementById('container').style.display = '';
+        // Example: Show a message or change UI elements
+        //alert(`Selected load type: ${value}`);
+        
+        // You could show/hide specific form sections
+        // document.getElementById('importSection').style.display = value === 'import' ? 'block' : 'none';
+        // document.getElementById('exportSection').style.display = value === 'export' ? 'block' : 'none';
+    }
+    
+    // Trigger auto-save when selection changes
+    //handleInputChange();
+}
+      </script>
+      <script>
+        function duplicateContainer() {
+            var container = document.getElementById("container");
+            var containerList = document.getElementById("containerList");
+    
+            // Clone container and remove display:none
+            var newContainer = container.cloneNode(true);
+            newContainer.style.display = "block";
+    
+            // Append new container
+            containerList.appendChild(newContainer);
+        }
+
+        function removeContainer(element) {
+            element.parentElement.parentElement.remove();
+        }
+
+        function duplicateBillto()
+        {
+            var billto = document.getElementById("billto");
+            var billtoList = document.getElementById("billtoList");
+            var newBillto = billto.cloneNode(true);
+            billtoList.appendChild(newBillto);
+        }
+
+        function removeBillto(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+        //
+
+        function duplicatePickup()
+        {
+            var pickup = document.getElementById("pickUPP");
+            var pickupList = document.getElementById("pickupList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removePickup(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        
+        function duplicateDropAt()
+        {
+            var pickup = document.getElementById("dropAt");
+            var pickupList = document.getElementById("dropAtList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removeDropAt(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        function duplicateCharges()
+        {
+            var pickup = document.getElementById("chargesDuplicate");
+            var pickupList = document.getElementById("chargesList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removeCharges(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        function duplicateRecieve()
+        {
+            var pickup = document.getElementById("RecieveRepay");
+            var pickupList = document.getElementById("RecieveRepayList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removeRecieve(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        
+    </script>
+      
+  </body>
+</html>

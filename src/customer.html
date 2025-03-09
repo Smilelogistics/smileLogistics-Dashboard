@@ -214,7 +214,7 @@
 
                         <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">invoice_footer_note</label>
+                                <label class="block text-gray-700 dark:text-gray-300">invoice footer note</label>
                                 <textarea type="text" x-model="formData.invoice_footer_note" name="invoice_footer_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
                             </div>
                             <div>
@@ -378,12 +378,45 @@
           return {
               step: localStorage.getItem('Driver_step') ? parseInt(localStorage.getItem('Driver_step')) : 1,
               formData: JSON.parse(localStorage.getItem('formData')) || {
-                  full_name: '',
-                  email: '',
-                  phone: '',
-                  charge_amount: '',
-                  charge_type: '',
-                  currency: '',
+                customer_name: '',
+                customer_email: '',
+                customer_phone: '',
+                customer_primary_address: '',
+                customer_secondary_address: '',
+                customer_code: '',
+                customer_sales_rep: '',
+                customer_office: '',
+                customer_type: '',
+                customer_city: '',
+                customer_state: '',
+                customer_zip: '',
+                customer_country: '',
+                fax_no: '',
+                toll_free: '',
+                other_notes: '',
+                credit_limit: '',
+                alert_percentage: '',
+                outstanding_balance: '',
+                due_date: '',
+                send_invoice_under_this_company: '',
+                account_code: '',
+                invoice_footer_note: '',
+                isSubAccount: '',
+                create_invoices_under_this_parent: '',
+                subAccount_of:'',
+                factoringCompany: '',
+                isFactoredInvoice: '',
+                isPrepaid: '',
+                isNonBillable: '',
+                flash_note_for_accounting: '',
+                payment_terms: '',
+                notes: '',
+                file_path: '',
+                print_settlements_under_this_company: '',
+                flash_notes_to_dispatch: '',
+                flash_notes_to_payroll: '',
+                internal_notes: '',
+                
               },
               nextStep() {
                   this.step++;

@@ -110,5 +110,9 @@ module.exports = {
     assetModuleFilename: "[path][name][ext]",
   },
   target: "web", // fix for "browserslist" error message
-  stats: "errors-only", // suppress irrelevant log messages
+  //stats: "errors-only", // suppress irrelevant log messages
+  stats: {
+    children: true, // Enable detailed logging for child compilations
+    errorDetails: true, // Show detailed error messages
+  },
 };

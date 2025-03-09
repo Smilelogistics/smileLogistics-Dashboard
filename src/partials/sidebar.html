@@ -9,8 +9,8 @@
   >
     <a href="index.html">
       <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
-        <img class="dark:hidden w-40" src="./images/logo/SMILES LOGISTICS LOGO DARK.PNG" alt="Logo" />
-        <img class="hidden dark:block w-40" src="./images/logo/SMILES LOGISTICS LOGO LIGHT.PNG" alt="Logo"/>
+        <img class="dark:hidden w-40" src="./images/logo/SMILES-LOGISTICS-LOGO-DARK.PNG" alt="Logo" />
+        <img class="hidden dark:block w-40" src="./images/logo/SMILES-LOGISTICS-LOGO-LIGHT.PNG" alt="Logo"/>
       </span>
 
       <img
@@ -510,6 +510,10 @@
                     <li>
                       <a href="newload.html" class="menu-dropdown-item group" :class="page === 'newload' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">New Load</a>
                     </li>
+
+                    <li>
+                      <a href="view_load.html" class="menu-dropdown-item group" :class="page === 'view load' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">View Load</a>
+                    </li>
                   </ul>
                 </div>
                 <!-- Dropdown Menu End -->
@@ -562,7 +566,7 @@
                       <a href="customer.html" class="menu-dropdown-item group" :class="page === 'Customer' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">New Customer</a>
                     </li>
                     <li>
-                      <a href="shipment.html" class="menu-dropdown-item group" :class="page === 'customer' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Customer List</a>
+                      <a href="customers_list.html" class="menu-dropdown-item group" :class="page === 'customer' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Customer List</a>
                     </li>
                   </ul>
                 </div>

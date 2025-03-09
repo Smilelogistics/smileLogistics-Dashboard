@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Loads | </title>
+  </head>
+  <body
+    x-data="{ page: 'view_loads', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader tart ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
+            <!-- Breadcrumb Start -->
+            <div x-data="{ pageName: `View Loads`}">
+              <include src="./partials/breadcrumb.html" />
+            </div>
+            <!-- Breadcrumb End -->
+             
+            <div class="w-full">
+              <div class="space-y-12">
+                <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] p-2">
+                  <div class="px-5 py-4 sm:px-6 sm:py-5">
+                    <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
+                      All Users
+                    </h3>
+                  </div>
+          
+                  <!-- Inputs Container -->
+                  <div class="border-t border-gray-100 p-5 dark:border-gray-800 sm:p-6">
+                    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
+                    >
+                      <div class="max-w-full overflow-x-auto">
+                        <table class="min-w-full">
+                          <!-- table header start -->
+                          <thead>
+                            <tr class="border-b border-gray-100 dark:border-gray-800">
+                              <th class="px-5 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p
+                                    class="font-medium text-gray-500 text-theme-xs dark:text-gray-400"
+                                  >
+                                    Load #
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-2 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                    Bill-To
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-2 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                    Container
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-2 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                    Size
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-2 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                    Eq Type
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-2 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                    Load Type
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-2 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                    Booking #
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-2 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                    From
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-2 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                    To
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-2 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                    Return
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-2 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                    Port APPT
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-2 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                    Cust Appt
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-2 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                    Stop List
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-2 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                    Pickup #
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-2 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                    BOL #
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-2 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                    PO #
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-2 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                                    LFD
+                                  </p>
+                                </div>
+                              </th>
+                              <th class="px-5 py-3 sm:px-6">
+                                <div class="flex items-center">
+                                  <p
+                                    class="font-medium text-gray-500 text-theme-xs dark:text-gray-400"
+                                  >
+                                    Status
+                                  </p>
+                                </div>
+                              </th>
+                            </tr>
+                          </thead>
+                          <!-- table header end -->
+                          <!-- table body start -->
+                          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                            <tr>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                    <div>
+                                      <span
+                                        class="block font-medium text-gray-800 text-theme-sm dark:text-white/90"
+                                      >
+                                        001
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    70
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    90999
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    Chicago IL
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    Miami
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    25-03-2023
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    25-03-2023
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p
+                                    class="rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500"
+                                  >
+                                    Active
+                                  </p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                    <div>
+                                      <span
+                                        class="block font-medium text-gray-800 text-theme-sm dark:text-white/90"
+                                      >
+                                        001
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    70
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    90999
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    Chicago IL
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    Miami
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    25-03-2023
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    25-03-2023
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p
+                                    class="rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500"
+                                  >
+                                    Active
+                                  </p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                    <div>
+                                      <span
+                                        class="block font-medium text-gray-800 text-theme-sm dark:text-white/90"
+                                      >
+                                        002
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    70
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    90999
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    Chicago IL
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    Miami
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    25-03-2023
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    25-03-2023
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p
+                                    class="rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500"
+                                  >
+                                    ON-Transit
+                                  </p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                    <div>
+                                      <span
+                                        class="block font-medium text-gray-800 text-theme-sm dark:text-white/90"
+                                      >
+                                        003
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    70
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    90999
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    Chicago IL
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    Miami
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    25-03-2023
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    25-03-2023
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p
+                                    class="rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500"
+                                  >
+                                    New
+                                  </p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                    <div>
+                                      <span
+                                        class="block font-medium text-gray-800 text-theme-sm dark:text-white/90"
+                                      >
+                                        004
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    70
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    90999
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    Chicago IL
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    Miami
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    25-03-2023
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    25-03-2023
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                                    SMBB
+                                  </p>
+                                </div>
+                              </td>
+                              <td class="px-5 py-4 sm:px-6">
+                                <div class="flex items-center">
+                                  <p
+                                    class="rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500"
+                                  >
+                                    Active
+                                  </p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+  </body>
+</html>

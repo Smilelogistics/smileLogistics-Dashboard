@@ -334,7 +334,7 @@
                                 </div> -->
                             </div>
                         </div>
-                        <div id="chargesList"></div>
+                        <div id="chargesList" class="chargesList"></div>
 
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                             <div id="totalCharges" style="display: ;">
@@ -526,26 +526,26 @@
                             });
                         });
               
-                //     function calculate() {
-                //     let units = parseFloat($("#unit").val()) || 0;
-                //     let rate = parseFloat($("#rate").val()) || 0;
-                //     let discount = parseFloat($("#discount").val()) || 0;
+                    function calculate() {
+                    let units = parseFloat($("#unit").val()) || 0;
+                    let rate = parseFloat($("#rate").val()) || 0;
+                    let discount = parseFloat($("#discount").val()) || 0;
 
-                //     let total = units * rate;
-                //     let netTotal = total - discount;
-                //     console.log("Net total is",netTotal)
+                    let total = units * rate;
+                    let netTotal = total - discount;
+                    console.log("Net total is",netTotal)
 
-                //     $("#amount").val(total);
-                //     $("#total").val(total);
-                //     $("#net_total").val(netTotal);
-                //     $("#total_discount").val(discount);
-                // }
+                    $("#amount").val(total);
+                    $("#total").val(total);
+                    $("#net_total").val(netTotal);
+                    $("#total_discount").val(discount);
+                }
 
-                //     $(".calc-field").on("input", function() {
-                //         calculate();
-                //     });
+                    $(".calc-field").on("input", function() {
+                        calculate();
+                    });
 
-                //     calculate();
+                    calculate();
 
 
 
@@ -568,64 +568,66 @@
     }
 
 
-    function calculate(node) {
-    let units = parseFloat($(node).find(".unit").val()) || 0;
-    let rate = parseFloat($(node).find(".rate").val()) || 0;
-    let discount = parseFloat($(node).find(".discount").val()) || 0;
 
-    let total = units * rate;
-    let netTotal = total - discount;
+//     function calculate(node) {
+//     let units = parseFloat($(node).find(".unit").val()) || 0;
+//     let rate = parseFloat($(node).find(".rate").val()) || 0;
+//     let discount = parseFloat($(node).find(".discount").val()) || 0;
 
-    $(node).find(".amount").val(total);
+//     let total = units * rate;
+//     let netTotal = total - discount;
 
-    updateTotals(); // Update the overall totals
-}
+//     $(node).find(".amount").val(total);
 
-// Function to update overall totals
-function updateTotals() {
-    let totalAmount = 0;
-    let totalDiscount = 0;
+//     updateTotals(); // Update the overall totals
+// }
 
-    $(".chargecalc").each(function () {
-        totalAmount += parseFloat($(this).find(".amount").val()) || 0;
-        totalDiscount += parseFloat($(this).find(".discount").val()) || 0;
-    });
+// // Function to update overall totals
+// function updateTotals() {
+//     let totalAmount = 0;
+//     let totalDiscount = 0;
 
-    $("#total").val(totalAmount);
-    $("#net_total").val(totalAmount - totalDiscount);
-    $("#total_discount").val(totalDiscount);
-}
+//     $(".chargecalc").each(function () {
+//         totalAmount += parseFloat($(this).find(".amount").val()) || 0;
+//         totalDiscount += parseFloat($(this).find(".discount").val()) || 0;
+//     });
 
-// Function to duplicate charges
-function duplicateCharges() {
-    var chargesDuplicate = document.getElementById("chargesDuplicate");
-    var chargesList = document.getElementById("chargesList");
-    var newCharge = chargesDuplicate.cloneNode(true);
+//     $("#total").val(totalAmount);
+//     $("#net_total").val(totalAmount - totalDiscount);
+//     $("#total_discount").val(totalDiscount);
+// }
 
-    // Remove the ID from cloned elements to avoid duplicates
-    $(newCharge).find("input, select").val(""); // Clear values
-    $(newCharge).find("[id]").removeAttr("id"); // Remove IDs
+// // Function to duplicate charges
+// function duplicateCharges() {
+//     var chargesDuplicate = document.getElementById("chargesDuplicate");
+//     var chargesList = document.getElementById("chargesList");
+//     var newCharge = chargesDuplicate.cloneNode(true);
 
-    chargesList.appendChild(newCharge);
+//     // Remove the ID from cloned elements to avoid duplicates
+//     $(newCharge).find("input, select").val(""); // Clear values
+//     $(newCharge).find("[id]").removeAttr("id"); // Remove IDs
 
-    // Rebind event listeners for calculation
-    $(newCharge).find(".calc-field").on("input", function () {
-        calculate(newCharge);
-    });
-}
+//     chargesList.appendChild(newCharge);
 
-// Function to remove charges
-function removeCharges(element) {
-    $(element).closest(".chargecalc").remove();
-    updateTotals(); // Recalculate totals after removal
-}
+//     // Ensure the new fields trigger calculations
+//     $(newCharge).find(".calc-field").trigger("input");
+// }
 
-// Attach event listeners to existing fields
-$(".calc-field").on("input", function () {
-    calculate($(this).closest(".chargecalc"));
-});
+// // Function to remove charges
+// function removeCharges(element) {
+//     $(element).closest(".chargesList").remove();
+//     updateTotals(); // Recalculate totals after removal
+// }
 
-updateTotals();
+// // Attach event listeners to ALL current & future fields
+// $(document).on("input", ".calc-field", function () {
+//     //alert("hello"); // Now works for newly duplicated fields
+//     calculate($(this).closest(".chargecalc"));
+// });
+
+// // Initialize calculations
+// updateTotals();
+
 
       </script>
       <script>

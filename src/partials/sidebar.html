@@ -9,8 +9,8 @@
   >
     <a href="index.html">
       <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
-        <img class="dark:hidden w-40" src="./images/logo/smile-dark.png" alt="Logo" />
-        <img class="hidden dark:block w-40" src="./images/logo/smile-light.png" alt="Logo"/>
+        <img class="dark:hidden w-40" src="./images/logo/logo-dark.png" alt="Logo" />
+        <img class="hidden dark:block w-40" src="./images/logo/logo-light.png" alt="Logo"/>
       </span>
 
       <img
@@ -1410,3 +1410,27 @@
     <!-- Promo Box -->
   </div>
 </aside>
+
+<script type="text/javascript">
+  // Prevent non-numeric input
+document.querySelectorAll(".numberOnly").forEach(function (input) {
+    input.addEventListener("input", function () {
+        this.value = this.value.replace(/\D/g, "");
+    });
+});
+
+//chosen js
+// $(document).ready(function() {
+//   $(".chosen-select").chosen({
+//     no_results_text: "No result found!",
+//     width: "100%"
+//   });
+// });
+
+// $(document).ready(function() {
+//   $("#chosen-selekt").chosen({
+//     no_results_text: "No currency found!",
+//     width: "100%"
+//   });
+// });
+</script>

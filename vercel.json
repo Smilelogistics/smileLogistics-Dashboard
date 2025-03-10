@@ -1,5 +1,5 @@
 {
-    "build": {
-      "output": "build"
-    }
+  "build": {
+    "outputDirectory": "build"
   }
+}

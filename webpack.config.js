@@ -32,14 +32,14 @@ const generateHTMLPlugins = () =>
     return new HtmlWebpackPlugin({
       filename,
       template: `./src/${filename}`,
-      favicon: `./src/images/favicon.ico`,
+      favicon: `./src/assets/images/favicon.ico`,
       inject: "body",
     });
   });
 
 module.exports = {
   mode: "development",
-  entry: "./src/js/index.js",
+  entry: "./src/assets/js/index.js",
   devServer: {
     static: {
       directory: path.join(__dirname, "./build"),

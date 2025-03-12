@@ -1,6 +1,11 @@
 <!doctype html>
 <html lang="en">
-  <head>
+    <head>
+        <meta charset="UTF-8">
+
+        <script src="src/assets/js/main.js"></script>
+        
+
     <meta charset="UTF-8" />
     <meta
       name="viewport"
@@ -8,7 +13,7 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>New Load | smileslogistics</title>
-     <!-- jQuery -->
+    <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <!-- jQuery UI -->
@@ -18,7 +23,8 @@
   <!-- Chosen Plugin -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
-  <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet"></head>
+ 
+    <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet"></head>
   <body
     x-data="{ page: 'newload', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
     x-init="
@@ -53,14 +59,14 @@
   >
     <a href="index.html">
       <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
-        <img class="dark:hidden w-40" src="src/images/logo/logo-dark.png" alt="Logo" />
-        <img class="hidden dark:block w-40" src="src/images/logo/logo-light.png" alt="Logo"/>
+        <img class="dark:hidden w-10 h-auto xs:w-16 sm:w-24 md:w-32 lg:w-40" src="src/assets/images/logo/logo-dark.png" alt="Logo" />
+        <img class="hidden dark:block w-10 h-auto xs:w-16 sm:w-24 md:w-32 lg:w-40" src="src/assets/images/logo/logo-light.png" alt="Logo"/>
       </span>
 
       <img
         class="logo-icon"
         :class="sidebarToggle ? 'lg:block' : 'hidden'"
-        src="src/images/logo/logo-icon.svg"
+        src="src/assets/images/logo/logo-icon.svg"
         alt="Logo"
       />
     </a>
@@ -671,7 +677,7 @@
               </li>
               <!-- Shipment Driver Ends -->
 
-              <!-- Menu item Customer -->
+              <!-- Menu item Truck -->
               <li>
                 <a href="#" @click.prevent="selected = (selected === 'Manage Truck' ? '':'Manage Truck')" class="menu-item group"
                   :class=" (selected === 'Manage Truck') || (page === 'Manage Truck') ? 'menu-item-active' : 'menu-item-inactive'">
@@ -723,6 +729,59 @@
                 <!-- Dropdown Menu End -->
               </li>
               <!-- Shipment Truck Ends -->
+
+              <!-- Menu item BIke -->
+              <li>
+                <a href="#" @click.prevent="selected = (selected === 'Manage BIke' ? '':'Manage BIke')" class="menu-item group"
+                  :class=" (selected === 'Manage BIke') || (page === 'Manage BIke') ? 'menu-item-active' : 'menu-item-inactive'">
+                <svg :class="(selected === 'Manage BIke') || (page === 'bike') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  fill-rule="evenodd" clip-rule="evenodd" d="M6 2C5.44772 2 5 2.44772 5 3V21C5 21.5523 5.44772 22 6 22H18C18.5523 22 19 21.5523 19 21V8.41421C19 8.149 18.8946 7.89464 18.7071 7.70711L14.2929 3.29289C14.1054 3.10536 13.851 3 13.5858 3H6ZM7 4H13V8H17V20H7V4Z"
+                  fill="currentColor"/>
+                <path
+                  d="M12 16C10.8954 16 10 15.1046 10 14H8C8 16.2091 9.79086 18 12 18V20H14V18.4142C15.1652 18.149 16 17.0609 16 15.8284C16 14.4927 14.6569 13.5 13 13.5H12C11.4477 13.5 11 13.0523 11 12.5C11 11.9477 11.4477 11.5 12 11.5H13C14.1046 11.5 15 12.3954 15 13.5H17C17 11.2909 15.2091 9.5 13 9.5V8H11V9.58579C9.83481 9.85098 9 10.9391 9 12.1716C9 13.5073 10.3431 14.5 12 14.5H13C13.5523 14.5 14 14.9477 14 15.5C14 16.0523 13.5523 16.5 13 16.5H12Z" fill="currentColor"/>
+              </svg>
+                  <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                  Manage BIke
+                  </span>
+                  <svg
+                    class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                    :class="[(selected === 'Manage BIke') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
+                      stroke=""
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </a>
+    
+                <!-- Dropdown Menu Start -->
+                <div
+                  class="overflow-hidden transform translate"
+                  :class="(selected === 'Manage BIke') ? 'block' :'hidden'"
+                >
+                  <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                    class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
+                    <li>
+                      <a href="bike.html" class="menu-dropdown-item group" :class="page === 'BIke' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">New BIke</a>
+                    </li>
+                    <li>
+                      <a href="shipment.html" class="menu-dropdown-item group" :class="page === 'bike' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Driver Truck</a>
+                    </li>
+                  </ul>
+                </div>
+                <!-- Dropdown Menu End -->
+              </li>
+              <!-- Shipment Bike Ends -->
 
               <!-- Menu item Carrier -->
               <li>
@@ -1564,8 +1623,8 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
       <!-- Hamburger Toggle BTN -->
 
       <a href="index.html" class="lg:hidden">
-        <img class="dark:hidden" src="src/images/logo/logo-dark.png" alt="Logo" />
-        <img class="hidden dark:block" src="src/images/logo/logo-light.png" alt="Logo"/>
+        <img class="dark:hidden" src="src/assets/images/logo/logo-dark.png" alt="Logo" />
+        <img class="hidden dark:block" src="src/assets/images/logo/logo-light.png" alt="Logo"/>
       </a>
 
       <!-- Application nav menu button -->
@@ -1751,7 +1810,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     class="relative block w-full h-10 rounded-full z-1 max-w-10"
                   >
                     <img
-                      src="src/images/user/user-02.jpg"
+                      src="src/assets/images/user/user-02.jpg"
                       alt="User"
                       class="overflow-hidden rounded-full"
                     />
@@ -1793,7 +1852,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     class="relative block w-full h-10 rounded-full z-1 max-w-10"
                   >
                     <img
-                      src="src/images/user/user-03.jpg"
+                      src="src/assets/images/user/user-03.jpg"
                       alt="User"
                       class="overflow-hidden rounded-full"
                     />
@@ -1835,7 +1894,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     class="relative block w-full h-10 rounded-full z-1 max-w-10"
                   >
                     <img
-                      src="src/images/user/user-04.jpg"
+                      src="src/assets/images/user/user-04.jpg"
                       alt="User"
                       class="overflow-hidden rounded-full"
                     />
@@ -1877,7 +1936,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     class="relative block w-full h-10 rounded-full z-1 max-w-10"
                   >
                     <img
-                      src="src/images/user/user-05.jpg"
+                      src="src/assets/images/user/user-05.jpg"
                       alt="User"
                       class="overflow-hidden rounded-full"
                     />
@@ -1919,7 +1978,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     class="relative block w-full h-10 rounded-full z-1 max-w-10"
                   >
                     <img
-                      src="src/images/user/user-02.jpg"
+                      src="src/assets/images/user/user-02.jpg"
                       alt="User"
                       class="overflow-hidden rounded-full"
                     />
@@ -1961,7 +2020,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     class="relative block w-full h-10 rounded-full z-1 max-w-10"
                   >
                     <img
-                      src="src/images/user/user-03.jpg"
+                      src="src/assets/images/user/user-03.jpg"
                       alt="User"
                       class="overflow-hidden rounded-full"
                     />
@@ -2003,7 +2062,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     class="relative block w-full h-10 rounded-full z-1 max-w-10"
                   >
                     <img
-                      src="src/images/user/user-04.jpg"
+                      src="src/assets/images/user/user-04.jpg"
                       alt="User"
                       class="overflow-hidden rounded-full"
                     />
@@ -2045,7 +2104,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     class="relative block w-full h-10 rounded-full z-1 max-w-10"
                   >
                     <img
-                      src="src/images/user/user-05.jpg"
+                      src="src/assets/images/user/user-05.jpg"
                       alt="User"
                       class="overflow-hidden rounded-full"
                     />
@@ -2103,7 +2162,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
           @click.prevent="dropdownOpen = ! dropdownOpen"
         >
           <span class="mr-3 overflow-hidden rounded-full h-11 w-11">
-            <img src="src/images/user/owner.jpg" alt="User" />
+            <img src="src/assets/images/user/owner.jpg" alt="User" />
           </span>
 
           <span class="block mr-1 font-medium text-theme-sm"> Super Admin </span>
@@ -2355,6 +2414,18 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                         <span class="text-gray-700 dark:text-gray-300">Broker</span>
                                     </label>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div  class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Type</label>
+                                    <select x-model="formData.shipment_type" name="shipment_type" id="shipment_type" onchange="handleShipmentType(this.value)" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select</option>
+                                    <option value="land">Land</option>
+                                    <option value="ocean">Ocean</option>
+                                    <option value="air">Air Freight</option>
+                                </select>
                             </div>
                         </div>
 
@@ -2626,7 +2697,6 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                 <label class="block text-gray-700 dark:text-gray-300">Quick lookup</label>
                                 <select x-model="formData.look_up" name="look_up" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled></option>
-                                   
                                 </select>
                             </div>
                             <div>
@@ -2956,15 +3026,50 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
                     <!-- Step 3: Dispatch -->
                     <div x-show="step === 3" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div id="chosen-select">
-                            <label class="block text-gray-700 dark:text-gray-300">Assign Driver</label>
-                            <select x-model="formData.driver_id" name="driver_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select">
-                                <option value="" selected disabled>Choose Driver</option>
-                                <option value="1">John Doe</option>
-                                <option value="2">Billy John</option>
-                                <option value="3">Jane Doe</option>
-                            </select>
+                        <div x-data="{ formData: { delivery_type: '', driver_id: '' } }">
+
+                            <div class="flex items-center space-x-4 mt-6">
+                                <!-- Radio Option 1 -->
+                                <label class="flex items-center space-x-2">
+                                    <input type="radio" x-model="formData.delivery_type" name="delivery_type" value="Carrier"
+                                        class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                    <span class="text-gray-700 dark:text-gray-300">Carrier?</span>
+                                </label>
+                        
+                                <!-- Radio Option 2 -->
+                                <label class="flex items-center space-x-2">
+                                    <input type="radio" x-model="formData.delivery_type" name="delivery_type" value="Truck"
+                                        class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                    <span class="text-gray-700 dark:text-gray-300">Bike/Truck</span>
+                                </label>
+                            </div>
+                        
+                            <!-- Show when "Truck" is selected -->
+                            <div x-show="formData.delivery_type === 'Truck'" class="isDrive mt-4">
+                                <label class="block text-gray-700 dark:text-gray-300">Assign Driver</label>
+                                <select x-model="formData.driver_id" name="driver_id"
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Choose Driver</option>
+                                    <option value="1">John Doe</option>
+                                    <option value="2">Billy John</option>
+                                    <option value="3">Jane Doe</option>
+                                </select>
+                            </div>
+                        
+                            <!-- Show when "Carrier" is selected -->
+                            <div x-show="formData.delivery_type === 'Carrier'" class="isTruc mt-4">
+                                <label class="block text-gray-700 dark:text-gray-300">Assign Carrier</label>
+                                <select x-model="formData.driver_id" name="driver_id"
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Choose Driver</option>
+                                    <option value="1">John Doe</option>
+                                    <option value="2">Billy John</option>
+                                    <option value="3">Jane Doe</option>
+                                </select>
+                            </div>
+                        
                         </div>
+                        
                     </div>
 
                     <!-- Step 4: Backup Docs -->
@@ -3161,7 +3266,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
       function handleLoadTypeChange(value) {
     if (value === 'import') {
         console.log(`Load type changed to ${value}`);
-        // You can add specific logic for import/export here
+        
         // For example, show/hide specific form sections
         document.getElementById('container').style.display = '';
         // Example: Show a message or change UI elements
@@ -3245,7 +3350,30 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
         }
 
         
+function handleShipmentType() {
+    var shipmentType = document.getElementById("shipment_type").value;
+    //alert("Selected Shipment Type: " + shipmentType);
+
+    if(shipmentType === "air")
+    {
+        $.ajax({
+            url: 'api/airports.php',
+            type: 'GET',
+            beforeSend:function()
+            {
+                
+            },
+            success: function(response) {
+                var airportList = document.getElementById("airportList");
+                airportList.innerHTML = '';
+            },
+            error: function(xhr, status, error) {
+                console.log(error);
+            }
+        });
+    }
+}
     </script>
       
-  <script defer src="bundle.js"></script></body>
-</html>
+  
+<script defer src="bundle.js"></script>

@@ -2,6 +2,8 @@ const path = require("path");
 const glob = require("glob");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 
 const INCLUDE_PATTERN =
   /<include\s+src=["'](.+?)["']\s*\/?>\s*(?:<\/include>)?/gis;
@@ -101,6 +103,11 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "style.css",
       chunkFilename: "style.css",
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'src/partials', to: 'partials' }, // Copy `partials` to `build/partials`
+      ],
     }),
   ],
   output: {

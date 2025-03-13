@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack serve --open --config webpack.config.js",
     "build": "webpack --config webpack.config.js",
-    "sort": "npx prettier --write src"
+    "sort": "npx prettier --write src",
+    "clean": "rm -rf build"
   },
   "keywords": [],
   "author": {
@@ -33,6 +34,7 @@
     "postcss-preset-env": "^9.6.0",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.5",
+    "rimraf": "^6.0.1",
     "style-loader": "^4.0.0",
     "tailwindcss": "^3.4.6",
     "webpack": "^5.96.1",

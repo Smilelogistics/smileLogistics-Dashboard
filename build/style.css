@@ -5009,6 +5009,14 @@ span.flatpickr-weekday:is(.dark *),
     width: 2.75rem;
   }
 
+  .sm\:w-24{
+    width: 6rem;
+  }
+
+  .sm\:w-32{
+    width: 8rem;
+  }
+
   .sm\:w-\[361px\]{
     width: 361px;
   }
@@ -5168,6 +5176,10 @@ span.flatpickr-weekday:is(.dark *),
 
 @media (min-width: 768px){
 
+  .md\:w-32{
+    width: 8rem;
+  }
+
   .md\:w-\[668px\]{
     width: 668px;
   }
@@ -5265,6 +5277,10 @@ span.flatpickr-weekday:is(.dark *),
 
   .lg\:w-11{
     width: 2.75rem;
+  }
+
+  .lg\:w-40{
+    width: 10rem;
   }
 
   .lg\:w-\[634px\]{

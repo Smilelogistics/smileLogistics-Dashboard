@@ -2,8 +2,6 @@ const path = require("path");
 const glob = require("glob");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-
 
 const INCLUDE_PATTERN =
   /<include\s+src=["'](.+?)["']\s*\/?>\s*(?:<\/include>)?/gis;
@@ -104,11 +102,6 @@ module.exports = {
       filename: "style.css",
       chunkFilename: "style.css",
     }),
-    new CopyWebpackPlugin({
-      patterns: [
-        { from: 'src/partials', to: 'partials' }, // Copy `partials` to `build/partials`
-      ],
-    }),
   ],
   output: {
     filename: "bundle.js",
@@ -117,9 +110,5 @@ module.exports = {
     assetModuleFilename: "[path][name][ext]",
   },
   target: "web", // fix for "browserslist" error message
-  //stats: "errors-only", // suppress irrelevant log messages
-  stats: {
-    children: true, // Enable detailed logging for child compilations
-    errorDetails: true, // Show detailed error messages
-  },
+  stats: "errors-only", // suppress irrelevant log messages
 };

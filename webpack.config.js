@@ -44,7 +44,7 @@ module.exports = {
   entry: "./src/js/index.js",
   devServer: {
     static: {
-      directory: path.join(__dirname, "./build"),
+      directory: path.join(__dirname, "./public"),
     },
     compress: true,
     port: 3000,
@@ -112,7 +112,7 @@ module.exports = {
   ],
   output: {
     filename: "bundle.js",
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "public"),
     clean: true,
     assetModuleFilename: "[path][name][ext]",
   },

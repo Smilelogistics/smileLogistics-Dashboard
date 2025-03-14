@@ -20,7 +20,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
   </head>
   <body
-    x-data="{ page: 'bike', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-data="{ page: 'truck', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
     x-init="
          darkMode = JSON.parse(localStorage.getItem('darkMode'));
          $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
@@ -52,7 +52,7 @@
         <main>
           <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
             <!-- Breadcrumb Start -->
-            <div x-data="{ pageName: `Bike`}">
+            <div x-data="{ pageName: `Truck`}">
               <include src="./partials/breadcrumb.html" />
             </div>
             <!-- Breadcrumb End -->
@@ -90,9 +90,9 @@
                                 <label class="block text-gray-700 dark:text-gray-300">bike Type</label>
                                 <select x-model="formData.bike_type" name="bike_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Select Type</option>
-                                    <option value="owner_operator">Owner Operator Bike</option>
-                                    <option value="company_bike">Company Bike</option>
-                                    <option value="fleet_owner">fleet Owner Bike</option>
+                                    <option value="owner_operator">Owner Operator Truck</option>
+                                    <option value="company_truck">Company Truck</option>
+                                    <option value="fleet_owner">fleet Owner Truck</option>
                                     <option value="leased">Leased</option>
                                     <option value="rented">Rented</option>
                                 </select>

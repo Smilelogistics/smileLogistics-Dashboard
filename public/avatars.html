@@ -43,14 +43,14 @@
   >
     <a href="index.html">
       <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
-        <img class="dark:hidden w-40" src="src/images/logo/logo-dark.png" alt="Logo" />
-        <img class="hidden dark:block w-40" src="src/images/logo/logo-light.png" alt="Logo"/>
+        <img class="dark:hidden w-20 h-auto xs:w-24 sm:w-24 md:w-32 lg:w-40" src="src/assets/images/logo/logo-dark.png" alt="Logo" />
+        <img class="hidden dark:block w-20 h-auto xs:w-24 sm:w-32 md:w-32 lg:w-40" src="src/assets/images/logo/logo-light.png" alt="Logo"/>
       </span>
 
       <img
         class="logo-icon"
         :class="sidebarToggle ? 'lg:block' : 'hidden'"
-        src="src/images/logo/logo-icon.svg"
+        src="src/assets/images/logo/logo-icon.svg"
         alt="Logo"
       />
     </a>
@@ -661,7 +661,7 @@
               </li>
               <!-- Shipment Driver Ends -->
 
-              <!-- Menu item Customer -->
+              <!-- Menu item Truck -->
               <li>
                 <a href="#" @click.prevent="selected = (selected === 'Manage Truck' ? '':'Manage Truck')" class="menu-item group"
                   :class=" (selected === 'Manage Truck') || (page === 'Manage Truck') ? 'menu-item-active' : 'menu-item-inactive'">
@@ -706,16 +706,16 @@
                       <a href="truck.html" class="menu-dropdown-item group" :class="page === 'truck' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">New Truck</a>
                     </li>
                     <li>
-                      <a href="shipment.html" class="menu-dropdown-item group" :class="page === 'truck' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Truck List</a>
+                      <a href="shipment.html" class="menu-dropdown-item group" :class="page === 'truck' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Driver Truck</a>
                     </li>
                   </ul>
                 </div>
                 <!-- Dropdown Menu End -->
               </li>
               <!-- Shipment Truck Ends -->
-               
-              <!-- Menu item BIke -->
-              <li>
+              
+               <!-- Menu item BIke -->
+               <li>
                 <a href="#" @click.prevent="selected = (selected === 'Manage BIke' ? '':'Manage BIke')" class="menu-item group"
                   :class=" (selected === 'Manage BIke') || (page === 'Manage BIke') ? 'menu-item-active' : 'menu-item-inactive'">
                 <svg :class="(selected === 'Manage BIke') || (page === 'bike') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
@@ -747,7 +747,7 @@
                     />
                   </svg>
                 </a>
-
+    
                 <!-- Dropdown Menu Start -->
                 <div
                   class="overflow-hidden transform translate"
@@ -759,14 +759,13 @@
                       <a href="bike.html" class="menu-dropdown-item group" :class="page === 'BIke' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">New BIke</a>
                     </li>
                     <li>
-                      <a href="shipment.html" class="menu-dropdown-item group" :class="page === 'bike' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Bike List</a>
+                      <a href="shipment.html" class="menu-dropdown-item group" :class="page === 'bike' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Driver Truck</a>
                     </li>
                   </ul>
                 </div>
                 <!-- Dropdown Menu End -->
               </li>
               <!-- Shipment Bike Ends -->
-              
 
               <!-- Menu item Carrier -->
               <li>
@@ -820,6 +819,7 @@
                 <!-- Dropdown Menu End -->
               </li>
               <!-- Shipment Carriers Ends -->
+
 
               <!-- Menu item Carrier -->
               <li>
@@ -1607,8 +1607,8 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
       <!-- Hamburger Toggle BTN -->
 
       <a href="index.html" class="lg:hidden">
-        <img class="dark:hidden" src="src/images/logo/logo-dark.png" alt="Logo" />
-        <img class="hidden dark:block" src="src/images/logo/logo-light.png" alt="Logo"/>
+        <img class="dark:hidden" src="src/assets/images/logo/logo-dark.png" alt="Logo" />
+        <img class="hidden dark:block" src="src/assets/images/logo/logo-light.png" alt="Logo"/>
       </a>
 
       <!-- Application nav menu button -->
@@ -1794,7 +1794,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     class="relative block w-full h-10 rounded-full z-1 max-w-10"
                   >
                     <img
-                      src="src/images/user/user-02.jpg"
+                      src="src/assets/images/user/user-02.jpg"
                       alt="User"
                       class="overflow-hidden rounded-full"
                     />
@@ -1836,7 +1836,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     class="relative block w-full h-10 rounded-full z-1 max-w-10"
                   >
                     <img
-                      src="src/images/user/user-03.jpg"
+                      src="src/assets/images/user/user-03.jpg"
                       alt="User"
                       class="overflow-hidden rounded-full"
                     />
@@ -1878,7 +1878,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     class="relative block w-full h-10 rounded-full z-1 max-w-10"
                   >
                     <img
-                      src="src/images/user/user-04.jpg"
+                      src="src/assets/images/user/user-04.jpg"
                       alt="User"
                       class="overflow-hidden rounded-full"
                     />
@@ -1920,7 +1920,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     class="relative block w-full h-10 rounded-full z-1 max-w-10"
                   >
                     <img
-                      src="src/images/user/user-05.jpg"
+                      src="src/assets/images/user/user-05.jpg"
                       alt="User"
                       class="overflow-hidden rounded-full"
                     />
@@ -1962,7 +1962,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     class="relative block w-full h-10 rounded-full z-1 max-w-10"
                   >
                     <img
-                      src="src/images/user/user-02.jpg"
+                      src="src/assets/images/user/user-02.jpg"
                       alt="User"
                       class="overflow-hidden rounded-full"
                     />
@@ -2004,7 +2004,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     class="relative block w-full h-10 rounded-full z-1 max-w-10"
                   >
                     <img
-                      src="src/images/user/user-03.jpg"
+                      src="src/assets/images/user/user-03.jpg"
                       alt="User"
                       class="overflow-hidden rounded-full"
                     />
@@ -2046,7 +2046,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     class="relative block w-full h-10 rounded-full z-1 max-w-10"
                   >
                     <img
-                      src="src/images/user/user-04.jpg"
+                      src="src/assets/images/user/user-04.jpg"
                       alt="User"
                       class="overflow-hidden rounded-full"
                     />
@@ -2088,7 +2088,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     class="relative block w-full h-10 rounded-full z-1 max-w-10"
                   >
                     <img
-                      src="src/images/user/user-05.jpg"
+                      src="src/assets/images/user/user-05.jpg"
                       alt="User"
                       class="overflow-hidden rounded-full"
                     />
@@ -2146,7 +2146,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
           @click.prevent="dropdownOpen = ! dropdownOpen"
         >
           <span class="mr-3 overflow-hidden rounded-full h-11 w-11">
-            <img src="src/images/user/owner.jpg" alt="User" />
+            <img src="src/assets/images/user/owner.jpg" alt="User" />
           </span>
 
           <span class="block mr-1 font-medium text-theme-sm"> Super Admin </span>
@@ -2353,7 +2353,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                   <div class="flex flex-col items-center justify-center gap-5 sm:flex-row">
   <div class="relative h-6 w-full max-w-6 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2361,7 +2361,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-8 w-full max-w-8 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2369,7 +2369,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-10 w-full max-w-10 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2377,7 +2377,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-12 w-full max-w-12 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2385,7 +2385,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-14 w-full max-w-14 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2393,7 +2393,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-16 w-full max-w-16 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2416,7 +2416,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                   <div class="flex flex-col items-center justify-center gap-5 sm:flex-row">
   <div class="relative h-6 w-full max-w-6 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2428,7 +2428,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-8 w-full max-w-8 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2440,7 +2440,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-10 w-full max-w-10 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2452,7 +2452,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-12 w-full max-w-12 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2464,7 +2464,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-14 w-full max-w-14 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2476,7 +2476,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-16 w-full max-w-16 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2503,7 +2503,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                   <div class="flex flex-col items-center justify-center gap-5 sm:flex-row">
   <div class="relative h-6 w-full max-w-6 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2515,7 +2515,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-8 w-full max-w-8 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2527,7 +2527,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-10 w-full max-w-10 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2539,7 +2539,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-12 w-full max-w-12 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2551,7 +2551,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-14 w-full max-w-14 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2563,7 +2563,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-16 w-full max-w-16 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2590,7 +2590,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                   <div class="flex flex-col items-center justify-center gap-5 sm:flex-row">
   <div class="relative h-6 w-full max-w-6 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2602,7 +2602,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-8 w-full max-w-8 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2614,7 +2614,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-10 w-full max-w-10 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2626,7 +2626,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-12 w-full max-w-12 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2638,7 +2638,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-14 w-full max-w-14 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />
@@ -2650,7 +2650,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
 
   <div class="relative h-16 w-full max-w-16 rounded-full">
     <img
-      src="src/images/user/user-01.jpg"
+      src="src/assets/images/user/user-01.jpg"
       alt="user"
       class="overflow-hidden rounded-full"
     />

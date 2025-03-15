@@ -252,7 +252,7 @@
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Settlement email, if Different from main</label>
-                                <input type="text" x-model="formData.send_settlements_mail" name="send_settlements_mail" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <input type="email" x-model="formData.send_settlements_mail" name="send_settlements_mail" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">settlement company </label>
@@ -330,12 +330,53 @@
           return {
               step: localStorage.getItem('Driver_step') ? parseInt(localStorage.getItem('Driver_step')) : 1,
               formData: JSON.parse(localStorage.getItem('formData')) || {
-                  full_name: '',
-                  email: '',
-                  phone: '',
-                  charge_amount: '',
-                  charge_type: '',
-                  currency: '',
+                fname: '',
+                lname: '',
+                mname: '',
+                email: '',
+                driver_type: '',
+                truck: '',
+                quick_note: '',
+                dispatcher_note: '',
+                driver_phone: '',
+                driver_phone_carrier: '',
+                driver_primary_address: '',
+                driver_secondary_address: '',
+                driver_city: '',
+                driver_state: '',
+                driver_zip: '',
+                fnameemergency_contact_info: '',
+                hired_on: '',
+                years_of_experience: '',
+                endorsements: '',
+                rating: '',
+                tags: '',
+                notes_about_the_choices_made: '',
+                isAccessToMobileApp: '',
+                mobile_settings: '',
+                pay_via: '',
+                company_name_paid_to: '',
+                employer_identification_number: '',
+                send_settlements_mail: '',
+                print_settlements_under_this_company: '',
+                flash_notes_to_dispatch: '',
+                flash_notes_to_payroll: '',
+                internal_notes: '',
+                file_path: '',
+                fname: '',
+                fname: '',
+                fname: '',
+                fname: '',
+                fname: '',
+                fname: '',
+                fname: '',
+                fname: '',
+                fname: '',
+                fname: '',
+                fname: '',
+                fname: '',
+                fname: '',
+                fname: '',
               },
               nextStep() {
                   this.step++;

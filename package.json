@@ -57,6 +57,7 @@
     "fullcalendar": "^6.1.15",
     "jquery": "^3.7.1",
     "jsvectormap": "^1.6.0",
+    "signature_pad": "^5.0.6",
     "swiper": "^11.1.14"
   }
 }

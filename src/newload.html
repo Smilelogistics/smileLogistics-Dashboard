@@ -115,11 +115,11 @@
                                         <input type="text" x-model="formData.ocean_shipper_reference_number" name="ocean_shipper_reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                     </div>
                                 </div>
-                                
+                               
                                 <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Carrier Name</label>
-                                        <select x-model="formData.shipper_name" name="shipper_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <select x-model="formData.carrier_name" name="carrier_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                         <option value="" selected disabled>Selet carrier</option>
                                         <option value="import">Joen Doe</option>
                                         <option value="export">Export</option>
@@ -140,7 +140,7 @@
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Consignee</label>
                                             <input type="text" x-model="formData.consignee" name="consignee" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                        </div>
+                                        </div> 
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Phone #</label>
                                             <input type="text" x-model="formData.consignee_phone" name="consignee_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
@@ -178,6 +178,8 @@
                                             <label class="block text-gray-700 dark:text-gray-300">Name</label>
                                             <input type="text" x-model="formData.second_notify_party_phone" name="second_notify_party_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                         </div>
+                                        
+                                        
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Phone #</label>
                                             <input type="text" x-model="formData.second_notify_party_phone" name="second_notify_party_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
@@ -279,11 +281,11 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 mb-6">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Total</label>
-                                        <input type="text" x-model="formData.ocean_total" name="ocean_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" readonly>
+                                        <input type="text" x-model="formData.ocean_total" name="ocean_total" id="ocean_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" readonly>
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Consignment Total</label>
-                                        <input type="text" x-model="formData.ocean_consignment_total" name="ocean_consignment_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" readonly>
+                                        <input type="text" x-model="formData.ocean_consignment_total" name="ocean_consignment_total" id="ocean_consignment_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" readonly>
                                     </div>
                                 </div>
                                 <div>
@@ -351,7 +353,7 @@
                                                   </svg>
                                                   
                                             </span></label>
-                                            <input type="text" x-model="formData.shipped_on_board_date" id="shipped_on_board_date" name="shipped_on_board_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="file" x-model="formData.ocean_signature" id="ocean_signature" name="ocean_signature" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                         </div>
                                     </div>
                                 </div>
@@ -1051,7 +1053,13 @@
                                 <label class="flex items-center space-x-2">
                                     <input type="radio" x-model="formData.delivery_type" name="delivery_type" value="Truck"
                                         class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                                    <span class="text-gray-700 dark:text-gray-300">Bike/Truck</span>
+                                    <span class="text-gray-700 dark:text-gray-300">Truck</span>
+                                </label>
+                                <!-- Radio Option 3 Bike -->
+                                <label class="flex items-center space-x-2">
+                                    <input type="radio" x-model="formData.delivery_type" name="delivery_type" value="Bike"
+                                        class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                    <span class="text-gray-700 dark:text-gray-300">Bike</span>
                                 </label>
                             </div>
                         
@@ -1073,6 +1081,18 @@
                                 <select x-model="formData.carrier_id" name="carrier_id"
                                     class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Choose Driver</option>
+                                    <option value="1">John Doe</option>
+                                    <option value="2">Billy John</option>
+                                    <option value="3">Jane Doe</option>
+                                </select>
+                            </div>
+
+                             <!-- Show when "Bike" is selected -->
+                             <div x-show="formData.delivery_type === 'Bike'" class="isBike mt-4">
+                                <label class="block text-gray-700 dark:text-gray-300">Assign Bike</label>
+                                <select x-model="formData.bike_id" name="bike_id"
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Choose Bike</option>
                                     <option value="1">John Doe</option>
                                     <option value="2">Billy John</option>
                                     <option value="3">Jane Doe</option>
@@ -1319,34 +1339,41 @@
                   disputed_note: '',
                   expense_disputed: '',
                   paid: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
+                //   currency: '',
+                  
+                  shipment_type: '',
+                    shipper_name: '',
+                    ocean_shipper_address: '',
+                    ocean_shipper_reference_number: '',
+                    carrier_name: '',
+                    carrier_reference_number: '',
+                    ocean_bill_of_ladening_number: '',
+                    consignee: '',
+                    consignee_phone: '',
+                    consignee_email: '',
+                    first_notify_party_name: '',
+                    first_notify_party_phone: '',
+                    first_notify_party_email: '',
+                    second_notify_party_name: '',
+                    second_notify_party_phone: '',
+                    second_notify_party_email: '',
+                    pre_carrier: '',
+                    vessel_aircraft_name: '',
+                    voyage_number: '',
+                    port_of_discharge: '',
+                    place_of_delivery: '',
+                    final_destination: '',
+                    port_of_landing: '',
+                    ocean_note: '',
+                    ocean_freight_charges: '',
+                    ocean_total_containers_in_words: '',
+                    no_original_bill_of_landing: '',
+                    original_bill_of_landing_payable_at: '',
+                    ocean_freight_charges: '',
+                    shipped_on_board_date: '',
+                    goods_name: '',
+                    ocean_vin: '',
+                    ocean_weight: '',
               },
               nextStep() {
                   this.step++;
@@ -1455,6 +1482,27 @@
         {
             element.parentElement.parentElement.remove();
         }
+
+    //     function duplicateGoods() {
+    //     var pickup = document.getElementById("chargesDuplicate");
+    //     var pickupList = document.getElementById("goodsList");
+    //     var newPickup = pickup.cloneNode(true);
+
+    //     // Ensure the cloned element has a unique ID to avoid duplicates
+    //     newPickup.id = "chargesDuplicate_" + Date.now();
+
+    //     // Append the cloned element
+    //     pickupList.appendChild(newPickup);
+    // }
+
+    // function removeGoods(element) {
+    //     var item = element.closest(".charges-item");
+    //     if (item) {
+    //         item.remove();
+    //     }
+    // }
+
+        
 
         
 function handleShipmentType() {

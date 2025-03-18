@@ -26,8 +26,9 @@
 
   .Toastnotifications {
       position: fixed;
-      top: 30px;
+      top: 80px;
       right: 20px;
+      z-index: 1000;
   }
 
   .Toastnotifications :where(.toast, .column) {
@@ -210,16 +211,6 @@
       };
 })
 </script>
-
-<ul class="Toastnotifications">
-  <!-- li toast -->
-</ul>
-<div class="Toastbuttons" style="display: none">
-  <button class="Toastbtn" id="success">Success</button>
-  <button class="Toastbtn" id="error">Error</button>
-  <button class="Toastbtn" id="warning">Warning</button>
-  <button class="Toastbtn" id="info">Info</button>
-</div>
 
 <aside
   :class="sidebarToggle ? 'translate-x-0 lg:w-[90px]' : '-translate-x-full'"
@@ -1686,6 +1677,17 @@
     <!-- Promo Box -->
   </div>
 </aside>
+
+<ul class="Toastnotifications">
+  <!-- li toast -->
+</ul>
+<div class="Toastbuttons" style="display: none">
+  <button class="Toastbtn" id="success">Success</button>
+  <button class="Toastbtn" id="error">Error</button>
+  <button class="Toastbtn" id="warning">Warning</button>
+  <button class="Toastbtn" id="info">Info</button>
+</div>
+
 
 <script type="text/javascript">
   // Prevent non-numeric input

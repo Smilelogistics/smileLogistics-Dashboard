@@ -90,6 +90,9 @@
                         <div x-data="{ selectedOption: 'ocean'}">
                             <div  class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                 <div x-data="{ isAuthenticated: false }">
+                                    <span x-show="!isAuthenticated" onclick="user()" class="cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">Get User
+
+                                    </span>
 
                                 <span x-show="!isAuthenticated" onclick="login()" class="cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400"> login</span>
                                 <span x-show="!isAuthenticated" onclick="register()" class="cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">Register</span>
@@ -144,7 +147,7 @@
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">BOL #</label>
-                                        <input type="text" x-model="formData.ocean_bill_of_ladening_number" name="ocean_bill_of_ladening_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="bill_of_ladening_number">
+                                        <input type="text" x-model="formData.ocean_bill_of_ladening_number" name="ocean_bill_of_ladening_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="bill_of_ladening_number">
                                     </div>
                                 </div>
                                 <div>
@@ -333,10 +336,10 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Freight Charges</label>
-                                            <select x-model="formData.ocean_freight_charges" name="ocean_freight_charges" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_freight_charges">
+                                            <select x-model="formData.ocean_freight_charges" name="ocean_freight_charges" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly placeholder="" id="ocean_freight_charges">
                                                 <option value="" selected disabled>Selet Charges</option>
-                                                <option value="prepay">Prepay</option>
-                                                <option value="postpay">Postpay</option>
+                                                <option value="1">Prepay</option>
+                                                <option value="2">Postpay</option>
                                             </select>
                                         </div>
                                         <div>
@@ -620,7 +623,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Pieces</label>
-                                    <input type="text" x-model="formData.pieces" name="pieces" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="pieces">
+                                    <input type="text" x-model="formData.pieces" name="pieces" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="pieces">
                                 </div>
                             <!-- Load Note Radio Buttons and Checkbox -->
                                 <div>
@@ -1274,6 +1277,10 @@
     <!-- ===== Page Wrapper End ===== -->
 
     <script>
+        // $(document).ready(function(){
+        //     createToast('success', 'succesfuly loaded');
+        // })
+       
         
 var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
       function stepperForm() {
@@ -1404,63 +1411,155 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
               },
 
               saveAndSubmit(e) {
-                //var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
-
+                var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                   localStorage.removeItem('formData');
                   localStorage.removeItem('step');
                   e.preventDefault();
                   var shipment_type = document.getAnimations("shipment_type").value
 
                     let form = document.getElementById("newloadForm");
-                    let formData = new FormData(form); // Collects both text and file input
+                    let formData = new FormData(form);
                     var s = document.getElementById("shipper_reference_number").value
-                    console.log(s)
+                    // Log FormData contents
+                    // console.log("FormData Contents:");
+                    // for (let pair of formData.entries()) {
+                    //     console.log(pair[0] + ": " + pair[1]);
+                    // }
+                    //       console.log(localStorage.getItem('auth_token'))
+                    //  return
 
-                    //let formData = new FormData(this);
+                    $.ajax({
+                        url: requestURL+'/shipments/create',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        },
 
-                // Log FormData contents
-                // console.log("FormData Contents:");
-                // for (let pair of formData.entries()) {
-                //     console.log(pair[0] + ": " + pair[1]);
-                // }
-                //       console.log(localStorage.getItem('auth_token'))              
-                
-                //  return
+                        beforeSend:function(){
+                            document.getElementById("Ajaxbackdrop").style.display = 'flex'
+                        },
 
-        $.ajax({
-            url: requestURL+'/shipments/create',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            headers: {
-                'Authorization': 'Bearer'+ localStorage.getItem('auth_token'),
-                'Accept': 'application/json'
-            },
+                        success: (response) => {
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            console.log('Form submitted successfully:', response);
+                            createToast('success', 'Shipment uploaded succesfully.');
+                            localStorage.removeItem('formData');
+                            localStorage.removeItem('step');
+                        },
+                         error: (xhr, status, error) => {
+                        console.error('Form submission failed:', xhr.responseText);
 
-            success: (response) => {
-                // Handle the success response
-                console.log('Form submitted successfully:', response);
-                // alert('Form submitted successfully!');
-
-                // Clear local storage after successful submission
-                localStorage.removeItem('formData');
-                localStorage.removeItem('step');
-            },
-                /**
-                 * Handles errors when submitting the form via AJAX
-                 * @param {Object} xhr - The XMLHttpRequest object
-                 * @param {String} status - The status of the request (e.g., 'error')
-                 * @param {String} error - The error message
-                 */
-            error: (xhr, status, error) => {
-                // Handle the error
-                console.error('Form submission failed:', error);
-                //alert('Form submission failed. Please try again.');
+                        try {
+                            let response = JSON.parse(xhr.responseText);
+                            
+                            if (response.errors) {
+                                let messages = Object.values(response.errors).flat().join('<br>'); // Combines multiple errors
+                                createToast('error', messages);
+                            } else if (response.message) {
+                                createToast('error', response.message);
+                            } else {
+                                createToast('error', 'An unexpected error occurred. Please try again.');
+                            }
+                        } catch (e) {
+                            createToast('error', 'An error occurred. Please check your input and try again.');
+                        }
+                    }
+                });
             }
-        });
-        }
         };
+    }
+
+    //populate driver select
+ 
+    function populateDriverSelect() {
+    var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
+
+    $.ajax({
+        url: requestURL + '/drivers/driver',
+        type: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'), // Add space after 'Bearer'
+            'Accept': 'application/json'
+        },
+        success: (response) => {
+            console.log('Driver data:', response);
+            if(response.length == 0){
+                createToast('error', 'No drivers found.');
+                return
+            }
+
+            // Ensure the response is an array
+            if (Array.isArray(response)) {
+                var driverSelect = document.getElementById('driver');
+
+                // Clear existing options (if any)
+                driverSelect.innerHTML = '';
+
+                // Add a default option
+                var defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.text = 'Select a driver';
+                driverSelect.appendChild(defaultOption);
+
+                // Populate the dropdown with driver data
+                response.forEach(driver => {
+                    var option = document.createElement('option');
+                    option.value = driver.id;
+                    option.text = driver.first_name + ' ' + driver.last_name;
+                    driverSelect.appendChild(option);
+                });
+            } else {
+                console.error('Invalid response format:', response);
+                createToast('error', 'Invalid driver data received.');
+            }
+        },
+        error: (xhr, status, error) => {
+            console.error('API request failed:', xhr.responseText);
+
+            if (xhr.status === 401) { // Unauthorized
+                alert("Session expired. Please log in again.");
+                localStorage.removeItem('auth_token');
+                window.location.href = "/login";
+            } else {
+                try {
+                    let response = JSON.parse(xhr.responseText);
+                    let message = response.message || "An error occurred. Please try again.";
+                    createToast('error', message);
+                } catch (e) {
+                    createToast("error", "An unexpected error occurred.");
+                }
+            }
+        }
+    });
+}
+
+// Call the function to populate the driver dropdown
+populateDriverSelect();
+
+
+    function user()
+    {
+        $.ajax({
+        url: requestURL + '/user',
+        type: 'GET',
+        headers: {
+            'Authorization': 'Bearer'+ localStorage.getItem('auth_token')
+        },
+        success: (response) => {
+            console.log('user data:', response);
+            // alert('Login successful!');
+            // localStorage.setItem('auth_token', response.token);
+        },
+        error: (xhr, status, error) => {
+            console.error('Login failed:', xhr.responseText); // ✅ Log error details
+            //alert('Login failed. Please check your credentials.');
+            console.log(logins)
+        }
+    });
     }
 
     function login() {

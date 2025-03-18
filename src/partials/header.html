@@ -749,4 +749,92 @@
       <!-- User Area -->
     </div>
   </div>
+
+
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+  /* * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+  } */
+
+  :root {
+      --dark: #34495e;
+      --light: #fff;
+      --success: #0abf30;
+      --error: #f24d4c;
+      --warning: #e9bd0c;
+      --info: #3498db;
+  }
+
+  /* body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: var(--dark);
+  } */
+
+
+  .Ajaxbackdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+</style>
+    <style>
+          .loader {
+            display: inline-grid;
+            width: 130px;
+            aspect-ratio: 2;
+            box-shadow: 0 5px #574951;
+            overflow: hidden;
+            z-index: 30000;
+          }
+          .loader:before {
+            content: "";
+            margin: 0 25%;
+            background: #f3f8f6;
+            clip-path: polygon(97.55% 65.45%,50% 100%,2.45% 65.45%,20.61% 9.55%,79.39% 9.55%);
+            transform-origin: bottom;
+            animation: 
+              l7-0 .5s linear infinite,
+              l7-1  3s steps(6) infinite;
+          }
+          @keyframes l7-0 {
+            0%{rotate: -36deg}
+            to{rotate:  36deg}
+          }
+          @keyframes l7-1 {
+            0%{translate: -174% 0}
+            to{translate:  174% 0}
+          }
+
+          .content 
+          {
+            /* background: white; */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+          }
+        </style>
+
+<div class="Ajaxbackdrop" id="Ajaxbackdrop" style="display: none;">
+  <div class="content">
+    <div class="loader"></div> 
+  </div>
+</div>
 </header>

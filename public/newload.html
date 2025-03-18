@@ -3,7 +3,6 @@
     <head>
         <meta charset="UTF-8">
 
-        <script src="src/assets/js/main.js"></script>
         
 
     <meta charset="UTF-8" />
@@ -12,6 +11,8 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>New Load | smileslogistics</title>
     <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -115,8 +116,242 @@ button {
       cursor: pointer;
     } */
 
+    
+  .toast {
+    position: absolute;
+    top: 25px;
+    right: 30px;
+    border-radius: 12px;
+    background: #fff;
+    padding: 20px 35px 20px 25px;
+    box-shadow: 0 6px 20px -5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transform: translateX(calc(100% + 30px));
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
+  }
+  
+  .toast.active {
+    transform: translateX(0%);
+  }
+  
+  .toast .toast-content {
+    display: flex;
+    align-items: center;
+  }
+  
+  .toast-content .check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px;
+    min-width: 35px;
+    background-color: #4070f4;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 50%;
+  }
+  
+  .toast-content .message {
+    display: flex;
+    flex-direction: column;
+    margin: 0 20px;
+  }
+  
+  .message .text {
+    font-size: 16px;
+    font-weight: 400;
+    color: #666666;
+  }
+  
+  .message .text.text-1 {
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .toast .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    padding: 5px;
+    cursor: pointer;
+    opacity: 0.7;
+  }
+  
+  .toast .close:hover {
+    opacity: 1;
+  }
+  
+  .toast .progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+  
+  }
+  
+  .toast .progress:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #4070f4;
+  }
+  
+  .progress.active:before {
+    animation: progress 5s linear forwards;
+  }
+  
+  @keyframes progress {
+    100% {
+      right: 100%;
+    }
+  }
+  
+  button {
+    padding: 12px 20px;
+    font-size: 20px;
+    outline: none;
+    border: none;
+    background-color: #4070f4;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  button:hover {
+    background-color: #0e4bf1;
+  }
+  
+  .toast.active ~ button {
+    pointer-events: none;
+  }
+  
+
   </style>
 
+<!-- 
+  .toast {
+    position: absolute;
+    top: 25px;
+    right: 30px;
+    border-radius: 12px;
+    background: #fff;
+    padding: 20px 35px 20px 25px;
+    box-shadow: 0 6px 20px -5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transform: translateX(calc(100% + 30px));
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
+  }
+  
+  .toast.active {
+    transform: translateX(0%);
+  }
+  
+  .toast .toast-content {
+    display: flex;
+    align-items: center;
+  }
+  
+  .toast-content .check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px;
+    min-width: 35px;
+    background-color: #4070f4;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 50%;
+  }
+  
+  .toast-content .message {
+    display: flex;
+    flex-direction: column;
+    margin: 0 20px;
+  }
+  
+  .message .text {
+    font-size: 16px;
+    font-weight: 400;
+    color: #666666;
+  }
+  
+  .message .text.text-1 {
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .toast .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    padding: 5px;
+    cursor: pointer;
+    opacity: 0.7;
+  }
+  
+  .toast .close:hover {
+    opacity: 1;
+  }
+  
+  .toast .progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+  
+  }
+  
+  .toast .progress:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #4070f4;
+  }
+  
+  .progress.active:before {
+    animation: progress 5s linear forwards;
+  }
+  
+  @keyframes progress {
+    100% {
+      right: 100%;
+    }
+  }
+  
+  button {
+    padding: 12px 20px;
+    font-size: 20px;
+    outline: none;
+    border: none;
+    background-color: #4070f4;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  button:hover {
+    background-color: #0e4bf1;
+  }
+  
+  .toast.active ~ button {
+    pointer-events: none;
+  }
+   -->
+        <script src="src/assets/js/main.js"></script>
+        <script>
+        
+
+        </script>
     <link rel="icon" href="favicon.ico"><link href="style.css" rel="stylesheet"></head>
   <body
     x-data="{ page: 'newload', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -125,6 +360,8 @@ button {
          $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
     :class="{'dark bg-gray-900': darkMode === true}"
   >
+
+  
     <!-- ===== Preloader Start ===== -->
     <div
   x-show="loaded"
@@ -2702,11 +2939,21 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     </template>
                 </ol>
             
-                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data">
+
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newloadForm">
                     <!-- Step 1: Basic Info -->
                     <div x-show="step === 1" >
+                                        
                         <div x-data="{ selectedOption: 'ocean'}">
                             <div  class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <div x-data="{ isAuthenticated: false }">
+                                    <span x-show="!isAuthenticated" onclick="user()" class="cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">Get User
+
+                                    </span>
+
+                                <span x-show="!isAuthenticated" onclick="login()" class="cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400"> login</span>
+                                <span x-show="!isAuthenticated" onclick="register()" class="cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">Register</span>
+                                </div>
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Type</label>
                                         <select x-model="selectedOption" name="shipment_type" id="shipment_type" onchange="handleShipmentType(this.value)" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
@@ -2722,7 +2969,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                     
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Name</label>
-                                        <select x-model="formData.shipper_name" name="shipper_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <select x-model="formData.shipper_name" name="shipper_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="shipper_name">
                                         <option value="" selected disabled>Select shipper</option>
                                         <option value="import">Import</option>
                                         <option value="export">Export</option>
@@ -2734,18 +2981,18 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Shipper Address</label>
-                                        <input type="text" x-model="formData.ocean_shipper_address" name="ocean_shipper_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <input type="text" x-model="formData.ocean_shipper_address" name="ocean_shipper_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="shipper_address">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Shipper Reference #</label>
-                                        <input type="text" x-model="formData.ocean_shipper_reference_number" name="ocean_shipper_reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <input type="text" x-model="formData.ocean_shipper_reference_number" name="ocean_shipper_reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="shipper_reference_number">
                                     </div>
                                 </div>
-                                
+                               
                                 <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Carrier Name</label>
-                                        <select x-model="formData.shipper_name" name="shipper_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <select x-model="formData.carrier_name" name="carrier_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="carrier_name">
                                         <option value="" selected disabled>Selet carrier</option>
                                         <option value="import">Joen Doe</option>
                                         <option value="export">Export</option>
@@ -2753,11 +3000,11 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Carrier Reference #</label>
-                                        <input type="text" x-model="formData.carrier_reference_number" name="carrier_reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <input type="text" x-model="formData.carrier_reference_number" name="carrier_reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="carrier_reference_number">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">BOL #</label>
-                                        <input type="text" x-model="formData.ocean_bill_of_ladening_number" name="ocean_bill_of_ladening_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <input type="text" x-model="formData.ocean_bill_of_ladening_number" name="ocean_bill_of_ladening_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="bill_of_ladening_number">
                                     </div>
                                 </div>
                                 <div>
@@ -2765,15 +3012,15 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Consignee</label>
-                                            <input type="text" x-model="formData.consignee" name="consignee" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                        </div>
+                                            <input type="text" x-model="formData.consignee" name="consignee" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="consignee">
+                                        </div> 
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Phone #</label>
-                                            <input type="text" x-model="formData.consignee_phone" name="consignee_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.consignee_phone" name="consignee_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="consignee_phone">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Email</label>
-                                            <input type="email" x-model="formData.consignee_email" name="consignee_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="email" x-model="formData.consignee_email" name="consignee_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="consignee_email">
                                         </div>
                                     </div>
                                 </div>
@@ -2784,15 +3031,15 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Name</label>
-                                            <input type="text" x-model="formData.first_notify_party_name" name="first_notify_party_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.first_notify_party_name" name="first_notify_party_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="first_notify_party_name">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Phone #</label>
-                                            <input type="text" x-model="formData.first_notify_party_phone" name="first_notify_party_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.first_notify_party_phone" name="first_notify_party_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="first_notify_party_phone">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Email</label>
-                                            <input type="email" x-model="formData.first_notify_party_email" name="first_notify_party_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="email" x-model="formData.first_notify_party_email" name="first_notify_party_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="first_notify_party_email">
                                         </div>
                                     </div>
                                 </div>
@@ -2802,15 +3049,17 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Name</label>
-                                            <input type="text" x-model="formData.second_notify_party_phone" name="second_notify_party_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.second_notify_party_phone" name="second_notify_party_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="second_notify_party_phone">
                                         </div>
+                                        
+                                        
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Phone #</label>
-                                            <input type="text" x-model="formData.second_notify_party_phone" name="second_notify_party_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.second_notify_party_phone" name="second_notify_party_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="second_notify_party_phone">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Email</label>
-                                            <input type="email" x-model="formData.second_notify_party_email" name="second_notify_party_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="email" x-model="formData.second_notify_party_email" name="second_notify_party_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="second_notify_party_email">
                                         </div>
                                     </div>
                                 </div>
@@ -2821,7 +3070,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Pre Carried</label>
-                                            <select x-model="formData.pre_carrier" name="pre_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <select x-model="formData.pre_carrier" name="pre_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="pre_carrier">
                                                 <option value="" selected disabled>Selet carrier</option>
                                                 <option value="import">Joen Doe</option>
                                                 <option value="export">Export</option>
@@ -2829,22 +3078,22 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Vessel / Aircraft</label>
-                                            <input type="text" x-model="formData.vessel_aircraft_name" name="vessel_aircraft_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.vessel_aircraft_name" name="vessel_aircraft_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="vessel_aircraft_name">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Voyage No</label>
-                                            <input type="email" x-model="formData.voyage_number" name="voyage_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="email" x-model="formData.voyage_number" name="voyage_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="voyage_number">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Port of landing</label>
-                                            <input type="email" x-model="formData.port_of_discharge" name="port_of_discharge" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="email" x-model="formData.port_of_discharge" name="port_of_discharge" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="port_of_discharge">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Port Discharged</label>
-                                        <select x-model="formData.pre_carrier" name="pre_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <select x-model="formData.pre_carrier" name="pre_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="pre_carrier">
                                             <option value="" selected disabled>Selet carrier</option>
                                             <option value="import">Joen Doe</option>
                                             <option value="export">Export</option>
@@ -2852,21 +3101,21 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Place of Delivery</label>
-                                        <input type="text" x-model="formData.place_of_delivery" name="place_of_delivery" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <input type="text" x-model="formData.place_of_delivery" name="place_of_delivery" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="place_of_delivery">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Final Destination</label>
-                                        <input type="email" x-model="formData.final_destination" name="final_destination" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <input type="email" x-model="formData.final_destination" name="final_destination" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="final_destination">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Port of landing</label>
-                                        <input type="email" x-model="formData.port_of_landing" name="port_of_landing" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <input type="email" x-model="formData.port_of_landing" name="port_of_landing" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="port_of_landing">
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Additional Note</label>
-                                        <textarea type="text" rows="4" cols="4" x-model="formData.ocean_note" name="ocean_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""></textarea>
+                                        <textarea type="text" rows="4" cols="4" x-model="formData.ocean_note" name="ocean_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_note"></textarea>
                                     </div>
                                 </div>
                                 
@@ -2876,40 +3125,40 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">ITN</label>
-                                            <input type="text" x-model="formData.itn" name="itn" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.itn" name="itn" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="itn">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Kind and No of Packages</label>
-                                            <input type="text" x-model="formData.kind_and_no_of_packages" name="kind_and_no_of_packages" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.kind_and_no_of_packages" name="kind_and_no_of_packages" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="kind_and_no_of_packages">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Description</label>
-                                            <textarea rows="1" cols="1" type="text" x-model="formData.decsription_of_goods" name="decsription_of_goods" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                                            <textarea rows="1" cols="1" type="text" x-model="formData.decsription_of_goods" name="decsription_of_goods" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="decsription_of_goods"> </textarea>
                                         </div>
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Net weight (kg)</label>
-                                            <input type="text" x-model="formData.ocean_net_weight" name="ocean_net_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.ocean_net_weight" name="ocean_net_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_net_weight">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Gross weight (kg)</label>
-                                            <input type="text" x-model="formData.ocean_gross_weight" name="ocean_gross_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.ocean_gross_weight" name="ocean_gross_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_gross_weight">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Measurement (m<sup>3</sup>)</label>
-                                            <input type="text" x-model="formData.ocean_gross_weight" name="ocean_gross_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.ocean_gross_weight" name="ocean_gross_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_gross_weight">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 mb-6">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Total</label>
-                                        <input type="text" x-model="formData.ocean_total" name="ocean_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" readonly>
+                                        <input type="text" x-model="formData.ocean_total" name="ocean_total" id="ocean_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_total" readonly>
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Consignment Total</label>
-                                        <input type="text" x-model="formData.ocean_consignment_total" name="ocean_consignment_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" readonly>
+                                        <input type="text" x-model="formData.ocean_consignment_total" name="ocean_consignment_total" id="ocean_consignment_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_consignment_total" readonly>
                                     </div>
                                 </div>
                                 <div>
@@ -2918,33 +3167,33 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Container #</label>
-                                            <input type="text" x-model="formData.ocean_container_number" name="ocean_container_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.ocean_container_number" name="ocean_container_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_container_number">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Seal #</label>
-                                            <input type="text" x-model="formData.ocean_seal_number" name="ocean_seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.ocean_seal_number" name="ocean_seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_seal_number">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Equipment Size</label>
-                                            <input type="text" x-model="formData.equipment_size" name="equipment_size" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.equipment_size" name="equipment_size" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="equipment_size">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">No containers or packages in word</label>
-                                            <input type="text" x-model="formData.ocean_total_containers_in_words" name="ocean_total_containers_in_words" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.ocean_total_containers_in_words" name="ocean_total_containers_in_words" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_total_containers_in_words">
                                         </div>
                                     </div>
                                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">No of original Bill of landing</label>
-                                            <input type="text" x-model="formData.no_original_bill_of_landing" name="no_original_bill_of_landing" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.no_original_bill_of_landing" name="no_original_bill_of_landing" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="no_original_bill_of_landing">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Payable at</label>
-                                            <input type="text" x-model="formData.original_bill_of_landing_payable_at" name="original_bill_of_landing_payable_at" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.original_bill_of_landing_payable_at" name="original_bill_of_landing_payable_at" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="original_bill_of_landing_payable_at">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Freight Charges</label>
-                                            <select x-model="formData.ocean_freight_charges" name="ocean_freight_charges" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <select x-model="formData.ocean_freight_charges" name="ocean_freight_charges" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_freight_charges">
                                                 <option value="" selected disabled>Selet Charges</option>
                                                 <option value="prepay">Prepay</option>
                                                 <option value="postpay">Postpay</option>
@@ -2960,15 +3209,15 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Place of Issue</label>
-                                            <input type="text" x-model="formData.place_of_issue" name="place_of_issue" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.place_of_issue" name="place_of_issue" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="place_of_issue">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Signatory Company</label>
-                                            <input type="text" x-model="formData.signatory_company" name="signatory_company" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.signatory_company" name="signatory_company" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="signatory_company">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Authorize Signatory</label>
-                                            <input type="text" x-model="formData.authorized_signatory" id="authorized_signatory" name="shipped_on_board_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.authorized_signatory" id="authorized_signatory" name="shipped_on_board_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="authorized_signatory">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300 flex">Signature <span id="openModal" class="">
@@ -2977,7 +3226,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                                   </svg>
                                                   
                                             </span></label>
-                                            <input type="text" x-model="formData.shipped_on_board_date" id="shipped_on_board_date" name="shipped_on_board_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="file" id="ocean_signature" name="ocean_signature" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                         </div>
                                     </div>
                                 </div>
@@ -3017,11 +3266,11 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                 <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Office</label>
-                                        <input type="text" x-model="formData.office" name="office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter your name">
+                                        <input type="text" x-model="formData.office" name="office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter your name" id="office">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Load Type</label>
-                                        <select x-model="formData.load_type" onchange="handleLoadTypeChange(this.value)" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <select x-model="formData.load_type" onchange="handleLoadTypeChange(this.value)" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="load_type">
                                         <option value="" selected disabled>Select Load Type</option>
                                         <option value="import">Import</option>
                                         <option value="export">Export</option>
@@ -3033,7 +3282,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Load Note</label>
-                                        <input type="text" x-model="formData.load_type_note" name="load_type_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Notes">
+                                        <input type="text" x-model="formData.load_type_note" name="load_type_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Notes" id="load_type_note"	>
                                     </div>
                                 <!-- Load Note Radio Buttons and Checkbox -->
                                     <div>
@@ -3202,20 +3451,20 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                             <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Reference #</label>
-                                    <input type="text" x-model="formData.reference_number" name="reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <input type="text" x-model="formData.reference_number" name="reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="reference_number">
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Booking #</label>
-                                    <input type="text" x-model="formData.booking_number" name="booking_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <input type="text" x-model="formData.booking_number" name="booking_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="booking_number">
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">BOL #</label>
-                                    <input type="text" x-model="formData.bill_of_laden_number" name="bill_of_laden_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <input type="text" x-model="formData.bill_of_laden_number" name="bill_of_laden_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="bill_of_laden_number">
                                 </div>
                             <!-- Load Note Radio Buttons and Checkbox -->
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">PO #</label>
-                                    <input type="text" x-model="formData.po_number" name="po_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <input type="text" x-model="formData.po_number" name="po_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="po_number">
                                 </div>
                             </div>
 
@@ -3223,20 +3472,20 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                             <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Load Weight</label>
-                                    <input type="text" x-model="formData.load_weight" name="load_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <input type="text" x-model="formData.load_weight" name="load_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="load_weight">
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Commodity</label>
-                                    <input type="text" x-model="formData.commodity" name="commodity" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <input type="text" x-model="formData.commodity" name="commodity" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="commodity">
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Pieces</label>
-                                    <input type="text" x-model="formData.pieces" name="pieces" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <input type="text" x-model="formData.pieces" name="pieces" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="pieces">
                                 </div>
                             <!-- Load Note Radio Buttons and Checkbox -->
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Pick up #</label>
-                                    <input type="text" x-model="formData.pick_up_number" name="pick_up_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <input type="text" x-model="formData.pick_up_number" name="pick_up_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="pick_up_number">
                                 </div>
                                 
                                 <!-- <div>
@@ -3258,7 +3507,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                             <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                                 <div id="chosen-select">
                                     <label class="block text-gray-700 dark:text-gray-300">OverWeight/Hazmat etc</label>
-                                    <select x-model="formData.over_weight" name="over_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select" multiple>
+                                    <select x-model="formData.over_weight" name="over_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select" multiple id="over_weight">
                                         <!-- <option value="" selected disabled>Select Type</option> -->
                                         <option value="Tri-axle">Tri-axle</option>
                                         <option value="8-pin">8-pin</option>
@@ -3276,21 +3525,21 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Tags</label>
-                                    <input type="text" x-model="formData.tags" name="tags" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <input type="text" x-model="formData.tags" name="tags" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="tags">
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Genset #</label>
-                                    <input type="text" x-model="formData.genset_number" name="genset_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <input type="text" x-model="formData.genset_number" name="genset_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="genset_number">
                                 </div>
                             <!-- Load Note Radio Buttons and Checkbox -->
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Refeer Temp</label>
-                                    <input type="text" x-model="formData.reefer_temp" name="reefer_temp" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <input type="text" x-model="formData.reefer_temp" name="reefer_temp" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="reefer_temp">
                                 </div>
                                 
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Seal #</label>
-                                    <input type="text" x-model="formData.seal_number" name="seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <input type="text" x-model="formData.seal_number" name="seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="seal_number">
                                 </div>
                             </div>
                             <!-- Pick up Deliveries -->
@@ -3309,7 +3558,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                 <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Pick up</label>
-                                        <select x-model="formData.pick_up" name="pick_up" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <select x-model="formData.pick_up" name="pick_up" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="pick_up">
                                             <option value="" selected disabled></option>
                                             <option value="pickup">Pickup</option>
                                             <option value="pickup loaded">Pickup Loaded</option>
@@ -3328,7 +3577,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Quick lookup</label>
-                                        <select x-model="formData.look_up" name="look_up" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <select x-model="formData.look_up" name="look_up" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="look_up">
                                             <option value="" selected disabled></option>
                                         </select>
                                     </div>
@@ -3394,7 +3643,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                         <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
                                             <div>
                                                 <label class="block text-gray-700 dark:text-gray-300">Drop At</label>
-                                                <select x-model="formData.drop_at" name="drop_at" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                <select x-model="formData.drop_at" name="drop_at" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="drop_at">
                                                     <option value="" selected disabled></option>
                                                     <option value="pickup">Pickup</option>
                                                     <option value="pickup loaded">Pickup Loaded</option>
@@ -3479,47 +3728,47 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                     <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Broker Name</label>
-                                            <input type="text" x-model="formData.broker_name" name="broker_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.broker_name" name="broker_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="broker_name">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Broker Email</label>
-                                            <input type="email" x-model="formData.broker_email" name="broker_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="email" x-model="formData.broker_email" name="broker_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="broker_email">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Phone No</label>
-                                            <input type="text" x-model="formData.broker_number" name="broker_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                                            <input type="text" x-model="formData.broker_number" name="broker_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="broker_number">
                                         </div>
                                     <!-- Load Note Radio Buttons and Checkbox -->
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Broker Ref #</label>
-                                            <input type="text" x-model="formData.reefer_temp" name="reefer_temp" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.reefer_temp" name="reefer_temp" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="reefer_temp">
                                         </div>
                                         
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Batch #</label>
-                                            <input type="text" x-model="formData.batch_number" name="batch_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.batch_number" name="batch_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="batch_number">
                                         </div>
                                     </div>
                                     <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Batch Req</label>
-                                            <input type="text" x-model="formData.batch_req" name="batch_req" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.batch_req" name="batch_req" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="batch_req">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Sales Rep</label>
-                                            <select x-model="formData.sales_rep" name="sales_rep" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <select x-model="formData.sales_rep" name="sales_rep" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="sales_rep">
                                                 <!-- <option value="" selected disabled>Select Type</option> -->
                                             </select>
                                         </div>
                                         
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">EDI/API Shipment #</label>
-                                            <input type="text" x-model="formData.edi_number" name="edi_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.edi_number" name="edi_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="edi_number">
                                         </div>
                                     <!-- Load Note Radio Buttons and Checkbox -->
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Note</label>
-                                            <textarea type="text" x-model="formData.note" name="note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""></textarea>
+                                            <textarea type="text" x-model="formData.note" name="note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="note"></textarea>
                                         </div>
                                         
                                         <!-- <div>
@@ -3602,15 +3851,15 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                             <div id="chargesList"></div>
 
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                                <div id="totalCharges" style="display: ;">
+                                <div id="totalCharges">
                                     <label class="block text-gray-700 dark:text-gray-300">Total</label>
                                     <input type="email" x-model="formData.total" name="total" id="total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total" placeholder="">
                                 </div>
-                                <div id="totalDiscount" style="display: ;">
+                                <div id="totalDiscount">
                                     <label class="block text-gray-700 dark:text-gray-300">Total Discount</label>
                                     <input type="email" x-model="formData.total_discount" name="total_discount" id="total_discount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total_discount" placeholder="">
                                 </div>
-                                <div id="netTotal" style="display: ;">
+                                <div id="netTotal">
                                     <label class="block text-gray-700 dark:text-gray-300">Net Total</label>
                                     <input type="text" x-model="formData.net_total" name="net_total" id="net_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly net_total" placeholder="">
                                 </div>
@@ -3677,7 +3926,13 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                                 <label class="flex items-center space-x-2">
                                     <input type="radio" x-model="formData.delivery_type" name="delivery_type" value="Truck"
                                         class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                                    <span class="text-gray-700 dark:text-gray-300">Bike/Truck</span>
+                                    <span class="text-gray-700 dark:text-gray-300">Truck</span>
+                                </label>
+                                <!-- Radio Option 3 Bike -->
+                                <label class="flex items-center space-x-2">
+                                    <input type="radio" x-model="formData.delivery_type" name="delivery_type" value="Bike"
+                                        class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                    <span class="text-gray-700 dark:text-gray-300">Bike</span>
                                 </label>
                             </div>
                         
@@ -3685,7 +3940,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                             <div x-show="formData.delivery_type === 'Truck'" class="isDrive mt-4">
                                 <label class="block text-gray-700 dark:text-gray-300">Assign Driver</label>
                                 <select x-model="formData.driver_id" name="driver_id"
-                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="truck_driver">
                                     <option value="" selected disabled>Choose Driver</option>
                                     <option value="1">John Doe</option>
                                     <option value="2">Billy John</option>
@@ -3697,8 +3952,20 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                             <div x-show="formData.delivery_type === 'Carrier'" class="isTruc mt-4">
                                 <label class="block text-gray-700 dark:text-gray-300">Assign Carrier</label>
                                 <select x-model="formData.carrier_id" name="carrier_id"
-                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="carrier_driver">
                                     <option value="" selected disabled>Choose Driver</option>
+                                    <option value="1">John Doe</option>
+                                    <option value="2">Billy John</option>
+                                    <option value="3">Jane Doe</option>
+                                </select>
+                            </div>
+
+                             <!-- Show when "Bike" is selected -->
+                             <div x-show="formData.delivery_type === 'Bike'" class="isBike mt-4">
+                                <label class="block text-gray-700 dark:text-gray-300">Assign Bike</label>
+                                <select x-model="formData.bike_id" name="bike_id"
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="bike_driver">
+                                    <option value="" selected disabled>Choose Bike</option>
                                     <option value="1">John Doe</option>
                                     <option value="2">Billy John</option>
                                     <option value="3">Jane Doe</option>
@@ -3713,7 +3980,7 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                     <div x-show="step === 4" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
                           <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
-                          <input type="file" x-model="formData.file_path" multiple name="file_path" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount">
+                          <input type="file" multiple name="file_path" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount" id="file_path">
                       </div>
                     </div>
 
@@ -3817,15 +4084,15 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                             <div id="chargesList"></div>
 
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                                <div id="totalCharges" style="display: ;">
+                                <div id="totalCharges">
                                     <label class="block text-gray-700 dark:text-gray-300">Total</label>
                                     <input type="email" x-model="formData.total" name="total" id="total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total" placeholder="">
                                 </div>
-                                <div id="totalDiscount" style="display: ;">
+                                <div id="totalDiscount">
                                     <label class="block text-gray-700 dark:text-gray-300">Total Discount</label>
                                     <input type="email" x-model="formData.total_discount" name="total_discount" id="total_discount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total_discount" placeholder="">
                                 </div>
-                                <div id="netTotal" style="display: ;">
+                                <div id="netTotal">
                                     <label class="block text-gray-700 dark:text-gray-300">Net Total</label>
                                     <input type="text" x-model="formData.net_total" name="net_total" id="net_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly net_total" placeholder="">
                                 </div>
@@ -3867,6 +4134,8 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
     <!-- ===== Page Wrapper End ===== -->
 
     <script>
+        
+var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
       function stepperForm() {
           return {
               step: localStorage.getItem('step') ? parseInt(localStorage.getItem('step')) : 1,
@@ -3934,7 +4203,6 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                   delivery_type: '',
                   driver_id: '',
                   carrier_id: '',
-                  file_path: '',
                   expense_type: '',
                   expense_unit: '',
                   expense_rate: '',
@@ -3945,34 +4213,41 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
                   disputed_note: '',
                   expense_disputed: '',
                   paid: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
-                  currency: '',
+                //   currency: '',
+                  
+                  shipment_type: '',
+                    shipper_name: '',
+                    ocean_shipper_address: '',
+                    ocean_shipper_reference_number: '',
+                    carrier_name: '',
+                    carrier_reference_number: '',
+                    ocean_bill_of_ladening_number: '',
+                    consignee: '',
+                    consignee_phone: '',
+                    consignee_email: '',
+                    first_notify_party_name: '',
+                    first_notify_party_phone: '',
+                    first_notify_party_email: '',
+                    second_notify_party_name: '',
+                    second_notify_party_phone: '',
+                    second_notify_party_email: '',
+                    pre_carrier: '',
+                    vessel_aircraft_name: '',
+                    voyage_number: '',
+                    port_of_discharge: '',
+                    place_of_delivery: '',
+                    final_destination: '',
+                    port_of_landing: '',
+                    ocean_note: '',
+                    ocean_freight_charges: '',
+                    ocean_total_containers_in_words: '',
+                    no_original_bill_of_landing: '',
+                    original_bill_of_landing_payable_at: '',
+                    ocean_freight_charges: '',
+                    shipped_on_board_date: '',
+                    goods_name: '',
+                    ocean_vin: '',
+                    ocean_weight: '',
               },
               nextStep() {
                   this.step++;
@@ -3985,15 +4260,144 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
               saveProgress() {
                   localStorage.setItem('formData', JSON.stringify(this.formData));
                   localStorage.setItem('step', this.step);
-                  alert("Progress saved successfully!");
+                  //alert("Progress saved successfully!");
               },
-              saveAndSubmit() {
+
+              saveAndSubmit(e) {
+                //var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
+
                   localStorage.removeItem('formData');
                   localStorage.removeItem('step');
-                  alert("Form submitted successfully!");
-              }
-          }
-      }
+                  e.preventDefault();
+                  var shipment_type = document.getAnimations("shipment_type").value
+
+                    let form = document.getElementById("newloadForm");
+                    let formData = new FormData(form); // Collects both text and file input
+                    var s = document.getElementById("shipper_reference_number").value
+                    console.log(s)
+
+                    //let formData = new FormData(this);
+
+                // Log FormData contents
+                // console.log("FormData Contents:");
+                // for (let pair of formData.entries()) {
+                //     console.log(pair[0] + ": " + pair[1]);
+                // }
+                //       console.log(localStorage.getItem('auth_token'))              
+                
+                //  return
+
+        $.ajax({
+            url: requestURL+'/shipments/create',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'Authorization': 'Bearer'+ localStorage.getItem('auth_token'),
+                'Accept': 'application/json'
+            },
+
+            success: (response) => {
+                // Handle the success response
+                console.log('Form submitted successfully:', response);
+                // alert('Form submitted successfully!');
+
+                // Clear local storage after successful submission
+                localStorage.removeItem('formData');
+                localStorage.removeItem('step');
+            },
+                /**
+                 * Handles errors when submitting the form via AJAX
+                 * @param {Object} xhr - The XMLHttpRequest object
+                 * @param {String} status - The status of the request (e.g., 'error')
+                 * @param {String} error - The error message
+                 */
+            error: (xhr, status, error) => {
+                // Handle the error
+                console.error('Form submission failed:', error);
+                //alert('Form submission failed. Please try again.');
+            }
+        });
+        }
+        };
+    }
+
+    function user()
+    {
+        $.ajax({
+        url: requestURL + '/user',
+        type: 'GET',
+        headers: {
+            'Authorization': 'Bearer'+ localStorage.getItem('auth_token')
+        },
+        success: (response) => {
+            console.log('user data:', response);
+            // alert('Login successful!');
+            // localStorage.setItem('auth_token', response.token);
+        },
+        error: (xhr, status, error) => {
+            console.error('Login failed:', xhr.responseText); // ✅ Log error details
+            //alert('Login failed. Please check your credentials.');
+            console.log(logins)
+        }
+    });
+    }
+
+    function login() {
+        var logins = JSON.stringify({email: "superadmin@gmail.com", password: "12345678" });
+    $.ajax({
+        url: requestURL + '/login',
+        type: 'POST',
+        data: logins,
+        dataType: 'json',
+        contentType: 'application/json', // ✅ Correct Content Type
+        success: (response) => {
+            console.log('Login successful:', response);
+            alert('Login successful!');
+            localStorage.setItem('auth_token', response.token);
+        },
+        error: (xhr, status, error) => {
+            console.error('Login failed:', xhr.responseText); // ✅ Log error details
+            //alert('Login failed. Please check your credentials.');
+            console.log(logins)
+        }
+    });
+}
+
+function register() {
+    $.ajax({
+        url: requestURL + '/register',
+        type: 'POST',
+        data: JSON.stringify({
+            fname: "John",
+            lname: "Doe",
+            email: "branch@gmail.com",
+            password: "12345678",
+            password_confirmation: "12345678",
+            user_type: "businessadministrator",
+            phone: "1234567890",
+            license_number: "123467",
+            address: "123 Main Street, City",
+            about_us: "We are a logistics company focused on efficiency."
+        }),
+        dataType: 'json',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer'+ localStorage.getItem('auth_token')
+        },
+
+        success: (response) => {
+            console.log('Login successful:', response);
+            alert('Login successful!');
+            localStorage.setItem('auth_token', response.token);
+        },
+        error: (xhr, status, error) => {
+            console.error('registeration failed:', xhr.responseText); // ✅ Log error details
+            //alert('Login failed. Please check your credentials.');
+        }
+    });
+}
 
 
       function handleLoadTypeChange(value) {
@@ -4082,6 +4486,27 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
             element.parentElement.parentElement.remove();
         }
 
+    //     function duplicateGoods() {
+    //     var pickup = document.getElementById("chargesDuplicate");
+    //     var pickupList = document.getElementById("goodsList");
+    //     var newPickup = pickup.cloneNode(true);
+
+    //     // Ensure the cloned element has a unique ID to avoid duplicates
+    //     newPickup.id = "chargesDuplicate_" + Date.now();
+
+    //     // Append the cloned element
+    //     pickupList.appendChild(newPickup);
+    // }
+
+    // function removeGoods(element) {
+    //     var item = element.closest(".charges-item");
+    //     if (item) {
+    //         item.remove();
+    //     }
+    // }
+
+        
+
         
 function handleShipmentType() {
     var shipmentType = document.getElementById("shipment_type").value;
@@ -4109,6 +4534,7 @@ function handleShipmentType() {
 
     </script>
       
+  <script src="src/assets/js/newload.js"></script>
   <script src="src/assets/js/main.js"></script>
 <script defer src="bundle.js"></script></body>
 </html>

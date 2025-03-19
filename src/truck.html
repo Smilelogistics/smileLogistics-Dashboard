@@ -7,17 +7,9 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>New Load | smileslogistics</title>
-     <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- jQuery UI -->
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-
-  <!-- Chosen Plugin -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
+    <title>Truck | smileslogistics</title>
+    <include src="./partials/mainhead.html"> </include>
+    <script src="./assets/js/main.js"></script>
   </head>
   <body
     x-data="{ page: 'truck', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -78,7 +70,7 @@
                 </ol>
                 
             
-                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data">
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newTruckForm">
                     <!-- Step 1: Basic Info -->
                     <div x-show="step === 1" >
                         <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
@@ -112,11 +104,11 @@
                                     <option value="IN">IN</option>
                                 </select>
                             </div>
-                            <div id="chosen-select">
+                            <div id="">
                                 <label class="block text-gray-700 dark:text-gray-300">Drivers Assigned</label>
-                                <select x-model="formData.driver_id" name="driver_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select">
-                                    <!-- <option value="" selected disabled>Select Type</option> -->
-                                    <option value="IN">List of Drivers</option>
+                                <select x-model="formData.driver_id" name="driver_id" id="driver_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select Type</option>
+                                    <option value="">List of Drivers</option>
                                    
                                 </select>
                             </div>
@@ -133,7 +125,7 @@
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Licence Plate</label>
-                                <input type="email" x-model="formData.license_plate_number" name="license_plate_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <input type="text" x-model="formData.license_plate_number" name="license_plate_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                         </div>
                         
@@ -143,7 +135,7 @@
                     <div x-show="step === 2" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
                           <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
-                          <input type="file" x-model="formData.file_path" multiple name="file_path" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount">
+                          <input type="file" x-model="formData.file_path" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount">
                       </div>
                     </div>
                     <!-- Navigation Buttons -->
@@ -190,12 +182,12 @@
           return {
               step: localStorage.getItem('Truck_step') ? parseInt(localStorage.getItem('Truck_step')) : 1,
               formData: JSON.parse(localStorage.getItem('formData')) || {
-                  full_name: '',
-                  email: '',
-                  phone: '',
-                  charge_amount: '',
-                  charge_type: '',
-                  currency: '',
+                customer_type: '',
+                customer_office: '',
+                driver_id: '',
+                make_model: '',
+                vehicle_number: '',
+                license_plate_number: '',
               },
               nextStep() {
                   this.step++;
@@ -211,12 +203,57 @@
                   alert("Progress saved successfully!");
               },
               saveAndSubmit() {
-                  localStorage.removeItem('formData');
-                  localStorage.removeItem('Truck_step');
-                  alert("Form submitted successfully!");
+                  let form = document.getElementById("newTruckForm");
+                    let formData = new FormData(form);
+                    $.ajax({
+                        url: requestURL+'/trucks/create',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        },
+
+                        beforeSend:function(){
+                            document.getElementById("Ajaxbackdrop").style.display = 'flex'
+                        },
+
+                        success: (response) => {
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            //console.log('Form submitted successfully:', response);
+                            createToast('success', response.message);
+                            localStorage.removeItem('formData');
+                            localStorage.removeItem('Truck_step');
+                            //alert("Form submitted successfully!");
+                        },
+                         error: (xhr, status, error) => {
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            console.error('Form submission failed:', xhr.responseText);
+
+                        try {
+                            let response = JSON.parse(xhr.responseText);
+                            
+                            if (response.errors) {
+                                let messages = Object.values(response.errors).flat().join('<br>'); // Combines multiple errors
+                                createToast('error', messages);
+                            } else if (response.message) {
+                                createToast('error', response.message);
+                            } else {
+                                createToast('error', 'An unexpected error occurred. Please try again.');
+                            }
+                        } catch (e) {
+                            createToast('error', 'An error occurred. Please check your input and try again.');
+                        }
+                    }
+                });
               }
           }
       }
+
+    
+        populateDriverSelect();
 
 
       function handleLoadTypeChange(value) {

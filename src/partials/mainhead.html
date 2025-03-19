@@ -1,6 +1,4 @@
-
-
-    <meta charset="UTF-8" />
+  <meta charset="UTF-8" />
     <meta
       name="viewport"
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
@@ -10,12 +8,20 @@
 
     <title>New Load | smileslogistics</title>
     <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>New Load | smileslogistics</title>
 
+    <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'>
+    <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- jQuery UI -->
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-
   <!-- Chosen Plugin -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
@@ -224,9 +230,121 @@ button {
   .toast.active ~ button {
     pointer-events: none;
   }
-  
 
   </style>
+
+  <script>
+    
+    var requestGetURL = "https://laravel-production-077b.up.railway.app/api/v1";
+
+    
+    function populateDriverSelect() {
+      $.ajax({
+          url: requestGetURL + '/drivers/driver',
+          type: 'GET',
+          headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('auth_token'), // Add space after 'Bearer'
+              'Accept': 'application/json'
+          },
+          success: (response) => {
+              console.log('Driver data:', response);
+              if(response.length == 0){
+                  createToast('error', 'No drivers found.');
+                  return
+              }
+              if (Array.isArray(response)) {
+                  var driverSelect = document.getElementById('driver_id');
+                  driverSelect.innerHTML = '';
+                  var defaultOption = document.createElement('option');
+                  defaultOption.value = '';
+                  defaultOption.text = 'Select a driver';
+                  driverSelect.appendChild(defaultOption);
+  
+                  response.forEach(driver => {
+                      var option = document.createElement('option');
+                      option.value = driver.id;
+                      option.text = driver.user.fname + ' ' + driver.user.lname;
+                      driverSelect.appendChild(option);
+                  });
+              } else {
+                  console.error('Invalid response format:', response);
+                  createToast('error', 'Invalid driver data received.');
+              }
+          },
+          error: (xhr, status, error) => {
+              console.error('API request failed:', xhr.responseText);
+  
+              if (xhr.status === 401) { // Unauthorized
+                  alert("Session expired. Please log in again.");
+                  localStorage.removeItem('auth_token');
+                  window.location.href = "/login";
+              } else {
+                  try {
+                      let response = JSON.parse(xhr.responseText);
+                      let message = response.message || "An error occurred. Please try again.";
+                      createToast('error', message);
+                  } catch (e) {
+                      createToast("error", "An unexpected error occurred.");
+                  }
+              }
+          }
+      });
+  }
+  function populateTruckSelect() {
+    $.ajax({
+        url: requestGetURL + '/trucks/trucks',
+        type: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+            'Accept': 'application/json'
+        },
+        success: (response) => {
+            console.log('Truck data:', response);
+
+            // Check if the response has the expected structure
+            if (response.trucks && Array.isArray(response.trucks)) {
+                var truckSelect = document.getElementById('truck_id');
+                truckSelect.innerHTML = '';
+
+                // Add a default option
+                var defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.text = 'Select a truck';
+                truckSelect.appendChild(defaultOption);
+
+                // Populate the dropdown with truck data
+                response.trucks.forEach(truck => {
+                    var option = document.createElement('option');
+                    option.value = truck.id;
+                    option.text = truck.make_model + ' (' + truck.license_plate_number + ')';
+                    truckSelect.appendChild(option);
+                });
+            } else {
+                console.error('Invalid response format:', response);
+                createToast('error', 'Invalid Truck data received.');
+            }
+        },
+        error: (xhr, status, error) => {
+            console.error('API request failed:', xhr.responseText);
+
+            if (xhr.status === 401) { // Unauthorized
+                alert("Session expired. Please log in again.");
+                localStorage.removeItem('auth_token');
+                window.location.href = "/login";
+            } else {
+                try {
+                    let response = JSON.parse(xhr.responseText);
+                    let message = response.message || "An error occurred. Please try again.";
+                    createToast('error', message);
+                } catch (e) {
+                    createToast("error", "An unexpected error occurred.");
+                }
+            }
+        }
+    });
+}
+  
+  </script>
   
 
 <!-- <include src="./../assets/css/main.css"> </include> -->

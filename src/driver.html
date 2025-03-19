@@ -1,23 +1,8 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-    />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>New Load | smileslogistics</title>
-    <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- jQuery UI -->
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-
-  <!-- Chosen Plugin -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
+        <include src="./partials/mainhead.html"> </include>
+        <script src="./assets/js/main.js"></script>
   </head>
   <body
     x-data="{ page: 'driver', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -78,7 +63,7 @@
                 </ol>
                 
             
-                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data">
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newdriverForm">
                     <!-- Step 1: Basic Info -->
                     <div x-show="step === 1" >
                         <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -107,15 +92,15 @@
                                 <label class="block text-gray-700 dark:text-gray-300">Driver Type</label>
                                 <select x-model="formData.driver_type" name="driver_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select Type</option>
-                                <option value="owner_operator">Owner Operator (Single Truck)</option>
-                                <option value="company_driver">Company Driver</option>
-                                <option value="fleet_owner">river for fleet Owner Or Fleet Owner Himself</option>
-                                <option value="temp">Temp</option>
+                                <option value="1">Owner Operator (Single Truck)</option>
+                                <option value="2">Company Driver</option>
+                                <option value="3">river for fleet Owner Or Fleet Owner Himself</option>
+                                <option value="4">Temp</option>
                             </select>
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Trucks</label>
-                                <select x-model="formData.truck" name="truck" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <select x-model="formData.truck_id" name="truck_id" id="truck_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select Type</option>
                             </select>
                             </div>
@@ -138,6 +123,11 @@
                                 <label class="block text-gray-700 dark:text-gray-300">Phone Carrier</label>
                                 <select x-model="formData.driver_phone_carrier" name="driver_phone_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select Type</option>
+                                <option value="Verizon">Verizon</option>
+                                <option value="TMobile">T-Mobile</option>
+                                <option value="AT&T">AT&T</option>
+                                <option value="Sprint">Sprint</option>
+                                <option value="Other">Other</option>
                             </select>
                             </div>
                             <div>
@@ -174,11 +164,21 @@
                         <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Hired On</label>
-                                <input type="text" x-model="formData.hired_on" name="hired_on" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <input type="text" x-model="formData.hired_on" id="hired_on" name="hired_on" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
+                        
+                            <script>
+                                $(document).ready(function () {
+                                    $(function () {
+                                        $("#hired_on").
+                                        datepicker();
+                                    });
+                                }) 
+                            </script>
+
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Years of Experience</label>
-                                <input type="text" x-model="formData.years_of_experience" name="years_of_experience" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <input type="text" x-model="formData.years_of_experience" id="hired_on" name="years_of_experience" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </select>
                             </div>
                             <div>
@@ -207,34 +207,39 @@
                                 <textarea type="text" x-model="formData.notes_about_the_choices_made" name="notes_about_the_choices_made" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
                             </div>
                             <div>
-                                <!-- <label class="block text-gray-700 dark:text-gray-300">Load Note</label> -->
                                 <div class="flex items-center space-x-4">
-                                    <!-- Radio Option 1 -->
-                                    <label class="flex items-center space-x-2">
+                                    <!-- <label class="flex items-center space-x-2">
                                         <input type="radio" x-model="formData.isAccessToMobileApp" name="isAccessToMobileApp" value="Left" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
                                         <span class="text-gray-700 dark:text-gray-300">Activate Access</span>
                                     </label>
 
-                                    <!-- Radio Option 2 -->
                                     <label class="flex items-center space-x-2">
                                         <input type="radio" x-model="formData.isAccessToMobileApp" name="isAccessToMobileApp" value="Right" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
                                         <span class="text-gray-700 dark:text-gray-300">Block Access</span>
                                     </label>
 
-                                    <!-- Radio Option 2 -->
                                     <label class="flex items-center space-x-2">
                                         <input type="radio" x-model="formData.isAccessToMobileApp" name="isAccessToMobileApp" value="Right" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
                                         <span class="text-gray-700 dark:text-gray-300">Reset Pin</span>
-                                    </label>
+                                    </label> -->
 
-                                    <!-- Checkbox Option -->
-                                    <label class="flex items-center space-x-2">
-                                        <input type="checkbox" x-model="formData.mobile_settings" name="mobile_settings" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                    <label class="flex items-center space-x-2 mt-3">
+                                        <input type="hidden" x-model="formData.mobile_settingsl" name="mobile_settings" value="0" id="mobile_settings">
+                                        <input type="checkbox" id="mobile_settings_control" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
                                         <span class="text-gray-700 dark:text-gray-300">Show Payment on App</span>
                                     </label>
                                 </div>
                             </div>
                         </div>
+                        <script>
+                            $(document).ready(function () {
+                                document.getElementById('mobile_settings_control').addEventListener('change', function() {
+                              var hiddenInput = document.getElementById('mobile_settings');
+                              hiddenInput.value = this.checked ? '1' : '0';
+                            });
+                            })
+                           
+                          </script>
 
                         <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                             <div>
@@ -283,7 +288,7 @@
                     <div x-show="step === 2" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
                           <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
-                          <input type="file" x-model="formData.file_path" multiple name="file_path" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount">
+                          <input type="file" x-model="formData.file_path" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount">
                       </div>
                     </div>
                     <!-- Navigation Buttons -->
@@ -335,7 +340,7 @@
                 mname: '',
                 email: '',
                 driver_type: '',
-                truck: '',
+                truck_id: '',
                 quick_note: '',
                 dispatcher_note: '',
                 driver_phone: '',
@@ -363,20 +368,6 @@
                 flash_notes_to_payroll: '',
                 internal_notes: '',
                 file_path: '',
-                fname: '',
-                fname: '',
-                fname: '',
-                fname: '',
-                fname: '',
-                fname: '',
-                fname: '',
-                fname: '',
-                fname: '',
-                fname: '',
-                fname: '',
-                fname: '',
-                fname: '',
-                fname: '',
               },
               nextStep() {
                   this.step++;
@@ -392,13 +383,55 @@
                   alert("Progress saved successfully!");
               },
               saveAndSubmit() {
-                  localStorage.removeItem('formData');
-                  localStorage.removeItem('Driver_step');
-                  alert("Form submitted successfully!");
+                    let form = document.getElementById("newdriverForm");
+                    let formData = new FormData(form);
+                    $.ajax({
+                        url: requestURL+'/drivers/driver',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        },
+
+                        beforeSend:function(){
+                            document.getElementById("Ajaxbackdrop").style.display = 'flex'
+                        },
+
+                        success: (response) => {
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            //console.log('Form submitted successfully:', response);
+                            createToast('success', response.message);
+                            localStorage.removeItem('formData');
+                            localStorage.removeItem('step');
+                        },
+                         error: (xhr, status, error) => {
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            console.error('Form submission failed:', xhr.responseText);
+
+                        try {
+                            let response = JSON.parse(xhr.responseText);
+                            
+                            if (response.errors) {
+                                let messages = Object.values(response.errors).flat().join('<br>'); // Combines multiple errors
+                                createToast('error', messages);
+                            } else if (response.message) {
+                                createToast('error', response.message);
+                            } else {
+                                createToast('error',  response.error || 'An unexpected error occurred. Please try again.');
+                            }
+                        } catch (e) {
+                            createToast('error', 'An error occurred. Please check your input and try again.');
+                        }
+                    }
+                });
               }
           }
       }
 
+      populateTruckSelect();
 
       function handleLoadTypeChange(value) {
     if (value === 'import') {

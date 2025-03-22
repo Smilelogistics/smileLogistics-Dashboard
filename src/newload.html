@@ -142,14 +142,14 @@
                                         
                         <div x-data="{ selectedOption: 'ocean'}">
                             <div  class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                <div x-data="{ isAuthenticated: false }">
+                                <!-- <div x-data="{ isAuthenticated: false }">
                                     <span x-show="!isAuthenticated" onclick="user()" class="cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">Get User
 
                                     </span>
 
                                 <span x-show="!isAuthenticated" onclick="login()" class="cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400"> login</span>
                                 <span x-show="!isAuthenticated" onclick="register()" class="cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">Register</span>
-                                </div>
+                                </div> -->
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Type</label>
                                         <select x-model="selectedOption" name="shipment_type" id="shipment_type" onchange="handleShipmentType(this.value)" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">

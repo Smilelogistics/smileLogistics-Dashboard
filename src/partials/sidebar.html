@@ -257,6 +257,17 @@
           setTimeout(() => toast.remove(), 500);
       };
 })
+try {
+    const token = localStorage.getItem('auth_token');
+    if (token) {
+       // window.location.href = '/newload';
+    } else {
+        window.location.href = '/signin.html';
+    }
+} catch (error) {
+    console.error('Error accessing localStorage:', error);
+    window.location.href = '/signin.html'; // Fallback to signin page
+}
 </script>
 
 <aside

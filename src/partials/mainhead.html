@@ -266,10 +266,10 @@ button {
           error: (xhr, status, error) => {
               console.error('API request failed:', xhr.responseText);
   
-              if (xhr.status === 401) { // Unauthorized
+              if (xhr.status === 401) {
                   alert("Session expired. Please log in again.");
                   localStorage.removeItem('auth_token');
-                  window.location.href = "/login";
+                  window.location.href = "/signin";
               } else {
                   try {
                       let response = JSON.parse(xhr.responseText);

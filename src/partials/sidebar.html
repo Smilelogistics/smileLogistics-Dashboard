@@ -28,7 +28,6 @@
       position: fixed;
       top: 80px;
       right: 20px;
-      z-index: 1000;
   }
 
   .Toastnotifications :where(.toast, .column) {
@@ -177,10 +176,57 @@
           padding: 8px 15px;
       }
   }
+
+  /* drop down menu beside list items to edit, delete or update */
+  .menu {
+          position: absolute;
+          background: white;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          padding: 5px 0;
+          box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+          display: flex;
+          flex-direction: column;
+          width: 100px;
+          font-size: 14px;
+          opacity: 0;
+          transform: translateY(-10px);
+          transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+      .menu a {
+          padding: 8px;
+          text-decoration: none;
+          color: black;
+          display: block;
+      }
+      .menu a:hover {
+          background: #f0f0f0;
+      }
+      .hidden {
+          display: none;
+      }
+      /* Fade-in Animation */
+      .fade-in {
+          display: flex;
+          opacity: 1;
+          transform: translateY(0);
+      }
+      /* Fade-out Animation */
+      .fade-out {
+          opacity: 0;
+          transform: translateY(-10px);
+      }
+      .menu a:hover {
+          background: #f0f0f0;
+      }
+      .hidden {
+          display: none;
+      }
 </style>
 <script>
   var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
   $(document).ready(function() {
+    
   
       const notifications = $(".Toastnotifications");
       const toastDetails = {
@@ -727,7 +773,7 @@
                     </li>
 
                     <li>
-                      <a href="view_load.html" class="menu-dropdown-item group" :class="page === 'view load' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">View Load</a>
+                      <a href="view_loads.html" class="menu-dropdown-item group" :class="page === 'view load' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">View Load</a>
                     </li>
                   </ul>
                 </div>
@@ -834,7 +880,7 @@
                       <a href="driver.html" class="menu-dropdown-item group" :class="page === 'driver' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">New Driver</a>
                     </li>
                     <li>
-                      <a href="shipment.html" class="menu-dropdown-item group" :class="page === 'driver' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Driver List</a>
+                      <a href="drivers_list.html" class="menu-dropdown-item group" :class="page === 'drivers_list' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Driver List</a>
                     </li>
                   </ul>
                 </div>
@@ -887,7 +933,7 @@
                       <a href="truck.html" class="menu-dropdown-item group" :class="page === 'truck' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">New Truck</a>
                     </li>
                     <li>
-                      <a href="shipment.html" class="menu-dropdown-item group" :class="page === 'truck' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Driver Truck</a>
+                      <a href="truck_list.html" class="menu-dropdown-item group" :class="page === 'truck' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Truck List</a>
                     </li>
                   </ul>
                 </div>
@@ -1635,7 +1681,7 @@
               >
                 <li>
                   <a
-                    href="signin.html"
+                    href="../auth/signin.html"
                     class="menu-dropdown-item group"
                     :class="page === 'signin' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
                   >
@@ -1644,7 +1690,7 @@
                 </li>
                 <li>
                   <a
-                    href="signup.html"
+                    href="../auth/signup.html"
                     class="menu-dropdown-item group"
                     :class="page === 'signup' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
                   >

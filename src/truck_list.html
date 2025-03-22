@@ -5,10 +5,10 @@
 
     <include src="./partials/mainhead.html"> </include>
     <script src="./assets/js/main.js"></script>
-    <title>Loads | </title>
+    <title>Trucks | </title>
   </head>
   <body
-    x-data="{ page: 'drivers_list', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-data="{ page: 'truck_list', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
     x-init="
          darkMode = JSON.parse(localStorage.getItem('darkMode'));
          $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
@@ -40,7 +40,7 @@
         <main>
           <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
             <!-- Breadcrumb Start -->
-            <div x-data="{ pageName: `Driver List`}">
+            <div x-data="{ pageName: `Truck List`}">
               <include src="./partials/breadcrumb.html" />
             </div>
             <!-- Breadcrumb End -->
@@ -220,7 +220,7 @@
       document.addEventListener('alpine:init', () => {
     Alpine.data('datatable', () => ({
         items: [], // Holds the table data
-        searchQuery: '', // Holds the search query
+        searchQuery: '', // Holds the search quer
         isLoading: false, // Controls the loader visibility
 
         // Computed property to filter items based on search query

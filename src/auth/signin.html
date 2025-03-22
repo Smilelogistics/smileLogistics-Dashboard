@@ -2,9 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <include src="./partials/mainhead.html"> </include>
-    <script src="./assets/js/main.js"></script>
-    <title>Sign In| </title>
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Sign In| TailAdmin - Tailwind CSS Admin Dashboard Template</title>
   </head>
   <body
     x-data="{ page: 'comingSoon', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -63,7 +66,7 @@
                 </p>
               </div>
               <div>
-                <!-- <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
                   <button
                     class="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
                   >
@@ -111,8 +114,8 @@
 
                     Sign in with X
                   </button>
-                </div> -->
-                <!-- <div class="relative py-3 sm:py-5">
+                </div>
+                <div class="relative py-3 sm:py-5">
                   <div class="absolute inset-0 flex items-center">
                     <div
                       class="w-full border-t border-gray-200 dark:border-gray-800"
@@ -124,9 +127,8 @@
                       >Or</span
                     >
                   </div>
-                </div> -->
-                <div x-data="loginComponent()">
-                <form id="login">
+                </div>
+                <form >
                   <div class="space-y-5">
                     <!-- Email -->
                     <div>
@@ -152,7 +154,7 @@
                       </label>
                       <div x-data="{ showPassword: false }" class="relative">
                         <input
-                          :type="showPassword ? 'text' : 'password'" name="password"
+                          :type="showPassword ? 'text' : 'password'"
                           placeholder="Enter your password"
                           class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
                         />
@@ -244,30 +246,13 @@
                     <!-- Button -->
                     <div>
                       <button
-                        class="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600" :disabled="isLoading"
-                        @click="login" 
+                        class="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
                       >
-                      <span x-show="!isLoading">Sign In</span>
-
-                        <svg
-                        x-show="isLoading"
-                        class="animate-spin h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                    >
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <span x-show="isLoading" class="ml-2">Signing In...</span>
-
+                        Sign In
                       </button>
                     </div>
-                    <!-- Error Span -->
-                  <span x-show="errorMessage" x-text="errorMessage" class="block mt-2 text-sm text-red-600"></span>
                   </div>
                 </form>
-              </div>
                 <div class="mt-5">
                   <p
                     class="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start"
@@ -293,10 +278,10 @@
             <include src="./partials/common-grid-shape.html"></include>
             <div class="flex flex-col items-center max-w-xs">
               <a href="index.html" class="block mb-4">
-                <img src="./assets/images/logo/logo-light.png" alt="Logo" />
+                <img src="./assets/images/logo/auth-logo.svg" alt="Logo" />
               </a>
               <p class="text-center text-gray-400 dark:text-white/60">
-                
+                Free and Open-Source Tailwind CSS Admin Dashboard Template
               </p>
             </div>
           </div>
@@ -340,61 +325,6 @@
       </div>
     </div>
     <!-- ===== Page Wrapper End ===== -->
-    <script>
-    var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
-
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('loginComponent', () => ({
-            isLoading: false,
-            errorMessage: '',
-
-            // Check if the user is authenticated
-            checkAuth() {
-                const token = localStorage.getItem('auth_token');
-                if (token) {
-                    window.location.href = '/dashboard';
-                }
-            },
-
-            // Login function
-            login() {
-                this.isLoading = true;
-                this.errorMessage = '';
-
-                let form = document.getElementById("login");
-                let logins = new FormData(form);
-
-                fetch(requestURL + '/login', {
-                    method: 'POST',
-                    body: JSON.stringify(Object.fromEntries(logins)),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(err => {
-                            throw new Error(err.message || 'Login failed');
-                        });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Login successful:', data);
-                    localStorage.setItem('auth_token', data.token);
-                    window.location.href = '/dashboard'; // Redirect to dashboard after successful login
-                })
-                .catch(error => {
-                    console.error('Login failed:', error);
-                    this.errorMessage = error.message || 'Login failed. Please check your credentials.';
-                })
-                .finally(() => {
-                    this.isLoading = false;
-                });
-            }
-        }));
-    });
-       </script>
+     
   </body>
 </html>

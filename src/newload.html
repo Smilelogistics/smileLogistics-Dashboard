@@ -7,6 +7,8 @@
         <script src="./assets/js/main.js"></script>
         <script>
         // blow Up modal
+        $(document).ready(function() {
+            
         const openModalButton = document.getElementById("openModal");
             const closeModalButton = document.getElementById("closeModal");
             const modal = document.getElementById("modal");
@@ -58,6 +60,7 @@
                 link.click();
             }
             });
+        })
         </script>
     </head>
   <body
@@ -275,18 +278,18 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Voyage No</label>
-                                            <input type="email" x-model="formData.voyage_number" name="voyage_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="voyage_number">
+                                            <input type="text" x-model="formData.voyage_number" name="voyage_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="voyage_number">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Port of landing</label>
-                                            <input type="email" x-model="formData.port_of_discharge" name="port_of_discharge" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="port_of_discharge">
+                                            <input type="text" x-model="formData.port_of_discharge" name="port_of_discharge" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="port_of_discharge">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Port Discharged</label>
-                                        <select x-model="formData.pre_carrier" name="pre_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="pre_carrier">
+                                        <select x-model="formData.port_of_discharge" name="port_of_discharge" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="port_of_discharge">
                                             <option value="" selected disabled>Selet carrier</option>
                                             <option value="import">Joen Doe</option>
                                             <option value="export">Export</option>
@@ -298,11 +301,11 @@
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Final Destination</label>
-                                        <input type="email" x-model="formData.final_destination" name="final_destination" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="final_destination">
+                                        <input type="text" x-model="formData.final_destination" name="final_destination" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="final_destination">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Port of landing</label>
-                                        <input type="email" x-model="formData.port_of_landing" name="port_of_landing" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="port_of_landing">
+                                        <input type="text" x-model="formData.port_of_landing" name="port_of_landing" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="port_of_landing">
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -410,7 +413,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Authorize Signatory</label>
-                                            <input type="text" x-model="formData.authorized_signatory" id="authorized_signatory" name="shipped_on_board_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="authorized_signatory">
+                                            <input type="text" x-model="formData.authorized_signatory" id="authorized_signatory" name="authorized_signatory" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="authorized_signatory">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300 flex">Signature <span id="openModal" class="">
@@ -673,7 +676,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Pieces</label>
-                                    <input type="text" x-model="formData.pieces" name="pieces" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="pieces">
+                                    <input type="number" x-model="formData.pieces" name="pieces" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="pieces">
                                 </div>
                             <!-- Load Note Radio Buttons and Checkbox -->
                                 <div>
@@ -934,7 +937,7 @@
                                     <!-- Load Note Radio Buttons and Checkbox -->
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Broker Ref #</label>
-                                            <input type="text" x-model="formData.reefer_temp" name="reefer_temp" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="reefer_temp">
+                                            <input type="text" x-model="formData.broker_reference_number" name="broker_reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="broker_reference_number">
                                         </div>
                                         
                                         <div>
@@ -1010,7 +1013,7 @@
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">comment (Will appear on Invoice)</label>
-                                        <input type="email" x-model="formData.comment" name="comment[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <input type="text" x-model="formData.comment" name="comment[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Units</label>
@@ -1033,7 +1036,7 @@
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Internal Note</label>
-                                        <input type="email" x-model="formData.internal_notes" name="internal_notes[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <input type="text" x-model="formData.internal_notes" name="internal_notes[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                     </div>
                                     <!-- <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Rate</label>
@@ -1046,11 +1049,11 @@
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                 <div id="totalCharges">
                                     <label class="block text-gray-700 dark:text-gray-300">Total</label>
-                                    <input type="email" x-model="formData.total" name="total" id="total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total" placeholder="">
+                                    <input type="text" x-model="formData.total" name="total" id="total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total" placeholder="">
                                 </div>
                                 <div id="totalDiscount">
                                     <label class="block text-gray-700 dark:text-gray-300">Total Discount</label>
-                                    <input type="email" x-model="formData.total_discount" name="total_discount" id="total_discount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total_discount" placeholder="">
+                                    <input type="text" x-model="formData.total_discount" name="total_discount" id="total_discount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total_discount" placeholder="">
                                 </div>
                                 <div id="netTotal">
                                     <label class="block text-gray-700 dark:text-gray-300">Net Total</label>
@@ -1276,20 +1279,20 @@
                             </div>
                             <div id="chargesList"></div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <!-- <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                 <div id="totalCharges">
                                     <label class="block text-gray-700 dark:text-gray-300">Total</label>
-                                    <input type="email" x-model="formData.total" name="total" id="total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total" placeholder="">
+                                    <input type="text" x-model="formData.total" name="total" id="total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total" placeholder="">
                                 </div>
                                 <div id="totalDiscount">
                                     <label class="block text-gray-700 dark:text-gray-300">Total Discount</label>
-                                    <input type="email" x-model="formData.total_discount" name="total_discount" id="total_discount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total_discount" placeholder="">
+                                    <input type="text" x-model="formData.total_discount" name="total_discount" id="total_discount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total_discount" placeholder="">
                                 </div>
                                 <div id="netTotal">
                                     <label class="block text-gray-700 dark:text-gray-300">Net Total</label>
                                     <input type="text" x-model="formData.net_total" name="net_total" id="net_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly net_total" placeholder="">
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                   </div>
             
@@ -1364,7 +1367,6 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                   over_weight: '',
                   tags: '',
                   genset_number: '',
-                  reefer_temp: '',
                   seal_number: '',
                   pick_up: '',
                   look_up: '',
@@ -1382,6 +1384,7 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                   broker_email: '',
                   broker_number: '',
                   reefer_temp: '',
+                  broker_reference_number: '',
                   batch_number: '',
                   batch_req: '',
                   sales_rep: '',
@@ -1429,6 +1432,7 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                     second_notify_party_phone: '',
                     second_notify_party_email: '',
                     pre_carrier: '',
+                    port_of_discharge: '',
                     vessel_aircraft_name: '',
                     voyage_number: '',
                     port_of_discharge: '',
@@ -1469,8 +1473,7 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
 
                     let form = document.getElementById("newloadForm");
                     let formData = new FormData(form);
-                    var s = document.getElementById("shipper_reference_number").value
-                    // Log FormData contents
+                    //Log FormData contents
                     // console.log("FormData Contents:");
                     // for (let pair of formData.entries()) {
                     //     console.log(pair[0] + ": " + pair[1]);
@@ -1502,6 +1505,7 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                         },
                          error: (xhr, status, error) => {
                         console.error('Form submission failed:', xhr.responseText);
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
 
                         try {
                             let response = JSON.parse(xhr.responseText);
@@ -1515,7 +1519,7 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                                 createToast('error', 'An unexpected error occurred. Please try again.');
                             }
                         } catch (e) {
-                            createToast('error', 'An error occurred. Please check your input and try again.');
+                            createToast('error', 'An error occurred. Please check your input and try again.', + e);
                         }
                     }
                 });

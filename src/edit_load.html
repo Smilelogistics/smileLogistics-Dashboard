@@ -135,7 +135,7 @@
                     </template>
                 </ol>
             
-
+                <div x-data="editLoad()">
                 <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newloadForm">
                     <!-- Step 1: Basic Info -->
                     <div x-show="step === 1" >
@@ -1318,7 +1318,8 @@
                 </form>
             </div>
             
-           
+        </div>
+    </div>
             </div>
 
           </div>
@@ -1336,11 +1337,11 @@
        
         
 var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
-      function stepperForm() {
-          return {
-              step: localStorage.getItem('step') ? parseInt(localStorage.getItem('step')) : 1,
-              formData: JSON.parse(localStorage.getItem('formData')) || {
-                  office: '',
+document.addEventListener('alpine:init', () => {
+    Alpine.data('editLoad', () => ({
+        //isLoading: false,
+        formData: {
+            office: '',
                   load_type: '',
                   load_type_note: '',
                   load_type_note_r: '',
@@ -1449,20 +1450,185 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                     goods_name: '',
                     ocean_vin: '',
                     ocean_weight: '',
-              },
+        },
+
+        init() {
+            //this.fetchData();
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedId = urlParams.get('id');
+            if (encodedId) {
+                this.id = atob(encodedId); // Decode the ID from base64
+                this.fetchData();
+            } else {
+                console.error('No ID found in the URL');
+            }
+        },
+
+        fetchData() {
+            //this.isLoading = true;
+            fetch(`${requestGetURL}/shipments/show/${this.id}`, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                    'Accept': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Fetched Data:', data); // Log the data
+                    this.formData = {
+                        // shipper_name: data.shipper_name || '',
+                        // shipper_reference_number: data.shipper_reference_number || '',
+                        
+                        // ocean_shipper_reference_number: data.ocean_shipper_reference_number || '',
+
+
+
+
+                        office: data.office || '', 
+                  load_type: data.load_type || '',
+                  load_type_note: data.load_type_note || '',
+                  load_type_note_r: data.load_type_note_r || '',
+                  isBroker: data.isBroker || '',
+                  shipment_type: data.shipment_type || '',
+                  bill_to: data.bill_to || '',
+                  quick_note: data.quick_note || '',
+                  container: data.container || '',
+                  container_size: data.container_size || '',
+                  container_type: data.container_type || '',
+                  chasis: data.chasis || '',
+                  isLoaded: data.isLoaded || '',
+                  chasis_size: data.chasis_size || '',
+                  chasis_type: data.chasis_type || '',
+                  chasis_vendor: data.chasis_vendor || '',
+                  reference_number: data.reference_number || '',
+                  booking_number: data.booking_number || '',
+                  bill_of_laden_number: data.bill_of_laden_number || '',
+                  po_number: data.po_number || '',
+                  load_weight: data.load_weight || '',
+                  commodity: data.commodity || '',
+                  pieces: data.pieces || '',
+                  pick_up_number: data.pick_up_number || '',
+                  over_weight: data.over_weight || '',
+                  tags: data.tags || '',
+                  genset_number: data.genset_number || '',
+                  seal_number: data.seal_number || '',
+                  pick_up: data.pick_up || '',
+                  look_up: data.look_up || '',
+                  pick_up_location_name: data.pick_up_location_name || '',
+                  pick_up_address: data.pick_up_address || '',
+                  pick_up_address: data.pick_up_address || '',
+                  pick_up_city: data.pick_up_city || '',
+                  zip: data.zip || '',
+                  appt_date: data.appt_date || '',
+                  from: data.from || '',
+                  to: data.to || '',
+                  no_latter_than_date: data.no_latter_than_date || '',
+                  drop_at_no_latter_than_time: data.drop_at_no_latter_than_time || '',
+                  broker_name: data.broker_name || '',
+                  broker_email: data.broker_email || '',
+                  broker_number: data.broker_number || '',
+                  reefer_temp: data.reefer_temp || '',
+                  broker_reference_number: data.broker_reference_number || '',
+                  batch_number: data.batch_number || '',
+                  batch_req: data.batch_req || '',
+                  sales_rep: data.sales_rep || '',
+                  edi_number: data.edi_number || '',
+                  note: data.note || '',
+                  charge_type: data.charge_type ||'',
+                  comment: data.comment ||'',
+                  units: data.units ||'',
+                  rate: data.rate ||'',
+                  amount: data.amount ||'',
+                  discount: data.discount ||'',
+                  internal_notes: data.internal_notes ||'',
+                  total: data.total ||'',
+                  total_discount: data.total_discount ||'',
+                  net_total: data.net_total ||'',
+                  delivery_type: data.delivery_type ||'',
+                  driver_id: data.driver_id ||'',
+                  carrier_id: data.carrier_id ||'',
+                  expense_type: data.expense_type ||'',
+                  expense_unit: data.expense_unit ||'',
+                  expense_rate: data.expense_rate ||'',
+                  expense_amount: data.expense_amount ||'',
+                  credit_reimbursement_amount: data.credit_reimbursement_amount ||'',
+                  vendor_invoice_number: data.vendor_invoice_number ||'',
+                  payment_reference_note: data.payment_reference_note ||'',
+                  disputed_note: data.disputed_note ||'',
+                  expense_disputed: data.expense_disputed ||'',
+                  paid: data.paid ||'',
+                //   currency: '',
+                  
+                  shipment_type: data.shipment_type || '',
+                    shipper_name: data.shipper_name || '',
+                    ocean_shipper_address: data.ocean_shipper_address || '',
+                    ocean_shipper_reference_number: data.ocean_shipper_reference_number || '',
+                    carrier_name: data.carrier_name || '',
+                    carrier_reference_number: data.carrier_reference_number || '',
+                    ocean_bill_of_ladening_number: data.ocean_bill_of_ladening_number || '',
+                    consignee: data.consignee || '',
+                    consignee_phone: data.consignee_phone || '',
+                    consignee_email: data.consignee_email || '',
+                    first_notify_party_name: data.first_notify_party_name || '',
+                    first_notify_party_phone: data.first_notify_party_phone || '',
+                    first_notify_party_email: data.first_notify_party_email || '',
+                    second_notify_party_name: data.second_notify_party_name || '',
+                    second_notify_party_phone: data.second_notify_party_phone || '',
+                    second_notify_party_email: data.second_notify_party_email || '',
+                    pre_carrier: data.pre_carrier || '',
+                    port_of_discharge: data.port_of_discharge || '',
+                    vessel_aircraft_name: data.vessel_aircraft_name || '',
+                    voyage_number: data.voyage_number || '',
+                    port_of_discharge: data.port_of_discharge || '',
+                    place_of_delivery: data.place_of_delivery || '',
+                    final_destination: data.final_destination || '',
+                    port_of_landing: data.port_of_landing || '',
+                    ocean_note: data.ocean_note || '',
+                    ocean_freight_charges: data.ocean_freight_charges || '',
+                    ocean_total_containers_in_words: data.ocean_total_containers_in_words || '',
+                    no_original_bill_of_landing: data.no_original_bill_of_landing || '',
+                    original_bill_of_landing_payable_at: data.original_bill_of_landing_payable_at || '',
+                    ocean_freight_charges: data.ocean_freight_charges || '',
+                    shipped_on_board_date: data.shipped_on_board_date || '',
+                    goods_name: data.goods_name || '',
+                    ocean_vin: data.ocean_vin || '',
+                    ocean_weight: data.ocean_weight || '',
+                        // Add other fields with fallbacks
+                    };
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                })
+                
+            .finally(() => {
+                //this.isLoading = false;
+            });
+        },
+
+        submitForm() {
+            console.log('Form Data:', this.formData);
+            // Send the data to the server using fetch or another method
+        }
+    }));
+});
+
+      function stepperForm() {
+          return {
+              step: localStorage.getItem('step') ? parseInt(localStorage.getItem('step')) : 1,
+            //   formData: JSON.parse(localStorage.getItem('formData')) || {
+            //   },
               nextStep() {
                   this.step++;
-                  localStorage.setItem('step', this.step);
+                 //localStorage.setItem('step', this.step);
               },
               prevStep() {
                   this.step--;
-                  localStorage.setItem('step', this.step);
+                  //localStorage.setItem('step', this.step);
               },
               saveProgress() {
-                  localStorage.setItem('formData', JSON.stringify(this.formData));
-                  localStorage.setItem('step', this.step);
+                //   localStorage.setItem('formData', JSON.stringify(this.formData));
+                //   localStorage.setItem('step', this.step);
                   //alert("Progress saved successfully!");
-                  createToast('success', 'Progress saved successfully');
               },
 
               saveAndSubmit(e) {
@@ -1474,13 +1640,7 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
 
                     let form = document.getElementById("newloadForm");
                     let formData = new FormData(form);
-                    //Log FormData contents
-                    // console.log("FormData Contents:");
-                    // for (let pair of formData.entries()) {
-                    //     console.log(pair[0] + ": " + pair[1]);
-                    // }
-                    //       console.log(localStorage.getItem('auth_token'))
-                    //  return
+                   
 
                     $.ajax({
                         url: requestURL+'/shipments/create',
@@ -1529,85 +1689,9 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
     }
 
     //populate driver select
-
 populateDriverSelect();
 
 
-    function user()
-    {
-        $.ajax({
-        url: requestURL + '/user',
-        type: 'GET',
-        headers: {
-            'Authorization': 'Bearer'+ localStorage.getItem('auth_token')
-        },
-        success: (response) => {
-            console.log('user data:', response);
-            // alert('Login successful!');
-            // localStorage.setItem('auth_token', response.token);
-        },
-        error: (xhr, status, error) => {
-            console.error('Login failed:', xhr.responseText); // ✅ Log error details
-            //alert('Login failed. Please check your credentials.');
-            console.log(logins)
-        }
-    });
-    }
-
-    function login() {
-        var logins = JSON.stringify({email: "branch@gmail.com", password: "12345678" });
-    $.ajax({
-        url: requestURL + '/login',
-        type: 'POST',
-        data: logins,
-        dataType: 'json',
-        contentType: 'application/json', // ✅ Correct Content Type
-        success: (response) => {
-            console.log('Login successful:', response);
-            alert('Login successful!');
-            localStorage.setItem('auth_token', response.token);
-        },
-        error: (xhr, status, error) => {
-            console.error('Login failed:', xhr.responseText); // ✅ Log error details
-            //alert('Login failed. Please check your credentials.');
-            console.log(logins)
-        }
-    });
-}
-
-function register() {
-    $.ajax({
-        url: requestURL + '/register',
-        type: 'POST',
-        data: JSON.stringify({
-            fname: "John",
-            lname: "Doe",
-            email: "branch@gmail.com",
-            password: "12345678",
-            password_confirmation: "12345678",
-            user_type: "businessadministrator",
-            phone: "1234567890",
-            license_number: "123467",
-            address: "123 Main Street, City",
-            about_us: "We are a logistics company focused on efficiency."
-        }),
-        dataType: 'json',
-        contentType: 'application/json',
-        headers: {
-            'Authorization': 'Bearer'+ localStorage.getItem('auth_token')
-        },
-
-        success: (response) => {
-            console.log('Login successful:', response);
-            alert('Login successful!');
-            localStorage.setItem('auth_token', response.token);
-        },
-        error: (xhr, status, error) => {
-            console.error('registeration failed:', xhr.responseText); // ✅ Log error details
-            //alert('Login failed. Please check your credentials.');
-        }
-    });
-}
 
 
       function handleLoadTypeChange(value) {

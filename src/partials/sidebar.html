@@ -28,6 +28,7 @@
       position: fixed;
       top: 80px;
       right: 20px;
+      z-index: 99999;
   }
 
   .Toastnotifications :where(.toast, .column) {
@@ -46,6 +47,7 @@
       background: var(--light);
       justify-content: space-between;
       animation: show_toast 0.3s ease forwards;
+      z-index: 99999;
   }
 
   @keyframes show_toast {
@@ -266,7 +268,7 @@ try {
     }
 } catch (error) {
     console.error('Error accessing localStorage:', error);
-    window.location.href = '/signin.html'; // Fallback to signin page
+    window.location.href = '/signin.html';
 }
 </script>
 

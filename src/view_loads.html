@@ -77,6 +77,7 @@
                             <!-- Table Header -->
                             <thead class="bg-gray-50 dark:bg-gray-900">
                               <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Action</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Load #</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Bill-To</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Container</th>
@@ -101,6 +102,30 @@
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                               <template x-for="(item, index) in items" :key="index">
                                 <tr>
+                                  <td class="px-5 py-4 sm:px-6">
+                                    <div class="flex items-center">
+                                        <div>
+                                          <span
+                                            class="block font-medium text-gray-800 text-theme-sm dark:text-white/90"
+                                          >
+                                            <div style="position: relative; display: inline-block;">
+                                              <!-- Three dots button -->
+                                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots-vertical cursor-pointer" viewBox="0 0 16 16" onclick="toggleMenu(event)">
+                                                  <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                                              </svg>
+                                      
+                                              <!-- Dropdown menu -->
+                                              <div class="menu hidden">
+                                                  <a href="#" x-on:click="editItem(item.id)">Edit</a>
+                                                  <a href="#" x-on:click="viewItem(item.id)">View</a>
+                                                  <a href="#" x-on:click="deleteItem(item.id)">Delete</a>
+                                              </div>
+                                          </div>
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100" x-text="item.load_number"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.bill_to"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.container"></td>
@@ -145,87 +170,137 @@
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script> -->
     <script>
-      // import Alpine from "https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js";
-      // import sidebar from "./sidebar.js";
-      // import overlay from "./overlay.js";
-      // import header from "./header.js";
-      // import breadcrumb from "./breadcrumb.js";
-
-   
-  document.addEventListener('alpine:init', () => {
-    Alpine.data('datatable', () => ({
-      items: [], // Holds the table data
-      searchQuery: '', // Holds the search query
-       isLoading: false, // Controls the loader visibility
-
-// Computed property to filter items based on search query
-get filteredItems() {
-  if (!this.searchQuery) return this.items; // Return all items if no search query
-
-  // Convert search query to lowercase for case-insensitive search
-  const query = this.searchQuery.toLowerCase();
-
-  // Filter items based on search query
-  return this.items.filter(item => {
-    return (
-      item.load_number.toString().toLowerCase().includes(query) ||
-      item.bill_to.toString().toLowerCase().includes(query) ||
-      item.container.toLowerCase().includes(query) ||
-      item.size.toLowerCase().includes(query) ||
-      item.eq_type.toLowerCase().includes(query) ||
-      item.load_type.toLowerCase().includes(query) ||
-      item.booking_number.toLowerCase().includes(query) ||
-      item.from.toLowerCase().includes(query) ||
-      item.to.toLowerCase().includes(query) ||
-      item.return.toLowerCase().includes(query) ||
-      item.port_appt.toLowerCase().includes(query) ||
-      item.cust_appt.toLowerCase().includes(query) ||
-      item.stop_list.toLowerCase().includes(query) ||
-      item.pickup_number.toLowerCase().includes(query) ||
-      item.bol_number.toLowerCase().includes(query) ||
-      item.po_number.toLowerCase().includes(query) ||
-      item.lfd.toLowerCase().includes(query) ||
-      item.status.toLowerCase().includes(query)
-    );
-  });
-},
-
-      init() {
-        this.fetchData();
-      },
-
-      fetchData() {
-        this.isLoading = true;
-        fetch(requestGetURL + '/shipments', {
-          headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
-            'Accept': 'application/json'
-          }
-        })
-          .then(response => response.json())
-          .then(data => {
-            //console.log('shipments', data.shipments);
-            if (data.shipments && Array.isArray(data.shipments)) {
-              this.items = data.shipments;
-              console.log(this.items);
-            } else {
-              console.error('Invalid data format:', data);
-            }
-          })
-          .catch(error => {
-            console.error('Error fetching data:', error);
-            if (error.status === 401) {
-              alert("Session expired. Please log in again.");
-              localStorage.removeItem('auth_token');
-              window.location.href = "/login";
-            }
-          })
-          .finally(() => {
-            this.isLoading = false;
-          });
+    function toggleMenu(event) {
+      let menu = event.currentTarget.nextElementSibling;
+      if (menu.classList.contains("hidden")) {
+          menu.classList.remove("hidden");
+          menu.classList.add("fade-in");
+      } else {
+          menu.classList.add("fade-out");
+          setTimeout(() => {
+              menu.classList.add("hidden");
+              menu.classList.remove("fade-out");
+          }, 200);
       }
-    }));
-  });
+
+      // Close other open menus
+      document.querySelectorAll(".menu").forEach(m => {
+          if (m !== menu) m.classList.add("hidden");
+      });
+
+      event.stopPropagation();
+    }
+
+
+      document.addEventListener('alpine:init', () => {
+          Alpine.data('datatable', () => ({
+              items: [],
+              searchQuery: '',
+              isLoading: false,
+              get filteredItems() {
+                  if (!this.searchQuery) return this.items;
+                  const query = this.searchQuery.toLowerCase();
+                  return this.items.filter(item => {
+                    return (
+                      item.load_number.toString().toLowerCase().includes(query) ||
+                      item.bill_to.toString().toLowerCase().includes(query) ||
+                      item.container.toLowerCase().includes(query) ||
+                      item.size.toLowerCase().includes(query) ||
+                      item.eq_type.toLowerCase().includes(query) ||
+                      item.load_type.toLowerCase().includes(query) ||
+                      item.booking_number.toLowerCase().includes(query) ||
+                      item.from.toLowerCase().includes(query) ||
+                      item.to.toLowerCase().includes(query) ||
+                      item.return.toLowerCase().includes(query) ||
+                      item.port_appt.toLowerCase().includes(query) ||
+                      item.cust_appt.toLowerCase().includes(query) ||
+                      item.stop_list.toLowerCase().includes(query) ||
+                      item.pickup_number.toLowerCase().includes(query) ||
+                      item.bol_number.toLowerCase().includes(query) ||
+                      item.po_number.toLowerCase().includes(query) ||
+                      item.lfd.toLowerCase().includes(query) ||
+                      item.status.toLowerCase().includes(query)
+                    );
+                  });
+              },
+
+              init() {
+                  this.fetchData();
+              },
+
+              fetchData() {
+                  this.isLoading = true;
+                  fetch(requestGetURL + '/shipments', {
+                      headers: {
+                          'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                          'Accept': 'application/json'
+                      }
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                    //console.log('shipments', data.shipments);
+                    if (data.shipments && Array.isArray(data.shipments)) {
+                      this.items = data.shipments;
+                      console.log(this.items);
+                    } else {
+                      console.error('Invalid data format:', data);
+                    }
+                  })
+                  .catch(error => {
+                    console.error('Error fetching data:', error);
+                    if (error.status === 401) {
+                      alert("Session expired. Please log in again.");
+                      localStorage.removeItem('auth_token');
+                      window.location.href = "/login";
+                    }
+                  })
+                      .finally(() => {
+                          this.isLoading = false;
+                      });
+              },
+
+              // Toggle dropdown menu
+              toggleMenu(event) {
+                  const menu = event.currentTarget.nextElementSibling;
+                  menu.classList.toggle('hidden');
+              },
+
+              // Edit item
+              editItem(id) {
+                const encodedId = btoa(id);
+                  window.location.href = `/edit_load.html?id=${encodedId}`;
+              },
+
+              // View item
+              viewItem(id) {
+                  window.location.href = `/view_load.html/${id}`;
+              },
+
+              // Delete item
+              deleteItem(id) {
+                  if (confirm('Are you sure you want to delete this item?')) {
+                      fetch(`${requestGetURL}/shipments/delete/${id}`, {
+                          method: 'DELETE',
+                          headers: {
+                              'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                              'Accept': 'application/json'
+                          }
+                      })
+                          .then(response => {
+                              if (response.ok) {
+                                  alert('Item deleted successfully');
+                                  this.fetchData();
+                              } else {
+                                  alert('Failed to delete item');
+                              }
+                          })
+                          .catch(error => {
+                              console.error('Error deleting item:', error);
+                          });
+                  }
+              }
+          }));
+      });
       </script>
   </body>
 </html>

@@ -122,7 +122,7 @@
 
             
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-              <div x-data="stepperForm()" class="w-full mx-auto px-4">
+              <div x-data="stepperForm" class="w-full mx-auto px-4">
                 <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xs dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 rtl:space-x-reverse">
                     <template x-for="(heading, index) in ['Basic Info', 'Charges', 'Dispatch', 'Backup Docs', 'Expenses']" :key="index">
                         <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === index + 1, 'text-gray-500 dark:text-gray-400': step !== index + 1 }">
@@ -134,8 +134,7 @@
                         </li>
                     </template>
                 </ol>
-            
-                <div x-data="editLoad()">
+
                 <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newloadForm">
                     <!-- Step 1: Basic Info -->
                     <div x-show="step === 1" >
@@ -1183,116 +1182,84 @@
                     <!-- Step 5: Expenses -->
                     <div x-show="step === 5">
                         <div>
-                            <div id="expenseDuplicate">
-                                <span onclick="duplicateExpense()" 
-                                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
-                                    +
-                                </span>
-                                <span onclick="removeExpense(this)" 
-                                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
-                                    x
-                                    <!-- 🗑 -->
-                                </span>
-                                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4 Expensecalc">
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Expense Type</label>
-                                        <select x-model="formData.expense_type" name="expense_type[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                            <option value="" selected disabled></option>
-                                            <option value="pickup">Pickup</option>
-                                            <option value="pickup loaded">Pickup Loaded</option>
-                                            <option value="pickup empty">Pickup Empty</option>
-                                            <hr class="mt-3 mb-3 text-white">
-                                            <option value="deliver">Deliver</option>
-                                            <option value="load_at">Load at</option>
-                                            <hr>
-                                            <option value="drop_at">Drop at</option>
-                                            <option value="drop_empty">Drop Empty</option>
-                                            <option value="drop_loaded">Drop Loaded</option>
-                                            <option value="stop_off">Stop off</option>
-                                            <option value="scale_stop">Scale Stop</option>
-                                            <option value="Other">Other</option>
-                                        </select>
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4 Expensecalc">
+                            <template x-for="(expense, index) in formData.shipment_expenses" :key="index">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Expense Type</label>
+                                    <select x-model="formData.shipment_expenses[index].expense_type" name="expense_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <option value="" selected disabled></option>
+                                        <option value="pickup">Pickup</option>
+                                        <option value="pickup loaded">Pickup Loaded</option>
+                                        <option value="pickup empty">Pickup Empty</option>
+                                        <hr class="mt-3 mb-3 text-white">
+                                        <option value="deliver">Deliver</option>
+                                        <option value="load_at">Load at</option>
+                                        <hr>
+                                        <option value="drop_at">Drop at</option>
+                                        <option value="drop_empty">Drop Empty</option>
+                                        <option value="drop_loaded">Drop Loaded</option>
+                                        <option value="stop_off">Stop off</option>
+                                        <option value="scale_stop">Scale Stop</option>
+                                        <option value="Other">Other</option>
+                                    </select>
                                     </div>
+
+                                    <!-- <span @click="removeOceanContainer(index)"></span> -->
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Units</label>
-                                        <input type="text" x-model="formData.expense_unit" name="expense_unit[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Rate</label>
-                                        <input type="text" x-model="formData.expense_rate" id="expense_rate" name="expense_rate[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly expense_calc-field expense_rate" placeholder="">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Amount</label>
-                                        <input type="text" id="expense_amount" x-model="formData.expense_amount" name="expense_amount[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly expense_amount" placeholder="">
+                                        <input type="text" x-model="formData.shipment_expenses[index].expense_unit" name="expense_unit" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                     </div>
                                     
                                     <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Credit/Reim Amount</label>
-                                        <input type="text" x-model="formData.credit_reimbursement_amount" id="credit_reimbursement_amount" name="credit_reimbursement_amount[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly credit_reimbursement_amount" placeholder="">
-                                    </div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Rate</label>
+                                        <input type="text" x-model="formData.shipment_expenses[index].expense_rate" id="expense_rate" name="expense_rate[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly expense_calc-field expense_rate" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Amount</label>
+                                    <input type="text" id="expense_amount" x-model="formData.shipment_expenses[index].expense_amount" name="expense_amount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly expense_amount" placeholder="">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Credit/Reim Amount</label>
+                                    <input type="text" x-model="formData.shipment_expenses[index].credit_reimbursement_amount" id="credit_reimbursement_amount" name="credit_reimbursement_amount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly credit_reimbursement_amount" placeholder="">
+                                </div>
                                 </div>
 
                                 <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Vendor Invoice #</label>
+                                    <input type="text" x-model="formData.shipment_expenses[index].vendor_invoice_number" id="vendor_invoice_number" name="vendor_invoice_number[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly vendor_invoice_number" placeholder="">
+                                </div>
 
-                                    
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Vendor Invoice #</label>
-                                        <input type="text" x-model="formData.vendor_invoice_number" id="vendor_invoice_number" name="vendor_invoice_number[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly vendor_invoice_number" placeholder="">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Payment Reference Note</label>
-                                        <textarea type="text" x-model="formData.payment_reference_note" id="payment_reference_note" name="payment_reference_note[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly payment_reference_note" placeholder=""> </textarea>
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Disputed Note </label>
-                                        <textarea type="text" x-model="formData.disputed_note" id="disputed_note" name="disputed_note[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly disputed_note" placeholder=""> </textarea>
-                                    </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Payment Reference Note</label>
+                                    <textarea type="text" x-model="formData.shipment_expenses[index].payment_reference_note" id="payment_reference_note" name="payment_reference_note[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white payment_reference_note" placeholder=""> </textarea>
+                                </div>
 
-                                    <div class="flex items-center space-x-4">
-                                        <!-- Radio Option 1 -->
-                                        <label class="flex items-center space-x-2">
-                                            <input type="checkbox" x-model="formData.expense_disputed" name="expense_disputed[]" value="Left" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                                            <span class="text-gray-700 dark:text-gray-300">Disputed?</span>
-                                        </label>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Disputed Note </label>
+                                    <textarea type="text" x-model="formData.shipment_expenses[index].disputed_note" id="disputed_note" name="disputed_note[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white disputed_note" placeholder=""> </textarea>
+                                </div>
+
+                                <div class="flex items-center space-x-4">
+                                    <!-- Radio Option 1 -->
+                                    <label class="flex items-center space-x-2">
+                                        <input type="checkbox" x-model="formData.shipment_expenses[index].expense_disputed" name="expense_disputed[]" value="Left" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                        <span class="text-gray-700 dark:text-gray-300">Disputed?</span>
+                                    </label>
+                                </div>
+
+                                <div class="flex items-center space-x-4">
     
-                                        <!-- Checkbox Option -->
-                                        <label class="flex items-center space-x-2">
-                                            <input type="checkbox" x-model="formData.paid" name="paid[]" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                                            <span class="text-gray-700 dark:text-gray-300">Paid?</span>
-                                        </label>
-                                    </div>
-
-<!--                                     
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Disputed?</label>
-                                        <input type="checkbox" id="expense_disputed" x-model="formData.expense_disputed" name="expense_disputed[]" class="w-2 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly expense_disputed" placeholder="">
-                                    </div> -->
-                                    <!-- <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">paid?</label>
-                                        <input type="checkbox" x-model="formData.paid" name="paid[]" class="w-2 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                    </div> -->
-                                    <!-- <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Rate</label>
-                                        <input type="text" x-model="formData.rate" name="rate" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
-                                    </div> -->
+                                    <!-- Checkbox Option -->
+                                    <label class="flex items-center space-x-2">
+                                        <input type="checkbox" x-model="formData.shipment_expenses[index].paid" name="paid[]" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                        <span class="text-gray-700 dark:text-gray-300">Paid?</span>
+                                    </label>
                                 </div>
-                            </div>
-                            <div id="chargesList"></div>
-
-                            <!-- <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                                <div id="totalCharges">
-                                    <label class="block text-gray-700 dark:text-gray-300">Total</label>
-                                    <input type="text" x-model="formData.total" name="total" id="total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total" placeholder="">
-                                </div>
-                                <div id="totalDiscount">
-                                    <label class="block text-gray-700 dark:text-gray-300">Total Discount</label>
-                                    <input type="text" x-model="formData.total_discount" name="total_discount" id="total_discount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total_discount" placeholder="">
-                                </div>
-                                <div id="netTotal">
-                                    <label class="block text-gray-700 dark:text-gray-300">Net Total</label>
-                                    <input type="text" x-model="formData.net_total" name="net_total" id="net_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly net_total" placeholder="">
-                                </div>
-                            </div> -->
+                            </template>
+                                    
+                        </div>
+                           
                         </div>
                   </div>
             
@@ -1320,8 +1287,6 @@
             
         </div>
     </div>
-            </div>
-
           </div>
         </main>
         <!-- ===== Main Content End ===== -->
@@ -1338,7 +1303,9 @@
         
 var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
 document.addEventListener('alpine:init', () => {
-    Alpine.data('editLoad', () => ({
+    Alpine.data('stepperForm', () => ({
+    step: localStorage.getItem('edit_load') ? parseInt(localStorage.getItem('edit_load')) : 1,
+
         //isLoading: false,
         formData: {
             office: '',
@@ -1404,18 +1371,20 @@ document.addEventListener('alpine:init', () => {
                   delivery_type: '',
                   driver_id: '',
                   carrier_id: '',
-                  expense_type: '',
-                  expense_unit: '',
-                  expense_rate: '',
-                  expense_amount: '',
-                  credit_reimbursement_amount: '',
-                  vendor_invoice_number: '',
-                  payment_reference_note: '',
-                  disputed_note: '',
-                  expense_disputed: '',
-                  paid: '',
-                //   currency: '',
-                  
+                  shipment_expenses: [
+                        {
+                            expense_type: '',
+                            expense_unit: '',
+                            expense_rate: '',
+                            expense_amount: '',
+                            credit_reimbursement_amount: '',
+                            vendor_invoice_number: '',
+                            payment_reference_note: '',
+                            disputed_note: '',
+                            expense_disputed: '',
+                            paid: '',
+                        }
+                    ],
                   shipment_type: '',
                     shipper_name: '',
                     ocean_shipper_address: '',
@@ -1451,13 +1420,14 @@ document.addEventListener('alpine:init', () => {
                     ocean_vin: '',
                     ocean_weight: '',
         },
+        step: 1,
 
         init() {
             //this.fetchData();
             const urlParams = new URLSearchParams(window.location.search);
             const encodedId = urlParams.get('id');
             if (encodedId) {
-                this.id = atob(encodedId); // Decode the ID from base64
+                this.id = atob(encodedId);
                 this.fetchData();
             } else {
                 console.error('No ID found in the URL');
@@ -1474,126 +1444,116 @@ document.addEventListener('alpine:init', () => {
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Fetched Data:', data); // Log the data
+                    console.log('Fetched Data:', data);
+                    localStorage.setItem('Fetched Data: ', data)
                     this.formData = {
-                        // shipper_name: data.shipper_name || '',
-                        // shipper_reference_number: data.shipper_reference_number || '',
-                        
-                        // ocean_shipper_reference_number: data.ocean_shipper_reference_number || '',
-
-
-
-
-                        office: data.office || '', 
-                  load_type: data.load_type || '',
-                  load_type_note: data.load_type_note || '',
-                  load_type_note_r: data.load_type_note_r || '',
-                  isBroker: data.isBroker || '',
-                  shipment_type: data.shipment_type || '',
-                  bill_to: data.bill_to || '',
-                  quick_note: data.quick_note || '',
-                  container: data.container || '',
-                  container_size: data.container_size || '',
-                  container_type: data.container_type || '',
-                  chasis: data.chasis || '',
-                  isLoaded: data.isLoaded || '',
-                  chasis_size: data.chasis_size || '',
-                  chasis_type: data.chasis_type || '',
-                  chasis_vendor: data.chasis_vendor || '',
-                  reference_number: data.reference_number || '',
-                  booking_number: data.booking_number || '',
-                  bill_of_laden_number: data.bill_of_laden_number || '',
-                  po_number: data.po_number || '',
-                  load_weight: data.load_weight || '',
-                  commodity: data.commodity || '',
-                  pieces: data.pieces || '',
-                  pick_up_number: data.pick_up_number || '',
-                  over_weight: data.over_weight || '',
-                  tags: data.tags || '',
-                  genset_number: data.genset_number || '',
-                  seal_number: data.seal_number || '',
-                  pick_up: data.pick_up || '',
-                  look_up: data.look_up || '',
-                  pick_up_location_name: data.pick_up_location_name || '',
-                  pick_up_address: data.pick_up_address || '',
-                  pick_up_address: data.pick_up_address || '',
-                  pick_up_city: data.pick_up_city || '',
-                  zip: data.zip || '',
-                  appt_date: data.appt_date || '',
-                  from: data.from || '',
-                  to: data.to || '',
-                  no_latter_than_date: data.no_latter_than_date || '',
-                  drop_at_no_latter_than_time: data.drop_at_no_latter_than_time || '',
-                  broker_name: data.broker_name || '',
-                  broker_email: data.broker_email || '',
-                  broker_number: data.broker_number || '',
-                  reefer_temp: data.reefer_temp || '',
-                  broker_reference_number: data.broker_reference_number || '',
-                  batch_number: data.batch_number || '',
-                  batch_req: data.batch_req || '',
-                  sales_rep: data.sales_rep || '',
-                  edi_number: data.edi_number || '',
-                  note: data.note || '',
-                  charge_type: data.charge_type ||'',
-                  comment: data.comment ||'',
-                  units: data.units ||'',
-                  rate: data.rate ||'',
-                  amount: data.amount ||'',
-                  discount: data.discount ||'',
-                  internal_notes: data.internal_notes ||'',
-                  total: data.total ||'',
-                  total_discount: data.total_discount ||'',
-                  net_total: data.net_total ||'',
-                  delivery_type: data.delivery_type ||'',
-                  driver_id: data.driver_id ||'',
-                  carrier_id: data.carrier_id ||'',
-                  expense_type: data.expense_type ||'',
-                  expense_unit: data.expense_unit ||'',
-                  expense_rate: data.expense_rate ||'',
-                  expense_amount: data.expense_amount ||'',
-                  credit_reimbursement_amount: data.credit_reimbursement_amount ||'',
-                  vendor_invoice_number: data.vendor_invoice_number ||'',
-                  payment_reference_note: data.payment_reference_note ||'',
-                  disputed_note: data.disputed_note ||'',
-                  expense_disputed: data.expense_disputed ||'',
-                  paid: data.paid ||'',
-                //   currency: '',
-                  
-                  shipment_type: data.shipment_type || '',
-                    shipper_name: data.shipper_name || '',
-                    ocean_shipper_address: data.ocean_shipper_address || '',
-                    ocean_shipper_reference_number: data.ocean_shipper_reference_number || '',
-                    carrier_name: data.carrier_name || '',
-                    carrier_reference_number: data.carrier_reference_number || '',
-                    ocean_bill_of_ladening_number: data.ocean_bill_of_ladening_number || '',
-                    consignee: data.consignee || '',
-                    consignee_phone: data.consignee_phone || '',
-                    consignee_email: data.consignee_email || '',
-                    first_notify_party_name: data.first_notify_party_name || '',
-                    first_notify_party_phone: data.first_notify_party_phone || '',
-                    first_notify_party_email: data.first_notify_party_email || '',
-                    second_notify_party_name: data.second_notify_party_name || '',
-                    second_notify_party_phone: data.second_notify_party_phone || '',
-                    second_notify_party_email: data.second_notify_party_email || '',
-                    pre_carrier: data.pre_carrier || '',
-                    port_of_discharge: data.port_of_discharge || '',
-                    vessel_aircraft_name: data.vessel_aircraft_name || '',
-                    voyage_number: data.voyage_number || '',
-                    port_of_discharge: data.port_of_discharge || '',
-                    place_of_delivery: data.place_of_delivery || '',
-                    final_destination: data.final_destination || '',
-                    port_of_landing: data.port_of_landing || '',
-                    ocean_note: data.ocean_note || '',
-                    ocean_freight_charges: data.ocean_freight_charges || '',
-                    ocean_total_containers_in_words: data.ocean_total_containers_in_words || '',
-                    no_original_bill_of_landing: data.no_original_bill_of_landing || '',
-                    original_bill_of_landing_payable_at: data.original_bill_of_landing_payable_at || '',
-                    ocean_freight_charges: data.ocean_freight_charges || '',
-                    shipped_on_board_date: data.shipped_on_board_date || '',
-                    goods_name: data.goods_name || '',
-                    ocean_vin: data.ocean_vin || '',
-                    ocean_weight: data.ocean_weight || '',
-                        // Add other fields with fallbacks
+                    office: data.office || '', 
+                    load_type: data.load_type || '',
+                    load_type_note: data.load_type_note || '',
+                    load_type_note_r: data.load_type_note_r || '',
+                    isBroker: data.isBroker || '',
+                    shipment_type: data.shipment_type || '',
+                    bill_to: data.bill_to || '',
+                    quick_note: data.quick_note || '',
+                    container: data.container || '',
+                    container_size: data.container_size || '',
+                    container_type: data.container_type || '',
+                    chasis: data.chasis || '',
+                    isLoaded: data.isLoaded || '',
+                    chasis_size: data.chasis_size || '',
+                    chasis_type: data.chasis_type || '',
+                    chasis_vendor: data.chasis_vendor || '',
+                    reference_number: data.reference_number || '',
+                    booking_number: data.booking_number || '',
+                    bill_of_laden_number: data.bill_of_laden_number || '',
+                    po_number: data.po_number || '',
+                    load_weight: data.load_weight || '',
+                    commodity: data.commodity || '',
+                    pieces: data.pieces || '',
+                    pick_up_number: data.pick_up_number || '',
+                    over_weight: data.over_weight || '',
+                    tags: data.tags || '',
+                    genset_number: data.genset_number || '',
+                    seal_number: data.seal_number || '',
+                    pick_up: data.pick_up || '',
+                    look_up: data.look_up || '',
+                    pick_up_location_name: data.pick_up_location_name || '',
+                    pick_up_address: data.pick_up_address || '',
+                    pick_up_address: data.pick_up_address || '',
+                    pick_up_city: data.pick_up_city || '',
+                    zip: data.zip || '',
+                    appt_date: data.appt_date || '',
+                    from: data.from || '',
+                    to: data.to || '',
+                    no_latter_than_date: data.no_latter_than_date || '',
+                    drop_at_no_latter_than_time: data.drop_at_no_latter_than_time || '',
+                    broker_name: data.broker_name || '',
+                    broker_email: data.broker_email || '',
+                    broker_number: data.broker_number || '',
+                    reefer_temp: data.reefer_temp || '',
+                    broker_reference_number: data.broker_reference_number || '',
+                    batch_number: data.batch_number || '',
+                    batch_req: data.batch_req || '',
+                    sales_rep: data.sales_rep || '',
+                    edi_number: data.edi_number || '',
+                    note: data.note || '',
+                    charge_type: data.charge_type ||'',
+                    comment: data.comment ||'',
+                    units: data.units ||'',
+                    rate: data.rate ||'',
+                    amount: data.amount ||'',
+                    discount: data.discount ||'',
+                    internal_notes: data.internal_notes ||'',
+                    total: data.total ||'',
+                    total_discount: data.total_discount ||'',
+                    net_total: data.net_total ||'',
+                    delivery_type: data.delivery_type ||'',
+                    driver_id: data.driver_id ||'',
+                    carrier_id: data.carrier_id ||'',
+                    expense_type: data.expense_type || [],
+                    expense_unit: data.expense_unit || [],
+                    expense_rate: data.expense_rate || [],
+                    expense_amount: data.expense_amount || [],
+                    credit_reimbursement_amount: data.credit_reimbursement_amount || [],
+                    vendor_invoice_number: data.vendor_invoice_number || [],
+                    payment_reference_note: data.payment_reference_note || [],
+                    disputed_note: data.disputed_note || [],
+                    expense_disputed: data.expense_disputed || [],
+                    paid: data.paid || [],
+                    shipment_type: data.shipment_type || '',
+                        shipper_name: data.shipper_name || '',
+                        ocean_shipper_address: data.ocean_shipper_address || '',
+                        ocean_shipper_reference_number: data.ocean_shipper_reference_number || '',
+                        carrier_name: data.carrier_name || '',
+                        carrier_reference_number: data.carrier_reference_number || '',
+                        ocean_bill_of_ladening_number: data.ocean_bill_of_ladening_number || '',
+                        consignee: data.consignee || '',
+                        consignee_phone: data.consignee_phone || '',
+                        consignee_email: data.consignee_email || '',
+                        first_notify_party_name: data.first_notify_party_name || '',
+                        first_notify_party_phone: data.first_notify_party_phone || '',
+                        first_notify_party_email: data.first_notify_party_email || '',
+                        second_notify_party_name: data.second_notify_party_name || '',
+                        second_notify_party_phone: data.second_notify_party_phone || '',
+                        second_notify_party_email: data.second_notify_party_email || '',
+                        pre_carrier: data.pre_carrier || '',
+                        port_of_discharge: data.port_of_discharge || '',
+                        vessel_aircraft_name: data.vessel_aircraft_name || '',
+                        voyage_number: data.voyage_number || '',
+                        port_of_discharge: data.port_of_discharge || '',
+                        place_of_delivery: data.place_of_delivery || '',
+                        final_destination: data.final_destination || '',
+                        port_of_landing: data.port_of_landing || '',
+                        ocean_note: data.ocean_note || '',
+                        ocean_freight_charges: data.ocean_freight_charges || '',
+                        ocean_total_containers_in_words: data.ocean_total_containers_in_words || '',
+                        no_original_bill_of_landing: data.no_original_bill_of_landing || '',
+                        original_bill_of_landing_payable_at: data.original_bill_of_landing_payable_at || '',
+                        ocean_freight_charges: data.ocean_freight_charges || '',
+                        shipped_on_board_date: data.shipped_on_board_date || '',
+                        goods_name: data.goods_name || '',
+                        ocean_vin: data.ocean_vin || '',
+                        ocean_weight: data.ocean_weight || '',
                     };
                 })
                 .catch(error => {
@@ -1604,6 +1564,21 @@ document.addEventListener('alpine:init', () => {
                 //this.isLoading = false;
             });
         },
+        nextStep() {
+                  this.step++;
+                  localStorage.setItem('edit_load', this.step);
+              },
+              prevStep() {
+                  this.step--;
+                  localStorage.setItem('edit_load', this.step);
+              },
+
+      
+
+        saveProgress() {
+            localStorage.setItem('formData', JSON.stringify(this.formData));
+            alert("Progress saved successfully!");
+        },
 
         submitForm() {
             console.log('Form Data:', this.formData);
@@ -1612,7 +1587,7 @@ document.addEventListener('alpine:init', () => {
     }));
 });
 
-      function stepperForm() {
+      function stepperFor() {
           return {
               step: localStorage.getItem('step') ? parseInt(localStorage.getItem('step')) : 1,
             //   formData: JSON.parse(localStorage.getItem('formData')) || {

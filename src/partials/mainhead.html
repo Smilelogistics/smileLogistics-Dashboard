@@ -17,7 +17,8 @@
   <!-- Chosen Plugin -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
+<link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
   <style>
     /* styles.css */
 /* body {
@@ -322,7 +323,7 @@ button {
             if (xhr.status === 401) { // Unauthorized
                 alert("Session expired. Please log in again.");
                 localStorage.removeItem('auth_token');
-                window.location.href = "/login";
+                window.location.href = "/signin.html";
             } else {
                 try {
                     let response = JSON.parse(xhr.responseText);
@@ -337,8 +338,42 @@ button {
 }
 
 $(document).ready(function() {
-   
+   var token = localStorage.getItem('auth_token');
+   if (!token) {
+       createToast('error', 'Session expired. Please log in again.');
+       window.location.href = "/signin.html";
+   }
 });
+
+  //auto loggout the nigga when he is not active for some time
+  const INACTIVITY_LIMIT = 80 * 60 * 1000; // 80 minutes in milliseconds
+  //const INACTIVITY_LIMIT = 5 * 1000; // 5 seconds (5,000ms) for te3sting
+
+  const TOKEN_KEY = "auth_token";
+  function updateLastActivity() {
+      localStorage.setItem("last_activity", Date.now());
+  }
+
+  function checkInactivity() {
+      const lastActivity = localStorage.getItem("last_activity");
+      if (lastActivity) {
+          const elapsed = Date.now() - parseInt(lastActivity, 10);
+          if (elapsed > INACTIVITY_LIMIT) {
+              createToast("error", "Sorry we have to this😢 but you've been away for too long, logging out...");
+              localStorage.removeItem(TOKEN_KEY);
+              localStorage.removeItem("last_activity");
+              window.location.href = "/signin.html";
+          }
+      }
+  }
+
+  document.addEventListener("mousemove", updateLastActivity);
+  document.addEventListener("keydown", updateLastActivity);
+  document.addEventListener("click", updateLastActivity);
+
+  updateLastActivity();
+  setInterval(checkInactivity, 60 * 1000);
+
   
   </script>
   

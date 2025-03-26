@@ -280,11 +280,13 @@
           },
 
           editItem(id) {
-              window.location.href = `/edit-driver.html?id=${id}`;
+            const encodedId = btoa(id);
+              window.location.href = `/edit-driver.html?id=${encodedId}`;
           },
 
           viewItem(id) {
-              window.location.href = `/view_driver_single.html?id=${id}`;
+            const encodedId = btoa(id);
+              window.location.href = `/view_driver_single.html?id=${encodedId}`;
           },
           deleteItem(id) {
               if (confirm('Are you sure you want to delete this item?')) {

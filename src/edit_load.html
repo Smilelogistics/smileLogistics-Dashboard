@@ -600,7 +600,7 @@
                                         
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Size</label>
-                                            <select x-model="formData.chasis_size" name="chasis_size" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <select x-model="formData.chasis_size" name="chasis_size[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                             <option value="" selected disabled>Select Size</option>
                                             <option value="20">20<sup>'</sup></option>
                                             <option value="40">40<sup>'</sup></option>
@@ -978,133 +978,114 @@
 
                 
                     <!-- Step 2: Charges -->
-                    <div x-show="step === 2">
-                        <div>
-                            <div id="chargesDuplicate">
-                                <span onclick="duplicateCharges()" 
-                                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
-                                    +
-                                </span>
-                                <span onclick="removeCharges(this)" 
-                                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
-                                    x
-                                    <!-- 🗑 -->
-                                </span>
-                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 chargecalc">
+                    <div x-show="step === 2" class="space-y-6">
+                        <template x-for="(charge, index) in formData.shipment_charges" :key="index">
+                            <div class="p-4 border rounded-lg bg-white dark:bg-gray-800 shadow-sm dark:border-gray-700">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="font-medium text-gray-900 dark:text-gray-100">Charge #<span x-text="index + 1"></span></h3>
+                                    <button @click="removeCharge(index)" type="button" 
+                                            class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm">
+                                        Remove
+                                    </button>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                                    <!-- Charge Type -->
                                     <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Charge Type</label>
-                                        <select x-model="formData.charge_type" name="charge_type[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                            <option value="" selected disabled></option>
-                                            <option value="pickup">Pickup</option>
-                                            <option value="pickup loaded">Pickup Loaded</option>
-                                            <option value="pickup empty">Pickup Empty</option>
-                                            <hr class="mt-3 mb-3 text-white">
-                                            <option value="deliver">Deliver</option>
-                                            <option value="load_at">Load at</option>
-                                            <hr>
-                                            <option value="drop_at">Drop at</option>
-                                            <option value="drop_empty">Drop Empty</option>
-                                            <option value="drop_loaded">Drop Loaded</option>
-                                            <option value="stop_off">Stop off</option>
-                                            <option value="scale_stop">Scale Stop</option>
-                                            <option value="Other">Other</option>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Charge Type</label>
+                                        <select x-model="charge.charge_type" 
+                                                class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
+                                            <option value="" class="dark:bg-gray-700">Select Type</option>
+                                            <option value="pickup" class="dark:bg-gray-700">Pickup</option>
+                                            <option value="delivery" class="dark:bg-gray-700">Delivery</option>
+                                            <!-- Add other options -->
                                         </select>
                                     </div>
+
+                                    <!-- Comment -->
                                     <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">comment (Will appear on Invoice)</label>
-                                        <input type="text" x-model="formData.comment" name="comment[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Comment</label>
+                                        <input type="text" x-model="charge.comment" 
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
                                     </div>
+
+                                    <!-- Units -->
                                     <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Units</label>
-                                        <input type="text" x-model="formData.units" id="unit" name="units[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly calc-field unit" placeholder="">
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Units</label>
+                                        <input type="number" x-model="charge.units" 
+                                            @change="calculateChargeAmount(index)"
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
                                     </div>
+
+                                    <!-- Rate -->
                                     <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Rate</label>
-                                        <input type="text" x-model="formData.rate" id="rate" name="rate[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly calc-field rate" placeholder="">
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Rate</label>
+                                        <input type="number" x-model="charge.rate" 
+                                            @change="calculateChargeAmount(index)"
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
                                     </div>
                                 </div>
 
-                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                    <!-- Amount -->
                                     <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Amount</label>
-                                        <input type="text" id="amount" x-model="formData.amount" name="amount[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly amount" placeholder="">
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Amount</label>
+                                        <input type="text" x-model="charge.amount" readonly 
+                                            class="w-full rounded bg-gray-100 dark:bg-gray-600 dark:text-gray-200 border-gray-300 dark:border-gray-500">
                                     </div>
+
+                                    <!-- Discount -->
                                     <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Discount</label>
-                                        <input type="text" id="discount" x-model="formData.discount" name="discount[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly calc-field discount" placeholder="">
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Discount</label>
+                                        <input type="number" x-model="charge.discount" 
+                                            @change="calculateTotals()"
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
                                     </div>
+
+                                    <!-- Internal Notes -->
                                     <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Internal Note</label>
-                                        <input type="text" x-model="formData.internal_notes" name="internal_notes[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Internal Notes</label>
+                                        <input type="text" x-model="charge.internal_notes" 
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
                                     </div>
-                                    <!-- <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Rate</label>
-                                        <input type="text" x-model="formData.rate" name="rate" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
-                                    </div> -->
+
+                                    <!-- Billed -->
+                                    <div class="flex items-end">
+                                        <label class="flex items-center text-gray-700 dark:text-gray-300">
+                                            <input type="checkbox" x-model="charge.billed" 
+                                                class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-blue-600 focus:ring-blue-500">
+                                            <span class="ml-2 text-sm">Billed</span>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-                            <div id="chargesList"></div>
+                        </template>
 
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                                <div id="totalCharges">
-                                    <label class="block text-gray-700 dark:text-gray-300">Total</label>
-                                    <input type="text" x-model="formData.total" name="total" id="total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total" placeholder="">
-                                </div>
-                                <div id="totalDiscount">
-                                    <label class="block text-gray-700 dark:text-gray-300">Total Discount</label>
-                                    <input type="text" x-model="formData.total_discount" name="total_discount" id="total_discount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total_discount" placeholder="">
-                                </div>
-                                <div id="netTotal">
-                                    <label class="block text-gray-700 dark:text-gray-300">Net Total</label>
-                                    <input type="text" x-model="formData.net_total" name="net_total" id="net_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly net_total" placeholder="">
-                                </div>
+                        <!-- Add Charge Button -->
+                        <button @click="addCharge" type="button"
+                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors">
+                            + Add New Charge
+                        </button>
+
+                        <!-- Totals Section -->
+                        <div class="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block font-medium text-gray-700 dark:text-gray-300">Total Charges</label>
+                                <div class="text-xl text-gray-900 dark:text-gray-100" x-text="'$' + formData.total"></div>
+                            </div>
+                            <div>
+                                <label class="block font-medium text-gray-700 dark:text-gray-300">Total Discount</label>
+                                <div class="text-xl text-gray-900 dark:text-gray-100" x-text="'$' + formData.total_discount"></div>
+                            </div>
+                            <div>
+                                <label class="block font-medium text-gray-700 dark:text-gray-300">Net Total</label>
+                                <div class="text-2xl font-bold text-gray-900 dark:text-gray-100" x-text="'$' + formData.net_total"></div>
                             </div>
                         </div>
                     </div>
 
                     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
-                    <script>
-                        function calculate() {
-                $(".chargecalc").each(function() {
-                    let units = parseFloat($(this).find(".unit").val()) || 0;
-                    let rate = parseFloat($(this).find(".rate").val()) || 0;
-                    let discount = parseFloat($(this).find(".discount").val()) || 0;
-
-                    let total = units * rate;
-                    let netTotal = total - discount;
-
-                    $(this).find(".amount").val(total);
-                    $(this).find(".total").val(total);
-                    $(this).find(".net_total").val(netTotal);
-                });
-            }
-
-            // Trigger calculation on input change
-            $(document).on("input", ".calc-field", function() {
-                calculate();
-            });
-                    //     function calculate() {
-                    //     let units = parseFloat($("#unit").val()) || 0;
-                    //     let rate = parseFloat($("#rate").val()) || 0;
-                    //     let discount = parseFloat($("#discount").val()) || 0;
-
-                    //     let total = units * rate;
-                    //     let netTotal = total - discount;
-                    //     console.log("Net total is",netTotal)
-
-                    //     $("#amount").val(total);
-                    //     $("#total").val(total);
-                    //     $("#net_total").val(netTotal);
-                    //     $("#total_discount").val(discount);
-                    // }
-
-                    //     $(".calc-field").on("input", function() {
-                    //         calculate();
-                    //     });
-
-                    //     calculate();
-                    </script>
-
+                    
                     <!-- Step 3: Dispatch -->
                     <div x-show="step === 3" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div x-data="{ formData: { delivery_type: '', driver_id: '' } }">
@@ -1173,95 +1154,129 @@
 
                     <!-- Step 4: Backup Docs -->
                     <div x-show="step === 4" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                          <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
-                          <input type="file" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount" id="file_path">
-                      </div>
+                        <template x-for="(upload, index) in formData.shipment_uploads" :key="index">
+                            <h3 class="font-medium text-gray-900 dark:text-gray-100">Document #<span x-text="index + 1"></span></h3>
+                            <img :src="`https://laravel-production-077b.up.railway.app/storage/${upload.file_path}`" class="w-32 h-32 object-cover rounded-md" alt="Document Image" />
+                        </template>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
+                            <input type="file" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount" id="file_path">
+                        </div>
                     </div>
 
-                    <!-- Step 5: Expenses -->
-                    <div x-show="step === 5">
-                        <div>
-                            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4 Expensecalc">
-                            <template x-for="(expense, index) in formData.shipment_expenses" :key="index">
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300">Expense Type</label>
-                                    <select x-model="formData.shipment_expenses[index].expense_type" name="expense_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                        <option value="" selected disabled></option>
-                                        <option value="pickup">Pickup</option>
-                                        <option value="pickup loaded">Pickup Loaded</option>
-                                        <option value="pickup empty">Pickup Empty</option>
-                                        <hr class="mt-3 mb-3 text-white">
-                                        <option value="deliver">Deliver</option>
-                                        <option value="load_at">Load at</option>
-                                        <hr>
-                                        <option value="drop_at">Drop at</option>
-                                        <option value="drop_empty">Drop Empty</option>
-                                        <option value="drop_loaded">Drop Loaded</option>
-                                        <option value="stop_off">Stop off</option>
-                                        <option value="scale_stop">Scale Stop</option>
-                                        <option value="Other">Other</option>
-                                    </select>
+                 <!-- Step 5: Expenses -->
+                    <div x-show="step === 5" class="space-y-6">
+                        <template x-for="(expense, index) in formData.shipment_expenses" :key="index">
+                            <div class="p-4 border rounded-lg bg-white dark:bg-gray-800 shadow-sm dark:border-gray-700 mb-6">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="font-medium text-gray-900 dark:text-gray-100">Expense #<span x-text="index + 1"></span></h3>
+                                    <button @click="removeExpense(index)" type="button" 
+                                            class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm">
+                                        Remove
+                                    </button>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
+                                    <!-- Expense Type -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Expense Type</label>
+                                        <select x-model="expense.expense_type" 
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-blue-500 focus:border-blue-500">
+                                            <option value="" selected disabled class="dark:bg-gray-700"></option>
+                                            <option value="pickup" class="dark:bg-gray-700">Pickup</option>
+                                            <option value="pickup loaded" class="dark:bg-gray-700">Pickup Loaded</option>
+                                            <option value="pickup empty" class="dark:bg-gray-700">Pickup Empty</option>
+                                            <option value="deliver" class="dark:bg-gray-700">Deliver</option>
+                                            <option value="load_at" class="dark:bg-gray-700">Load at</option>
+                                            <option value="drop_at" class="dark:bg-gray-700">Drop at</option>
+                                            <option value="drop_empty" class="dark:bg-gray-700">Drop Empty</option>
+                                            <option value="drop_loaded" class="dark:bg-gray-700">Drop Loaded</option>
+                                            <option value="stop_off" class="dark:bg-gray-700">Stop off</option>
+                                            <option value="scale_stop" class="dark:bg-gray-700">Scale Stop</option>
+                                            <option value="Other" class="dark:bg-gray-700">Other</option>
+                                        </select>
                                     </div>
 
-                                    <!-- <span @click="removeOceanContainer(index)"></span> -->
+                                    <!-- Units -->
                                     <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Units</label>
-                                        <input type="text" x-model="formData.shipment_expenses[index].expense_unit" name="expense_unit" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Units</label>
+                                        <input type="text" x-model="expense.expense_unit" 
+                                            @change="calculateExpenseAmount(index)"
+                                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-blue-500 focus:border-blue-500">
                                     </div>
-                                    
+
+                                    <!-- Rate -->
                                     <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Rate</label>
-                                        <input type="text" x-model="formData.shipment_expenses[index].expense_rate" id="expense_rate" name="expense_rate[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly expense_calc-field expense_rate" placeholder="">
-                                </div>
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300">Amount</label>
-                                    <input type="text" id="expense_amount" x-model="formData.shipment_expenses[index].expense_amount" name="expense_amount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly expense_amount" placeholder="">
-                                </div>
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300">Credit/Reim Amount</label>
-                                    <input type="text" x-model="formData.shipment_expenses[index].credit_reimbursement_amount" id="credit_reimbursement_amount" name="credit_reimbursement_amount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly credit_reimbursement_amount" placeholder="">
-                                </div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Rate</label>
+                                        <input type="text" x-model="expense.expense_rate" 
+                                            @change="calculateExpenseAmount(index)"
+                                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
+
+                                    <!-- Amount -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Amount</label>
+                                        <input type="text" x-model="expense.expense_amount" readonly
+                                            class="w-full p-2 border rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white bg-gray-100">
+                                    </div>
+
+                                    <!-- Credit/Reim Amount -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Credit/Reim Amount</label>
+                                        <input type="text" x-model="expense.credit_reimbursement_amount"
+                                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
                                 </div>
 
-                                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300">Vendor Invoice #</label>
-                                    <input type="text" x-model="formData.shipment_expenses[index].vendor_invoice_number" id="vendor_invoice_number" name="vendor_invoice_number[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly vendor_invoice_number" placeholder="">
-                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                                    <!-- Vendor Invoice # -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Vendor Invoice #</label>
+                                        <input type="text" x-model="expense.vendor_invoice_number"
+                                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
 
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300">Payment Reference Note</label>
-                                    <textarea type="text" x-model="formData.shipment_expenses[index].payment_reference_note" id="payment_reference_note" name="payment_reference_note[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white payment_reference_note" placeholder=""> </textarea>
-                                </div>
+                                    <!-- Payment Reference Note -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Payment Reference Note</label>
+                                        <textarea x-model="expense.payment_reference_note"
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-blue-500 focus:border-blue-500"></textarea>
+                                    </div>
 
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300">Disputed Note </label>
-                                    <textarea type="text" x-model="formData.shipment_expenses[index].disputed_note" id="disputed_note" name="disputed_note[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white disputed_note" placeholder=""> </textarea>
-                                </div>
+                                    <!-- Disputed Note -->
+                                    <div x-show="expense.expense_disputed">
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Disputed Note</label>
+                                        <textarea x-model="expense.disputed_note"
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-blue-500 focus:border-blue-500"></textarea>
+                                    </div>
 
-                                <div class="flex items-center space-x-4">
-                                    <!-- Radio Option 1 -->
-                                    <label class="flex items-center space-x-2">
-                                        <input type="checkbox" x-model="formData.shipment_expenses[index].expense_disputed" name="expense_disputed[]" value="Left" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                                        <span class="text-gray-700 dark:text-gray-300">Disputed?</span>
-                                    </label>
-                                </div>
+                                    <!-- Disputed Checkbox -->
+                                    <div class="flex items-center">
+                                        <label class="flex items-center text-gray-700 dark:text-gray-300">
+                                            <input type="checkbox" x-model="expense.expense_disputed" 
+                                                class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-blue-600 focus:ring-blue-500">
+                                            <span class="ml-2 text-sm">Disputed?</span>
+                                        </label>
+                                    </div>
 
-                                <div class="flex items-center space-x-4">
-    
-                                    <!-- Checkbox Option -->
-                                    <label class="flex items-center space-x-2">
-                                        <input type="checkbox" x-model="formData.shipment_expenses[index].paid" name="paid[]" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                                        <span class="text-gray-700 dark:text-gray-300">Paid?</span>
-                                    </label>
+                                    <!-- Paid Checkbox -->
+                                    <div class="flex items-center">
+                                        <label class="flex items-center text-gray-700 dark:text-gray-300">
+                                            <input type="checkbox" x-model="expense.paid" 
+                                                class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-blue-600 focus:ring-blue-500">
+                                            <span class="ml-2 text-sm">Paid?</span>
+                                        </label>
+                                    </div>
                                 </div>
-                            </template>
-                                    
-                        </div>
-                           
-                        </div>
-                  </div>
+                            </div>
+                        </template>
+
+                        <!-- Add Expense Button -->
+                        <button @click="addExpense" type="button"
+                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors">
+                            + Add New Expense
+                        </button>
+                    </div>
             
                     <!-- Navigation Buttons -->
                     <div class="flex justify-between mt-6">
@@ -1270,7 +1285,7 @@
                             Previous
                         </button>
                         <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
-                            x-show="step < 8" @click="nextStep">
+                            x-show="step < 5" @click="nextStep">
                             Next
                         </button>
                         <button type="button" class="px-4 py-2 bg-yellow-500 text-white rounded dark:bg-yellow-400"
@@ -1296,10 +1311,6 @@
     <!-- ===== Page Wrapper End ===== -->
 
     <script>
-        // $(document).ready(function(){
-        //     createToast('success', 'succesfuly loaded');
-        // })
-       
         
 var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
 document.addEventListener('alpine:init', () => {
@@ -1371,20 +1382,6 @@ document.addEventListener('alpine:init', () => {
                   delivery_type: '',
                   driver_id: '',
                   carrier_id: '',
-                  shipment_expenses: [
-                        {
-                            expense_type: '',
-                            expense_unit: '',
-                            expense_rate: '',
-                            expense_amount: '',
-                            credit_reimbursement_amount: '',
-                            vendor_invoice_number: '',
-                            payment_reference_note: '',
-                            disputed_note: '',
-                            expense_disputed: '',
-                            paid: '',
-                        }
-                    ],
                   shipment_type: '',
                     shipper_name: '',
                     ocean_shipper_address: '',
@@ -1419,6 +1416,9 @@ document.addEventListener('alpine:init', () => {
                     goods_name: '',
                     ocean_vin: '',
                     ocean_weight: '',
+                    shipment_charges: [],
+                    shipment_expenses: [],
+                    shipment_uploads: [],
         },
         step: 1,
 
@@ -1447,115 +1447,56 @@ document.addEventListener('alpine:init', () => {
                     console.log('Fetched Data:', data);
                     localStorage.setItem('Fetched Data: ', data)
                     this.formData = {
-                    office: data.office || '', 
-                    load_type: data.load_type || '',
-                    load_type_note: data.load_type_note || '',
-                    load_type_note_r: data.load_type_note_r || '',
-                    isBroker: data.isBroker || '',
-                    shipment_type: data.shipment_type || '',
-                    bill_to: data.bill_to || '',
-                    quick_note: data.quick_note || '',
-                    container: data.container || '',
-                    container_size: data.container_size || '',
-                    container_type: data.container_type || '',
-                    chasis: data.chasis || '',
-                    isLoaded: data.isLoaded || '',
-                    chasis_size: data.chasis_size || '',
-                    chasis_type: data.chasis_type || '',
-                    chasis_vendor: data.chasis_vendor || '',
-                    reference_number: data.reference_number || '',
-                    booking_number: data.booking_number || '',
-                    bill_of_laden_number: data.bill_of_laden_number || '',
-                    po_number: data.po_number || '',
-                    load_weight: data.load_weight || '',
-                    commodity: data.commodity || '',
-                    pieces: data.pieces || '',
-                    pick_up_number: data.pick_up_number || '',
-                    over_weight: data.over_weight || '',
-                    tags: data.tags || '',
-                    genset_number: data.genset_number || '',
-                    seal_number: data.seal_number || '',
-                    pick_up: data.pick_up || '',
-                    look_up: data.look_up || '',
-                    pick_up_location_name: data.pick_up_location_name || '',
-                    pick_up_address: data.pick_up_address || '',
-                    pick_up_address: data.pick_up_address || '',
-                    pick_up_city: data.pick_up_city || '',
-                    zip: data.zip || '',
-                    appt_date: data.appt_date || '',
-                    from: data.from || '',
-                    to: data.to || '',
-                    no_latter_than_date: data.no_latter_than_date || '',
-                    drop_at_no_latter_than_time: data.drop_at_no_latter_than_time || '',
-                    broker_name: data.broker_name || '',
-                    broker_email: data.broker_email || '',
-                    broker_number: data.broker_number || '',
-                    reefer_temp: data.reefer_temp || '',
-                    broker_reference_number: data.broker_reference_number || '',
-                    batch_number: data.batch_number || '',
-                    batch_req: data.batch_req || '',
-                    sales_rep: data.sales_rep || '',
-                    edi_number: data.edi_number || '',
-                    note: data.note || '',
-                    charge_type: data.charge_type ||'',
-                    comment: data.comment ||'',
-                    units: data.units ||'',
-                    rate: data.rate ||'',
-                    amount: data.amount ||'',
-                    discount: data.discount ||'',
-                    internal_notes: data.internal_notes ||'',
-                    total: data.total ||'',
-                    total_discount: data.total_discount ||'',
-                    net_total: data.net_total ||'',
-                    delivery_type: data.delivery_type ||'',
-                    driver_id: data.driver_id ||'',
-                    carrier_id: data.carrier_id ||'',
-                    expense_type: data.expense_type || [],
-                    expense_unit: data.expense_unit || [],
-                    expense_rate: data.expense_rate || [],
-                    expense_amount: data.expense_amount || [],
-                    credit_reimbursement_amount: data.credit_reimbursement_amount || [],
-                    vendor_invoice_number: data.vendor_invoice_number || [],
-                    payment_reference_note: data.payment_reference_note || [],
-                    disputed_note: data.disputed_note || [],
-                    expense_disputed: data.expense_disputed || [],
-                    paid: data.paid || [],
-                    shipment_type: data.shipment_type || '',
-                        shipper_name: data.shipper_name || '',
-                        ocean_shipper_address: data.ocean_shipper_address || '',
-                        ocean_shipper_reference_number: data.ocean_shipper_reference_number || '',
-                        carrier_name: data.carrier_name || '',
-                        carrier_reference_number: data.carrier_reference_number || '',
-                        ocean_bill_of_ladening_number: data.ocean_bill_of_ladening_number || '',
-                        consignee: data.consignee || '',
-                        consignee_phone: data.consignee_phone || '',
-                        consignee_email: data.consignee_email || '',
-                        first_notify_party_name: data.first_notify_party_name || '',
-                        first_notify_party_phone: data.first_notify_party_phone || '',
-                        first_notify_party_email: data.first_notify_party_email || '',
-                        second_notify_party_name: data.second_notify_party_name || '',
-                        second_notify_party_phone: data.second_notify_party_phone || '',
-                        second_notify_party_email: data.second_notify_party_email || '',
-                        pre_carrier: data.pre_carrier || '',
-                        port_of_discharge: data.port_of_discharge || '',
-                        vessel_aircraft_name: data.vessel_aircraft_name || '',
-                        voyage_number: data.voyage_number || '',
-                        port_of_discharge: data.port_of_discharge || '',
-                        place_of_delivery: data.place_of_delivery || '',
-                        final_destination: data.final_destination || '',
-                        port_of_landing: data.port_of_landing || '',
-                        ocean_note: data.ocean_note || '',
-                        ocean_freight_charges: data.ocean_freight_charges || '',
-                        ocean_total_containers_in_words: data.ocean_total_containers_in_words || '',
-                        no_original_bill_of_landing: data.no_original_bill_of_landing || '',
-                        original_bill_of_landing_payable_at: data.original_bill_of_landing_payable_at || '',
-                        ocean_freight_charges: data.ocean_freight_charges || '',
-                        shipped_on_board_date: data.shipped_on_board_date || '',
-                        goods_name: data.goods_name || '',
-                        ocean_vin: data.ocean_vin || '',
-                        ocean_weight: data.ocean_weight || '',
-                    };
+                    ...this.formData,
+                    ...data,
+                    shipment_charges: data.shipment_charges?.map(charge => ({
+                        id: charge.id || '',
+                        charge_type: charge.type || '',
+                        comment: charge.comment || '',
+                        units: charge.unit || '',
+                        rate: charge.rate || '',
+                        amount: charge.amount || '',
+                        discount: charge.discount || '',
+                        internal_notes: charge.internal_notes || '',
+                        billed: charge.billed || false,
+                        invoice_date: charge.invoice_date || '',
+                        invoice_number: charge.invoice_number || ''
+                    })) || [],
+
+                    //expenses
+                    shipment_expenses: data.shipment_expenses?.map(expense => ({
+                        id: expense.id || '',
+                        expense_type: expense.expense_type || '',
+                        expense_unit: expense.units || '',
+                        expense_rate: expense.rate || '',
+                        expense_amount: expense.amount || '',
+                        expense_amount: expense.disputed_amount || '',
+                        expense_billed: expense.billed || '',
+                        credit_reimbursement_amount: expense.credit_reimbursement_amount || '',
+                        vendor_invoice_number: expense.vendor_invoice_number || '',
+                        payment_reference_note: expense.payment_reference_note || '',
+                        disputed_note: expense.disputed_note || '',
+                        expense_disputed: expense.expense_disputed || false,
+                        vendor_invoice_number: expense.vendor_invoice_number,
+                        vendor_invoice_name: expense.vendor_invoice_name,
+                        paid: expense.paid || false
+                    })) || [],
+
+                    //notes
+                    shipment_notes: data.shipment_notes?.map(notes => ({
+                        id: notes.id || '',
+                        note: notes.note || '',
+                    })) || [],
+
+                    //docs
+                    shipment_uploads: data.shipment_uploads?.map(upload => ({
+                        id: upload.id || '',
+                        file_name: upload.file_name || '',
+                        file_path: upload.file_path || '',
+                    })) || [],
+                };
                 })
+                
                 .catch(error => {
                     console.error('Error fetching data:', error);
                 })
@@ -1564,6 +1505,83 @@ document.addEventListener('alpine:init', () => {
                 //this.isLoading = false;
             });
         },
+
+        // Charge Management Methods
+        addCharge() {
+            this.formData.shipment_charges.push({
+                id: '',
+                charge_type: '',
+                comment: '',
+                units: '',
+                rate: '',
+                amount: '',
+                discount: '',
+                internal_notes: '',
+                billed: false,
+                invoice_date: '',
+                invoice_number: ''
+            });
+        },
+
+        removeCharge(index) {
+            this.formData.shipment_charges.splice(index, 1);
+            this.calculateTotals();
+        },
+
+        calculateChargeAmount(index) {
+            const charge = this.formData.shipment_charges[index];
+            charge.amount = parseFloat(charge.units) || 0 * parseFloat(charge.rate) || 0;
+            this.calculateTotals();
+        },
+
+        calculateTotals() {
+            this.formData.total = this.formData.shipment_charges.reduce(
+                (sum, charge) => sum + (parseFloat(charge.amount) || 0), 0
+            ).toFixed(2);
+            
+            this.formData.total_discount = this.formData.shipment_charges.reduce(
+                (sum, charge) => sum + (parseFloat(charge.discount) || 0), 0
+            ).toFixed(2);
+            
+            this.formData.net_total = (
+                parseFloat(this.formData.total) - 
+                parseFloat(this.formData.total_discount)
+            ).toFixed(2);
+        },
+        addExpense() {
+            this.formData.shipment_expenses.push({
+                id: '',
+                expense_type: '',
+                expense_unit: '',
+                expense_rate: '',
+                expense_amount: '',
+                disputed_amount: '',
+                expense_billed: false,
+                credit_reimbursement_amount: '',
+                vendor_invoice_number: '',
+                payment_reference_note: '',
+                disputed_note: '',
+                expense_disputed: false,
+                vendor_invoice_name: '',
+                paid: false
+            });
+        },
+
+        removeExpense(index) {
+            this.formData.shipment_expenses.splice(index, 1);
+            this.calculateExpenseTotals();
+        },
+
+        calculateExpenseAmount(index) {
+            const expense = this.formData.shipment_expenses[index];
+            expense.expense_amount = parseFloat(expense.expense_unit) || 0 * parseFloat(expense.expense_rate) || 0;
+            this.calculateExpenseTotals();
+        },
+
+        calculateExpenseTotals() {
+            // Implement if you need expense-specific totals
+        },
+
         nextStep() {
                   this.step++;
                   localStorage.setItem('edit_load', this.step);

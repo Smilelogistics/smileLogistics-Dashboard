@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+
+    <include src="./partials/mainhead.html"> </include>
+    <script src="./assets/js/main.js"></script>
+    <title>Driver | </title>
+  </head>
+  <body
+    x-data="{ page: 'view_truckr_single', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader tart ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
+            <!-- Breadcrumb Start -->
+            <div x-data="{ pageName: `View Truck`}">
+              <include src="./partials/breadcrumb.html" />
+            </div>
+            <!-- Breadcrumb End -->
+             
+            <div class="w-full">
+              <div class="space-y-12">
+                <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] p-2">
+                  <div class="px-5 py-4 sm:px-6 sm:py-5">
+                    <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
+                      Truck Details
+                    </h3>
+                  </div>
+          
+                  <!-- Inputs Container -->
+                  <div class="border-t border-gray-100 p-5 dark:border-gray-800 sm:p-6">
+                    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
+                    >
+                      <div class="max-w-full overflow-x-auto">
+                        <div class="max-w-6xl mx-auto" x-data="singleItem">
+                          <!-- Loading State -->
+                          <template x-if="isLoading">
+                            <div class="text-center py-8">
+                              <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+                              <p class="mt-2 text-gray-600">Loading driver details...</p>
+                            </div>
+                          </template>
+                        
+                          <!-- Main Card -->
+                          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700" x-show="!isLoading">
+                            <!-- Header -->
+                            <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-600 flex justify-between items-center">
+                              <div>
+                                <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Driver Details</h2>
+                                <p class="text-sm text-gray-500 dark:text-gray-300" x-text="'Reference #: ' + (formData.reference_number || 'N/A')"></p>
+                              </div>
+                              <!-- <span class="px-3 py-1 text-xs font-semibold rounded-full dark:text-white" 
+                                    :class="{
+                                      'bg-green-100 text-green-800': formData.shipment_type === 'delivered',
+                                      'bg-blue-100 text-blue-800': formData.shipment_type === 'in_transit',
+                                      'bg-yellow-100 text-yellow-800': formData.shipment_type === 'pending'
+                                    }"
+                                    x-text="formData.shipment_type ? formData.shipment_type.replace('_', ' ').toUpperCase() : 'STATUS UNKNOWN'">
+                              </span> -->
+                            </div>
+                            
+                            <!-- Content Grid -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+                              <!-- Basic Information -->
+                               <!-- Row1 -->
+                                <div class="md:col-span-2 lg:col-span-3">
+                                  <div class="flex flex-wrap gap-4">
+                                    
+                                    <!-- Basic Information (Column 1) -->
+                                    <div class="flex-1 space-y-4 min-w-[200px]"> <!-- flex-1 for equal width -->
+                                      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">BASIC INFORMATION</h3>
+                                      
+                                    <!-- Shippint type == land -->
+                                      
+                                      <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Truck Type</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.truck_type || 'N/A'"></p>
+                                      </div>
+                                      
+                                      <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400"> Truck Office</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.truck_office || 'N/A'"></p>
+                                      </div>
+                                      
+                                      <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Drivers Assigned</p>
+                                      
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.driver_fname + ' ' + formData.driver_lname + ' ' + formData.driver_mname || 'N/A'"></p>
+                                      </div>
+                                      
+                                      <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Make and Model</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                        x-text="formData.make_model || 'N/A'">
+                                    </p>
+                                      </div>
+                                      
+                                      <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Licence Plate</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.license_plate_number || 'N/A'"></p>
+                                      </div>
+                                      
+                                      <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">VIN #</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.vehicle_number || 'N/A'"></p>
+                                      </div>
+                                     
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+
+                            <!-- Backup Docs -->
+                            <div class="space-y-4">
+                              <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">Backup Docs</h3>
+
+                              <template x-if="Array.isArray(formData.truck_docs) && formData.truck_docs.length > 0">
+                                  <div class="grid grid-cols-2 gap-4">
+                                      <template x-for="doc in formData.truck_docs" :key="doc.id">
+                                          <div>
+                                              <p class="text-xs text-gray-500 dark:text-gray-400">Document</p>
+                                              
+                                              <template x-if="doc.file.match(/\.(jpeg|jpg|png|gif)$/i)">
+                                                  <img :src="`https://laravel-production-077b.up.railway.app/api/v1/storage/${doc.file}`" class="w-32 h-32 object-cover rounded-md" alt="Document Image" />
+                                              </template>
+
+                                              <template x-if="doc.file.match(/\.(pdf|docx?|xlsx?)$/i)">
+                                                  <a :href="`https://laravel-production-077b.up.railway.app/api/v1/storage/${doc.file}`" target="_blank" class="text-blue-500 underline">
+                                                      View Document
+                                                  </a>
+                                              </template>
+                                          </div>
+                                      </template>
+                                  </div>
+                              </template>
+
+                              <template x-if="!Array.isArray(formData.truck_docs) || formData.truck_docs.length === 0">
+                                  <p class="text-xs text-gray-500 dark:text-gray-400">No documents available.</p>
+                              </template>
+                            </div>
+
+                            
+                             
+                              </div>
+
+                              
+                            </div>
+                            
+                            <!-- Footer -->
+                            <div class="bg-gray-50 dark:bg-gray-700 px-6 py-3 border-t border-gray-200 dark:border-gray-600 flex justify-between">
+                              <div class="text-sm text-gray-500 dark:text-gray-400" x-text="'Last updated: ' + (new Date().toLocaleString())"></div>
+                              <div>
+                                <!-- <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition mr-2">
+                                  Edit Shipment
+                                </button> -->
+                                <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition">
+                                  Print
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script> -->
+    <script>
+      
+
+      document.addEventListener('alpine:init', () => {
+        Alpine.data('singleItem', () => ({
+          id: null,
+          formData: '',
+          isLoading: false,
+          
+          init() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedId = urlParams.get('id');
+            if (encodedId) {
+              this.id = atob(encodedId);
+              this.fetchData();
+            } else {
+              console.error('No ID found in the URL');
+            }
+          },
+
+          fetchData() {
+            this.isLoading = true;
+            fetch(`${requestGetURL}/trucks/truck/${this.id}`, {
+              headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                'Accept': 'application/json'
+              }
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(data => {
+              console.log('Single truck:', data.truck);
+              this.formData = {
+                // Basic Information
+                truck_type: data.truck.truck_type || '',
+                truck_office: data.truck.truck_office || '',
+                driver_fname: data.truck?.driver?.user?.fname || '',
+                driver_lname: data.truck?.driver?.user?.lname || '',
+                driver_mname: data.truck?.driver?.user?.mname || '',
+                make_model: data.truck.make_model || '',
+                license_plate_number: data.truck.license_plate_number || '',
+                vehicle_number: data.truck.vehicle_number || '',
+                truck_docs: data.truck?.truck_docs?.map(doc => ({
+                  id: doc.id,
+                  file: doc.file
+              })) || []
+                
+
+                
+                //shipment_expenses: data.shipment_expenses || [],
+              };
+            })
+            .catch(error => {
+              console.error('Error fetching data:', error);
+            })
+            .finally(() => {
+              this.isLoading = false;
+            });
+          }
+        }));
+      });
+   
+      </script>
+  </body>
+</html>

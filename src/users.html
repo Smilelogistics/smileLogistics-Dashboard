@@ -7,7 +7,9 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Users | TailAdmin - Tailwind CSS Admin Dashboard Template</title>
+    <title>Users |</title>
+    <include src="./partials/mainhead.html"> </include>
+    <script src="./assets/js/main.js"></script>
   </head>
   <body
     x-data="{ page: 'users', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -46,59 +48,91 @@
               <include src="./partials/breadcrumb.html" />
             </div>
             <!-- Breadcrumb End -->
-            <div class="w-full">
+            <div class="w-full" x-data="userForm()">
               <div class="space-y-12">
                 <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] p-2">
                   <div class="px-5 py-4 sm:px-6 sm:py-5">
                     <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
-                      Default Inputs
+                      Create Account
                     </h3>
                   </div>
-          
+                  <div x-data="{ userRole: 'Loading...', user_type: null }"
+                    x-init="
+                        document.addEventListener('userRoleLoaded', () => {
+                            userRole = window.userRole;
+                            console.log('Updated userRole:', userRole);
+                        });
+                    ">
+                    <!-- <p>User Role: <span x-text="userRole"></span></p> -->
+
                   <!-- Inputs Container -->
                   <div class="border-t border-gray-100 p-5 dark:border-gray-800 sm:p-6">
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                      <!-- Input 1 -->
-                      <div>
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                          Fullname
-                        </label>
-                        <input
-                          type="text"
-                          class="dark:bg-dark-900 h-9 w-full rounded-md border border-gray-300 bg-transparent px-3 py-1.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                        />
-                      </div>
-          
-                      <!-- Input 2 -->
-                      <div>
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                          Email Address
-                        </label>
-                        <input
-                          type="text"
-                          class="dark:bg-dark-900 h-9 w-full rounded-md border border-gray-300 bg-transparent px-3 py-1.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                        />
-                      </div>
-          
-                      <!-- Input 3 -->
-                      <div>
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                          Status
-                        </label>
-                        <input
-                          type="text"
-                          class="dark:bg-dark-900 h-9 w-full rounded-md border border-gray-300 bg-transparent px-3 py-1.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                        />
-                      </div>
-          
-                      <!-- Button -->
-                      <div class="flex items-end">
-                        <button
-                          class="h-9 w-40 rounded-md bg-gradient-to-r from-cyan-900 via-cyan-900 to-cyan-500 px-4 py-1.5 text-sm font-medium text-white shadow-md hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-800 dark:hover:bg-brand-900">
-                          Apply
-                        </button>
+
+                    <form class="border-t border-gray-100 p-5 dark:border-gray-800 sm:p-6" @submit.prevent="CreateUser">
+                      <div class="grid grid-cols-1 sm:grid-cols-5 gap-4">
+                        <!-- Input 1 -->
+                        <div>
+                          <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                            First Name
+                          </label>
+                          <input
+                            type="text" x-model="fname" name="fname"
+                            class="dark:bg-dark-900 h-9 w-full rounded-md border border-gray-300 bg-transparent px-3 py-1.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                          required />
+                        </div>
+
+                        <div>
+                          <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                            Last Name
+                          </label>
+                          <input
+                            type="text" x-model="lname" name="lname"
+                            class="dark:bg-dark-900 h-9 w-full rounded-md border border-gray-300 bg-transparent px-3 py-1.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                         required />
+                        </div>
+            
+                        <!-- Input 2 -->
+                        <div>
+                          <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                            Email Address
+                          </label>
+                          <input
+                            type="email" x-model="email" name="email"
+                            class="dark:bg-dark-900 h-9 w-full rounded-md border border-gray-300 bg-transparent px-3 py-1.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                          required />
+                        </div>
+            
+                        <!-- Input 3 -->
+                        <div>
+                          <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                            Account Type
+                          </label>
+                
+                          
+                          <select x-model="user_type" name="user_type" class="dark:bg-dark-900 h-9 w-full rounded-md border border-gray-300 bg-transparent px-3 py-1.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800">
+                            <option value="" x-bind:disabled="!(userRole === 'superadministrator' || userRole === 'businessadministrator')" hidden>
+                              Choose Role
+                          </option>
+                      
                         
+                            <option value="branch" x-show="userRole === 'superadministrator'">Branch</option>
+                            <option value="customer" x-show="userRole === 'superadministrator' || userRole === 'businessadministrator'">Customer</option>
+                            <option value="driver" x-show="userRole === 'superadministrator' || userRole === 'businessadministrator'">Driver</option>
+                        </select>
+                        
+
+                        </div>
+            
+                        <!-- Button -->
+                        <div class="flex items-end">
+                          <button x-show="userRole === 'superadministrator' || userRole === 'businessadministrator'" 
+                            class="h-9 w-40 rounded-md bg-gradient-to-r from-cyan-900 via-cyan-900 to-cyan-500 px-4 py-1.5 text-sm font-medium text-white shadow-md hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-800 dark:hover:bg-brand-900">
+                            Apply
+                          </button>
+                          
+                        </div>
                       </div>
+                    </form>
                     </div>
                   </div>
                 </div>
@@ -195,166 +229,6 @@
                                 </div>
                               </td>
                             </tr>
-                            <tr>
-                              <td class="px-5 py-4 sm:px-6">
-                                <div class="flex items-center">
-                                  <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 overflow-hidden rounded-full">
-                                      <img src="./assets/images/user/user-18.jpg" alt="brand" />
-                                    </div>
-
-                                    <div>
-                                      <span
-                                        class="block font-medium text-gray-800 text-theme-sm dark:text-white/90"
-                                      >
-                                        Kaiya George
-                                      </span>
-                                      <span
-                                        class="block text-gray-500 text-theme-xs dark:text-gray-400"
-                                      >
-                                        Project Manager
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="px-5 py-4 sm:px-6">
-                                <div class="flex items-center">
-                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                                    Technology
-                                  </p>
-                                </div>
-                              </td>
-                              <td class="px-5 py-4 sm:px-6">
-                                <div class="flex items-center">
-                                  <p
-                                    class="rounded-full bg-warning-50 px-2 py-0.5 text-theme-xs font-medium text-warning-700 dark:bg-warning-500/15 dark:text-warning-400"
-                                  >
-                                    Pending
-                                  </p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="px-5 py-4 sm:px-6">
-                                <div class="flex items-center">
-                                  <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 overflow-hidden rounded-full">
-                                      <img src="./assets/images/user/user-19.jpg" alt="brand" />
-                                    </div>
-
-                                    <div>
-                                      <span
-                                        class="block font-medium text-gray-800 text-theme-sm dark:text-white/90"
-                                      >
-                                        Zain Geidt
-                                      </span>
-                                      <span
-                                        class="block text-gray-500 text-theme-xs dark:text-gray-400"
-                                      >
-                                        Content Writer
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="px-5 py-4 sm:px-6">
-                                <div class="flex items-center">
-                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                                    Blog Writing
-                                  </p>
-                                </div>
-                              </td>
-                              <td class="px-5 py-4 sm:px-6">
-                                <div class="flex items-center">
-                                  <p
-                                    class="rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500"
-                                  >
-                                    Active
-                                  </p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="px-5 py-4 sm:px-6">
-                                <div class="flex items-center">
-                                  <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 overflow-hidden rounded-full">
-                                      <img src="./assets/images/user/user-20.jpg" alt="brand" />
-                                    </div>
-
-                                    <div>
-                                      <span
-                                        class="block font-medium text-gray-800 text-theme-sm dark:text-white/90"
-                                      >
-                                        Abram Schleifer
-                                      </span>
-                                      <span
-                                        class="block text-gray-500 text-theme-xs dark:text-gray-400"
-                                      >
-                                        Digital Marketer
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="px-5 py-4 sm:px-6">
-                                <div class="flex items-center">
-                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                                    Social Media
-                                  </p>
-                                </div>
-                              </td>
-                              <td class="px-5 py-4 sm:px-6">
-                                <div class="flex items-center">
-                                  <p
-                                    class="rounded-full bg-error-50 px-2 py-0.5 text-theme-xs font-medium text-error-700 dark:bg-error-500/15 dark:text-error-500"
-                                  >
-                                    Cancel
-                                  </p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td class="px-5 py-4 sm:px-6">
-                                <div class="flex items-center">
-                                  <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 overflow-hidden rounded-full">
-                                      <img src="./assets/images/user/user-21.jpg" alt="brand" />
-                                    </div>
-
-                                    <div>
-                                      <span
-                                        class="block font-medium text-gray-800 text-theme-sm dark:text-white/90"
-                                      >
-                                        Carla George
-                                      </span>
-                                      <span
-                                        class="block text-gray-500 text-theme-xs dark:text-gray-400"
-                                      >
-                                        Front-end Developer
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td class="px-5 py-4 sm:px-6">
-                                <div class="flex items-center">
-                                  <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                                    Website
-                                  </p>
-                                </div>
-                              </td>
-                              <td class="px-5 py-4 sm:px-6">
-                                <div class="flex items-center">
-                                  <p
-                                    class="rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500"
-                                  >
-                                    Active
-                                  </p>
-                                </div>
-                              </td>
-                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -364,7 +238,7 @@
                 </div>
               </div>
             </div>
-
+          </div>
         
           </div>
         </main>
@@ -373,5 +247,60 @@
       <!-- ===== Content Area End ===== -->
     </div>
     <!-- ===== Page Wrapper End ===== -->
+
+    <script>
+      document.addEventListener('alpine:init', () => {
+        Alpine.data('userForm', () => ({
+            fname: '',
+            lname: '',
+            user_type: '',
+            email: '',
+            userRole: '',
+
+            async CreateUser() {
+                let formData = new FormData();
+                formData.append('fname', this.fname);
+                formData.append('lname', this.lname);
+                formData.append('user_type', this.user_type);
+                formData.append('email', this.email);
+              // console.log("FormData Contents:");
+                    // for (let pair of formData.entries()) {
+                    //     console.log(pair[0] + ": " + pair[1]);
+                    // }
+                    //       console.log(localStorage.getItem('auth_token'))
+                    //  return
+                try {
+                    let response = await fetch(requestURL + '/register', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
+                    let result = await response.json();
+
+                    if (response.ok) {
+                        createToast('success', result.message || 'User created successfully');
+                    } else {
+                        createToast(result.message || 'Something went wrong');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    createToast('error','Failed to create user');
+                }
+            }
+        }));
+    });
+
+
+window.fetchUserRole();
+
+    </script>
   </body>
 </html>

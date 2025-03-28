@@ -1756,6 +1756,29 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
         this.value = this.value.replace(/\D/g, "");
     });
 });
+async function fetchUserRole() {
+    try {
+        let response = await fetch(requestURL + '/roles/role', {
+            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('auth_token') }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        let data = await response.json();
+        console.log("Fetched user role:", data.role);
+
+        // Store globally
+        window.userRole = data.role;
+
+        // Dispatch event for Alpine.js to listen
+        document.dispatchEvent(new CustomEvent('userRoleLoaded'));
+    } catch (error) {
+        console.error('Error fetching user role:', error);
+    }
+}
+
 
 //chosen js
 // $(document).ready(function() {

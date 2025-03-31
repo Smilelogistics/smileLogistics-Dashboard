@@ -92,13 +92,11 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Invoice Type</label>
-                                <select x-model="formData.invoice_type" name="truck_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <select x-model="formData.invoice_type" name="invoice_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Select Type</option>
-                                    <option value="owner_operator">Owner Operator Truck</option>
-                                    <option value="company_truck">Company Truck</option>
-                                    <option value="fleet_owner">Fleet Owner Truck</option>
-                                    <option value="leased">Leased</option>
-                                    <option value="rented">Rented</option>
+                                    <option value="standard invoive">Standard Invoice</option>
+                                    <option value="debit invoice">Debit Invoice</option>
+                                    <option value="credit memo">Credit Memo</option>
                                 </select>
                             </div>
                             <!-- <div>
@@ -284,19 +282,17 @@
                                     <label class="block text-gray-700 dark:text-gray-300">Charge Type</label>
                                     <select x-model="formData.charge_type" name="charge_type[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                         <option value="" selected disabled></option>
-                                        <option value="pickup">Pickup</option>
-                                        <option value="pickup loaded">Pickup Loaded</option>
-                                        <option value="pickup empty">Pickup Empty</option>
+                                        <option value="Drayage">Drayage</option>
+                                        <option value="Fuel Surcharge">Fuel Surcharge</option>
+                                        <option value="Admin Fee">Admin Fee</option>
                                         <hr class="mt-3 mb-3 text-white">
-                                        <option value="deliver">Deliver</option>
-                                        <option value="load_at">Load at</option>
+                                        <option value="Attempted pickup">Attempted pickup</option>
+                                        <option value="Bonded Cargo">Bonded Cargo Charge</option>
                                         <hr>
-                                        <option value="drop_at">Drop at</option>
-                                        <option value="drop_empty">Drop Empty</option>
-                                        <option value="drop_loaded">Drop Loaded</option>
-                                        <option value="stop_off">Stop off</option>
-                                        <option value="scale_stop">Scale Stop</option>
-                                        <option value="Other">Other</option>
+                                        <option value="Chasis Split">Chasis Split</option>
+                                        <option value="Chasis Stack">Chasis Stack</option>
+                                        <option value="Demurge">Demurage</option>
+                                        <option value="driver assistance">Deriver Assistance</option>
                                     </select>
                                 </div>
                                 <div>

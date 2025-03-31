@@ -7,18 +7,10 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Invoice | smileslogistics</title>
-    
-     <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- jQuery UI -->
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-
-  <!-- Chosen Plugin -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
+    <title>Carrier |</title>
+ 
+    <include src="./partials/mainhead.html"> </include>
+    <script src="./assets/js/main.js"></script>
   </head>
   <body
     x-data="{ page: 'carrier', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -78,23 +70,23 @@
                             :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 2, 'border-gray-500 dark:border-gray-400': step !== 2 }">
                             2
                         </span>
-                        <span class="ml-2 hidden sm:inline">Recieve Payments</span>
+                        <span class="ml-2 hidden sm:inline">Backup Docs</span>
                     </li>
                 
                     <!-- Step 3 -->
-                    <li class="flex-1 flex items-center justify-center"
+                    <!-- <li class="flex-1 flex items-center justify-center"
                         :class="{ 'text-blue-600 dark:text-blue-500': step === 3, 'text-gray-500 dark:text-gray-400': step !== 3 }">
                         <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
                             :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 3, 'border-gray-500 dark:border-gray-400': step !== 3 }">
                             3
                         </span>
                         <span class="ml-2 hidden sm:inline">Backup Docs</span>
-                    </li>
+                    </li> -->
                 </ol>
                 
                 
             
-                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data">
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newCarrier">
                     <!-- Step 1: Basic Info -->
                     <div x-show="step === 1">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
@@ -120,15 +112,15 @@
                                     <option value="IN">IN</option>
                                 </select>
                             </div>
-                            <div>
+                            <!-- <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Carrier #</label>
                                 <input type="text" x-model="formData.carrier_number" name="carrier_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                            </div>
+                            </div> -->
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Carrier Type</label>
                                 <select x-model="formData.type" name="type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Select </option>
-                                    <option value="IN">IN</option>
+                                    <option value="third party">Third Party</option>
                                 </select>
                             </div>
                         </div>
@@ -154,6 +146,10 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
                             <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Contact Name</label>
+                                <input type="text" x-model="formData.contact_name" id="contact_name" name="contact_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
+                            <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Cell Phone</label>
                                 <input type="text" x-model="formData.cell_phone" id="cell_phone" name="cell_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                             </div>
@@ -161,9 +157,15 @@
                                 <label class="block text-gray-700 dark:text-gray-300">Cell Carrier</label>
                                 <select x-model="formData.cell_carrier" name="cell_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Select </option>
+                                    <option value="verizon">Verizon</option>
+                                    <option value="att">AT&T</option>
+                                    <option value="tmobile">T-Mobile</option>
+                                    <option value="sprint">Sprint</option>
+                                    <option value="united">United</option>
+                                    <option value="virgin">Virgin Mobile</option>
                                 </select>
                             </div>
-                            <div>
+                            <!-- <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Carrier Access to Mobile app</label>
                                 <select x-model="formData.carrier_access" name="carrier_access" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Select </option>
@@ -171,14 +173,14 @@
                                     <option value="deactivate_access">Deactivate Access</option>
                                     <option value="resend_pin">Resend PIN</option>
                                 </select>
-                            </div>
+                            </div> -->
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Office Phone No</label>
                                 <input type="text" x-model="formData.office_phone" id="office_phone" name="office_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                             </div>
                         </div>
                     
-
+<!-- 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
                             <div>
                             <label class="block text-gray-700 dark:text-gray-300">Contact Name</label>
@@ -189,7 +191,7 @@
                                 <label for="show_payment_in_mobile_app">
                                 <input type="checkbox" x-model="formData.show_payment_in_mobile_app" id="show_payment_in_mobile_app" name="show_payment_in_mobile_app" class="w-2 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> <span class="text-gray-700 dark:text-gray-300">Show payment in mobile app</span> </label>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
                             <div>
@@ -252,11 +254,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-2">
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">No of Drivers</label>
-                            <input type="text" x-model="formData.no_of_drivers" id="no_of_drivers" name="no_of_drivers" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <input type="number" x-model="formData.no_of_drivers" id="no_of_drivers" name="no_of_drivers" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         </div>
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Power Units (Truck)</label>
-                            <input type="text" x-model="formData.power_units" id="power_units" name="power_units" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <input type="number" x-model="formData.power_units" id="power_units" name="power_units" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         </div>
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Other equipment (chassis, reefers, vans etc)</label>
@@ -264,8 +266,17 @@
                         </div>
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Carrier profile / options</label>
-                            <select x-model="formData.profile_photo" name="profile_photo" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <select x-model="formData.carrier_profile" name="carrier_profile" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select </option>
+                                <option value="drayage">Drayage</option>
+                                <option value="over_the_road">Over the road >500 Miles</option>
+                                <option value="warehouse">Warehouse</option>
+                                <option value="local_intrastate">Local/Intra state only</option>
+                                <option value="harzmart">Harmat permit</option>
+                                <option value="over_weight_permit">Over weight permit</option>
+                                <option value="alcohol_permit">Alcohol permit</option>
+                                <option value="resdential_delivery">Residential Delivery</option>
+                                <option value="transload_service">Transload Service</option>
                             </select>
                         </div>
                     </div>
@@ -275,6 +286,7 @@
                             <label class="block text-gray-700 dark:text-gray-300">( rating )Carrier belongs to these pay categories</label>
                             <select x-model="formData.rating" name="rating" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select </option>
+                                <option value="1">None</option>
                             </select>
                         </div>
                         <div>
@@ -285,6 +297,14 @@
                             <label class="block text-gray-700 dark:text-gray-300">Carries these cargo</label>
                             <select x-model="formData.carries_this_cargo" name="carries_this_cargo" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select </option>
+                                <option value="general_fright">General Fright</option>
+                                <option value="intermodial_containers">General Containers</option>
+                                <option value="harzadous_commodities">Harzadous Commodities</option>
+                                <option value="agricultural_farm_supplies">Agricultural Farm Supplies</option>
+                                <option value="beverages">Beverages</option>
+                                <option value="building_materials">Bulding Materials</option>
+                                <option value="chemicals">Chemicals</option>
+
                             </select>
                         </div>
                         <div>
@@ -299,7 +319,7 @@
                             });
                         })
                     </script>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-2">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-2">
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300"> Flash note to dispatchers about this carrier</label>
                             <textarea cols="1" rows="1" type="text" x-model="formData.flash_note_to_riders_about_this_carrier" id="" name="flash_note_to_riders_about_this_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> </textarea>
@@ -335,91 +355,27 @@
         $(document).on("input", ".calc-field", function() {
             calculate();
         });
-                //     function calculate() {
-                //     let units = parseFloat($("#unit").val()) || 0;
-                //     let rate = parseFloat($("#rate").val()) || 0;
-                //     let discount = parseFloat($("#discount").val()) || 0;
-
-                //     let total = units * rate;
-                //     let netTotal = total - discount;
-                //     console.log("Net total is",netTotal)
-
-                //     $("#amount").val(total);
-                //     $("#total").val(total);
-                //     $("#net_total").val(netTotal);
-                //     $("#total_discount").val(discount);
-                // }
-
-                //     $(".calc-field").on("input", function() {
-                //         calculate();
-                //     });
-
-                //     calculate();
                 </script>
                     
                     
                     
                     <!-- Step 2: Backup Docs -->
                     <div x-show="step === 2">
-                       <div>
-                           <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
-                           <div id="RecieveRepay">
-                                <span onclick="duplicateRecieve()" 
-                                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
-                                    +
-                                </span>
-                                <span onclick="removeRecieve(this)" 
-                                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
-                                    x
-                                    <!-- 🗑 -->
-                                </span>
-                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Credit Memo</label>
-                                        <input type="text" x-model="formData.credit_memo" name="credit_memo[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Credit Amount</label>
-                                        <input type="email" x-model="formData.credit_amount" name="credit_amount[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white " placeholder="">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Note</label>
-                                        <textarea type="text" cols="1" rows="1" x-model="formData.credit_note" name="credit_note[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder=""> </textarea>
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Date</label>
-                                        <input type="text" x-model="formData.credit_date" name="credit_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                    </div>
-                                </div>
-                           </div>
-                           <div id="RecieveRepayList"></div>
-
-                           
-
-                           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-2">
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Balance Before Credit</label>
-                                <input type="text" x-model="formData." name="[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" readonly>
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Total Credit Applied</label>
-                                <input type="email" x-model="formData." name="[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white " placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Final Invoice Bal</label>
-                                <input type="email" x-model="formData." name="[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white " placeholder="">
+                                <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
+                                <input type="file" x-model="formData.file_path" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                             </div>
                         </div>
-                       </div>
                     </div>
                 
                     <!-- Step 3: Review & Submit -->
-                    <div x-show="step === 3">
+                    <!-- <div x-show="step === 3">
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
                             <input type="file" x-model="formData.file_path" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         </div>
-                    </div>
+                    </div> -->
                 
                     <!-- Navigation Buttons -->
                     <div class="flex justify-between mt-6">
@@ -431,7 +387,7 @@
                 
                         <!-- Next Button -->
                         <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
-                            x-show="step < 3" @click="nextStep">
+                            x-show="step < 2" @click="nextStep">
                             Next
                         </button>
                 
@@ -443,7 +399,7 @@
                 
                         <!-- Submit Button (Only shows on Step 3) -->
                         <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
-                            x-show="step === 3">
+                            x-show="step === 2">
                             Submit
                         </button>
                     </div>
@@ -465,12 +421,39 @@
             return {
                 step: localStorage.getItem('carrier_step') ? parseInt(localStorage.getItem('carrier_step')) : 1,
                 formData: JSON.parse(localStorage.getItem('formData')) || {
-                    full_name: '',
+                    name: '',
+                    state_served: '',
+                    code: '',
+                    offices: '',
+                    type: '',
+                    usdot_number: '',
+                    mc_number: '',
+                    scac: '',
+                    tax_id: '',
+                    cell_phone: '',
+                    cell_carrier: '',
+                    office_phone: '',
                     email: '',
-                    phone: '',
-                    charge_amount: '',
-                    charge_type: '',
-                    currency: '',
+                    primary_address: '',
+                    secondary_address: '',
+                    city: '',
+                    state: '',
+                    zip: '',
+                    country: '',
+                    fax_no: '',
+                    toll_free_number: '',
+                    other_contact_info: '',
+                    no_of_drivers: '',
+                    power_units: '',
+                    other_equipments: '',
+                    carrier_profile: '',
+                    rating: '',
+                    note_about_choices: '',
+                    carries_this_cargo: '',
+                    carrier_start_date: '',
+                    flash_note_to_riders_about_this_carrier: '',
+                    flash_note_to_payroll_about_this_carrier: '',
+                    internal_note: '',
                 },
                 totalSteps: 3, // Adjust based on actual number of steps
                 nextStep() {
@@ -490,8 +473,56 @@
                     localStorage.setItem('formData', JSON.stringify(this.formData));
                 },
                 saveAndSubmit() {
-                    // Submit form (implement actual submission logic here)
-                    alert("Form submitted successfully!");
+                    let form = document.getElementById("newCarrier");
+                    let formData = new FormData(form);
+                    // for (let pair of formData.entries()) {
+                    //     console.log(pair[0] + ": " + pair[1]);
+                    // }
+                    //  console.log(localStorage.getItem('auth_token'))
+                     //return
+                    $.ajax({
+                        url: requestURL+'/carriers/create',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        },
+
+                        beforeSend:function(){
+                            document.getElementById("Ajaxbackdrop").style.display = 'flex'
+                        },
+
+                        success: (response) => {
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            //console.log('Form submitted successfully:', response);
+                            createToast('success', response.message);
+                            localStorage.removeItem('formData');
+                            localStorage.removeItem('carrier_step');
+                            //alert("Form submitted successfully!");
+                        },
+                         error: (xhr, status, error) => {
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            console.error('Form submission failed:', xhr.responseText);
+
+                        try {
+                            let response = JSON.parse(xhr.responseText);
+                            
+                            if (response.errors) {
+                                let messages = Object.values(response.errors).flat().join('<br>'); // Combines multiple errors
+                                createToast('error', messages);
+                            } else if (response.message) {
+                                createToast('error', response.message);
+                            } else {
+                                createToast('error', 'An unexpected error occurred. Please try again.');
+                            }
+                        } catch (e) {
+                            createToast('error', 'An error occurred. Please check your input and try again.');
+                        }
+                    }
+                    });
 
                     // Clear stored data after submission
                     localStorage.removeItem('formData');
@@ -499,12 +530,39 @@
 
                     // Reset form data
                     this.formData = {
-                        full_name: '',
+                        name: '',
+                        state_served: '',
+                        code: '',
+                        offices: '',
+                        type: '',
+                        usdot_number: '',
+                        mc_number: '',
+                        scac: '',
+                        tax_id: '',
+                        cell_phone: '',
+                        cell_carrier: '',
+                        office_phone: '',
                         email: '',
-                        phone: '',
-                        charge_amount: '',
-                        charge_type: '',
-                        currency: '',
+                        primary_address: '',
+                        secondary_address: '',
+                        city: '',
+                        state: '',
+                        zip: '',
+                        country: '',
+                        fax_no: '',
+                        toll_free_number: '',
+                        other_contact_info: '',
+                        no_of_drivers: '',
+                        power_units: '',
+                        other_equipments: '',
+                        carrier_profile: '',
+                        rating: '',
+                        note_about_choices: '',
+                        carries_this_cargo: '',
+                        carrier_start_date: '',
+                        flash_note_to_riders_about_this_carrier: '',
+                        flash_note_to_payroll_about_this_carrier: '',
+                        internal_note: '',
                     };
                     this.step = 1;
                 }

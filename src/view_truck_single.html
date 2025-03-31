@@ -112,7 +112,7 @@
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Drivers Assigned</p>
                                       
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.driver_fname + ' ' + formData.driver_lname + ' ' + formData.driver_mname || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.driver_fname ? (formData.driver_fname + ' ' + formData.driver_lname) : 'N/A'"></p>
                                       </div>
                                       
                                       <div>
@@ -243,10 +243,10 @@
               this.formData = {
                 // Basic Information
                 truck_type: data.truck.truck_type || '',
-                truck_office: data.truck.truck_office || '',
-                driver_fname: data.truck?.driver?.user?.fname || '',
-                driver_lname: data.truck?.driver?.user?.lname || '',
-                driver_mname: data.truck?.driver?.user?.mname || '',
+                truck_office: data.truck.office || '',
+                driver_fname: data.truck?.truck_driver?.driver?.user?.fname || '',
+                driver_lname: data.truck?.truck_driver?.driver?.user?.lname || '',
+                driver_mname: data.truck?.truck_driver?.driver?.user?.mname || '',
                 make_model: data.truck.make_model || '',
                 license_plate_number: data.truck.license_plate_number || '',
                 vehicle_number: data.truck.vehicle_number || '',

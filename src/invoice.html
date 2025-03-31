@@ -8,16 +8,9 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Invoice | smileslogistics</title>
-    <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- jQuery UI -->
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-
-  <!-- Chosen Plugin -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
+    <include src="./partials/mainhead.html"> </include>
+    <script src="./assets/js/main.js"></script>
   </head>
   <body
     x-data="{ page: 'invoice', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -93,13 +86,13 @@
                 
                 
             
-                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data">
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newInvoice">
                     <!-- Step 1: Basic Info -->
                     <div x-show="step === 1">
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Invoice Type</label>
-                                <select x-model="formData.truck_type" name="truck_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <select x-model="formData.invoice_type" name="truck_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Select Type</option>
                                     <option value="owner_operator">Owner Operator Truck</option>
                                     <option value="company_truck">Company Truck</option>
@@ -108,60 +101,71 @@
                                     <option value="rented">Rented</option>
                                 </select>
                             </div>
-                            <div>
+                            <!-- <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Truck Office</label>
                                 <select x-model="formData.truck_office" name="truck_office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Select Office</option>
                                     <option value="IN">IN</option>
                                 </select>
-                            </div>
-                            <div>
+                            </div> -->
+                            <!-- <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Invoice Number</label>
                                 <input type="text" x-model="formData.invoice_number" name="invoice_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                            </div>
+                            </div> -->
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Invoice Date</label>
                                 <input type="text" x-model="formData.invoice_date" id="invoice_datepicker" name="invoice_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Is Factored?</label>
+                            <label for="invoice_number" class="flex">
+                                <input type="checkbox" x-model="formData.isFactored" 
+                                       name="isFactored"
+                                       class="w-2 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                       :value="true">
+                                <span class="flex text-gray-700 dark:text-gray-300">Yes, is Factored</span>
+                            </label>
+                        </div>
+                        
                     </div>
                 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-                        <div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+                        <!-- <div>
                             <label class="block text-gray-700 dark:text-gray-300">Invoice Prefix</label>
                             <select x-model="formData.invoice_prefix" name="invoice_prefix" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select </option>
                                 <option value="owner_operator">Owner Operator Truck</option>
                             </select>
-                        </div>
-                        <div>
-                            <label class="block text-gray-700 dark:text-gray-300">Is Factored?</label>
-                            <label for="invoice_number" class="flex">
-                            <input type="checkbox" x-model="formData.isFactored" name="isFactored" class="w-2 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"><span class="flex text-gray-700 dark:text-gray-300">Yes, is Factored</span></label>
-                        </div>
+                        </div> -->
+                       
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Override Default Company</label>
                             <input type="text" x-model="formData.override_default_company" name="override_default_company" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         </div>
-                    </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Bill to</label>
-                            <input type="text" x-model="formData.bill_to" name="bill_to" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <select x-model="formData.customer_id" name="customer_id" id="customer_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+
+                            </select>
                         </div>
+                    </div>
+
+                    <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+                       
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Bill to</label>
                             <textarea type="text" x-model="formData.bill" cols="1" rows="1" name="" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> </textarea>
                         </div>
-                    </div>
+                    </div> -->
 
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
-                        <div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                        <!-- <div>
                             <label class="block text-gray-700 dark:text-gray-300">Invoice Terms</label>
                             <select x-model="formData.invoice_terms" name="invoice_terms" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select </option>
                             </select>
-                        </div>
+                        </div> -->
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Invoice Due Date</label>
                             <input type="text" x-model="formData.invoice_due_date" id="invoice_due_datepicker" name="invoice_due_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
@@ -297,7 +301,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">comment (Will appear on Invoice)</label>
-                                    <input type="email" x-model="formData.comment" name="comment[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <input type="text" x-model="formData.comment" name="comment[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Units</label>
@@ -320,7 +324,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Internal Note</label>
-                                    <input type="email" x-model="formData.internal_notes" name="internal_notes[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <input type="text" x-model="formData.internal_notes" name="internal_notes[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                 </div>
                                 <!-- <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Rate</label>
@@ -333,11 +337,11 @@
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                             <div id="totalCharges" style="display: ;">
                                 <label class="block text-gray-700 dark:text-gray-300">Total</label>
-                                <input type="email" x-model="formData.total" name="total" id="total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total" placeholder="">
+                                <input type="text" x-model="formData.total" name="total" id="total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total numberOnly" placeholder="">
                             </div>
                             <div id="totalDiscount" style="display: ;">
                                 <label class="block text-gray-700 dark:text-gray-300">Total Discount</label>
-                                <input type="email" x-model="formData.total_discount" name="total_discount" id="total_discount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total_discount" placeholder="">
+                                <input type="text" x-model="formData.total_discount" name="total_discount" id="total_discount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total_discount numberOnly" placeholder="">
                             </div>
                             <div id="netTotal" style="display: ;">
                                 <label class="block text-gray-700 dark:text-gray-300">Net Total</label>
@@ -369,15 +373,15 @@
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Credit Amount</label>
-                                        <input type="email" x-model="formData.credit_amount" name="credit_amount[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white " placeholder="">
+                                        <input type="text" x-model="formData.credit_amount" name="credit_amount[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Note</label>
-                                        <textarea type="text" cols="1" rows="1" x-model="formData.credit_note" name="credit_note[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder=""> </textarea>
+                                        <textarea type="text" cols="1" rows="1" x-model="formData.credit_note" name="credit_note[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Date</label>
-                                        <input type="text" x-model="formData.credit_date" name="credit_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <input type="text" x-model="formData.credit_date" id="credit_date" name="credit_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                     </div>
                                 </div>
                            </div>
@@ -388,15 +392,15 @@
                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Balance Before Credit</label>
-                                <input type="text" x-model="formData.balance_before_credit" name="[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" readonly>
+                                <input type="text" x-model="formData.balance_before_credit" name="balance_before_credit[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" readonly>
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Total Credit Applied</label>
-                                <input type="email" x-model="formData.total_credit_applied" name="[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white " placeholder="">
+                                <input type="text" x-model="formData.total_credit_applied" name="total_credit_applied[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Final Invoice Bal</label>
-                                <input type="email" x-model="formData.final_invoice_bal" name="[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white " placeholder="">
+                                <input type="text" x-model="formData.final_invoice_bal" name="final_invoice_bal[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
                             </div>
                         </div>
                        </div>
@@ -454,12 +458,43 @@
             return {
                 step: localStorage.getItem('Invoice_step') ? parseInt(localStorage.getItem('Invoice_step')) : 1,
                 formData: JSON.parse(localStorage.getItem('formData')) || {
-                    full_name: '',
-                    email: '',
-                    phone: '',
-                    charge_amount: '',
-                    charge_type: '',
-                    currency: '',
+                    invoice_type: '',
+                    invoice_date: '',
+                    isFactored: '',
+                    override_default_company: '',
+                    customer_id: '',
+                    invoice_due_date: '',
+                    attention_invoice_to: '',
+                    note_bill_to_party: '',	
+                    loads_on_invoice: '',
+                    booking_number: '',
+                    bill_of_landing_number: '',
+                    po_number: '',
+                    reference_number: '',
+                    move_date: '',
+                    trailer: '',
+                    container: '',
+                    chasis: '',
+                    load_weight: '',
+                    commodity: '',
+                    no_of_packages: '',
+                    charge_type: [],
+                    comment: [],
+                    units: [],
+                    rate: [],
+                    amount: [],
+                    discount: [],
+                    internal_notes: [],
+                    total: '',
+                    total_discount: '',
+                    net_total: '',
+                    credit_memo: [],
+                    credit_amount: [],
+                    credit_note: [],
+                    credit_date: [],
+                    balance_before_credit: [],
+                    total_credit_applied: [],
+                    final_invoice_bal: [],
                 },
                 totalSteps: 3, // Adjust based on actual number of steps
                 nextStep() {
@@ -479,8 +514,59 @@
                     localStorage.setItem('formData', JSON.stringify(this.formData));
                 },
                 saveAndSubmit() {
-                    // Submit form (implement actual submission logic here)
-                    alert("Form submitted successfully!");
+                    //alert("Form submitted successfully!");
+                    let form = document.getElementById("newInvoice");
+                    let formData = new FormData(form);
+                    formData.append('file_path', this.formData.file_path);
+                      // console.log("FormData Contents:");
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+                          console.log(localStorage.getItem('auth_token'))
+                     //return
+
+                    $.ajax({
+                        url: requestURL+'/invoices/create',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        },
+
+                        beforeSend:function(){
+                            document.getElementById("Ajaxbackdrop").style.display = 'flex'
+                        },
+
+                        success: (response) => {
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            //console.log('Form submitted successfully:', response);
+                            createToast('success', response.message);
+                            localStorage.removeItem('formData');
+                            localStorage.removeItem('step');
+                        },
+                         error: (xhr, status, error) => {
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            console.error('Form submission failed:', xhr.responseText);
+
+                        try {
+                            let response = JSON.parse(xhr.responseText);
+                            
+                            if (response.errors) {
+                                let messages = Object.values(response.errors).flat().join('<br>');
+                                createToast('error', messages);
+                            } else if (response.message) {
+                                createToast('error', response.message);
+                            } else {
+                                createToast('error',  response.error || 'An unexpected error occurred. Please try again.');
+                            }
+                        } catch (e) {
+                            createToast('error', 'An error occurred. Please check your input and try again.');
+                        }
+                    }
+                });
 
                     // Clear stored data after submission
                     localStorage.removeItem('formData');
@@ -488,7 +574,7 @@
 
                     // Reset form data
                     this.formData = {
-                        full_name: '',
+                        invoice_type: '',
                         email: '',
                         phone: '',
                         charge_amount: '',
@@ -515,7 +601,7 @@
                         });
 
                         $(function() {
-                            $("#invoice_datepicker").datepicker({
+                            $("#invoice_datepicker, #credit_date").datepicker({
                                 
                             });
                         });
@@ -561,66 +647,6 @@
         //handleInputChange();
     }
 
-
-
-//     function calculate(node) {
-//     let units = parseFloat($(node).find(".unit").val()) || 0;
-//     let rate = parseFloat($(node).find(".rate").val()) || 0;
-//     let discount = parseFloat($(node).find(".discount").val()) || 0;
-
-//     let total = units * rate;
-//     let netTotal = total - discount;
-
-//     $(node).find(".amount").val(total);
-
-//     updateTotals(); // Update the overall totals
-// }
-
-// // Function to update overall totals
-// function updateTotals() {
-//     let totalAmount = 0;
-//     let totalDiscount = 0;
-
-//     $(".chargecalc").each(function () {
-//         totalAmount += parseFloat($(this).find(".amount").val()) || 0;
-//         totalDiscount += parseFloat($(this).find(".discount").val()) || 0;
-//     });
-
-//     $("#total").val(totalAmount);
-//     $("#net_total").val(totalAmount - totalDiscount);
-//     $("#total_discount").val(totalDiscount);
-// }
-
-// // Function to duplicate charges
-// function duplicateCharges() {
-//     var chargesDuplicate = document.getElementById("chargesDuplicate");
-//     var chargesList = document.getElementById("chargesList");
-//     var newCharge = chargesDuplicate.cloneNode(true);
-
-//     // Remove the ID from cloned elements to avoid duplicates
-//     $(newCharge).find("input, select").val(""); // Clear values
-//     $(newCharge).find("[id]").removeAttr("id"); // Remove IDs
-
-//     chargesList.appendChild(newCharge);
-
-//     // Ensure the new fields trigger calculations
-//     $(newCharge).find(".calc-field").trigger("input");
-// }
-
-// // Function to remove charges
-// function removeCharges(element) {
-//     $(element).closest(".chargesList").remove();
-//     updateTotals(); // Recalculate totals after removal
-// }
-
-// // Attach event listeners to ALL current & future fields
-// $(document).on("input", ".calc-field", function () {
-//     //alert("hello"); // Now works for newly duplicated fields
-//     calculate($(this).closest(".chargecalc"));
-// });
-
-// // Initialize calculations
-// updateTotals();
 
 
       </script>
@@ -704,7 +730,7 @@
             element.parentElement.parentElement.remove();
         }
 
-        
+        populateCustomerSelect();
     </script>
       
   </body>

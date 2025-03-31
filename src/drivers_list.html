@@ -271,7 +271,7 @@
                       if (error.status === 401) {
                           alert("Session expired. Please log in again.");
                           localStorage.removeItem('auth_token');
-                          window.location.href = "/login";
+                          window.location.href = "/signin.html";
                       }
                   })
                   .finally(() => {
@@ -281,7 +281,7 @@
 
           editItem(id) {
             const encodedId = btoa(id);
-              window.location.href = `/edit-driver.html?id=${encodedId}`;
+              window.location.href = `/edit_driver.html?id=${encodedId}`;
           },
 
           viewItem(id) {

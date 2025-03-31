@@ -135,7 +135,7 @@
                     </template>
                 </ol>
 
-                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newloadForm">
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="editloadForm">
                     <!-- Step 1: Basic Info -->
                     <div x-show="step === 1" >
                                         
@@ -1018,11 +1018,12 @@
                                     </div>
 
                                     <!-- Rate -->
+                                    <!-- <span x-text="JSON.stringify(charge)"></span> -->
                                     <div>
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Rate</label>
-                                        <input type="number" x-model="charge.rate" 
+                                        <input type="text" name="rate" x-model="charge.rate" 
                                             @change="calculateChargeAmount(index)"
-                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 numberOnly">
                                     </div>
                                 </div>
 
@@ -1030,16 +1031,16 @@
                                     <!-- Amount -->
                                     <div>
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Amount</label>
-                                        <input type="text" x-model="charge.amount" readonly 
-                                            class="w-full rounded bg-gray-100 dark:bg-gray-600 dark:text-gray-200 border-gray-300 dark:border-gray-500">
+                                        <input type="text" name="amount" x-model="charge.amount" readonly 
+                                            class="w-full rounded bg-gray-100 dark:bg-gray-600 dark:text-gray-200 border-gray-300 dark:border-gray-500 ">
                                     </div>
 
                                     <!-- Discount -->
                                     <div>
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Discount</label>
-                                        <input type="number" x-model="charge.discount" 
+                                        <input type="text" x-model="charge.discount" 
                                             @change="calculateTotals()"
-                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 numberOnly">
                                     </div>
 
                                     <!-- Internal Notes -->
@@ -1598,45 +1599,61 @@ document.addEventListener('alpine:init', () => {
             alert("Progress saved successfully!");
         },
 
-        submitForm() {
+        saveAndSubmit(e) {
             console.log('Form Data:', this.formData);
-            // Send the data to the server using fetch or another method
-        }
-    }));
-});
-
-      function stepperFor() {
-          return {
-              step: localStorage.getItem('step') ? parseInt(localStorage.getItem('step')) : 1,
-            //   formData: JSON.parse(localStorage.getItem('formData')) || {
-            //   },
-              nextStep() {
-                  this.step++;
-                 //localStorage.setItem('step', this.step);
-              },
-              prevStep() {
-                  this.step--;
-                  //localStorage.setItem('step', this.step);
-              },
-              saveProgress() {
-                //   localStorage.setItem('formData', JSON.stringify(this.formData));
-                //   localStorage.setItem('step', this.step);
-                  //alert("Progress saved successfully!");
-              },
-
-              saveAndSubmit(e) {
+               // console.log("ID is",this.id)
+                // return;
                 var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                   localStorage.removeItem('formData');
                   localStorage.removeItem('step');
                   e.preventDefault();
                   var shipment_type = document.getAnimations("shipment_type").value
 
-                    let form = document.getElementById("newloadForm");
+                    let form = document.getElementById("editloadForm");
                     let formData = new FormData(form);
-                   
+                    // console.log('id is', this.id)
+                    // return
+                    // Ensure expenses are included
+                    this.formData.shipment_expenses.forEach((expense, index) => {
+                        formData.append(`shipment_expenses[${index}][expense_type]`, expense.expense_type);
+                        formData.append(`shipment_expenses[${index}][expense_unit]`, expense.expense_unit);
+                        formData.append(`shipment_expenses[${index}][expense_rate]`, expense.expense_rate);
+                        formData.append(`shipment_expenses[${index}][expense_amount]`, expense.expense_amount);
+                        formData.append(`shipment_expenses[${index}][credit_reimbursement_amount]`, expense.credit_reimbursement_amount);
+                        formData.append(`shipment_expenses[${index}][vendor_invoice_number]`, expense.vendor_invoice_number);
+                        formData.append(`shipment_expenses[${index}][payment_reference_note]`, expense.payment_reference_note);
+                        formData.append(`shipment_expenses[${index}][disputed_note]`, expense.disputed_note);
+                        formData.append(`shipment_expenses[${index}][expense_disputed]`, expense.expense_disputed ? 1 : 0);
+                        formData.append(`shipment_expenses[${index}][paid]`, expense.paid ? 1 : 0);
+                    });
 
+                    this.formData.shipment_charges.forEach((charge, index) => {
+                        formData.append(`shipment_charges[${index}][charge_type]`, charge.charge_type);
+                        formData.append(`shipment_charges[${index}][comment]`, charge.comment);
+                        formData.append(`shipment_charges[${index}][units]`, charge.units);
+                        formData.append(`shipment_charges[${index}][rate]`, charge.rate);
+                        formData.append(`shipment_charges[${index}][amount]`, charge.amount);
+                        formData.append(`shipment_charges[${index}][discount]`, charge.discount);
+                        formData.append(`shipment_charges[${index}][internal_notes]`, charge.internal_notes);
+                        formData.append(`shipment_charges[${index}][billed]`, charge.billed ? 1 : 0);  // Convert checkbox boolean to 1/0
+                    });
+
+
+          
+                    let fileInput = document.getElementById("file_path");
+                    if (fileInput.files.length > 0) {
+                        for (let i = 0; i < fileInput.files.length; i++) {
+                            formData.append(`shipment_uploads[${i}]`, fileInput.files[i]);
+                        }
+                    }
+                    
+
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+                    formData.append("_method", "PUT");
                     $.ajax({
-                        url: requestURL+'/shipments/create',
+                        url: requestURL+'/shipments/update/'+this.id,
                         type: 'POST',
                         data: formData,
                         processData: false,
@@ -1652,8 +1669,8 @@ document.addEventListener('alpine:init', () => {
 
                         success: (response) => {
                             document.getElementById("Ajaxbackdrop").style.display = 'none'
-                            console.log('Form submitted successfully:', response);
-                            createToast('success', 'Shipment uploaded succesfully.');
+                            //console.log('Form submitted successfully:', response);
+                            createToast('success', response.message);
                             localStorage.removeItem('formData');
                             localStorage.removeItem('step');
                         },
@@ -1677,12 +1694,12 @@ document.addEventListener('alpine:init', () => {
                         }
                     }
                 });
-            }
-        };
-    }
+             }
+        }));
+    });
 
-    //populate driver select
-populateDriverSelect();
+        //populate driver select
+    populateDriverSelect();
 
 
 

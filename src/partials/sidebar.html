@@ -272,10 +272,16 @@ try {
 }
 </script>
 
-<aside
+<aside 
   :class="sidebarToggle ? 'translate-x-0 lg:w-[90px]' : '-translate-x-full'"
   class="sidebar fixed left-0 top-0 z-9999 flex h-screen w-[290px] flex-col overflow-y-hidden border-r border-gray-200 bg-white px-5 dark:border-gray-800 dark:bg-black lg:static lg:translate-x-0"
->
+  x-data="{ userRole: 'Loading...', user_type: null }"
+  x-init="
+      document.addEventListener('userRoleLoaded', () => {
+          userRole = window.userRole;
+          console.log('Updated userRole:', userRole);
+      });
+  ">
   <!-- SIDEBAR HEADER -->
   <div
     :class="sidebarToggle ? 'justify-center' : 'justify-between'"
@@ -367,6 +373,8 @@ try {
           
           <!-- Menu Item Dashboard -->
           <!-- Menu Item Business Management -->
+           
+          <template x-if="userRole === 'superadministrator' || userRole === 'businessadministrator'">
           <li>
             <a
               href="#"
@@ -520,6 +528,7 @@ try {
           <!-- Business and Invoices Ends -->
 
            <!-- Menu Item Multitenancy -->
+
            <li>
             <a
               href="#"
@@ -585,7 +594,7 @@ try {
             </div>
             <!-- Dropdown Menu End -->
           </li>
-
+        </template>
           <!-- Multitenancy Ends -->
 
             <!-- Menu Item Financials -->
@@ -796,6 +805,7 @@ try {
               <!-- Manage Shipment Ends -->
 
               <!-- Menu item Customer -->
+               <template x-if="userRole === 'superadministrator' || userRole === 'businessadministrator'">
               <li>
                 <a href="#" @click.prevent="selected = (selected === 'Manage Customer' ? '':'Manage Customer')" class="menu-item group"
                   :class=" (selected === 'Manage Customer') || (page === 'Manage Customer') ? 'menu-item-active' : 'menu-item-inactive'">
@@ -846,9 +856,12 @@ try {
                 </div>
                 <!-- Dropdown Menu End -->
               </li>
+              </template>
               <!-- Shipment Customer Ends -->
 
               <!-- Menu item Driver -->
+               
+              <template x-if="userRole === 'superadministrator' || userRole === 'businessadministrator'">
               <li>
                 <a href="#" @click.prevent="selected = (selected === 'Manage Driver' ? '':'Manage Driver')" class="menu-item group"
                   :class=" (selected === 'Manage Driver') || (page === 'Manage Driver') ? 'menu-item-active' : 'menu-item-inactive'">
@@ -899,9 +912,12 @@ try {
                 </div>
                 <!-- Dropdown Menu End -->
               </li>
+              </template>
               <!-- Shipment Driver Ends -->
 
               <!-- Menu item Truck -->
+               
+              <template x-if="userRole === 'superadministrator' || userRole === 'businessadministrator'">
               <li>
                 <a href="#" @click.prevent="selected = (selected === 'Manage Truck' ? '':'Manage Truck')" class="menu-item group"
                   :class=" (selected === 'Manage Truck') || (page === 'Manage Truck') ? 'menu-item-active' : 'menu-item-inactive'">
@@ -952,9 +968,12 @@ try {
                 </div>
                 <!-- Dropdown Menu End -->
               </li>
+              </template>
               <!-- Shipment Truck Ends -->
               
                <!-- Menu item BIke -->
+                
+               <template x-if="userRole === 'superadministrator' || userRole === 'businessadministrator'">
                <li>
                 <a href="#" @click.prevent="selected = (selected === 'Manage BIke' ? '':'Manage BIke')" class="menu-item group"
                   :class=" (selected === 'Manage BIke') || (page === 'Manage BIke') ? 'menu-item-active' : 'menu-item-inactive'">
@@ -1005,9 +1024,12 @@ try {
                 </div>
                 <!-- Dropdown Menu End -->
               </li>
+              </template>
               <!-- Shipment Bike Ends -->
 
               <!-- Menu item Carrier -->
+               
+              <template x-if="userRole === 'superadministrator' || userRole === 'businessadministrator'">
               <li>
                 <a href="#" @click.prevent="selected = (selected === 'Manage Carrier' ? '':'Manage Carrier')" class="menu-item group"
                   :class=" (selected === 'Manage Carrier') || (page === 'Manage Carrier') ? 'menu-item-active' : 'menu-item-inactive'">
@@ -1058,6 +1080,7 @@ try {
                 </div>
                 <!-- Dropdown Menu End -->
               </li>
+            </template>
               <!-- Shipment Carriers Ends -->
 
 
@@ -1106,7 +1129,7 @@ try {
                       <a href="invoice.html" class="menu-dropdown-item group" :class="page === 'invoice' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">New Invoice</a>
                     </li>
                     <li>
-                      <a href="shipment.html" class="menu-dropdown-item group" :class="page === 'invoice' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Invoice List</a>
+                      <a href="invoice_list.html" class="menu-dropdown-item group" :class="page === 'invoice List' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Invoice List</a>
                     </li>
                   </ul>
                 </div>
@@ -1756,6 +1779,8 @@ document.querySelectorAll(".numberOnly").forEach(function (input) {
         this.value = this.value.replace(/\D/g, "");
     });
 });
+
+
 async function fetchUserRole() {
     try {
         let response = await fetch(requestURL + '/roles/role', {
@@ -1794,4 +1819,7 @@ async function fetchUserRole() {
 //     width: "100%"
 //   });
 // });
+
+window.fetchUserRole();
+
 </script>

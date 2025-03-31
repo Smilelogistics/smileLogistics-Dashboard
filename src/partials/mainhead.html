@@ -283,6 +283,63 @@ button {
           }
       });
   }
+
+  function populateCustomerSelect() {
+      $.ajax({
+          url: requestGetURL + '/invoices/customer',
+          type: 'GET',
+          headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+              'Accept': 'application/json'
+          },
+          success: (response) => {
+              console.log('Customer data:', response.customers);
+              if(response.customers.length == 0){
+                  createToast('error', 'No customer found.');
+                  return
+              }
+              if (Array.isArray(response.customers)) {
+                  var customerSelect = document.getElementById('customer_id');
+                  customerSelect.innerHTML = '';
+                  var defaultOption = document.createElement('option');
+                  defaultOption.value = '';
+                  defaultOption.text = 'Bill To';
+                  //defaultOption.disabled = true;
+                  defaultOption.hidden = true;
+                  customerSelect.appendChild(defaultOption);
+  
+                  response.customers.forEach(customer => {
+                      var option = document.createElement('option');
+                      option.value = customer.id;
+                      option.text = customer.user.fname + ' ' + customer.user.lname;
+                      customerSelect.appendChild(option);
+                  });
+              } else {
+                  console.error('Invalid response format:', response);
+                  createToast('error', 'Invalid customer data received.');
+              }
+          },
+          error: (xhr, status, error) => {
+              console.error('API request failed:', xhr.responseText);
+  
+              if (xhr.status === 401) {
+                  alert("Session expired. Please log in again.");
+                  localStorage.removeItem('auth_token');
+                  window.location.href = "/signin";
+              } else {
+                  try {
+                      let response = JSON.parse(xhr.responseText);
+                      let message = response.message || "An error occurred. Please try again.";
+                      createToast('error', message);
+                  } catch (e) {
+                      createToast("error", "An unexpected error occurred.");
+                  }
+              }
+          }
+      });
+  }
+
+
   function populateTruckSelect() {
     $.ajax({
         url: requestGetURL + '/trucks/trucks',

@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+  <head>
+        <include src="./partials/mainhead.html"> </include>
+        <script src="./assets/js/main.js"></script>
+  </head>
+  <body
+    x-data="{ page: 'driver', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
+            <!-- Breadcrumb Start -->
+            <div x-data="{ pageName: `Driver`}">
+              <include src="./partials/breadcrumb.html" />
+            </div>
+            <!-- Breadcrumb End -->
+
+            <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+              <div x-data="stepperForm()" class="w-full mx-auto px-4">
+                <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xs dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 rtl:space-x-reverse">
+                    <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 1, 'text-gray-500 dark:text-gray-400': step !== 1 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 1, 'border-gray-500 dark:border-gray-400': step !== 1 }">
+                            1
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Basic Info</span>
+                    </li>
+                
+                    <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 2, 'text-gray-500 dark:text-gray-400': step !== 2 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 2, 'border-gray-500 dark:border-gray-400': step !== 2 }">
+                            2
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Backup Docs</span>
+                    </li>
+                </ol>
+                
+            
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="editDriverForm">
+                    <!-- Step 1: Basic Info -->
+                    <div x-show="step === 1" >
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">First Name</label>
+                                <input type="text" x-model="formData.fname" name="fname" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Last Name</label>
+                                <input type="text" x-model="formData.lname" name="lname" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Other Name</label>
+                                <input type="text" x-model="formData.mname" name="mname" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Email</label>
+                                <input type="email" x-model="formData.email" name="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                          
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                           
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Driver Type</label>
+                                <select x-model="formData.driver_type" name="driver_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="" selected disabled>Select Type</option>
+                                <option value="1">Owner Operator (Single Truck)</option>
+                                <option value="2">Company Driver</option>
+                                <option value="3">river for fleet Owner Or Fleet Owner Himself</option>
+                                <option value="4">Temp</option>
+                            </select>
+                            </div>
+                            <!-- <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Trucks</label>
+                                <select x-model="formData.truck_id" name="truck_id" id="truck_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="" selected disabled>Select Type</option>
+                            </select>
+                            </div> -->
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Quick Note</label>
+                                <input type="text" x-model="formData.quick_note" name="quick_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Note to Dispatcher</label>
+                                <input type="email" x-model="formData.dispatcher_note" name="dispatcher_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                          
+                        </div>
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Phone</label>
+                                <input type="text" x-model="formData.driver_phone" name="driver_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Phone Carrier</label>
+                                <select x-model="formData.driver_phone_carrier" name="driver_phone_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="" selected disabled>Select Type</option>
+                                <option value="Verizon">Verizon</option>
+                                <option value="TMobile">T-Mobile</option>
+                                <option value="AT&T">AT&T</option>
+                                <option value="Sprint">Sprint</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Primary Address</label>
+                                <input type="text" x-model="formData.driver_primary_address" name="driver_primary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Secondary Address</label>
+                                <input type="text" x-model="formData.driver_secondary_address" name="driver_secondary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">City</label>
+                                <input type="text" x-model="formData.driver_city" name="driver_city" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">State</label>
+                                <select x-model="formData.driver_state" name="driver_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="" selected disabled>Select Type</option>
+                            </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Zip</label>
+                                <input type="text" x-model="formData.driver_zip" name="driver_zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Emergency Contact Info</label>
+                                <input type="text" x-model="formData.emergency_contact_info" name="emergency_contact_info" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Hired On</label>
+                                <input type="text" x-model="formData.hired_on" id="hired_on" name="hired_on" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                        
+                            <script>
+                                $(document).ready(function () {
+                                    $(function () {
+                                        $("#hired_on").
+                                        datepicker();
+                                    });
+                                }) 
+                            </script>
+
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Years of Experience</label>
+                                <input type="text" x-model="formData.years_of_experience" id="years_of_experience" name="years_of_experience" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </select>
+                            </div>
+                            <!-- <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Driver endors / options</label>
+                                <select x-model="formData.endorsements" name="endorsements" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select Type</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">( rating )/categories</label>
+                                <select x-model="formData.rating" name="rating" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select Type</option>
+                                </select>
+                            </div> -->
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Tags</label>
+                                <select x-model="formData.tags" name="tags" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select Type</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">notes_about_the_choices_made</label>
+                                <textarea type="text" x-model="formData.notes_about_the_choices_made" name="notes_about_the_choices_made" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                            </div>
+                            <div>
+                                <div class="flex items-center space-x-4">
+                                    <!-- <label class="flex items-center space-x-2">
+                                        <input type="radio" x-model="formData.isAccessToMobileApp" name="isAccessToMobileApp" value="Left" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                        <span class="text-gray-700 dark:text-gray-300">Activate Access</span>
+                                    </label>
+
+                                    <label class="flex items-center space-x-2">
+                                        <input type="radio" x-model="formData.isAccessToMobileApp" name="isAccessToMobileApp" value="Right" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                        <span class="text-gray-700 dark:text-gray-300">Block Access</span>
+                                    </label>
+
+                                    <label class="flex items-center space-x-2">
+                                        <input type="radio" x-model="formData.isAccessToMobileApp" name="isAccessToMobileApp" value="Right" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                        <span class="text-gray-700 dark:text-gray-300">Reset Pin</span>
+                                    </label> -->
+
+                                    <label class="flex items-center space-x-2 mt-3">
+                                        <input type="hidden" x-model="formData.mobile_settingsl" name="mobile_settings" value="0" id="mobile_settings">
+                                        <input type="checkbox" id="mobile_settings_control" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                        <span class="text-gray-700 dark:text-gray-300">Show Payment on App</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            $(document).ready(function () {
+                                document.getElementById('mobile_settings_control').addEventListener('change', function() {
+                              var hiddenInput = document.getElementById('mobile_settings');
+                              hiddenInput.value = this.checked ? '1' : '0';
+                            });
+                            })
+                           
+                          </script>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Paid via</label>
+                                <input type="text" x-model="formData.pay_via" name="pay_via" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Company name / Pay-to</label>
+                                <input type="text" x-model="formData.company_name_paid_to" name="company_name_paid_to" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Employer ID number</label>
+                                <input type="text" x-model="formData.employer_identification_number" name="employer_identification_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Settlement email, if Different from main</label>
+                                <input type="email" x-model="formData.send_settlements_mail" name="send_settlements_mail" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">settlement company </label>
+                                <input type="text" x-model="formData.print_settlements_under_this_company" name="print_settlements_under_this_company" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300"> Flash note to dispatchers (note will show up during order entry)
+                                </label>
+                                <textarea type="text" x-model="formData.flash_notes_to_dispatch" name="flash_notes_to_dispatch" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300"> Flash note to payroll (shows up while creating settlements)</label>
+                                <textarea type="text" x-model="formData.flash_notes_to_payroll" name="flash_notes_to_payroll" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Internal Notes</label>
+                                <textarea type="text" x-model="formData.internal_notes" name="internal_notes" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                        
+                    
+                    <!-- Step 2: Backup Docs -->
+                    <div x-show="step === 2" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <template x-for="(upload, index) in formData.driver_docs" :key="index">
+                            <h3 class="font-medium text-gray-900 dark:text-gray-100">Document #<span x-text="index + 1"></span></h3>
+                            <img :src="`https://laravel-production-077b.up.railway.app/storage/${upload.file_path}`" class="w-32 h-32 object-cover rounded-md" alt="Document Image" />
+                        </template>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
+                            <input type="file" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount" id="file_path">
+                        </div>
+                    </div>
+                    <!-- Navigation Buttons -->
+                    <div class="flex justify-between mt-6">
+                        <!-- Previous Button -->
+                        <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white"
+                            x-show="step > 1" @click="step = step - 1">
+                            Previous
+                        </button>
+
+                        <!-- Next Button (Only shows when on step 1) -->
+                        <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
+                            x-show="step < 2" @click="step = step + 1">
+                            Next
+                        </button>
+
+                        <!-- Save & Continue Later Button -->
+                        <button type="button" class="px-4 py-2 bg-yellow-500 text-white rounded dark:bg-yellow-400"
+                            @click="saveProgress">
+                            Save & Continue Later
+                        </button>
+
+                        <!-- Submit Button (Only shows on step 2) -->
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
+                            x-show="step === 2">
+                            Submit
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+            </div>
+
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+
+    <script>
+       document.addEventListener('alpine:init', () => {
+            Alpine.data('stepperForm', () => ({
+                step: localStorage.getItem('edit_truck') ? parseInt(localStorage.getItem('edit_truck')) : 1,
+                formData:{
+                    fname: '',
+                    lname: '',
+                    mname:'',
+                    email: '',
+                    driver_type: '',
+                    quick_note: '',
+                    dispatcher_note: '',
+                    driver_phone: '',
+                    driver_phone_carrier: '',
+                    driver_primary_address: '',
+                    driver_secondary_address: '',
+                    driver_city: '',
+                    driver_state: '',
+                    driver_zip: '',
+                    emergency_contact_info: '',
+                    hired_on: '',
+                    years_of_experience: '',
+                    tags: '',
+                    notes_about_the_choices_made: '',
+                    mobile_settings_control: '',
+                    pay_via: '',
+                    company_name_paid_to: '',
+                    employer_identification_number: '',
+                    send_settlements_mail: '',
+                    print_settlements_under_this_company: '',
+                    flash_notes_to_dispatch: '',
+                    flash_notes_to_payroll: '',
+                    internal_notes: '',
+                    driver_docs: [],
+                },
+                step: 1,
+
+                init() {
+                    //this.fetchData();
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const encodedId = urlParams.get('id');
+                    if (encodedId) {
+                        this.id = atob(encodedId);
+                        this.fetchData();
+                    } else {
+                        console.error('No ID found in the URL');
+                    }
+                },
+
+                fetchData() {
+                    fetch(requestURL + '/drivers/driver/' + this.id, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('show Driver Data:', data.driver);
+                        this.formData = {
+                            fname: data.driver.user.fname || '',
+                            lname: data.driver.user.lname || '',
+                            mname: data.driver.user.mname || '',
+                            email: data.driver.user.email || '',
+                            vehicle_number: data.driver.vehicle_number || '',
+                            license_plate_number: data.driver.license_plate_number || '',
+                            driver_type: data.driver.driver_type || '',
+                            quick_note: data.driver.quick_note || '',
+                            dispatcher_note: data.driver.dispatcher_note || '',
+                            driver_phone: data.driver.driver_phone || '',
+                            driver_phone_carrier: data.driver.driver_phone_carrier || '',
+                            driver_primary_address: data.driver.driver_primary_address || '',
+                            driver_secondary_address: data.driver.driver_secondary_address || '',
+                            driver_city: data.driver.driver_city || '',
+                            driver_state: data.driver.driver_state || '',
+                            driver_zip: data.driver.driver_zip || '',
+                            emergency_contact_info: data.driver.emergency_contact_info || '',
+                            hired_on: data.driver.hired_on || '',
+                            years_of_experience: data.driver.years_of_experience || '',
+                            tags: data.driver.tags || '',
+                            notes_about_the_choices_made: data.driver.notes_about_the_choices_made || '',
+                            mobile_settings_control: data.driver.mobile_settings_control || '',
+                            pay_via: data.driver.pay_via || '',
+                            company_name_paid_to: data.driver.company_name_paid_to || '',
+                            employer_identification_number: data.driver.employer_identification_number || '',
+                            send_settlements_mail: data.driver.send_settlements_mail || '',
+                            flash_notes_to_dispatch: data.driver.flash_notes_to_dispatch || '',
+                            flash_notes_to_payroll: data.driver.flash_notes_to_payroll || '',
+                            print_settlements_under_this_company: data.driver.print_settlements_under_this_company || '',
+                            internal_notes: data.driver.internal_notes || '',
+                            //truck_driver: truckDriver,
+                            driver_docs: data.driver.driver_docs?.map(tdoc => ({
+                                id: tdoc.id || '',
+                                file_path: tdoc.file_path || 'Unknown',
+                            })) || [],
+                        };
+
+                        // Set the selected driver (if available)
+                        // this.selectedDriver = truckDriver || { fname: 'No Driver', lname: '' };
+                        // this.formData.driver_id = this.selectedDriver.id || '';
+                        
+                    })
+                },
+                nextStep() {
+                        this.step++;
+                        localStorage.setItem('edit_truck', this.step);
+                    },
+                    prevStep() {
+                        this.step--;
+                        localStorage.setItem('edit_truck', this.step);
+                    },
+                saveProgress() {
+                    localStorage.setItem('formData', JSON.stringify(this.formData));
+                },
+                saveAndSubmit(e) {
+                    e.preventDefault();
+                    
+                    let form = document.getElementById("editDriverForm");
+                    let formData = new FormData(form);
+
+                    formData.append("_method", "PUT");
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+                        console.log(localStorage.getItem('auth_token'))
+                                    
+                    console.log("FormData Debugging:");
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+
+                    $.ajax({
+                        url: requestURL + "/drivers/driver/" + this.id,
+                        type: "POST",
+                        data: formData,
+                        processData: false, 
+                        contentType: false,
+                        headers: {
+                            "Authorization": "Bearer " + localStorage.getItem("auth_token"),
+                            "Accept": "application/json"
+                        },
+                        beforeSend:function(){
+                            document.getElementById("Ajaxbackdrop").style.display = 'flex'
+                        },
+
+                        success: (response) => {
+                            console.log("Success:", response);
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            createToast('success', response.message);
+                        },
+                        error: (xhr) => {
+                            console.error("Error:", xhr.responseText);
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            createToast('error', xhr.responseText);
+                        }
+                    });
+                }
+            }));
+        })
+    
+
+      function handleLoadTypeChange(value) {
+    if (value === 'import') {
+        console.log(`Load type changed to ${value}`);
+        // You can add specific logic for import/export here
+        // For example, show/hide specific form sections
+        document.getElementById('container').style.display = '';
+        // Example: Show a message or change UI elements
+        //alert(`Selected load type: ${value}`);
+        
+        // You could show/hide specific form sections
+        // document.getElementById('importSection').style.display = value === 'import' ? 'block' : 'none';
+        // document.getElementById('exportSection').style.display = value === 'export' ? 'block' : 'none';
+    }
+    
+    // Trigger auto-save when selection changes
+    //handleInputChange();
+}
+      </script>
+      <script>
+        function duplicateContainer() {
+            var container = document.getElementById("container");
+            var containerList = document.getElementById("containerList");
+    
+            // Clone container and remove display:none
+            var newContainer = container.cloneNode(true);
+            newContainer.style.display = "block";
+    
+            // Append new container
+            containerList.appendChild(newContainer);
+        }
+
+        function removeContainer(element) {
+            element.parentElement.parentElement.remove();
+        }
+
+        function duplicateBillto()
+        {
+            var billto = document.getElementById("billto");
+            var billtoList = document.getElementById("billtoList");
+            var newBillto = billto.cloneNode(true);
+            billtoList.appendChild(newBillto);
+        }
+
+        function removeBillto(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+        //
+
+        function duplicatePickup()
+        {
+            var pickup = document.getElementById("pickUPP");
+            var pickupList = document.getElementById("pickupList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removePickup(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        
+        function duplicateDropAt()
+        {
+            var pickup = document.getElementById("dropAt");
+            var pickupList = document.getElementById("dropAtList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removeDropAt(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        function duplicateCharges()
+        {
+            var pickup = document.getElementById("chargesDuplicate");
+            var pickupList = document.getElementById("chargesList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removeCharges(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        
+    </script>
+      
+  </body>
+</html>

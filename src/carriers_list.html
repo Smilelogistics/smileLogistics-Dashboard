@@ -5,10 +5,10 @@
 
     <include src="./partials/mainhead.html"> </include>
     <script src="./assets/js/main.js"></script>
-    <title>Trucks | </title>
+    <title>Carriers | </title>
   </head>
   <body
-    x-data="{ page: 'truck_list', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-data="{ page: 'carriers_list', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
     x-init="
          darkMode = JSON.parse(localStorage.getItem('darkMode'));
          $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
@@ -40,7 +40,7 @@
         <main>
           <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
             <!-- Breadcrumb Start -->
-            <div x-data="{ pageName: `Truck List`}">
+            <div x-data="{ pageName: `carriers List`}">
               <include src="./partials/breadcrumb.html" />
             </div>
             <!-- Breadcrumb End -->
@@ -50,7 +50,7 @@
                 <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] p-2">
                   <div class="px-5 py-4 sm:px-6 sm:py-5">
                     <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
-                      All Trucks
+                      All Carriers
                     </h3>
                   </div>
           
@@ -78,8 +78,8 @@
                             <thead class="bg-gray-50 dark:bg-gray-900">
                               <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ACTION</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Truck Type</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Truck Office</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Carrier Type</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Carrier Office</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Drivers Assigned</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Make and Model</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">VIN #</th>
@@ -117,7 +117,7 @@
                                   </td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.truck_office ? item.truck_office : ' '"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                      x-text="item.truck_driver.driver.user ? (item.truck_driver.driver.user.fname + ' ' + item.truck_driver.driver.user.lname) : 'N/A'">
+                                      x-text="item.driver && item.truck_driver.driver.user ? (item.truck_driver.driver.user.fname + ' ' + item.truck_driver.driver.user.lname) : 'N/A'">
                                   </td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.make_model ? item.make_model : ' '"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.vehicle_number ? item.vehicle_number : ' '"></td>
@@ -191,7 +191,7 @@
 
         fetchData() {
             this.isLoading = true;
-            fetch(requestGetURL + '/trucks/trucks', {
+            fetch(requestGetURL + '/carriers/carriers', {
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
                     'Accept': 'application/json'
@@ -199,9 +199,9 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Trucks data:', data.trucks);
-                    if (data.trucks && Array.isArray(data.trucks)) {
-                        this.items = data.trucks;
+                    console.log('carriers data:', data.carriers);
+                    if (data.carriers && Array.isArray(data.carriers)) {
+                        this.items = data.carriers;
                         console.log(this.items);
                     } else {
                         console.error('Invalid data format:', data);
@@ -235,7 +235,7 @@
         // Delete item
         deleteItem(id) {
             if (confirm('Are you sure you want to delete this item?')) {
-                fetch(`${requestGetURL}/trucks/delete/${id}`, {
+                fetch(`${requestGetURL}/carriers/delete/${id}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
@@ -245,7 +245,7 @@
                     .then(response => {
                         if (response.ok) {
                             alert('Item deleted successfully');
-                            this.fetchData(); // Refresh the table data
+                            this.fetchData(); 
                         } else {
                             alert('Failed to delete item');
                         }

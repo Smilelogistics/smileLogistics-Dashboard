@@ -258,7 +258,6 @@
                         </div>
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Power Units (Truck)</label>
-                            <input type="number" x-model="formData.power_units" id="power_units" name="power_units" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         </div>
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Other equipment (chassis, reefers, vans etc)</label>
@@ -668,6 +667,14 @@
         {
             element.parentElement.parentElement.remove();
         }
+
+        $(document).ready(function() {
+        $(".chosen-select").chosen({
+            placeholder_text_multiple: "Select options",
+            no_results_text: "Oops, nothing found!", 
+            allow_single_deselect: true  
+        });
+});
 
         
     </script>

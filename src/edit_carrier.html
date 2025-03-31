@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Edit Truck | smileslogistics</title>
+    <include src="./partials/mainhead.html"> </include>
+    <script src="./assets/js/main.js"></script>
+  </head>
+  <body
+    x-data="{ page: 'truck', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+            <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
+              <!-- Breadcrumb Start -->
+              <div x-data="{ pageName: `Carrier`}">
+                <include src="./partials/breadcrumb.html" />
+              </div>
+              <!-- Breadcrumb End -->
+  
+              <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                <div x-data="stepperForm()" class="w-full mx-auto px-4">
+                  <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xs dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 rtl:space-x-reverse">
+                      <!-- Step 1 -->
+                      <li class="flex-1 flex items-center justify-center"
+                          :class="{ 'text-blue-600 dark:text-blue-500': step === 1, 'text-gray-500 dark:text-gray-400': step !== 1 }">
+                          <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                              :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 1, 'border-gray-500 dark:border-gray-400': step !== 1 }">
+                              1
+                          </span>
+                          <span class="ml-2 hidden sm:inline">Basic Info</span>
+                      </li>
+                  
+                      <!-- Step 2 -->
+                      <li class="flex-1 flex items-center justify-center"
+                          :class="{ 'text-blue-600 dark:text-blue-500': step === 2, 'text-gray-500 dark:text-gray-400': step !== 2 }">
+                          <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                              :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 2, 'border-gray-500 dark:border-gray-400': step !== 2 }">
+                              2
+                          </span>
+                          <span class="ml-2 hidden sm:inline">Backup Docs</span>
+                      </li>
+                  
+                      <!-- Step 3 -->
+                      <!-- <li class="flex-1 flex items-center justify-center"
+                          :class="{ 'text-blue-600 dark:text-blue-500': step === 3, 'text-gray-500 dark:text-gray-400': step !== 3 }">
+                          <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                              :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 3, 'border-gray-500 dark:border-gray-400': step !== 3 }">
+                              3
+                          </span>
+                          <span class="ml-2 hidden sm:inline">Backup Docs</span>
+                      </li> -->
+                  </ol>
+                  
+                  
+              
+                  <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="editCarrierForm">
+                      <!-- Step 1: Basic Info -->
+                      <div x-show="step === 1">
+                          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Carrier Name</label>
+                                  <input type="text" x-model="formData.name" name="name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">State served</label>
+                                  <input type="text" x-model="formData.state_served" name="state_served" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Carrier Code</label>
+                                  <input type="text" x-model="formData.code" name="code" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              </div>
+                          </div>
+  
+                          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Offices</label>
+                                  <select x-model="formData.offices" name="offices" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                      <option value="" selected disabled>Select </option>
+                                      <option value="IN">IN</option>
+                                  </select>
+                              </div>
+                              <!-- <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Carrier #</label>
+                                  <input type="text" x-model="formData.carrier_number" name="carrier_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              </div> -->
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Carrier Type</label>
+                                  <select x-model="formData.type" name="type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                      <option value="" selected disabled>Select </option>
+                                      <option value="third party">Third Party</option>
+                                  </select>
+                              </div>
+                          </div>
+  
+                          <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">USDOT #</label>
+                                  <input type="text" x-model="formData.usdot_number" name="usdot_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">MC #</label>
+                                  <input type="text" x-model="formData.mc_number" name="mc_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">SCAC</label>
+                                  <input type="text" x-model="formData.scac" name="scac" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Tax ID / EIN</label>
+                                  <input type="text" x-model="formData.tax_id" name="tax_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              </div>
+                          </div>
+  
+                          <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Contact Name</label>
+                                  <input type="text" x-model="formData.contact_name" id="contact_name" name="contact_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                  </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Cell Phone</label>
+                                  <input type="text" x-model="formData.cell_phone" id="cell_phone" name="cell_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Cell Carrier</label>
+                                  <select x-model="formData.cell_carrier" name="cell_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                      <option value="" selected disabled>Select </option>
+                                      <option value="verizon">Verizon</option>
+                                      <option value="att">AT&T</option>
+                                      <option value="tmobile">T-Mobile</option>
+                                      <option value="sprint">Sprint</option>
+                                      <option value="united">United</option>
+                                      <option value="virgin">Virgin Mobile</option>
+                                  </select>
+                              </div>
+                              <!-- <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Carrier Access to Mobile app</label>
+                                  <select x-model="formData.carrier_access" name="carrier_access" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                      <option value="" selected disabled>Select </option>
+                                      <option value="activate_access">Activate Access</option>
+                                      <option value="deactivate_access">Deactivate Access</option>
+                                      <option value="resend_pin">Resend PIN</option>
+                                  </select>
+                              </div> -->
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Office Phone No</label>
+                                  <input type="text" x-model="formData.office_phone" id="office_phone" name="office_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              </div>
+                          </div>
+                      
+  <!-- 
+                          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+                              <div>
+                              <label class="block text-gray-700 dark:text-gray-300">Contact Name</label>
+                              <input type="text" x-model="formData.contact_name" id="contact_name" name="contact_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Mobile app settings</label>
+                                  <label for="show_payment_in_mobile_app">
+                                  <input type="checkbox" x-model="formData.show_payment_in_mobile_app" id="show_payment_in_mobile_app" name="show_payment_in_mobile_app" class="w-2 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> <span class="text-gray-700 dark:text-gray-300">Show payment in mobile app</span> </label>
+                              </div>
+                          </div> -->
+  
+                          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Email</label>
+                                  <input type="email" x-model="formData.email" id="email" name="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Address 1</label>
+                                  <input type="text" x-model="formData.primary_address" id="primary_address" name="primary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Address 2</label>
+                                  <input type="text" x-model="formData.secondary_address" name="secondary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              </div>
+                          </div>
+  
+                      <script>
+                          $(function() {
+                              $("#move_date_datepicker").datepicker({
+                                  
+                              });
+                          });
+                      </script>
+  
+                      <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300">City</label>
+                              <input type="text" x-model="formData.city" id="city" name="city" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                          </div>
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300">State / Province</label>
+                              <input type="text" x-model="formData.state" id="state" name="state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                          </div>
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300">Zip / Postal Code</label>
+                              <input type="text" x-model="formData.zip" name="zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                          </div>
+                          
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300">Country</label>
+                              <input type="text" x-model="formData.country" name="country" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                          </div>
+                      </div>
+  
+                      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-2">
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300">Fax No</label>
+                              <input type="text" x-model="formData.fax_no" id="" name="fax_no" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                          </div>
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300">Toll Free No</label>
+                              <input type="text" x-model="formData.toll_free_number" id="toll_free_number" name="toll_free_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                          </div>
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300">Other Contact Info</label>
+                              <textarea type="text" cols="1" rows="1" x-model="formData.other_contact_info" name="other_contact_info" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> </textarea>
+                          </div>
+                      </div>
+  
+                      <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-2">
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300">No of Drivers</label>
+                              <input type="number" x-model="formData.no_of_drivers" id="no_of_drivers" name="no_of_drivers" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                          </div>
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300">Power Units (Truck)</label>
+                          </div>
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300">Other equipment (chassis, reefers, vans etc)</label>
+                              <input type="text" x-model="formData.other_equipments" id="other_equipments" name="other_equipments" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                          </div>
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300">Carrier profile / options</label>
+                              <select x-model="formData.carrier_profile" name="carrier_profile" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                  <option value="" selected disabled>Select </option>
+                                  <option value="drayage">Drayage</option>
+                                  <option value="over_the_road">Over the road >500 Miles</option>
+                                  <option value="warehouse">Warehouse</option>
+                                  <option value="local_intrastate">Local/Intra state only</option>
+                                  <option value="harzmart">Harmat permit</option>
+                                  <option value="over_weight_permit">Over weight permit</option>
+                                  <option value="alcohol_permit">Alcohol permit</option>
+                                  <option value="resdential_delivery">Residential Delivery</option>
+                                  <option value="transload_service">Transload Service</option>
+                              </select>
+                          </div>
+                      </div>
+  
+                      <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-2">
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300">( rating )Carrier belongs to these pay categories</label>
+                              <select x-model="formData.rating" name="rating" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                  <option value="" selected disabled>Select </option>
+                                  <option value="1">None</option>
+                              </select>
+                          </div>
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300">Note about the choices made</label>
+                              <textarea cols="1" rows="1" type="text" x-model="formData.note_about_choices" id="" name="note_about_choices" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> </textarea>
+                          </div>
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300">Carries these cargo</label>
+                              <select x-model="formData.carries_this_cargo" name="carries_this_cargo" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                  <option value="" selected disabled>Select </option>
+                                  <option value="general_fright">General Fright</option>
+                                  <option value="intermodial_containers">General Containers</option>
+                                  <option value="harzadous_commodities">Harzadous Commodities</option>
+                                  <option value="agricultural_farm_supplies">Agricultural Farm Supplies</option>
+                                  <option value="beverages">Beverages</option>
+                                  <option value="building_materials">Bulding Materials</option>
+                                  <option value="chemicals">Chemicals</option>
+  
+                              </select>
+                          </div>
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300">Start Date</label>
+                              <input type="text" x-model="formData.start_date" id="carrier_start_date" name="start_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                          </div>
+                      </div>
+                      <script>
+                          $(function() {
+                              $('#carrier_start_date').datepicker({
+                                  //dateFormat: 'dd-mm-yy'
+                              });
+                          })
+                      </script>
+                      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-2">
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300"> Flash note to dispatchers about this carrier</label>
+                              <textarea cols="1" rows="1" type="text" x-model="formData.flash_note_to_riders_about_this_carrier" id="" name="flash_note_to_riders_about_this_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> </textarea>
+                          </div>
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300"> Flash note to payroll</label>
+                              <textarea cols="1" rows="1" type="text" x-model="formData.flash_note_to_payroll_about_this_carrier" id="" name="flash_note_to_payroll_about_this_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> </textarea>
+                          </div>
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300"> Internal note</label>
+                              <textarea cols="1" rows="1" type="text" x-model="formData.internal_note" id="" name="internal_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> </textarea>
+                          </div>
+                      </div>
+                  </div>
+  
+                  <script>
+                      function calculate() {
+              $(".chargecalc").each(function() {
+                  let units = parseFloat($(this).find(".unit").val()) || 0;
+                  let rate = parseFloat($(this).find(".rate").val()) || 0;
+                  let discount = parseFloat($(this).find(".discount").val()) || 0;
+  
+                  let total = units * rate;
+                  let netTotal = total - discount;
+  
+                  $(this).find(".amount").val(total);
+                  $(this).find(".total").val(total);
+                  $(this).find(".net_total").val(netTotal);
+              });
+          }
+  
+          // Trigger calculation on input change
+          $(document).on("input", ".calc-field", function() {
+              calculate();
+          });
+                  </script>
+                      
+                      
+                      
+                      <!-- Step 2: Backup Docs -->
+                      <div x-show="step === 2">
+                          <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-2">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
+                                  <input type="file" x-model="formData.file_path" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              </div>
+                          </div>
+                      </div>
+                  
+                      <!-- Step 3: Review & Submit -->
+                      <!-- <div x-show="step === 3">
+                          <div>
+                              <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
+                              <input type="file" x-model="formData.file_path" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                          </div>
+                      </div> -->
+                  
+                      <!-- Navigation Buttons -->
+                      <div class="flex justify-between mt-6">
+                          <!-- Previous Button -->
+                          <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white"
+                              x-show="step > 1" @click="prevStep">
+                              Previous
+                          </button>
+                  
+                          <!-- Next Button -->
+                          <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
+                              x-show="step < 2" @click="nextStep">
+                              Next
+                          </button>
+                  
+                          <!-- Save & Continue Later -->
+                          <button type="button" class="px-4 py-2 bg-yellow-500 text-white rounded dark:bg-yellow-400"
+                              @click="saveProgress">
+                              Save & Continue Later
+                          </button>
+                  
+                          <!-- Submit Button (Only shows on Step 3) -->
+                          <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
+                              x-show="step === 2">
+                              Submit
+                          </button>
+                      </div>
+  
+                  </form>
+              </div>
+              </div>
+  
+            </div>
+          </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+
+    <script>
+        //we use use alpine js for most of the updates 
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('stepperForm', () => ({
+                step: localStorage.getItem('edit_carrier') ? parseInt(localStorage.getItem('edit_carrier')) : 1,
+                formData:{
+                    name: '',
+                    state_served: '',
+                    code: '',
+                    offices: '',
+                    type: '',
+                    usdot_number: '',
+                    mc_number: '',
+                    scac: '',
+                    tax_id: '',
+                    cell_phone: '',
+                    cell_carrier: '',
+                    office_phone: '',
+                    email: '',
+                    primary_address: '',
+                    secondary_address: '',
+                    city: '',
+                    state: '',
+                    zip: '',
+                    country: '',
+                    fax_no: '',
+                    toll_free_number: '',
+                    other_contact_info: '',
+                    no_of_drivers: '',
+                    power_units: '',
+                    other_equipments: '',
+                    carrier_profile: '',
+                    rating: '',
+                    note_about_choices: '',
+                    carries_this_cargo: '',
+                    carrier_start_date: '',
+                    flash_note_to_riders_about_this_carrier: '',
+                    flash_note_to_payroll_about_this_carrier: '',
+                    internal_note: '',
+                    carrier_docs: [],
+                },
+                selectedDriver: null,
+                step: 1,
+
+                init() {
+                    //this.fetchData();
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const encodedId = urlParams.get('id');
+                    if (encodedId) {
+                        this.id = atob(encodedId);
+                        this.fetchData();
+                    } else {
+                        console.error('No ID found in the URL');
+                    }
+                },
+
+                fetchData() {
+                    fetch(requestURL + '/carriers/carrier/' + this.id, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        this.formData = data.carrier;
+                        console.log('Carrier Data:',data.carrier);
+                            let carrier = Array.isArray(data.carrier) ? data.carrier[0] : data.carrier;
+
+                        if (!carrier) {
+                            console.error("No carrier data found");
+                            return;
+                        }
+
+                    
+                    
+
+                        this.formData = {
+                            name: carrier.name,
+                            state_served: carrier.state_served,
+                            code: carrier.code,
+                            offices: carrier.offices,
+                            type: carrier.type,
+                            usdot_number: carrier.usdot_number,
+                            mc_number: carrier.mc_number,
+                            scac: carrier.scac,
+                            tax_id: carrier.tax_id,
+                            cell_phone: carrier.cell_phone,
+                            cell_carrier: carrier.cell_carrier,
+                            office_phone: carrier.office_phone,
+                            email: carrier.email,
+                            primary_address: carrier.primary_address,
+                            secondary_address: carrier.secondary_address,
+                            city: carrier.city,
+                            state: carrier.state,
+                            zip: carrier.zip,
+                            country: carrier.country,
+                            fax_no: carrier.fax_no,
+                            toll_free_number: carrier.toll_free_number,
+                            other_contact_info: carrier.other_contact_info,
+                            no_of_drivers: carrier.no_of_drivers,
+                            power_units: carrier.power_units,
+                            other_equipments: carrier.other_equipments,
+                            carrier_profile: carrier.carrier_profile,
+                            rating: carrier.rating,
+                            note_about_choices: carrier.note_about_choices,
+                            carries_this_cargo: carrier.carries_this_cargo,
+                            carrier_start_date: carrier.carrier_start_date,
+                            flash_note_to_riders_about_this_carrier: carrier.flash_note_to_riders_about_this_carrier,
+                            flash_note_to_payroll_about_this_carrier: carrier.flash_note_to_payroll_about_this_carrier,
+                            internal_note:carrier.internal_note,
+
+                            carrier_docs: carrier.carrier_docs?.map(tdoc => ({
+                                id: tdoc.id || '',
+                                file_path: tdoc.file_path || 'Unknown',
+                            })) || [],
+                        };
+
+                        // // Set the selected driver (if available)
+                        // this.selectedDriver = truckDriver || { fname: 'No Driver', lname: '' };
+                        // this.formData.driver_id = this.selectedDriver.id || '';
+                        
+                    })
+                },
+                nextStep() {
+                        this.step++;
+                        localStorage.setItem('edit_carrier', this.step);
+                    },
+                    prevStep() {
+                        this.step--;
+                        localStorage.setItem('edit_carrier', this.step);
+                    },
+                saveProgress() {
+                    localStorage.setItem('formData', JSON.stringify(this.formData));
+                },
+                saveAndSubmit(e) {
+                    e.preventDefault();
+                    
+                    let form = document.getElementById("editCarrierForm");
+                    let formData = new FormData(form);
+
+                    formData.append("_method", "PUT");
+                                    for (let pair of formData.entries()) {
+                                        console.log(pair[0] + ": " + pair[1]);
+                                    }
+                                        console.log(localStorage.getItem('auth_token'))
+                                    
+                       
+
+                    // 🚀 Debugging: Log all FormData values
+                    console.log("FormData Debugging:");
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+
+                    $.ajax({
+                        url: requestURL + "/carriers/update/" + this.id,
+                        type: "POST",
+                        data: formData,
+                        processData: false, 
+                        contentType: false,
+                        headers: {
+                            "Authorization": "Bearer " + localStorage.getItem("auth_token"),
+                            "Accept": "application/json"
+                        },
+                        beforeSend:function(){
+                            document.getElementById("Ajaxbackdrop").style.display = 'flex'
+                        },
+
+                        success: (response) => {
+                            console.log("Success:", response);
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            createToast('success', response.message);
+                        },
+                        error: (xhr) => {
+                            console.error("Error:", xhr.responseText);
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            createToast('error', xhr.responseText);
+                        }
+                    });
+                }
+            }));
+        })
+    
+       // populateDriverSelect();
+
+
+      function handleLoadTypeChange(value) {
+    if (value === 'import') {
+        console.log(`Load type changed to ${value}`);
+        // You can add specific logic for import/export here
+        // For example, show/hide specific form sections
+        document.getElementById('container').style.display = '';
+        // Example: Show a message or change UI elements
+        //alert(`Selected load type: ${value}`);
+        
+        // You could show/hide specific form sections
+        // document.getElementById('importSection').style.display = value === 'import' ? 'block' : 'none';
+        // document.getElementById('exportSection').style.display = value === 'export' ? 'block' : 'none';
+    }
+    
+    // Trigger auto-save when selection changes
+    //handleInputChange();
+}
+      </script>
+      <script>
+        function duplicateContainer() {
+            var container = document.getElementById("container");
+            var containerList = document.getElementById("containerList");
+    
+            // Clone container and remove display:none
+            var newContainer = container.cloneNode(true);
+            newContainer.style.display = "block";
+    
+            // Append new container
+            containerList.appendChild(newContainer);
+        }
+
+        function removeContainer(element) {
+            element.parentElement.parentElement.remove();
+        }
+
+        function duplicateBillto()
+        {
+            var billto = document.getElementById("billto");
+            var billtoList = document.getElementById("billtoList");
+            var newBillto = billto.cloneNode(true);
+            billtoList.appendChild(newBillto);
+        }
+
+        function removeBillto(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+        //
+
+        function duplicatePickup()
+        {
+            var pickup = document.getElementById("pickUPP");
+            var pickupList = document.getElementById("pickupList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removePickup(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        
+        function duplicateDropAt()
+        {
+            var pickup = document.getElementById("dropAt");
+            var pickupList = document.getElementById("dropAtList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removeDropAt(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        function duplicateCharges()
+        {
+            var pickup = document.getElementById("chargesDuplicate");
+            var pickupList = document.getElementById("chargesList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removeCharges(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        
+    </script>
+      
+  </body>
+</html>

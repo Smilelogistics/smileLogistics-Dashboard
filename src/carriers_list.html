@@ -78,12 +78,13 @@
                             <thead class="bg-gray-50 dark:bg-gray-900">
                               <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ACTION</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Carrier Name</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Carrier Type</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Carrier Office</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Drivers Assigned</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Make and Model</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">VIN #</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Licence Plate </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Office Tel</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">No of Drivers</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">State Served</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tool Free </th>
                                 
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
                               </tr>
@@ -112,18 +113,19 @@
                                     </div>
                                   </td>
                                  
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.name ? item.name : ' '"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                      x-text="item.truck_type ? item.truck_type : ' '">
+                                      x-text="item.type ? item.type : ' '">
                                   </td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.truck_office ? item.truck_office : ' '"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.offices ? item.offices : ' '"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                      x-text="item.driver && item.truck_driver.driver.user ? (item.truck_driver.driver.user.fname + ' ' + item.truck_driver.driver.user.lname) : 'N/A'">
+                                      x-text="item.office_phone ? item.office_phone : 'N/A'">
                                   </td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.make_model ? item.make_model : ' '"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.vehicle_number ? item.vehicle_number : ' '"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.license_plate_number ? item.license_plate_number : ' '"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.no_of_drivers ? item.no_of_drivers : ' '"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.no_of_drivers ? item.no_of_drivers : ' '"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.state ? item.state : ' '"></td>
                                   <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full" :class="item.driver_status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" x-text="item.driver_status"></span>
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full" :class="item.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" x-text="item.driver_status"></span>
                                   </td>
                                 </tr>
                               </template>
@@ -223,13 +225,13 @@
         // Edit item
         editItem(id) {
           const encodedId = btoa(id);
-            window.location.href = `/edit_truck.html?id=${encodedId}`;
+            window.location.href = `/edit_carrier.html?id=${encodedId}`;
         },
 
         // View item
         viewItem(id) {
           const encodedId = btoa(id);
-          window.location.href = `/view_truck_single.html?id=${encodedId}`;
+          window.location.href = `/view_carrier_single.html?id=${encodedId}`;
         },
 
         // Delete item

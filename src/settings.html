@@ -9,15 +9,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Settings | Smile Logistics</title>
      <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- jQuery UI -->
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-
-  <!-- Chosen Plugin -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
+     <include src="./partials/mainhead.html"> </include>
+     <script src="./assets/js/main.js"></script>
   </head>
   <body
     x-data="{ page: 'settings', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -49,7 +43,11 @@
         <!-- ===== Header End ===== -->
 
         <!-- ===== Main Content Start ===== -->
-        <main>
+      
+        <main x-data="settings()">
+          <div x-show="isLoading" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
           <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
             <!-- Breadcrumb Start -->
             <div x-data="{ pageName: `Settings`}">
@@ -93,36 +91,38 @@
                         <!-- General Settings Form -->
                         <div x-show="activeTab === 'general'">
                             <h2 class="text-lg font-semibold mb-3 dark:text-white">General Settings</h2>
-                            <form>
+                            <form id="generalForm" @submit.prevent="submitForm('general')" x-ref="generalForm" enctype="multipart/form-data">
                               <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                  <div>
-                                      <label class="block mb-2 dark:text-white">Name:</label>
-                                      <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter Name">
-                                  </div>
+                                <div x-data="{ user: { fame: 'John', lname: 'Doe', mname: 'Smith' } }">
+                                  <label class="block mb-2 dark:text-white">Name:</label>
+                                  <input type="text" :value="user.fame + ' ' + user.lname + ' ' + user.mname" name="name" 
+                                         class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                                         placeholder="Enter Name" readonly>
+                                </div>
                                   <div>
                                       <label class="block mb-2 dark:text-white">Email:</label>
-                                      <input type="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter Email">
+                                      <input type="email" x-model="user.email" name="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" readonly>
                                   </div>
                                   
                                   <div>
                                     <label class="block mb-2 dark:text-white">Phone:</label>
-                                    <input type="text" class="numberOnly w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter Phone number">
+                                    <input type="text" x-model="formData.phone" name="phone" class="numberOnly w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter Phone number">
                                 </div>
                               </div>
 
                               <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                 <div>
                                     <label class="block mb-2 dark:text-white">Address:</label>
-                                    <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="No 123, Street">
+                                    <input type="text" x-model="formData.address" name="address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="No 123, Street">
                                 </div>
                                 <div>
                                     <label class="block mb-2 dark:text-white">Parcel Prefix:</label>
-                                    <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="SML">
+                                    <input type="text" x-model="formData.parcel_prefix" name="parcel_prefix" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="SML">
                                 </div>
                                 
                                 <div>
                                   <label class="block mb-2 dark:text-white">Invoice Prefix:</label>
-                                  <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="SMLINV">
+                                  <input type="text" x-model="formData.invoice_prefix" name="invoice_prefix" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="SMLINV">
                               </div>
                             </div>
                             <style>
@@ -137,7 +137,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                               <div id="chosen-select">
                                 <label class="block mb-2 dark:text-white">Currency:</label>
-                                <select class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select">
+                                <select x-model="formData.currency" name="currency" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select">
                                   <option value="" selected disabled>Select a currency</option>
                                   <option value="AED">AED - United Arab Emirates Dirham</option>
                                   <option value="AFN">AFN - Afghan Afghani</option>
@@ -316,29 +316,44 @@
                               
                               <div>
                                   <label class="block mb-2 dark:text-white">Copyright:</label>
-                                  <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Alright Reserved SML">
+                                  <input x-model="formData.copyright" name="copyright" type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Alright Reserved SML">
                               </div>
+
+                              <div>
+                                <label class="block mb-2 dark:text-white">Logo</label>
+                                <input x-model="formData.logo1" name="logo1" type="file" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                            
                               
                             </div>
-                              <button class="mt-3 bg-blue-600 text-white px-4 py-2 rounded ">Save Changes</button>
+                            <button type="submit" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded" :disabled="isLoading">
+                              <span x-show="!isLoading">Save Changes</span>
+                              <span x-show="isLoading" class="flex items-center justify-center">
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Saving...
+                              </span>
+                            </button>
                             </form>
                         </div>
             
                        <!-- Payment Gateway Form -->
                         <div x-show="activeTab === 'payment'">
                           <h2 class="text-lg font-semibold mb-3 dark:text-white">Payment Gateway Setup</h2>
-                          <form>
+                          <form  @submit.prevent="submitForm('payment')" x-ref="paymentForm">
                               <!-- Paystack Settings -->
                               <div>
                                   <h6 class="text-md font-medium mb-3 dark:text-white">Paystack Settings</h6>
                                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                       <div>
                                           <label class="block mb-2 dark:text-white">Public Key:</label>
-                                          <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXX">
+                                          <input type="text" x-model="formData.paystack_publicKey" name="paystack_publicKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXX">
                                       </div>
                                       <div>
                                           <label class="block mb-2 dark:text-white">Secret Key:</label>
-                                          <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
+                                          <input type="text" x-model="formData.paystack_secretKey" name="paystack_secretKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
                                       </div>
                                   </div> <!-- ✅ Correctly closed grid div -->
                               </div>
@@ -349,11 +364,11 @@
                                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                       <div>
                                           <label class="block mb-2 dark:text-white">Public Key:</label>
-                                          <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXX">
+                                          <input type="text" x-model="formData.FLW_pubKey" name="FLW_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXX">
                                       </div>
                                       <div>
                                           <label class="block mb-2 dark:text-white">Secret Key:</label>
-                                          <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
+                                          <input type="text" x-model="formData.FLW_secKey" name="FLW_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
                                       </div>
                                   </div>
                               </div>
@@ -364,11 +379,11 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                     <div>
                                         <label class="block mb-2 dark:text-white">Public Key:</label>
-                                        <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXX">
+                                        <input type="text" x-model="formData.Razor_pubKey" name="Razor_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXX">
                                     </div>
                                     <div>
                                         <label class="block mb-2 dark:text-white">Secret Key:</label>
-                                        <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
+                                        <input type="text" x-model="formData.Razor_secKey" name="Razor_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
                                     </div>
                                   </div>
                               </div>
@@ -378,15 +393,25 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                     <div>
                                         <label class="block mb-2 dark:text-white">Public Key:</label>
-                                        <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXX">
+                                        <input type="text" x-model="formData.stripe_pubKey" name="stripe_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXX">
                                     </div>
                                     <div>
                                         <label class="block mb-2 dark:text-white">Secret Key:</label>
-                                        <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
+                                        <input type="text" x-model="formData.stripe_secKey" name="stripe_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
                                     </div>
                                   </div>
                                 </div>
-                              <button class="mt-3 bg-blue-600 text-white px-4 py-2 rounded">Save Changes</button>
+                              <!-- <button class="mt-3 bg-blue-600 text-white px-4 py-2 rounded">Save Changes</button> -->
+                              <button type="submit" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded" :disabled="isLoading">
+                                <span x-show="!isLoading">Save Changes</span>
+                                <span x-show="isLoading" class="flex items-center justify-center">
+                                  <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                  </svg>
+                                  Saving...
+                                </span>
+                              </button>
                           </form>
                         </div>
 
@@ -394,47 +419,47 @@
                         <!-- Mail Settings Form -->
                         <div x-show="activeTab === 'sms'">
                             <h2 class="text-lg font-semibold mb-3 dark:text-white">Mail Settings</h2>
-                            <form>
+                            <form @submit.prevent="submitForm('sms')" x-ref="smsForm">
                               <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                 <div>
                                     <label class="block mb-2 dark:text-white">Mail Driver:</label>
-                                    <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="smtp">
+                                    <input type="text" x-model="formData.mail_driver" name="mail_driver" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="smtp">
                                 </div>
                                 <div>
                                     <label class="block mb-2 dark:text-white">Mail Host:</label>
-                                    <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="smtp.mailtrap.io">
+                                    <input type="text" x-model="formData.mail_host" name="mail_host" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="smtp.mailtrap.io">
                                 </div>
                                 
                                 <div>
                                   <label class="block mb-2 dark:text-white">Mail Port:</label>
-                                  <input type="text" class="numberOnly w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="465">
+                                  <input type="text" x-model="formData.mail_port" name="mail_port" class="numberOnly w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="465">
                               </div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                               <div>
                                   <label class="block mb-2 dark:text-white">Mail Encryption:</label>
-                                  <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="SSL TLS">
+                                  <input type="text" x-model="formData.mail_encryption" name="mail_encryption" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="SSL TLS">
                               </div>
                               <div>
                                   <label class="block mb-2 dark:text-white">Mail Username:</label>
-                                  <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="example@mail.com">
+                                  <input type="text" x-model="formData.mail_username" name="mail_username" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="example@mail.com">
                               </div>
                               
                               <div>
                                 <label class="block mb-2 dark:text-white">Mail Password:</label>
-                                <input type="password" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
+                                <input type="password" x-model="formData.mail_password" name="mail_password" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
                               </div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                               <div>
                                   <label class="block mb-2 dark:text-white">Mail From:</label>
-                                  <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="example.com">
+                                  <input type="text" x-model="formData.mail_from" name="mail_from" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="example.com">
                               </div>
                               <div>
                                   <label class="block mb-2 dark:text-white">Mail Fron Name:</label>
-                                  <input type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="SMILE LOGISTICS">
+                                  <input type="text" x-model="formData.mail_from_name" name="mail_from_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="SMILE LOGISTICS">
                               </div>
                               
                             </div>
@@ -445,12 +470,12 @@
                         <!-- Contacts Form -->
                         <div x-show="activeTab === 'security'">
                             <h2 class="text-lg font-semibold mb-3">Security Settings</h2>
-                            <form>
+                            <form id="securityForm" @submit.prevent="submitForm('security')" x-ref="securityForm">
                               <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
                                   <div>
                                     <label class="inline-flex items-center mb-5 cursor-pointer">
                                       <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 mr-40">Enable Email OTP</span>
-                                      <input type="checkbox" value="" class="sr-only peer">
+                                      <input type="checkbox" x-model="formData.enable_email_otp" name="enable_email_otp" value="" class="sr-only peer">
                                       <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
                                     </label>
                                     
@@ -458,7 +483,7 @@
                                   <div>
                                     <label class="inline-flex items-center mb-5 cursor-pointer">
                                       <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 mr-40">Enable 2FA</span>
-                                      <input type="checkbox" value="" class="sr-only peer" checked>
+                                      <input type="checkbox" x-model="formData.enable_2fa" name="enable_2fa" value="" class="sr-only peer" checked>
                                       <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
                                     </label>                                    
                                   </div>
@@ -478,5 +503,164 @@
       <!-- ===== Content Area End ===== -->
     </div>
     <!-- ===== Page Wrapper End ===== -->
+
+    <script>
+      document.addEventListener('alpine:init', () => {
+  Alpine.data('settings', () => ({
+    activeTab: 'general',
+    isLoading: false,
+    user: {
+      name: '',
+      email: ''
+    },
+    formData: {
+      phone: '',
+      address: '',
+      parcel_prefix: '',
+      invoice_prefix: '',
+      currency: '',
+      copyright: '',
+      paystack_publicKey: '',
+      paystack_secretKey: '',
+      FLW_pubKey: '',
+      FLW_secKey: '',
+      Razor_pubKey: '',
+      Razor_secKey: '',
+      stripe_pubKey: '',
+      stripe_secKey: '',
+      mail_driver: '',
+      mail_host: '',
+      mail_port: '',
+      mail_encryption: '',
+      mail_username: '',
+      mail_password: '',
+      mail_from: '',
+      mail_from_name: '',
+      enable_email_otp: '',
+      enable_2fa: '',
+      logo1: '',
+    },
+    
+    init() {
+      this.fetchUserData();
+      this.fetchSettings();
+    },
+    
+    async fetchUserData() {
+      try {
+        const response = await fetch(requestURL + '/user', {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+          'Accept': 'application/json'
+        }
+      });
+        if (response.ok) {
+          const data = await response.json();
+          console.log("User data", data);
+          this.user = {
+            name: data.name,
+            email: data.email
+          };
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    },
+
+    async fetchSettings() {
+      try {
+        const response = await fetch(requestURL + '/settings/data', {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+          'Accept': 'application/json'
+        }
+      });
+        if (response.ok) {
+          const datas = await response.json();
+          let data = Array.isArray(datas) ? datas[0] : datas;
+          console.log("Settings data", data);
+            this.formData = {
+            ...this.formData,
+            ...data
+          };
+          console.log('FOMR DATA',data.phone);
+        this.formData.phone = data.phone || '';
+        this.formData.address = data.address || '';
+        this.formData.parcel_prefix = data.parcel_prefix || '';
+        this.formData.invoice_prefix = data.invoice_prefix || '';
+        this.formData.currency = data.currency || '';
+        this.formData.copyright = data.copyright || '';
+        this.formData.paystack_publicKey = data.paystack_publicKey || '';
+        this.formData.paystack_secretKey = data.paystack_secretKey || '';
+        this.formData.FLW_pubKey = data.FLW_pubKey || '';
+        this.formData.FLW_secKey = data.FLW_secKey || '';
+        this.formData.Razor_pubKey = data.Razor_pubKey || '';
+        this.formData.Razor_secKey = data.Razor_secKey || '';
+        this.formData.stripe_pubKey = data.stripe_pubKey || '';
+        this.formData.stripe_secKey = data.stripe_secKey || '';
+        this.formData.mail_driver = data.mail_driver || '';
+        this.formData.mail_host = data.mail_host || '';
+        this.formData.mail_port = data.mail_port || '';
+        this.formData.mail_encryption = data.mail_encryption || '';
+        this.formData.mail_username = data.mail_username || '';
+        this.formData.mail_password = data.mail_password || '';
+        this.formData.mail_from = data.mail_from || '';
+        this.formData.mail_from_name = data.mail_from_name || '';
+        this.formData.enable_email_otp = data.enable_email_otp || '';
+        this.formData.enable_2fa = data.enable_2fa || '';
+        }
+      } catch (error) {
+        console.error('Error fetching settings data:', error);
+      }
+    },
+    
+    async submitForm(tabName) {
+      this.isLoading = true;
+      const form = this.$refs[`${tabName}Form`];
+      const formData = new FormData(form);
+      //console.log(tabName);
+      // console.log("FormData Contents:");
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ": " + pair[1]);
+        }
+              console.log(localStorage.getItem('auth_token'))
+         //return
+      try {
+        const response = await fetch(`${requestURL}/settings/${tabName}`, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+            'Accept': 'application/json',
+          }
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          createToast('success', data.message);	
+        } else {
+          createToast('error', data.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        createToast('error','Network error. Please try again.');
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    
+    // showToast(message, type = 'success') {
+    //   // Implement your toast notification here
+    //   alert(`${type.toUpperCase()}: ${message}`);
+    // }
+  }));
+});
+
+// Initialize the component
+document.addEventListener('DOMContentLoaded', () => {
+  Alpine.start();
+});
+    </script>
   </body>
 </html>

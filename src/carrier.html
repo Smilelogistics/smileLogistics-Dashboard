@@ -94,9 +94,23 @@
                                 <label class="block text-gray-700 dark:text-gray-300">Carrier Name</label>
                                 <input type="text" x-model="formData.name" name="name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                             </div>
-                            <div>
+                            <style>
+                                 #choosen-seleckt .chosen-container {
+                                height: 40px !important;
+                                background: none !important;
+                                border: none !important;
+                                vertical-align: middle !important;
+                              }
+                            </style>
+                            </style>
+                            <div class="choose-seleckt">
                                 <label class="block text-gray-700 dark:text-gray-300">State served</label>
-                                <input type="text" x-model="formData.state_served" name="state_served" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <select x-model="formData.state_served" name="state_served" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select" multiple>
+                                    <option value="3">First</option>
+                                    <option value="2">First</option>
+                                    <option value="4">First</option>
+                                </select>
+
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Carrier Code</label>
@@ -263,10 +277,9 @@
                             <label class="block text-gray-700 dark:text-gray-300">Other equipment (chassis, reefers, vans etc)</label>
                             <input type="text" x-model="formData.other_equipments" id="other_equipments" name="other_equipments" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         </div>
-                        <div>
+                        <div id="choose-select">
                             <label class="block text-gray-700 dark:text-gray-300">Carrier profile / options</label>
-                            <select x-model="formData.carrier_profile" name="carrier_profile" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                <option value="" selected disabled>Select </option>
+                            <select multiple x-model="formData.carrier_profile" name="carrier_profile" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select" >
                                 <option value="drayage">Drayage</option>
                                 <option value="over_the_road">Over the road >500 Miles</option>
                                 <option value="warehouse">Warehouse</option>
@@ -292,10 +305,10 @@
                             <label class="block text-gray-700 dark:text-gray-300">Note about the choices made</label>
                             <textarea cols="1" rows="1" type="text" x-model="formData.note_about_choices" id="" name="note_about_choices" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> </textarea>
                         </div>
-                        <div>
+                        <div id="choose-select">
                             <label class="block text-gray-700 dark:text-gray-300">Carries these cargo</label>
-                            <select x-model="formData.carries_this_cargo" name="carries_this_cargo" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                <option value="" selected disabled>Select </option>
+                            <select x-model="formData.carries_this_cargo" name="carries_this_cargo" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select" multiple>
+                                <!-- <option value="" selected disabled>Select </option> -->
                                 <option value="general_fright">General Fright</option>
                                 <option value="intermodial_containers">General Containers</option>
                                 <option value="harzadous_commodities">Harzadous Commodities</option>
@@ -675,7 +688,9 @@
             allow_single_deselect: true  
         });
 });
-
+// $(document).ready(function() {
+//     $(".chosen-select").chosen();
+// });
         
     </script>
       

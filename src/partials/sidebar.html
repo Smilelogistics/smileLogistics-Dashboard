@@ -374,7 +374,7 @@ try {
           <!-- Menu Item Dashboard -->
           <!-- Menu Item Business Management -->
            
-          <template x-if="userRole === 'superadministrator' || userRole === 'businessadministrator'">
+          <!-- <template x-if="userRole === 'superadministrator' || userRole === 'businessadministrator'"> -->
           <li>
             <a
               href="#"
@@ -585,7 +585,7 @@ try {
                   <a
                     href="settings.html"
                     class="menu-dropdown-item group"
-                    :class="page === 'Users' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    :class="page === 'Settings' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
                   >
                     Settings
                   </a>
@@ -594,7 +594,7 @@ try {
             </div>
             <!-- Dropdown Menu End -->
           </li>
-        </template>
+        <!-- </template> -->
           <!-- Multitenancy Ends -->
 
             <!-- Menu Item Financials -->

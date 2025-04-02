@@ -530,7 +530,7 @@
                         <!-- General Settings Form -->
                         <div x-show="activeTab === 'address'">
                             <h2 class="text-lg font-semibold mb-3 dark:text-white">Address Settings</h2>
-                            <form id="basicForm" @submit.prevent="submitForm('address')" x-ref="addressForm" enctype="multipart/form-data">
+                            <form id="basicForm" @submit.prevent="submitCustomerForm('address')" x-ref="addressForm" enctype="multipart/form-data">
                               <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                 <div x-data="{ user: { fame: 'John', lname: 'Doe', mname: 'Smith' } }">
                                   <label class="block mb-2 dark:text-white">Name:</label>
@@ -632,10 +632,10 @@
                             </form>
                         </div>
             
-                       <!-- Payment Gateway Form -->
+                       <!-- Basic info Form -->
                         <div x-show="activeTab === 'basic'">
                           <h2 class="text-lg font-semibold mb-3 dark:text-white">Basic Information</h2>
-                          <form  @submit.prevent="submitForm('basic')" x-ref="basicForm">
+                          <form  @submit.prevent="submitCustomerForm('basic')" x-ref="basicForm">
                               <!-- Paystack Settings -->
                               <div>
                                   <h6 class="text-md font-medium mb-3 dark:text-white">Basic Settings</h6>
@@ -714,7 +714,7 @@
                                   </div>
                               </div>
                                <!-- Stripe Settings -->
-                               <div>
+                               <!-- <div>
                                 <h6 class="text-md font-medium mb-3 dark:text-white">Stripe Settings</h6>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                     <div>
@@ -726,7 +726,7 @@
                                         <input type="text" x-model="formData.stripe_secKey" name="stripe_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
                                     </div>
                                   </div>
-                                </div>
+                                </div> -->
                               <!-- <button class="mt-3 bg-blue-600 text-white px-4 py-2 rounded">Save Changes</button> -->
                               <button type="submit" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded" :disabled="isLoading">
                                 <span x-show="!isLoading">Save Changes</span>
@@ -745,19 +745,19 @@
             
                         <!-- Contacts Form -->
                         <div x-show="activeTab === 'other'">
-                            <h2 class="text-lg font-semibold mb-3">Security Settings</h2>
-                            <form id="otherForm" @submit.prevent="submitForm('other')" x-ref="otherForm">
+                            <h2 class="text-lg font-semibold mb-3">Other Settings</h2>
+                            <form id="otherForm" @submit.prevent="submitCustomerForm('other')" x-ref="otherForm">
                               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                   <div>
                                     <label class="inline-flex items-center mb-5 cursor-pointer">
                                       <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 mr-40">is Sub Account?</span>
-                                      <input type="checkbox" x-model="formData.isSubAccount" name="isSubAccount" value="" class="sr-only peer">
+                                      <input type="checkbox" x-model="formData.isSubAccount" name="isSubAccount" value="" class="sr-only peer" @change="formData.isSubAccount = $event.target.checked ? 1 : 0">
                                       <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
                                     </label>
                                     
                                   </div>
                                   
-                                  <div x-show="false">
+                                  <div x-show="formData.isSubAccount === 1" x-transition>
                                     <label class="block mb-2 dark:text-white">Sub Account of?:</label>
                                     <input type="text" x-model="formData.subAccount_of" name="subAccount_of" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                 </div>
@@ -766,21 +766,21 @@
                                 <div>
                                   <label class="inline-flex items-center mb-5 cursor-pointer">
                                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 mr-40">is Factored?</span>
-                                    <input type="checkbox" x-model="formData.isFactoredInvoice" name="isFactoredInvoice" value="" class="sr-only peer">
+                                    <input type="checkbox" x-model="formData.isFactoredInvoice" name="isFactoredInvoice" value="0" class="sr-only peer" @change="formData.isFactoredInvoice = $event.target.checked ? 1 : 0">
                                     <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
                                   </label>
                                   
                                 </div>
                                 
-                                <div x-show="false">
-                                  <label class="block mb-2 dark:text-white">Factoring Company:</label>
-                                  <input type="text" x-model="formData.factoringCompany" name="factoringCompany" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                              </div>
-                            </div>
+                                  <div x-show="formData.isFactoredInvoice === 1" x-transition>
+                                    <label class="block mb-2 dark:text-white">Factoring Company:</label>
+                                    <input type="text" x-model="formData.factoringCompany" name="factoringCompany" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                </div>
+                                </div>
                                   <div>
                                     <label class="inline-flex items-center mb-5 cursor-pointer">
                                       <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 mr-40">is Prepaid?</span>
-                                      <input type="checkbox" x-model="formData.isPrepaid" name="isPrepaid" value="" class="sr-only peer" checked>
+                                      <input type="checkbox" x-model="formData.isPrepaid" name="isPrepaid" value="0" class="sr-only peer" @change="formData.isPrepaid = $event.target.checked ? 1 : 0">
                                       <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
                                     </label>                                    
                                   </div>
@@ -789,19 +789,341 @@
                                   <div>
                                     <label class="inline-flex items-center mb-5 cursor-pointer">
                                       <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 mr-40">is Non Billable?</span>
-                                      <input type="checkbox" x-model="formData.isNonBillable" name="isNonBillable" value="" class="sr-only peer" checked>
+                                      <input 
+                                        type="checkbox" 
+                                        x-model="formData.isNonBillable" 
+                                        name="isNonBillable" 
+                                        value="1" 
+                                        class="sr-only peer"
+                                        @change="formData.isNonBillable = $event.target.checked ? 1 : 0"
+                                      >
                                       <div class="relative w-10 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
                                     </label>                                    
                                   </div>
+                                  <button class="mt-3 bg-blue-600 text-white px-4 py-2 rounded">Save Changes</button>
+                                </form>
                               </div>
-                              <button class="mt-3 bg-blue-600 text-white px-4 py-2 rounded">Save Changes</button>
-                            </form>
                         </div>
                     </div>
                 </div>
               </template>
 
               <!-- customer settings ends -->
+
+              <!-- Driver settings starts -->
+              <template x-if="userRole === 'driver'">
+                <div x-data="{ activeTab: 'address' }" class="w-full mx-auto bg-white p-6 shadow-lg rounded-md dark:bg-white/[0.03]">
+                    <!-- Tabs -->
+                    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
+                        <ul class="flex flex-wrap -mb-px">
+                            <li class="me-2">
+                                <a href="#" @click.prevent="activeTab = 'address'"
+                                    :class="activeTab === 'address' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
+                                    class="inline-block p-4 border-b-2 rounded-t-lg dark:text-white" id="profile-tab">Address Setiings</a>
+                            </li>
+                            <li class="me-2">
+                                <a href="#" @click.prevent="activeTab = 'basic'"
+                                    :class="activeTab === 'basic' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
+                                    class="inline-block p-4 border-b-2 rounded-t-lg dark:text-white">Basic Setup</a>
+                            </li>
+                            <li class="me-2">
+                                <a href="#" @click.prevent="activeTab = 'other'"
+                                    :class="activeTab === 'other' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
+                                    class="inline-block p-4 border-b-2 rounded-t-lg dark:text-white">Other</a>
+                            </li>
+                        </ul>
+                    </div>
+            
+                    <!-- Tab Content -->
+                    <div class="mt-4">
+                        <!-- General Settings Form -->
+                        <div x-show="activeTab === 'address'">
+                            <h2 class="text-lg font-semibold mb-3 dark:text-white">Address Settings</h2>
+                            <form id="DbasicForm" @submit.prevent="submitDriverForm('Daddress')" x-ref="driverAddressForm" enctype="multipart/form-data">
+                              <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                <div x-data="{ user: { fame: 'John', lname: 'Doe', mname: 'Smith' } }">
+                                  <label class="block mb-2 dark:text-white">Name:</label>
+                                  <input type="text" :value="user.fame + ' ' + user.lname + ' ' + user.mname" name="name" 
+                                         class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                                         placeholder="Enter Name" readonly>
+                                </div>
+                                  <div>
+                                      <label class="block mb-2 dark:text-white">Email:</label>
+                                      <input type="email" x-model="user.email" name="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" readonly>
+                                  </div>
+                                  
+                                  <div>
+                                    <label class="block mb-2 dark:text-white">Phone:</label>
+                                    <input type="text" x-model="formData.driver_phone" name="driver_phone" class="numberOnly w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter Phone number">
+                                </div>
+                                <div>
+                                  <label class="block mb-2 dark:text-white">Phone Carrier:</label>
+                                  <select type="text" x-model="formData.driver_phone_carrier" name="driver_phone_carrier" class=" w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> 
+                                    <option value="Vodafone">Vodafone</option>
+                                    <option value="Airtel">Airtel</option>
+                                    <option value="MTN">MTN</option>
+                                    <option value="Glo">Glo</option>
+                                    <option value="Vodafone">Vodafone</option>
+                                    <option value="other">Others</option>
+                                    </select>
+                              </div>
+                              </div>
+
+                              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <div>
+                                    <label class="block mb-2 dark:text-white">Primary Address:</label>
+                                    <input type="text" x-model="formData.driver_primary_address" name="driver_primary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="No 123, Street">
+                                </div>
+                                <div>
+                                    <label class="block mb-2 dark:text-white">Secondary Address:</label>
+                                    <input type="text" x-model="formData.driver_secondary_address" name="driver_secondary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="SML">
+                                </div>
+                                
+                                <div>
+                                  <label class="block mb-2 dark:text-white">Country:</label>
+                                  <input type="text" x-model="formData.driver_country" name="driver_country" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                              <div>
+                                <label class="block mb-2 dark:text-white">State:</label>
+                                <input type="text" x-model="formData.driver_state" name="driver_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                              
+                              <div>
+                                  <label class="block mb-2 dark:text-white">City:</label>
+                                  <input type="text" x-model="formData.driver_city" name="driver_city" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                              <div>
+                                <label class="block mb-2 dark:text-white">Zip:</label>
+                                <input type="text" x-model="formData.driver_zip" name="driver_zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+
+                              <div>
+                                <label class="block mb-2 dark:text-white">Office:</label>
+                                <select type="text" x-model="formData.office" name="office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> 
+                                  <option value="" selected disabled> Choose</option>
+                                  <option value="IN">IN</option>
+                                  </select>
+                            </div>
+                              
+                          </div>
+                            <button type="submit" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded" :disabled="isLoading">
+                              <span x-show="!isLoading">Save Changes</span>
+                              <span x-show="isLoading" class="flex items-center justify-center">
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Saving...
+                              </span>
+                            </button>
+                            </form>
+                        </div>
+            
+                       <!-- Basic info Form -->
+                        <div x-show="activeTab === 'basic'">
+                          <h2 class="text-lg font-semibold mb-3 dark:text-white">Basic Information</h2>
+                          <form  @submit.prevent="submitDriverForm('Dbasic')" x-ref="driverBasicForm">
+                              <!-- Paystack Settings -->
+                              <div>
+                                  <h6 class="text-md font-medium mb-3 dark:text-white">Basic Settings</h6>
+                                  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                      <div>
+                                          <label class="block mb-2 dark:text-white">Driver Type:</label>
+                                          <select type="text" x-model="formData.driver_type" name="driver_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <option value="" selected disabled> Choose</option>
+                                            <option value="1">Owner Operator (single Truck)</option>
+                                            <option value="2">Company Driver</option>
+                                            <option value="3">Driver for Fleet owner or Fleet owner Himself</option>
+                                            <option value="4">Temporary Driver</option>
+                                            <option value="5">Rented Driver</option>
+                                            <option value="6">Leased Driver</option>
+                                          </select>
+                                      </div>
+                                      <div>
+                                          <label class="block mb-2 dark:text-white">Emergency contact phone:</label>
+                                          <input type="text" x-model="formData.emergency_contact_info" name="emergency_contact_info" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                      </div>
+                                      <script>
+                                        $(document).ready(function() {
+                                          $('#hired_on', '#terminated_on').datepicker({
+                                            format: 'yyyy-mm-dd',
+                                            autoclose: true
+                                          });
+                                        })
+                                      </script>
+                                      <div>
+                                        <label class="block mb-2 dark:text-white">Hired on:</label>
+                                        <input type="text" x-model="formData.hired_on" name="hired_on" id="hired_on" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+
+                                    <div>
+                                        <label class="block mb-2 dark:text-white">terminated_on:</label>
+                                        <input type="text" x-model="formData.terminated_on" name="terminated_on" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                  </div> <!-- ✅ Correctly closed grid div -->
+                              </div>
+
+                              <!-- Flutterwave Settings -->
+                              <div>
+                                  <!-- <h6 class="text-md font-medium mb-3 dark:text-white">Flutterwave Settings</h6> -->
+                                  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                      <div>
+                                          <label class="block mb-2 dark:text-white">Years of Experience:</label>
+                                          <input type="text" x-model="formData.years_of_experience" name="years_of_experience" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                      </div>
+                                      <div>
+                                          <label class="block mb-2 dark:text-white">tags:</label>
+                                          <input type="text" x-model="formData.tags" name="tags" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                      </div>
+                                      <div>
+                                        <label class="block mb-2 dark:text-white">Endorsements:</label>
+                                        <input type="text" x-model="formData.endorsements" name="endorsements" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                    <div>
+                                        <label class="block mb-2 dark:text-white">Rating:</label>
+                                        <input type="text" x-model="formData.rating" name="rating" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                  </div>
+                              </div>
+
+                               <!-- Razor Settings -->
+                              <div>
+                                <!-- <h6 class="text-md font-medium mb-3 dark:text-white">RazorPay Settings</h6> -->
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                    <div>
+                                        <label class="block mb-2 dark:text-white">Note About choices Made:</label>
+                                        <input type="text" x-model="formData.notes_about_the_choices_made" name="notes_about_the_choices_made" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                    <div>
+                                        <label class="block mb-2 dark:text-white">Pay Via:</label>
+                                        <input type="text" x-model="formData.pay_via" name="pay_via" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                    <script>
+                                      $(document).ready(function () {
+                              
+                                          $(function () {
+                                              $("#start_date").
+                                              datepicker();
+                                          });
+                                      }) 
+                                  </script>
+                                    <div>
+                                      <label class="block mb-2 dark:text-white">Company name paid to:</label>
+                                      <input type="text" x-model="formData.company_name_paid_to" name="company_name_paid_to" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                  </div>
+                                  <div>
+                                      <label class="block mb-2 dark:text-white">Employer ID #</label>:</label>
+                                      <input type="text" x-model="formData.employer_identification_number" name="employer_identification_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                                  </div>
+                                  </div>
+                              </div>
+
+                              <div>
+                                <!-- <h6 class="text-md font-medium mb-3 dark:text-white">RazorPay Settings</h6> -->
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                    <div>
+                                        <label class="block mb-2 dark:text-white">Settlement Email:</label>
+                                        <input type="text" x-model="formData.send_settlements_mail" name="send_settlements_mail" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                    <div>
+                                        <label class="block mb-2 dark:text-white">Print settlement under this company:</label>
+                                        <input type="text" x-model="formData.print_settlements_under_this_company" name="print_settlements_under_this_company" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                    <div>
+                                      <label class="block mb-2 dark:text-white">Flash notes to dispatch:</label>
+                                      <input type="text" x-model="formData.flash_notes_to_dispatch" name="flash_notes_to_dispatch" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                  </div>
+                                  <div>
+                                      <label class="block mb-2 dark:text-white">Flash notes to payroll:</label>
+                                      <input type="text" x-model="formData.flash_notes_to_payroll" name="flash_notes_to_payroll" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                                  </div>
+                                  </div>
+                              </div>
+
+                              
+                              <div>
+                                <!-- <h6 class="text-md font-medium mb-3 dark:text-white">RazorPay Settings</h6> -->
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                    <div>
+                                        <label class="block mb-2 dark:text-white">internal_notes:</label>
+                                        <input type="text" x-model="formData.internal_notes" name="internal_notes" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                    <div>
+                                        <label class="block mb-2 dark:text-white">Driver Status:</label>
+                                        <select type="text" x-model="formData.driver_status" name="driver_status" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                          <option value="active">Active</option>
+                                          <option value="Inactive">Inactive</option>
+                                        </select>
+                                    </div>
+                                  </div>
+                              </div>
+                              
+                               <!-- Stripe Settings -->
+                               <!-- <div>
+                                <h6 class="text-md font-medium mb-3 dark:text-white">Stripe Settings</h6>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <div>
+                                        <label class="block mb-2 dark:text-white">Public Key:</label>
+                                        <input type="text" x-model="formData.stripe_pubKey" name="stripe_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXX">
+                                    </div>
+                                    <div>
+                                        <label class="block mb-2 dark:text-white">Secret Key:</label>
+                                        <input type="text" x-model="formData.stripe_secKey" name="stripe_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
+                                    </div>
+                                  </div>
+                                </div> -->
+                              <!-- <button class="mt-3 bg-blue-600 text-white px-4 py-2 rounded">Save Changes</button> -->
+                              <button type="submit" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded" :disabled="isLoading">
+                                <span x-show="!isLoading">Save Changes</span>
+                                <span x-show="isLoading" class="flex items-center justify-center">
+                                  <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                  </svg>
+                                  Saving...
+                                </span>
+                              </button>
+                          </form>
+                        </div>
+
+            
+            
+                        <!-- Contacts Form -->
+                        <div x-show="activeTab === 'other'">
+                            <h2 class="text-lg font-semibold mb-3">Other Settings</h2>
+                            <form id="DotherForm" @submit.prevent="submitDriverForm('Dother')" x-ref="driverOtherForm">
+                              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  <div>
+                                    <label class="inline-flex items-center mb-5 cursor-pointer">
+                                      <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 mr-40">Access To Mobile App?</span>
+                                      <input type="checkbox" x-model="formData.isAccessToMobileApp" name="isAccessToMobileApp" value="" class="sr-only peer" @change="formData.isAccessToMobileApp = $event.target.checked ? 1 : 0">
+                                      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                                    </label>
+                                    
+                                  </div>
+                                  
+                              </div>
+                              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                  <label class="inline-flex items-center mb-5 cursor-pointer">
+                                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 mr-40">Show payment in mobile App?</span>
+                                    <input type="checkbox" x-model="formData.mobile_settings" name="mobile_settings" value="0" class="sr-only peer" @change="formData.mobile_settings = $event.target.checked ? 1 : 0">
+                                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                                  </label>
+                                  
+                                </div>
+                                
+                                </div>
+                                  <button class="mt-3 bg-blue-600 text-white px-4 py-2 rounded">Save Changes</button>
+                                </form>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+              </template>
+              <!-- Driver update ends -->
             
             </div>
 
@@ -819,6 +1141,7 @@
     activeTab: 'general',
     activeTab: 'address',
     isLoading: false,
+    userRole: window.userRole,
     user: {
       name: '',
       email: ''
@@ -850,12 +1173,76 @@
       enable_2fa: '',
       logo1: '',
 
+
+      //customer and Driver variables
+      customer_phone: '',
+      customer_primary_address: '',
+      customer_secondary_address: '',
+      customer_country: '',
+      customer_state: '',
+      customer_zip: '',
+      customer_office: '',
+
+      invoice_footer_note: '',
+      customer_sales_rep: '',
+      fax_no: '',
+      toll_free: '',
+      note: '',
+      internal_note: '',
+      tag: '',
+      flash_note_for_drivers: '',
+      flash_note_for_accounting: '',
+      other_notes: '',
+      start_date: '',
+      credit_limit: '',
+
+      isSubAccount: '',
+      subAccount_of: '',
+      isFactoredInvoice: '',
+      factoringCompany: '',
+      isPrepaid: '',
+      isNonBillable: '',
+
+      //driver address
+      driver_phone: '',
+      driver_phone_carrier: '',
+      driver_primary_address: '',
+      driver_secondary_address: '',
+      driver_country: '',
+      driver_state: '',
+      driver_city: '',
+      driver_zip: '',
+      office: '',
+
+      //basic
+      driver_type: '',
+      emergency_contact_info: '',
+      hired_on: '',
+      terminated_on: '',
+      years_of_experience: '',
+      tags: '',
+      endorsements: '',
+      rating: '',
+      notes_about_the_choices_made: '',
+      pay_via: '',
+      company_name_paid_to: '',
+      employer_identification_number: '',
+      send_settlements_mail: '',
+      print_settlements_under_this_company: '',
+      flash_notes_to_dispatch: '',
+      flash_notes_to_payroll: '',
+      internal_notes: '',
+      driver_status: '',
+
+      isAccessToMobileApp: '',
+      mobile_settings: '',
       
     },
     
     init() {
       this.fetchUserData();
       this.fetchSettings();
+      //this.submitCustomerForm();
     },
     
     async fetchUserData() {
@@ -869,6 +1256,7 @@
         if (response.ok) {
           const data = await response.json();
           console.log("User data", data);
+          //console.log("User Role", userRole);
           this.user = {
             name: data.name,
             email: data.email
@@ -926,6 +1314,79 @@
       }
     },
     
+    async submitCustomerForm(tabName) {
+      this.isLoading = true;
+      const form = this.$refs[`${tabName}Form`];
+      const formData = new FormData(form);
+      //console.log(tabName);
+      // console.log("FormData Contents:");
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ": " + pair[1]);
+        }
+              console.log(localStorage.getItem('auth_token'))
+         //return
+      try {
+        const response = await fetch(`${requestURL}/settings/${tabName}`, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+            'Accept': 'application/json',
+          }
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          createToast('success', data.message);	
+        } else {
+          createToast('error', data.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        createToast('error','Network error. Please try again.');
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    
+    async submitDriverForm(tabName) {
+      this.isLoading = true;
+      const form = this.$refs[`${tabName}Form`];
+      const formData = new FormData(form);
+      //console.log(tabName);
+      // console.log("FormData Contents:");
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ": " + pair[1]);
+        }
+              console.log(localStorage.getItem('auth_token'))
+         //return
+      try {
+        const response = await fetch(`${requestURL}/settings/${tabName}`, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+            'Accept': 'application/json',
+          }
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          createToast('success', data.message);	
+        } else {
+          createToast('error', data.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        createToast('error','Network error. Please try again.');
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
     async submitForm(tabName) {
       this.isLoading = true;
       const form = this.$refs[`${tabName}Form`];

@@ -246,10 +246,12 @@
                 })
                     .then(response => {
                         if (response.ok) {
-                            alert('Item deleted successfully');
+                          createToast('success', 'Carrier deleted succesfully');
+                            //alert('Item deleted successfully');
                             this.fetchData(); 
                         } else {
-                            alert('Failed to delete item');
+                            //alert('Failed to delete item');
+                            createToast('error', 'Failed to delete Item');
                         }
                     })
                     .catch(error => {

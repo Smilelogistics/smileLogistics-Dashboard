@@ -103,12 +103,16 @@
                               }
                             </style>
                             </style>
-                            <div class="choose-seleckt">
+                            <div class="choose-seleckt" style="z-index: 1 !important;">
                                 <label class="block text-gray-700 dark:text-gray-300">State served</label>
-                                <select x-model="formData.state_served" name="state_served" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select" multiple>
-                                    <option value="3">First</option>
-                                    <option value="2">First</option>
-                                    <option value="4">First</option>
+                                <select x-model="formData.state_served" name="state_served[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select" multiple>
+                                    <template x-for="(states, country) in allStates" :key="country">
+                                        <optgroup :label="country">
+                                            <template x-for="state in states" :key="state">
+                                                <option x-text="state" :value="state"></option>
+                                            </template>
+                                        </optgroup>
+                                    </template>
                                 </select>
 
                             </div>
@@ -280,7 +284,7 @@
                         </div>
                         <div id="choose-select">
                             <label class="block text-gray-700 dark:text-gray-300">Carrier profile / options</label>
-                            <select multiple x-model="formData.carrier_profile" name="carrier_profile" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select" >
+                            <select multiple x-model="formData.carrier_profile" name="carrier_profile[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select" >
                                 <option value="drayage">Drayage</option>
                                 <option value="over_the_road">Over the road >500 Miles</option>
                                 <option value="warehouse">Warehouse</option>
@@ -308,7 +312,7 @@
                         </div>
                         <div id="choose-select">
                             <label class="block text-gray-700 dark:text-gray-300">Carries these cargo</label>
-                            <select x-model="formData.carries_this_cargo" name="carries_this_cargo" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select" multiple>
+                            <select x-model="formData.carries_this_cargo" name="carries_this_cargo[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select" multiple>
                                 <!-- <option value="" selected disabled>Select </option> -->
                                 <option value="general_fright">General Fright</option>
                                 <option value="intermodial_containers">General Containers</option>
@@ -435,7 +439,7 @@
                 step: localStorage.getItem('carrier_step') ? parseInt(localStorage.getItem('carrier_step')) : 1,
                 formData: JSON.parse(localStorage.getItem('formData')) || {
                     name: '',
-                    state_served: '',
+                    state_served: [],
                     code: '',
                     offices: '',
                     type: '',
@@ -459,14 +463,34 @@
                     no_of_drivers: '',
                     power_units: '',
                     other_equipments: '',
-                    carrier_profile: '',
+                    carrier_profile: [],
                     rating: '',
                     note_about_choices: '',
-                    carries_this_cargo: '',
+                    carries_this_cargo: [],
                     carrier_start_date: '',
                     flash_note_to_riders_about_this_carrier: '',
                     flash_note_to_payroll_about_this_carrier: '',
                     internal_note: '',
+                },
+                selectedState: '',
+                allStates: {
+                    'United States': [
+                        'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
+                        'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa',
+                        'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan',
+                        'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+                        'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio',
+                        'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
+                        'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
+                        'Wisconsin', 'Wyoming'
+                    ],
+                    'Nigeria': [
+                        'Abia', 'Adamawa', 'Akwa Ibom', 'Anambra', 'Bauchi', 'Bayelsa', 'Benue', 'Borno',
+                        'Cross River', 'Delta', 'Ebonyi', 'Edo', 'Ekiti', 'Enugu', 'FCT - Abuja', 'Gombe',
+                        'Imo', 'Jigawa', 'Kaduna', 'Kano', 'Katsina', 'Kebbi', 'Kogi', 'Kwara', 'Lagos',
+                        'Nasarawa', 'Niger', 'Ogun', 'Ondo', 'Osun', 'Oyo', 'Plateau', 'Rivers', 'Sokoto',
+                        'Taraba', 'Yobe', 'Zamfara'
+                    ]
                 },
                 totalSteps: 3, // Adjust based on actual number of steps
                 nextStep() {
@@ -491,8 +515,8 @@
                     // for (let pair of formData.entries()) {
                     //     console.log(pair[0] + ": " + pair[1]);
                     // }
-                    //  console.log(localStorage.getItem('auth_token'))
-                     //return
+                     console.log(localStorage.getItem('auth_token'))
+                    // return
                     $.ajax({
                         url: requestURL+'/carriers/create',
                         type: 'POST',

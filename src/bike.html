@@ -8,16 +8,9 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Bike | smileslogistics</title>
-     <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- jQuery UI -->
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-
-  <!-- Chosen Plugin -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
+    
+    <include src="./partials/mainhead.html"> </include>
+    <script src="./assets/js/main.js"></script>
   </head>
   <body
     x-data="{ page: 'truck', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -114,9 +107,8 @@
                             </div>
                             <div id="chosen-select">
                                 <label class="block text-gray-700 dark:text-gray-300">Drivers Assigned</label>
-                                <select x-model="formData.driver_id" name="driver_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select">
+                                <select x-model="formData.driver_id" name="driver_id" id="driver_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <!-- <option value="" selected disabled>Select Type</option> -->
-                                    <option value="IN">List of Drivers</option>
                                    
                                 </select>
                             </div>
@@ -190,12 +182,12 @@
           return {
               step: localStorage.getItem('Bike_step') ? parseInt(localStorage.getItem('Bike_step')) : 1,
               formData: JSON.parse(localStorage.getItem('formData')) || {
-                  full_name: '',
-                  email: '',
-                  phone: '',
-                  charge_amount: '',
-                  charge_type: '',
-                  currency: '',
+                bike_type: '',
+                bike_office: '',
+                driver_id: '',
+                make_model: '',
+                bike_number: '',
+                license_plate_number: '',
               },
               nextStep() {
                   this.step++;
@@ -236,6 +228,7 @@
     // Trigger auto-save when selection changes
     //handleInputChange();
 }
+populateDriverSelect()
       </script>
       <script>
         function duplicateContainer() {

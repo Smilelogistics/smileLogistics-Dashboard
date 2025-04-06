@@ -374,7 +374,7 @@ try {
           <!-- Menu Item Dashboard -->
           <!-- Menu Item Business Management -->
            
-          <!-- <template x-if="userRole === 'superadministrator' || userRole === 'businessadministrator'"> -->
+           <template x-if="userRole === 'superadministrator' || userRole === 'businessadministrator'">
           <li>
             <a
               href="#"
@@ -442,17 +442,19 @@ try {
                     class="menu-dropdown-item group"
                     :class="page === 'Users' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
                   >
-                    All Businesses
+                    Businesses
                   </a>
                 </li>
               </ul>
             </div>
             <!-- Dropdown Menu End -->
           </li>
+          </template>
 
           <!-- Business Management Ends -->
 
           <!-- Menu Item Business and Invoices -->
+          <template x-if="userRole === 'superadministrator'">
           <li>
             <a
               href="#"
@@ -746,7 +748,7 @@ try {
               </li>
     
               <!-- Miscellanious Ends -->
-
+            </template>
               
 
               <!-- Menu item manage shipment -->

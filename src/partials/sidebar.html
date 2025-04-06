@@ -378,13 +378,13 @@ try {
           <li>
             <a
               href="#"
-              @click.prevent="selected = (selected === 'Business Management' ? '':'Business Management')"
+              @click.prevent="selected = (selected === 'Manage Users' ? '':'Manage Users')"
               class="menu-item group"
-              :class=" (selected === 'Business Management') || (page === 'Users' || page === 'formLayout' || page === 'proFormElements' || page === 'proFormLayout') ? 'menu-item-active' : 'menu-item-inactive'"
+              :class=" (selected === 'Manage Users') || (page === 'Users' || page === 'formLayout' || page === 'proFormElements' || page === 'proFormLayout') ? 'menu-item-active' : 'menu-item-inactive'"
             >
             
             <svg
-            :class="(selected === 'Business Management') || (page === 'Users' || page === 'formLayout' || page === 'proFormElements' || page === 'proFormLayout') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+            :class="(selected === 'Manage Users') || (page === 'Users' || page === 'formLayout' || page === 'proFormElements' || page === 'proFormLayout') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
             width="24"
             height="24"
             viewBox="0 0 24 24"
@@ -405,12 +405,12 @@ try {
                 class="menu-item-text"
                 :class="sidebarToggle ? 'lg:hidden' : ''"
               >
-              Business Management
+              Manage Users
               </span>
 
               <svg
                 class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
-                :class="[(selected === 'Business Management') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
+                :class="[(selected === 'Manage Users') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
@@ -430,7 +430,7 @@ try {
             <!-- Dropdown Menu Start -->
             <div
               class="overflow-hidden transform translate"
-              :class="(selected === 'Business Management') ? 'block' :'hidden'"
+              :class="(selected === 'Manage Users') ? 'block' :'hidden'"
             >
               <ul
                 :class="sidebarToggle ? 'lg:hidden' : 'flex'"

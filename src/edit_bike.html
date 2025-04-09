@@ -7,8 +7,7 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Bike | smileslogistics</title>
-    
+    <title>Edit Bike | </title>
     <include src="./partials/mainhead.html"> </include>
     <script src="./assets/js/main.js"></script>
   </head>
@@ -71,7 +70,7 @@
                 </ol>
                 
             
-                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newBike">
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="editBikeForm">
                     <!-- Step 1: Basic Info -->
                     <div x-show="step === 1" >
                         <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
@@ -80,7 +79,7 @@
                                 <input type="text" x-model="formData.customer_name" name="customer_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div> -->
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">bike Type</label>
+                                <label class="block text-gray-700 dark:text-gray-300">Bike Type</label>
                                 <select x-model="formData.bike_type" name="bike_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Select Type</option>
                                     <option value="owner_operator">Owner Operator Bike</option>
@@ -98,18 +97,20 @@
                                     vertical-align: middle !important;
                                   }
                             </style>
-                            <div >
+                            <div id="">
                                 <label class="block text-gray-700 dark:text-gray-300">Bike Office</label>
                                 <select x-model="formData.bike_office" name="bike_office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Select Type</option>
                                     <option value="IN">IN</option>
                                 </select>
                             </div>
-                            <div id="chosen-select">
-                                <label class="block text-gray-700 dark:text-gray-300">Drivers Assigned</label>
+                            <div id="">
+                                <label class="block text-gray-700 dark:text-gray-300">Drivers Assigned (<span class="text-gray-700 dark:text-gray-300" x-text="selectedDriver ? selectedDriver.fname + ' ' + selectedDriver.lname : 'No Driver'"></span>)</label>
+                                
                                 <select x-model="formData.driver_id" name="driver_id" id="driver_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                    <!-- <option value="" selected disabled>Select Type</option> -->
-                                   
+                                    <option value="" selected disabled>Select Type</option>
+                                    <option value="">List of Drivers</option>
+                                
                                 </select>
                             </div>
                         </div>
@@ -133,10 +134,14 @@
 
                     <!-- Step 2: Backup Docs -->
                     <div x-show="step === 2" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                          <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
-                          <input type="file" x-model="formData.file_path" multiple name="file_path" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount">
-                      </div>
+                        <template x-for="(upload, index) in formData.bike_docs" :key="index">
+                            <h3 class="font-medium text-gray-900 dark:text-gray-100">Document #<span x-text="index + 1"></span></h3>
+                            <img :src="`https://laravel-production-077b.up.railway.app/storage/${upload.file_path}`" class="w-32 h-32 object-cover rounded-md" alt="Document Image" />
+                        </template>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
+                            <input type="file" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount" id="file_path">
+                        </div>
                     </div>
                     <!-- Navigation Buttons -->
                     <div class="flex justify-between mt-6">
@@ -178,104 +183,153 @@
     <!-- ===== Page Wrapper End ===== -->
 
     <script>
-      function stepperForm() {
-          return {
-              step: localStorage.getItem('Bike_step') ? parseInt(localStorage.getItem('Bike_step')) : 1,
-              formData: JSON.parse(localStorage.getItem('formData')) || {
-                bike_type: '',
-                bike_office: '',
-                driver_id: '',
-                make_model: '',
-                bike_number: '',
-                license_plate_number: '',
-              },
-              nextStep() {
-                  this.step++;
-                  localStorage.setItem('Bike_step', this.step);
-              },
-              prevStep() {
-                  this.step--;
-                  localStorage.setItem('Bike_step', this.step);
-              },
-              saveProgress() {
-                  localStorage.setItem('formData', JSON.stringify(this.formData));
-                  localStorage.setItem('Bike_step', this.step);
-                alert("Progress saved successfully!");
-                
-              },
-              saveAndSubmit() {
-                let form = document.getElementById("newBike");
-                    let formData = new FormData(form);
-                    // for (let pair of formData.entries()) {
-                    //     console.log(pair[0] + ": " + pair[1]);
-                    // }
-                    //  console.log(localStorage.getItem('auth_token'))
-                    // return
-                    $.ajax({
-                        url: requestURL+'/bikes/create',
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
+        //we use use alpine js for most of the updates 
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('stepperForm', () => ({
+                step: localStorage.getItem('edit_bike') ? parseInt(localStorage.getItem('edit_bike')) : 1,
+                formData:{
+                    bike_type: '',
+                    bike_office: '',
+                    driver_id: '',
+                    make_model: '',
+                    bike_number: '',
+                    license_plate_number: '',
+                    driver: [],
+                    bike_docs: [],
+                },
+                selectedDriver: null,
+                step: 1,
+
+                init() {
+                    //this.fetchData();
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const encodedId = urlParams.get('id');
+                    if (encodedId) {
+                        this.id = atob(encodedId);
+                        this.fetchData();
+                    } else {
+                        console.error('No ID found in the URL');
+                    }
+                },
+
+                fetchData() {
+                    fetch(requestURL + '/bikes/bike/' + this.id, {
                         headers: {
                             'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
                             'Accept': 'application/json'
-                        },
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        this.formData = data.bike;
+                        console.log('Bike Data:',data.bike);
+                            let bike = Array.isArray(data.bike) ? data.bike[0] : data.bike;
 
+                        if (!bike) {
+                            console.error("No bike data found");
+                            return;
+                        }
+
+                    
+                        const bikeDriver = bike.driver ? {
+                            id: bike.driver.driver?.id || '',
+                            fname: bike.driver?.user?.fname || 'Unknown',
+                            lname: bike.driver?.user?.lname || '',
+                            email: bike.driver?.user?.email || '',
+                        } : null;
+
+                        this.formData = {
+                            bike_type: bike.bike_type,
+                            bike_office: bike.bike_office,
+                            driver_id: bike.driver_id,
+                            make_model: bike.make_model,
+                            bike_number: bike.bike_number,
+                            license_plate_number: bike.license_plate_number,
+                            bike_driver: bikeDriver,
+                            bike_docs: bike.bike_docs?.map(tdoc => ({
+                                id: tdoc.id || '',
+                                file_path: tdoc.file_path || 'Unknown',
+                            })) || [],
+                        };
+
+                        // Set the selected driver (if available)
+                        this.selectedDriver = bikeDriver || { fname: 'No Driver', lname: '' };
+                        this.formData.driver_id = this.selectedDriver.id || '';
+                        
+                    })
+                },
+                nextStep() {
+                        this.step++;
+                        localStorage.setItem('edit_bike', this.step);
+                    },
+                    prevStep() {
+                        this.step--;
+                        localStorage.setItem('edit_bike', this.step);
+                    },
+                saveProgress() {
+                    localStorage.setItem('formData', JSON.stringify(this.formData));
+                },
+                saveAndSubmit(e) {
+                    e.preventDefault();
+                    
+                    let form = document.getElementById("editBikeForm");
+                    let formData = new FormData(form);
+
+                    formData.append("_method", "PUT");
+                                    for (let pair of formData.entries()) {
+                                        console.log(pair[0] + ": " + pair[1]);
+                                    }
+                                        console.log(localStorage.getItem('auth_token'))
+                                    
+                        let currentDriverId = this.formData.driver_id || null;
+                    let currentbikeType = this.formData.bike_type || null;
+                    let currentOffice = this.formData.bike_office || null;
+
+                    let driverId = formData.get("driver_id") || currentDriverId;
+                    let bikeType = formData.get("bike_type") || currentbikeType;
+                    let office = formData.get("bike_office") || currentOffice;
+
+                    // Ensure `null` is NOT sent as a string
+                    formData.set("driver_id", driverId || "");
+                    formData.set("bike_type", bikeType || "");
+                    formData.set("bike_office", office || "");
+
+                    // 🚀 Debugging: Log all FormData values
+                    console.log("FormData Debugging:");
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+
+                    $.ajax({
+                        url: requestURL + "/bikes/update/" + this.id,
+                        type: "POST",
+                        data: formData,
+                        processData: false, 
+                        contentType: false,
+                        headers: {
+                            "Authorization": "Bearer " + localStorage.getItem("auth_token"),
+                            "Accept": "application/json"
+                        },
                         beforeSend:function(){
                             document.getElementById("Ajaxbackdrop").style.display = 'flex'
                         },
 
                         success: (response) => {
+                            console.log("Success:", response);
                             document.getElementById("Ajaxbackdrop").style.display = 'none'
-                            //console.log('Form submitted successfully:', response);
                             createToast('success', response.message);
-                            localStorage.removeItem('formData');
-                            localStorage.removeItem('bike_step');
-                            
-                            this.step = 1;
-                            //alert("Form submitted successfully!");
                         },
-                         error: (xhr, status, error) => {
+                        error: (xhr) => {
+                            console.error("Error:", xhr.responseText);
                             document.getElementById("Ajaxbackdrop").style.display = 'none'
-                            console.error('Form submission failed:', xhr.responseText);
-
-                        try {
-                            let response = JSON.parse(xhr.responseText);
-                            
-                            if (response.errors) {
-                                let messages = Object.values(response.errors).flat().join('<br>'); // Combines multiple errors
-                                createToast('error', messages);
-                            } else if (response.message) {
-                                createToast('error', response.message);
-                            } else {
-                                createToast('error', 'An unexpected error occurred. Please try again.');
-                            }
-                        } catch (e) {
-                            createToast('error', 'An error occurred. Please check your input and try again.');
+                            createToast('error', xhr.responseText);
                         }
-                    }
                     });
-
-                    // Clear stored data after submission
-                    localStorage.removeItem('formData');
-                    localStorage.removeItem('Bike_step');
-
-                    // Reset form data
-                    this.formData = {
-                        bike_type: '',
-                        bike_office: '',
-                        driver_id: '',
-                        make_model: '',
-                        bike_number: '',
-                        license_plate_number: '',
-                    };
-                    //this.step = 1;
-                  
-                  //alert("Form submitted successfully!");
-              }
-          }
-      }
+                }
+            }));
+        })
+    
+        populateDriverSelect();
 
 
       function handleLoadTypeChange(value) {
@@ -295,7 +349,6 @@
     // Trigger auto-save when selection changes
     //handleInputChange();
 }
-populateDriverSelect()
       </script>
       <script>
         function duplicateContainer() {

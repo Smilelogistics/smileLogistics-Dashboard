@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Edit Bike | </title>
+    <include src="./partials/mainhead.html"> </include>
+    <script src="./assets/js/main.js"></script>
+  </head>
+  <body
+    x-data="{ page: 'Consolidate shipment', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
+            <!-- Breadcrumb Start -->
+            <div x-data="{ pageName: `Consolidate Shipment`}">
+              <include src="./partials/breadcrumb.html" />
+            </div>
+            <!-- Breadcrumb End -->
+
+            <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+              <div x-data="stepperForm()" class="w-full mx-auto px-4">
+                <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xs dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 rtl:space-x-reverse">
+                    <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 1, 'text-gray-500 dark:text-gray-400': step !== 1 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 1, 'border-gray-500 dark:border-gray-400': step !== 1 }">
+                            1
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Basic Info</span>
+                    </li>
+                
+                    <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 2, 'text-gray-500 dark:text-gray-400': step !== 2 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 2, 'border-gray-500 dark:border-gray-400': step !== 2 }">
+                            2
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Assign Driver</span>
+                    </li>
+
+                    <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 3, 'text-gray-500 dark:text-gray-400': step !== 3 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 3, 'border-gray-500 dark:border-gray-400': step !== 3 }">
+                            3
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Backup Docs</span>
+                    </li>
+                </ol>
+                
+            
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="ConsolidateShipmentForm">
+                    <!-- Step 1: Basic Info -->
+                    <div x-show="step === 1" >
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                            <!-- <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Customer Name</label>
+                                <input type="text" x-model="formData.customer_name" name="customer_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div> -->
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Consolidation Type</label>
+                                <select x-model="formData.consolidation_type" name="consolidation_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select Type</option>
+                                    <option value="personal">Personal</option>
+                                    <option value="commercial">Commercial</option>
+                                </select>
+                            </div>
+                            
+                            <div id="">
+                                <label class="block text-gray-700 dark:text-gray-300">Consolidate For</label>
+                                <input type="text" x-model="formData.consolidated_for" name="consolidated_for" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Customer Email</label>
+                                <input type="text" x-model="formData.customer_email" name="customer_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Customer Phone</label>
+                                <input type="text" x-model="formData.customer_phone" name="customer_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                            <div id="">
+                                <label class="block text-gray-700 dark:text-gray-300">Reciever Name</label>
+                                <input type="text" x-model="formData.receiver_name" name="receiver_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Reciever Address</label>
+                                <input type="text" x-model="formData.receiver_address" name="receiver_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Reciever Phone</label>
+                                <input type="text" x-model="formData.receiver_phone" name="receiver_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Reciever Email</label>
+                                <input type="text" x-model="formData.receiver_email" name="receiver_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                        </div>
+
+                        
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                            
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Origin Warehouse</label>
+                                <select x-model="formData.origin_warehouse" name="origin_warehouse" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select Type</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Destination Warehouse</label>
+                                <select x-model="formData.destination_warehouse" name="destination_warehouse" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select Type</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Departure Date</label>
+                                <input type="text" x-model="formData.expected_departure_date" name="expected_departure_date" id="expected_departure_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Arrival Date</label>
+                                <input type="text" id="expected_arrival_date" x-model="formData.expected_arrival_date" name="expected_arrival_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                            <div id="">
+                                <label class="block text-gray-700 dark:text-gray-300">Total Weight</label>
+                                <input type="text" x-model="formData.total_weight" name="total_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Total Shipping Cost</label>
+                                <input type="text" x-model="formData.total_shipping_cost" name="total_shipping_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Handling Fee</label>
+                                <input type="text" x-model="formData.handling_fee" name="handling_fee" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            
+                            
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Payment Status</label>
+                                <select x-model="formData.payment_status" name="payment_status" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select Type</option>
+                                    <option value="Paid">Paid</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Partially Paid">Partially Paid</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Payment Method</label>
+                                <select x-model="formData.payment_method" name="payment_method" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select Type</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Card">Card</option>
+                                    <option value="Transfer">Transfer</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div id="">
+                                <label class="block text-gray-700 dark:text-gray-300">Internal Notes</label>
+                                <textarea cols="1" rows="1" type="text" x-model="formData.total_weight" name="total_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" > </textarea>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Step 2: Assign Driver -->
+                    <div id="">
+                        <label class="block text-gray-700 dark:text-gray-300">Drivers Assigned (<span class="text-gray-700 dark:text-gray-300" x-text="selectedDriver ? selectedDriver.fname + ' ' + selectedDriver.lname : 'No Driver'"></span>)</label>
+                        
+                        <select x-model="formData.driver_id" name="driver_id" id="driver_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <option value="" selected disabled>Select Type</option>
+                            <option value="">List of Drivers</option>
+                        
+                        </select>
+                    </div>
+                    </div>
+
+                    <!-- Step 2: Backup Docs -->
+                    <div x-show="step === 3" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
+                            <input type="file" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount" id="file_path">
+                        </div>
+                    </div>
+
+
+                    <!-- Navigation Buttons -->
+                    <div class="flex justify-between mt-6">
+                        <!-- Previous Button -->
+                        <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white"
+                            x-show="step > 1" @click="step = step - 1">
+                            Previous
+                        </button>
+
+                        <!-- Next Button (Only shows when on step 1) -->
+                        <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
+                            x-show="step < 3" @click="step = step + 1">
+                            Next
+                        </button>
+
+                        <!-- Save & Continue Later Button -->
+                        <button type="button" class="px-4 py-2 bg-yellow-500 text-white rounded dark:bg-yellow-400"
+                            @click="saveProgress">
+                            Save & Continue Later
+                        </button>
+
+                        <!-- Submit Button (Only shows on step 2) -->
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
+                            x-show="step === 3">
+                            Submit
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+            </div>
+
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+
+    <script>
+        //we use use alpine js for most of the updates 
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('stepperForm', () => ({
+                step: localStorage.getItem('edit_bike') ? parseInt(localStorage.getItem('edit_bike')) : 1,
+                formData:{
+                    bike_type: '',
+                    bike_office: '',
+                    driver_id: '',
+                    make_model: '',
+                    bike_number: '',
+                    license_plate_number: '',
+                    driver: [],
+                    bike_docs: [],
+                },
+                selectedDriver: null,
+                step: 1,
+
+                init() {
+                    //this.fetchData();
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const encodedId = urlParams.get('id');
+                    if (encodedId) {
+                        this.id = atob(encodedId);
+                        this.fetchData();
+                    } else {
+                        console.error('No ID found in the URL');
+                    }
+                },
+
+                fetchData() {
+                    fetch(requestURL + '/bikes/bike/' + this.id, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        this.formData = data.bike;
+                        console.log('Bike Data:',data.bike);
+                            let bike = Array.isArray(data.bike) ? data.bike[0] : data.bike;
+
+                        if (!bike) {
+                            console.error("No bike data found");
+                            return;
+                        }
+
+                    
+                        const bikeDriver = bike.driver ? {
+                            id: bike.driver.driver?.id || '',
+                            fname: bike.driver?.user?.fname || 'Unknown',
+                            lname: bike.driver?.user?.lname || '',
+                            email: bike.driver?.user?.email || '',
+                        } : null;
+
+                        this.formData = {
+                            bike_type: bike.bike_type,
+                            bike_office: bike.bike_office,
+                            driver_id: bike.driver_id,
+                            make_model: bike.make_model,
+                            bike_number: bike.bike_number,
+                            license_plate_number: bike.license_plate_number,
+                            bike_driver: bikeDriver,
+                            bike_docs: bike.bike_docs?.map(tdoc => ({
+                                id: tdoc.id || '',
+                                file_path: tdoc.file_path || 'Unknown',
+                            })) || [],
+                        };
+
+                        // Set the selected driver (if available)
+                        this.selectedDriver = bikeDriver || { fname: 'No Driver', lname: '' };
+                        this.formData.driver_id = this.selectedDriver.id || '';
+                        
+                    })
+                },
+                nextStep() {
+                        this.step++;
+                        localStorage.setItem('edit_bike', this.step);
+                    },
+                    prevStep() {
+                        this.step--;
+                        localStorage.setItem('edit_bike', this.step);
+                    },
+                saveProgress() {
+                    localStorage.setItem('formData', JSON.stringify(this.formData));
+                },
+                saveAndSubmit(e) {
+                    e.preventDefault();
+                    
+                    let form = document.getElementById("editBikeForm");
+                    let formData = new FormData(form);
+
+                    formData.append("_method", "PUT");
+                                    for (let pair of formData.entries()) {
+                                        console.log(pair[0] + ": " + pair[1]);
+                                    }
+                                        console.log(localStorage.getItem('auth_token'))
+                                    
+                        let currentDriverId = this.formData.driver_id || null;
+                    let currentbikeType = this.formData.bike_type || null;
+                    let currentOffice = this.formData.bike_office || null;
+
+                    let driverId = formData.get("driver_id") || currentDriverId;
+                    let bikeType = formData.get("bike_type") || currentbikeType;
+                    let office = formData.get("bike_office") || currentOffice;
+
+                    // Ensure `null` is NOT sent as a string
+                    formData.set("driver_id", driverId || "");
+                    formData.set("bike_type", bikeType || "");
+                    formData.set("bike_office", office || "");
+
+                    // 🚀 Debugging: Log all FormData values
+                    console.log("FormData Debugging:");
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+
+                    $.ajax({
+                        url: requestURL + "/bikes/update/" + this.id,
+                        type: "POST",
+                        data: formData,
+                        processData: false, 
+                        contentType: false,
+                        headers: {
+                            "Authorization": "Bearer " + localStorage.getItem("auth_token"),
+                            "Accept": "application/json"
+                        },
+                        beforeSend:function(){
+                            document.getElementById("Ajaxbackdrop").style.display = 'flex'
+                        },
+
+                        success: (response) => {
+                            console.log("Success:", response);
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            createToast('success', response.message);
+                        },
+                        error: (xhr) => {
+                            console.error("Error:", xhr.responseText);
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            createToast('error', xhr.responseText);
+                        }
+                    });
+                }
+            }));
+        })
+    
+        populateDriverSelect();
+
+
+      function handleLoadTypeChange(value) {
+    if (value === 'import') {
+        console.log(`Load type changed to ${value}`);
+        // You can add specific logic for import/export here
+        // For example, show/hide specific form sections
+        document.getElementById('container').style.display = '';
+        // Example: Show a message or change UI elements
+        //alert(`Selected load type: ${value}`);
+        
+        // You could show/hide specific form sections
+        // document.getElementById('importSection').style.display = value === 'import' ? 'block' : 'none';
+        // document.getElementById('exportSection').style.display = value === 'export' ? 'block' : 'none';
+    }
+    
+    // Trigger auto-save when selection changes
+    //handleInputChange();
+}
+      </script>
+      <script>
+        function duplicateContainer() {
+            var container = document.getElementById("container");
+            var containerList = document.getElementById("containerList");
+    
+            // Clone container and remove display:none
+            var newContainer = container.cloneNode(true);
+            newContainer.style.display = "block";
+    
+            // Append new container
+            containerList.appendChild(newContainer);
+        }
+
+        function removeContainer(element) {
+            element.parentElement.parentElement.remove();
+        }
+
+        function duplicateBillto()
+        {
+            var billto = document.getElementById("billto");
+            var billtoList = document.getElementById("billtoList");
+            var newBillto = billto.cloneNode(true);
+            billtoList.appendChild(newBillto);
+        }
+
+        function removeBillto(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+        //
+
+        function duplicatePickup()
+        {
+            var pickup = document.getElementById("pickUPP");
+            var pickupList = document.getElementById("pickupList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removePickup(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        
+        function duplicateDropAt()
+        {
+            var pickup = document.getElementById("dropAt");
+            var pickupList = document.getElementById("dropAtList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removeDropAt(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        function duplicateCharges()
+        {
+            var pickup = document.getElementById("chargesDuplicate");
+            var pickupList = document.getElementById("chargesList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removeCharges(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        
+    </script>
+      
+  </body>
+</html>

@@ -10,64 +10,6 @@
     <title>Edit Bike | </title>
     <include src="./partials/mainhead.html"> </include>
     <script src="./assets/js/main.js"></script>
-
-    <script>
-        // blow Up modal
-        $(document).ready(function() {
-            
-            const openModalButton = document.getElementById("openModal");
-                const closeModalButton = document.getElementById("closeModal");
-                const modal = document.getElementById("modal");
-    
-                // Open Modal
-                openModalButton.addEventListener("click", () => {
-                modal.style.display = "flex"; // Show the modal
-                const modalContent = modal.querySelector(".modal-content");
-                modalContent.style.animation = "blowUp 0.3s ease-out forwards"; // Blow up animation
-                });
-    
-                // Close Modal
-                closeModalButton.addEventListener("click", () => {
-                const modalContent = modal.querySelector(".modal-content");
-                modalContent.style.animation = "goBack 0.3s ease-out forwards"; // Go back animation
-    
-                // Hide the modal after the animation completes
-                setTimeout(() => {
-                    modal.style.display = "none";
-                }, 300); // Match the duration of the animation
-                });
-    
-    
-                const canvas = document.getElementById("signature_pad");
-                const clearButton = document.getElementById("clear");
-                const saveButton = document.getElementById("save");
-                
-                // Initialize Signature Pad
-                const signaturePad = new SignaturePad(canvas);
-                
-                // Clear the canvas
-                clearButton.addEventListener("click", () => {
-                signaturePad.clear();
-                });
-                
-                // Save the signature as an image
-                saveButton.addEventListener("click", () => {
-                if (signaturePad.isEmpty()) {
-                    alert("Please provide a signature first.");
-                } else {
-                    const dataURL = signaturePad.toDataURL(); // Get signature as a data URL
-                    console.log(dataURL); // Log the data URL to the console
-                    alert("Signature saved! Check the console for the data URL.");
-                
-                    // Optionally, download the image
-                    const link = document.createElement("a");
-                    link.href = dataURL;
-                    link.download = "signature.png";
-                    link.click();
-                }
-                });
-            })
-    </script>
   </head>
   <body
     x-data="{ page: 'Consolidate shipment', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -106,23 +48,6 @@
               <include src="./partials/breadcrumb.html" />
             </div>
             <!-- Breadcrumb End -->
-
-               <!-- Modal -->
-               <div id="modal" class="modal">
-                <div class="modal-content">
-                <span id="closeModal" class="close">&times;</span>
-                <h2>Sign and Save, then upload the signed signature</h2>
-                <div id="signature-pad" class="signature-pad">
-                    <canvas id="signature_pad" width="400" height="200"></canvas>
-                    <div class="buttons">
-                        <button type="button" id="clear" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Reset</button>
-
-                        <button type="button" id="save" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Save</button>
-                    </div>
-                </div>
-                </div>
-            </div>
-
 
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
               <div x-data="stepperForm()" class="w-full mx-auto px-4">
@@ -165,8 +90,8 @@
                                 <label class="block text-gray-700 dark:text-gray-300">Consolidation Type</label>
                                 <select x-model="formData.consolidation_type" name="consolidation_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Select Type</option>
-                                    <option value="Personal">Personal</option>
-                                    <option value="Commercial">Commercial</option>
+                                    <option value="personal">Personal</option>
+                                    <option value="commercial">Commercial</option>
                                 </select>
                             </div>
                             
@@ -244,15 +169,7 @@
                                 <label class="block text-gray-700 dark:text-gray-300">Handling Fee</label>
                                 <input type="text" x-model="formData.handling_fee" name="handling_fee" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300 flex">Signature <span id="openModal" class="">
-                                    <svg xmlns="http://www.w3.org/2000/svg" style="margin-left: 10px;" width="16" height="16" fill="currentColor" class="bi bi-pen-fill text-blue-600 cursor-pointer dark:text-white" viewBox="0 0 16 16">
-                                        <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
-                                      </svg>
-                                      
-                                </span></label>
-                                <input type="file" id="proof_of_delivery_path" name="proof_of_delivery_path" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
+                            
                             
                         </div>
 
@@ -289,11 +206,12 @@
                     <!-- Step 2: Assign Driver -->
                     <div x-show="step === 2" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div id="">
-                            <label class="block text-gray-700 dark:text-gray-300">Drivers Assigned</label>
+                            <label class="block text-gray-700 dark:text-gray-300">Drivers Assigned (<span class="text-gray-700 dark:text-gray-300" x-text="selectedDriver ? selectedDriver.fname + ' ' + selectedDriver.lname : 'No Driver'"></span>)</label>
                             
                             <select x-model="formData.driver_id" name="driver_id" id="driver_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select Type</option>
                                 <option value="">List of Drivers</option>
+                            
                             </select>
                         </div>
                     </div>
@@ -345,13 +263,14 @@
       <!-- ===== Content Area End ===== -->
     </div>
     <!-- ===== Page Wrapper End ===== -->
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+
     <script>
-        function stepperForm() {
-          return {
-              step: localStorage.getItem('consolidate_shipment_step') ? parseInt(localStorage.getItem('consolidate_shipment_step')) : 1,
-              formData: JSON.parse(localStorage.getItem('formData')) || {
-                consolidation_type: '',
+        //we use use alpine js for most of the updates 
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('stepperForm', () => ({
+                step: localStorage.getItem('consolidate_shipment_step') ? parseInt(localStorage.getItem('consolidate_shipment_step')) : 1,
+                formData:{
+                    consolidation_type: '',
                     consolidated_for: '',
                     customer_email: '',
                     customer_phone: '',
@@ -371,71 +290,139 @@
                     internal_notes: '',
                     driver_id: '',
                     files: []
-              },
-              nextStep() {
-                  this.step++;
-                  localStorage.setItem('consolidate_shipment_step', this.step);
-              },
-              prevStep() {
-                  this.step--;
-                  localStorage.setItem('consolidate_shipment_step', this.step);
-              },
-              saveProgress() {
-                  localStorage.setItem('formData', JSON.stringify(this.formData));
-                  localStorage.setItem('consolidate_shipment_step', this.step);
-                  alert("Progress saved successfully!");
-              },
-              saveAndSubmit() {
-                  let form = document.getElementById("ConsolidateShipmentForm");
-                    let formData = new FormData(form);
-                    $.ajax({
-                        url: requestURL+'/consolidate/create',
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
+                },
+                selectedDriver: null,
+                //step: 1,
+
+                init() {
+                    //this.fetchData();
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const encodedId = urlParams.get('id');
+                    if (encodedId) {
+                        this.id = atob(encodedId);
+                        this.fetchData();
+                    } else {
+                        console.error('No ID found in the URL');
+                    }
+                },
+
+                fetchData() {
+                    fetch(requestURL + '/bikes/bike/' + this.id, {
                         headers: {
                             'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
                             'Accept': 'application/json'
-                        },
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        this.formData = data.bike;
+                        console.log('Bike Data:',data.bike);
+                            let bike = Array.isArray(data.bike) ? data.bike[0] : data.bike;
 
+                        if (!bike) {
+                            console.error("No bike data found");
+                            return;
+                        }
+
+                    
+                        const bikeDriver = bike.driver ? {
+                            id: bike.driver.driver?.id || '',
+                            fname: bike.driver?.user?.fname || 'Unknown',
+                            lname: bike.driver?.user?.lname || '',
+                            email: bike.driver?.user?.email || '',
+                        } : null;
+
+                        this.formData = {
+                            bike_type: bike.bike_type,
+                            bike_office: bike.bike_office,
+                            driver_id: bike.driver_id,
+                            make_model: bike.make_model,
+                            bike_number: bike.bike_number,
+                            license_plate_number: bike.license_plate_number,
+                            bike_driver: bikeDriver,
+                            bike_docs: bike.bike_docs?.map(tdoc => ({
+                                id: tdoc.id || '',
+                                file_path: tdoc.file_path || 'Unknown',
+                            })) || [],
+                        };
+
+                        // Set the selected driver (if available)
+                        this.selectedDriver = bikeDriver || { fname: 'No Driver', lname: '' };
+                        this.formData.driver_id = this.selectedDriver.id || '';
+                        
+                    })
+                },
+                nextStep() {
+                        this.step++;
+                        localStorage.setItem('consolidate_shipment_step', this.step);
+                    },
+                    prevStep() {
+                        this.step--;
+                        localStorage.setItem('consolidate_shipment_step', this.step);
+                    },
+                saveProgress() {
+                    localStorage.setItem('formData', JSON.stringify(this.formData));
+                },
+                saveAndSubmit(e) {
+                    e.preventDefault();
+                    
+                    let form = document.getElementById("editBikeForm");
+                    let formData = new FormData(form);
+
+                    formData.append("_method", "PUT");
+                                    for (let pair of formData.entries()) {
+                                        console.log(pair[0] + ": " + pair[1]);
+                                    }
+                                        console.log(localStorage.getItem('auth_token'))
+                                    
+                        let currentDriverId = this.formData.driver_id || null;
+                    let currentbikeType = this.formData.bike_type || null;
+                    let currentOffice = this.formData.bike_office || null;
+
+                    let driverId = formData.get("driver_id") || currentDriverId;
+                    let bikeType = formData.get("bike_type") || currentbikeType;
+                    let office = formData.get("bike_office") || currentOffice;
+
+                    // Ensure `null` is NOT sent as a string
+                    formData.set("driver_id", driverId || "");
+                    formData.set("bike_type", bikeType || "");
+                    formData.set("bike_office", office || "");
+
+                    // 🚀 Debugging: Log all FormData values
+                    console.log("FormData Debugging:");
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+
+                    $.ajax({
+                        url: requestURL + "/bikes/update/" + this.id,
+                        type: "POST",
+                        data: formData,
+                        processData: false, 
+                        contentType: false,
+                        headers: {
+                            "Authorization": "Bearer " + localStorage.getItem("auth_token"),
+                            "Accept": "application/json"
+                        },
                         beforeSend:function(){
                             document.getElementById("Ajaxbackdrop").style.display = 'flex'
                         },
 
                         success: (response) => {
+                            console.log("Success:", response);
                             document.getElementById("Ajaxbackdrop").style.display = 'none'
-                            //console.log('Form submitted successfully:', response);
                             createToast('success', response.message);
-                            localStorage.removeItem('formData');
-                            localStorage.removeItem('consolidate_shipment_step');
-                            //alert("Form submitted successfully!");
                         },
-                         error: (xhr, status, error) => {
+                        error: (xhr) => {
+                            console.error("Error:", xhr.responseText);
                             document.getElementById("Ajaxbackdrop").style.display = 'none'
-                            console.error('Form submission failed:', xhr.responseText);
-
-                        try {
-                            let response = JSON.parse(xhr.responseText);
-                            
-                            if (response.errors) {
-                                let messages = Object.values(response.errors).flat().join('<br>'); // Combines multiple errors
-                                createToast('error', messages);
-                            } else if (response.message) {
-                                createToast('error', response.message);
-                            } else {
-                                createToast('error', 'An unexpected error occurred. Please try again.');
-                            }
-                        } catch (e) {
-                            createToast('error', 'An error occurred. Please check your input and try again.');
+                            createToast('error', xhr.responseText);
                         }
-                    }
-                });
-              }
-          }
-      }
-
-
+                    });
+                }
+            }));
+        })
+    
         populateDriverSelect();
 
 
@@ -528,5 +515,5 @@
         
     </script>
       
-      <script src="./assets/js/newload.js"></script>
-      <include src="./partials/footer.html"></include>
+  </body>
+</html>

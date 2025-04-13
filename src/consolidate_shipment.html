@@ -209,16 +209,12 @@
                             
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Origin Warehouse</label>
-                                <select x-model="formData.origin_warehouse" name="origin_warehouse" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                    <option value="" selected disabled>Select Type</option>
-                                </select>
+                                <input x-model="formData.origin_warehouse" name="origin_warehouse" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
                             </div>
                             
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Destination Warehouse</label>
-                                <select x-model="formData.destination_warehouse" name="destination_warehouse" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                    <option value="" selected disabled>Select Type</option>
-                                </select>
+                                <input x-model="formData.destination_warehouse" name="destination_warehouse" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Departure Date</label>
@@ -251,7 +247,7 @@
                                       </svg>
                                       
                                 </span></label>
-                                <input type="file" id="proof_of_delivery_path" name="proof_of_delivery_path" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <input type="file" x-model="formData.proof_of_delivery_path" id="proof_of_delivery_path" name="proof_of_delivery_path" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                             
                         </div>

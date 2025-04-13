@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Edit Bike | </title>
+    <include src="./partials/mainhead.html"> </include>
+    <script src="./assets/js/main.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCM6UYyHtRcZBA-2edj7r7vYg3yYWrnaiE&libraries=places"></script>
+
+    <script>
+        const openModalButton = document.getElementById("openModal");
+        const closeModalButton = document.getElementById("closeModal");
+        const modal = document.getElementById("modal");
+
+        // Open Modal
+        openModalButton.addEventListener("click", () => {
+        modal.style.display = "flex"; // Show the modal
+        const modalContent = modal.querySelector(".modal-content");
+        modalContent.style.animation = "blowUp 0.3s ease-out forwards"; // Blow up animation
+        });
+
+        // Close Modal
+        closeModalButton.addEventListener("click", () => {
+        const modalContent = modal.querySelector(".modal-content");
+        modalContent.style.animation = "goBack 0.3s ease-out forwards"; // Go back animation
+
+        // Hide the modal after the animation completes
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 300); // Match the duration of the animation
+        });
+    </script>
+  </head>
+  <body
+    x-data="{ page: 'Delivery', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
+            <!-- Breadcrumb Start -->
+            <div x-data="{ pageName: `Delivery`}">
+              <include src="./partials/breadcrumb.html" />
+            </div>
+            <!-- Breadcrumb End -->
+
+               <!-- Modal -->
+               <div id="modal" class="modal">
+                <div class="modal-content">
+                <span id="closeModal" class="close">&times;</span>
+                <h2>Sign and Save, then upload the signed signature</h2>
+                <div id="signature-pad" class="signature-pad">
+                    <canvas id="signature_pad" width="400" height="200"></canvas>
+                    <div class="buttons">
+                        <button type="button" id="clear" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Reset</button>
+
+                        <button type="button" id="save" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Save</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+
+            <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+              <div x-data="stepperForm()" class="w-full mx-auto px-4">
+                <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xs dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 rtl:space-x-reverse">
+                    <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 1, 'text-gray-500 dark:text-gray-400': step !== 1 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 1, 'border-gray-500 dark:border-gray-400': step !== 1 }">
+                            1
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Smiles Delivery</span>
+                    </li>
+<!--                 
+                    <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 2, 'text-gray-500 dark:text-gray-400': step !== 2 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 2, 'border-gray-500 dark:border-gray-400': step !== 2 }">
+                            2
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Assign Driver</span>
+                    </li>
+
+                    <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 3, 'text-gray-500 dark:text-gray-400': step !== 3 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 3, 'border-gray-500 dark:border-gray-400': step !== 3 }">
+                            3
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Backup Docs</span>
+                    </li> -->
+                </ol>
+                
+            
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="deliveryForm">
+                    <!-- Step 1: Basic Info -->
+                    <div x-show="step === 1" >
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                           
+                            <div id="">
+                                <label class="block text-gray-700 dark:text-gray-300">Pick up address</label>
+                                <input type="text" x-model="formData.from" id="from-address" @change="getCoordinates" name="from" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Drop Off Address</label>
+                                <input type="text" x-model="formData.drop_off_address" @change="getCoordinates" id="to-address" name="drop_off_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Package Description</label>
+                                <textarea type="text" x-model="formData.package_description" name="package_description" rows="1" cols="1" id="" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                            </div>
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                            <div id="">
+                                <label class="block text-gray-700 dark:text-gray-300">Package Weight</label>
+                                <input type="text" x-model="formData.package_weight" id="package-weight" name="package_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Fragile?</label>
+                                <select type="text" x-model="formData.isFragile" name="isFragile" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <option value="" selected disabled>Select</option>
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                    </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="service-type">Service Type:</label>
+                                <select name="service_type" x-model="formData.service_type" id="service-type">
+                                    <option value="standard">Standard (3-5 days)</option>
+                                    <option value="express">Express (1-2 days)</option>
+                                    <option value="same-day">Same Day</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                              
+                            <div id="standard-rates" class="price-tier">
+                                <h3 class="font-bold dark:text-white ">Standard Rates</h3>
+                                <p class="text-sm dark:text-white ">Base rate: ₦50 per km + ₦100 base fee</p>
+                            </div>
+                            
+                            <div id="express-rates" class="price-tier">
+                                <h3 class="font-bold dark:text-white ">Express Rates</h3>
+                                <p class="text-sm dark:text-white ">Base rate: ₦75 per km + ₦200 base fee</p>
+                            </div>
+                            
+                            <div id="same-day-rates" class="price-tier">
+                                <h3 class="text-sm font-bold dark:text-white">Same Day Rates</h3>
+                                <p class="text-sm dark:text-white ">Base rate: ₦100 per km + ₦300 base fee</p>
+                            </div>
+
+                            
+                        
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+                            <!-- <button id="calculate-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Calculate Delivery Cost</button> -->
+                        
+                            <div id="results" class="results" style="display:none;">
+                                <h2 class="text-2xl font-bold mb-4 dark:text-white">Delivery Quote</h2>
+                                <p><strong class="font-bold dark:text-white ">Distance:</strong> <span id="distance-text" class="font-bold dark:text-white">-</span></p>
+                                <p><strong class="font-bold dark:text-white ">Estimated Duration:</strong> <span id="duration-text" class="font-bold dark:text-white">-</span></p>
+                                <p><strong class="font-bold dark:text-white ">Package Weight:</strong> <span id="weight-text" class="font-bold dark:text-white">-</span> kg</p>
+                                <p><strong class="font-bold dark:text-white ">Service Type:</strong> <span id="service-text" class="font-bold dark:text-white">-</span></p>
+                                <p><strong class="font-bold dark:text-white">Total Cost:</strong> <span id="cost-text" class="font-weight:bold; font-size:1.2em; dark:text-white">-</span></p>
+                                
+                            </div>
+                            <div id="" class="grid grid-cols-1 gap-3 mb-6">
+                                <div id="map"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="flex justify-between mt-6">
+                        <button type="submit" id="save-quote" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
+                            >
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+            </div>
+
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script>
+        function stepperForm() {
+          return {
+              step: localStorage.getItem('consolidate_shipment_step') ? parseInt(localStorage.getItem('consolidate_shipment_step')) : 1,
+              formData: JSON.parse(localStorage.getItem('formData')) || {
+                consolidation_type: '',
+                    consolidated_for: '',
+                    customer_email: '',
+                    customer_phone: '',
+                    receiver_name: '',
+                    receiver_address: '',
+                    receiver_phone: '',
+                    receiver_email: '',
+                    origin_warehouse: '',
+                    destination_warehouse: '',
+                    expected_departure_date: '',
+                    expected_arrival_date: '',
+                    total_weight: '',
+                    total_shipping_cost: '',
+                    handling_fee: '',
+                    payment_status: '',
+                    payment_method: '',
+                    internal_notes: '',
+                    driver_id: '',
+                    service_type: '',
+                    package_weight: '',
+                    package_description: '',
+                    from_address: '',
+                    pickup_address: '',
+                    files: []
+              },
+              nextStep() {
+                  this.step++;
+                  localStorage.setItem('consolidate_shipment_step', this.step);
+              },
+              prevStep() {
+                  this.step--;
+                  localStorage.setItem('consolidate_shipment_step', this.step);
+              },
+              saveProgress() {
+                  localStorage.setItem('formData', JSON.stringify(this.formData));
+                  localStorage.setItem('consolidate_shipment_step', this.step);
+                  alert("Progress saved successfully!");
+              },
+              saveAndSubmit() {
+                  let form = document.getElementById("deliveryForm");
+                    let formData = new FormData(form);
+                    $.ajax({
+                        url: requestURL+'/consolidate/create',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        },
+
+                        beforeSend:function(){
+                            document.getElementById("Ajaxbackdrop").style.display = 'flex'
+                        },
+
+                        success: (response) => {
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            //console.log('Form submitted successfully:', response);
+                            createToast('success', response.message);
+                            localStorage.removeItem('formData');
+                            localStorage.removeItem('consolidate_shipment_step');
+                            //alert("Form submitted successfully!");
+                        },
+                         error: (xhr, status, error) => {
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            console.error('Form submission failed:', xhr.responseText);
+
+                        try {
+                            let response = JSON.parse(xhr.responseText);
+                            
+                            if (response.errors) {
+                                let messages = Object.values(response.errors).flat().join('<br>'); // Combines multiple errors
+                                createToast('error', messages);
+                            } else if (response.message) {
+                                createToast('error', response.message);
+                            } else {
+                                createToast('error', 'An unexpected error occurred. Please try again.');
+                            }
+                        } catch (e) {
+                            createToast('error', 'An error occurred. Please check your input and try again.');
+                        }
+                    }
+                });
+              },
+
+              getCoordinates() {
+                if(this.formData.from && this.formData.drop_off_address)
+                {
+                    calculateDistance();
+                }
+                  
+              }
+          }
+      }
+
+
+      function handleLoadTypeChange(value) {
+    if (value === 'import') {
+        console.log(`Load type changed to ${value}`);
+        // You can add specific logic for import/export here
+        // For example, show/hide specific form sections
+        document.getElementById('container').style.display = '';
+        // Example: Show a message or change UI elements
+        //alert(`Selected load type: ${value}`);
+        
+        // You could show/hide specific form sections
+        // document.getElementById('importSection').style.display = value === 'import' ? 'block' : 'none';
+        // document.getElementById('exportSection').style.display = value === 'export' ? 'block' : 'none';
+    }
+    
+    // Trigger auto-save when selection changes
+    //handleInputChange();
+}
+      </script>
+      <script>
+        function duplicateContainer() {
+            var container = document.getElementById("container");
+            var containerList = document.getElementById("containerList");
+    
+            // Clone container and remove display:none
+            var newContainer = container.cloneNode(true);
+            newContainer.style.display = "block";
+    
+            // Append new container
+            containerList.appendChild(newContainer);
+        }
+
+        function removeContainer(element) {
+            element.parentElement.parentElement.remove();
+        }
+
+        function duplicateBillto()
+        {
+            var billto = document.getElementById("billto");
+            var billtoList = document.getElementById("billtoList");
+            var newBillto = billto.cloneNode(true);
+            billtoList.appendChild(newBillto);
+        }
+
+        function removeBillto(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+        //
+
+        function duplicatePickup()
+        {
+            var pickup = document.getElementById("pickUPP");
+            var pickupList = document.getElementById("pickupList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removePickup(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        
+        function duplicateDropAt()
+        {
+            var pickup = document.getElementById("dropAt");
+            var pickupList = document.getElementById("dropAtList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removeDropAt(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        function duplicateCharges()
+        {
+            var pickup = document.getElementById("chargesDuplicate");
+            var pickupList = document.getElementById("chargesList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removeCharges(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        
+    </script>
+
+<script>
+    // Initialize autocomplete
+    function initAutocomplete() {
+        const autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('autocomplete'),
+            { types: ['geocode'] } // Limit to geographic locations
+        );
+
+        // When user selects an address from dropdown
+        autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+            if (!place.address_components) {
+                alert("No details available for this address");
+                return;
+            }
+
+            // Get address components
+            const addressComponents = {
+                street_number: '',
+                route: '',
+                locality: '',
+                administrative_area_level_1: '',
+                postal_code: '',
+                country: ''
+            };
+
+            // Parse address components
+            for (const component of place.address_components) {
+                const componentType = component.types[0];
+                if (addressComponents[componentType]) {
+                    addressComponents[componentType] = component.long_name;
+                }
+            }
+
+            // Fill form fields
+            document.getElementById('street_number').value = addressComponents.street_number;
+            document.getElementById('route').value = addressComponents.route;
+            document.getElementById('locality').value = addressComponents.locality;
+            document.getElementById('administrative_area_level_1').value = addressComponents.administrative_area_level_1;
+            document.getElementById('postal_code').value = addressComponents.postal_code;
+            document.getElementById('country').value = addressComponents.country;
+        });
+    }
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', initAutocomplete);
+
+      // Global variables
+      let fromPlace, toPlace, map, directionsService, directionsRenderer;
+        const service = new google.maps.DistanceMatrixService();
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer();
+        
+        // Initialize the map
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 7,
+                center: { lat: 9.0820, lng: 8.6753 }, // Center of Nigeria
+            });
+            directionsRenderer.setMap(map);
+        }
+        
+        // Initialize autocomplete fields
+        function initAutocomplete() {
+            new google.maps.places.Autocomplete(
+                document.getElementById('from-address'),
+                { types: ['geocode'] }
+            );
+            
+            new google.maps.places.Autocomplete(
+                document.getElementById('to-address'),
+                { types: ['geocode'] }
+            );
+            
+            // Show relevant price tier
+            document.getElementById('service-type').addEventListener('change', function() {
+                document.querySelectorAll('.price-tier').forEach(el => el.classList.remove('visible'));
+                document.getElementById(`${this.value}-rates`).classList.add('visible');
+            });
+            // Show initial tier
+            document.getElementById('standard-rates').classList.add('visible');
+        }
+        
+        // Calculate distance and cost
+        function calculateDistance() {
+            const fromAddress = document.getElementById('from-address').value;
+            const toAddress = document.getElementById('to-address').value;
+            const weight = parseFloat(document.getElementById('package-weight').value) || 1;
+            const serviceType = document.getElementById('service-type').value;
+            
+            if (!fromAddress || !toAddress) {
+                alert("Please select both pickup and delivery locations");
+                return;
+            }
+            
+            service.getDistanceMatrix({
+                origins: [fromAddress],
+                destinations: [toAddress],
+                travelMode: 'DRIVING',
+                unitSystem: google.maps.UnitSystem.METRIC
+            }, function(response, status) {
+                if (status !== 'OK') {
+                    alert('Error calculating distance: ' + status);
+                    return;
+                }
+                
+                const element = response.rows[0].elements[0];
+                const distance = element.distance;
+                const duration = element.duration;
+                const distanceKm = distance.value / 1000;
+                
+                // Calculate cost based on service type
+                let ratePerKm, baseFee;
+                switch(serviceType) {
+                    case 'express':
+                        ratePerKm = 75;
+                        baseFee = 200;
+                        break;
+                    case 'same-day':
+                        ratePerKm = 100;
+                        baseFee = 300;
+                        break;
+                    default: // standard
+                        ratePerKm = 50;
+                        baseFee = 100;
+                }
+                
+                // Weight multiplier (10% extra for every 5kg over 5kg)
+                const weightMultiplier = weight > 5 ? 1 + (Math.ceil((weight - 5)/5) * 0.1) : 1;
+                const cost = (distanceKm * ratePerKm * weightMultiplier) + baseFee;
+                
+                // Display results
+                document.getElementById('distance-text').textContent = 
+                    `${distance.text} (${distanceKm.toFixed(2)} km)`;
+                document.getElementById('duration-text').textContent = duration.text;
+                document.getElementById('weight-text').textContent = weight;
+                document.getElementById('service-text').textContent = 
+                    document.getElementById('service-type').options[document.getElementById('service-type').selectedIndex].text;
+                document.getElementById('cost-text').textContent = `₦${cost.toFixed(2)}`;
+                document.getElementById('results').style.display = 'block';
+                
+                // Show route on map
+                showRoute(fromAddress, toAddress);
+            });
+        }
+        
+        // Display route on map
+        function showRoute(start, end) {
+            directionsService.route({
+                origin: start,
+                destination: end,
+                travelMode: 'DRIVING'
+            }, function(response, status) {
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(response);
+                } else {
+                    console.error('Directions request failed: ' + status);
+                }
+            });
+        }
+        
+        // Save to database
+        document.getElementById('save-quote').addEventListener('click', function() {
+            const distanceText = document.getElementById('distance-text').textContent;
+            const distanceKm = parseFloat(distanceText.match(/\(([\d.]+) km\)/)[1]);
+            const cost = parseFloat(document.getElementById('cost-text').textContent.replace('₦', ''));
+            const weight = parseFloat(document.getElementById('package-weight').value);
+            const serviceType = document.getElementById('service-type').value;
+            
+            fetch('/api/shipments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    from_address: document.getElementById('from-address').value,
+                    to_address: document.getElementById('to-address').value,
+                    distance_km: distanceKm,
+                    weight_kg: weight,
+                    service_type: serviceType,
+                    delivery_cost: cost,
+                    estimated_duration: document.getElementById('duration-text').textContent
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Quote saved successfully!');
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error saving quote');
+            });
+        });
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initMap();
+            initAutocomplete();
+            //document.getElementById('calculate-btn').addEventListener('click', calculateDistance);
+        });
+</script>
+      
+      <script src="./assets/js/newload.js"></script>
+      <include src="./partials/footer.html"></include>

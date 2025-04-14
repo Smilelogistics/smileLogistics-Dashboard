@@ -5,10 +5,10 @@
 
     <include src="./partials/mainhead.html"> </include>
     <script src="./assets/js/main.js"></script>
-    <title>Loads | </title>
+    <title>Payments | </title>
   </head>
   <body
-    x-data="{ page: 'drivers_list', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-data="{ page: 'consolidate_payments_list', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
     x-init="
          darkMode = JSON.parse(localStorage.getItem('darkMode'));
          $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
@@ -40,7 +40,7 @@
         <main>
           <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
             <!-- Breadcrumb Start -->
-            <div x-data="{ pageName: `Driver List`}">
+            <div x-data="{ pageName: `Payments List`}">
               <include src="./partials/breadcrumb.html" />
             </div>
             <!-- Breadcrumb End -->
@@ -50,7 +50,7 @@
                 <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] p-2">
                   <div class="px-5 py-4 sm:px-6 sm:py-5">
                     <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
-                      All Drivers
+                      All Payments
                     </h3>
                   </div>
           
@@ -64,12 +64,6 @@
                             <div x-show="isLoading" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                               <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
                             </div>
-                            <div id="map"></div>
-    
-                            <div id="shipments-list">
-                                <!-- Will be populated by JavaScript -->
-                            </div>
-                            
                             <!-- Search Input -->
                             <div class="mb-4">
                               <input
@@ -84,22 +78,13 @@
                             <thead class="bg-gray-50 dark:bg-gray-900">
                               <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ACTION</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Fullname</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Email</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Company</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Phone #</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Hire Date</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Office </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Primary Address</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">State</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">City</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Country</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Cust Appt</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Stop List</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Pickup #</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">BOL #</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">PO #</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">LFD</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Consolidated for</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Customer Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Customer Email</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Customer Phone</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Reciever Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Reciever Email </th>
+                                
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
                               </tr>
                             </thead>
@@ -117,7 +102,7 @@
                                    
                                       <div x-show="open" @click.away="open = false" class="absolute left-0 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">
                                           <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                                            <li><a href="#" x-on:click="editItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a></li>
+                                            <!-- <li><a href="#" x-on:click="editItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a></li> -->
                                             <li><a href="#" x-on:click="viewItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View</a></li>
                                           </ul>
                                           <div class="py-2">
@@ -126,28 +111,20 @@
                                       </div>
                                     </div>
                                   </td>
+                                 
+                                  
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                  x-text="item.user.fname + (item.user.mname ? ' ' + item.user.mname : '') + ' ' + item.user.lname">
-                              </td>
-                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                  x-text="item.user.email ? item.user.email : ' '">
-                              </td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.company"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.driver_phone ? item.driver_phone : ' '"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.hired_on ? item.hired_on : ' '"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.office ? item.office : ' '"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.primary_address ? item.primary_address : ' '"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.state ? item.state : ' '"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.city ? item.city : ' '"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.country ? item.country : ' '"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.cust_appt"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.stop_list"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.pickup_number"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.bol_number"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.po_number"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.lfd"></td>
+                                      x-text="item.consolidated_for ? item.consolidated_for : ' '">
+                                  </td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.customer_name ? item.customer_name : ' '"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
+                                      x-text="item.customer_email ? item.customer_email : 'N/A'">
+                                  </td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.receiver_phone ? item.receiver_phone : ' '"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.vehicle_number ? item.vehicle_number : ' '"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.receiver_email ? item.receiver_email : ' '"></td>
                                   <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full" :class="item.driver_status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" x-text="item.driver_status"></span>
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full" :class="item.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" x-text="item.status"></span>
                                   </td>
                                 </tr>
                               </template>
@@ -256,7 +233,7 @@
 
           fetchData() {
               this.isLoading = true;
-              fetch(requestGetURL + '/drivers/driver', {
+              fetch(requestGetURL + '/consolidate/payments', {
                   headers: {
                       'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
                       'Accept': 'application/json'
@@ -264,7 +241,7 @@
               })
                   .then(response => response.json())
                   .then(data => {
-                      console.log('Drivers data:', data);
+                      console.log('Payments data:', data);
                       if (data && Array.isArray(data)) {
                           this.items = data;
                           console.log(this.items);
@@ -318,32 +295,10 @@
           }
       }));
   });
-  
-      </script>
-      
-      <script>
-        // Set up continuous tracking
-// const watchId = navigator.geolocation.watchPosition(function(position) {
-//     const latitude = position.coords.latitude;
-//     const longitude = position.coords.longitude;
-//  console.log('Latitude:', latitude, 'Longitude:', longitude);
-//     // Make API call to your Laravel backend
-//     axios.post(`/api/v1/bikes/update-location/${bikeId}`, {
-//         latitude: latitude,
-//         longitude: longitude
-//     });
-// }, function(error) {
-//     console.error('Error getting location:', error);
-// }, {
-//     enableHighAccuracy: true,
-//     maximumAge: 30000,
-//     timeout: 27000
-// });
 
-// Stop tracking when needed
-// navigator.geolocation.clearWatch(watchId);
 
-function checkLocationPermission() {
+
+  function checkLocationPermission() {
     if (!navigator.geolocation) {
         alert('Geolocation is not supported by your browser');
         return;
@@ -357,6 +312,7 @@ function checkLocationPermission() {
             showLocationEnableInstructions();
         } else if (permissionStatus.state === 'granted') {
             startLocationTracking();
+            console.log('Location permission granted');
         } else {
             // prompt state - will trigger the permission prompt
             startLocationTracking();
@@ -397,7 +353,8 @@ function startLocationTracking() {
 }
 
 function updateBikeLocation(latitude, longitude) {
-    const bikeId = /* get your bike ID here */;
+    const bikeId = 1;
+    console.log('latitude', latitude)
     axios.post(`/api/v1/bikes/update-location/${bikeId}`, {
         latitude: latitude,
         longitude: longitude
@@ -409,148 +366,7 @@ function updateBikeLocation(latitude, longitude) {
         console.error('Error updating location:', error);
     });
 }
-
-
-        let map;
-        let directionsService;
-        let directionsRenderer;
-        //const driverId = {{ auth()->id() }}; // Laravel blade syntax
-        
-        function initMap() {
-            map = new google.maps.Map(document.getElementById("map"), {
-                center: { lat: 9.0820, lng: 8.6753 }, // Center of Nigeria
-                zoom: 10
-            });
-            
-            directionsService = new google.maps.DirectionsService();
-            directionsRenderer = new google.maps.DirectionsRenderer({
-                map: map,
-                suppressMarkers: false
-            });
-            
-            loadDriverShipments();
-        }
-        
-        function loadDriverShipments() {
-            fetch(`/api/driver-shipments/${driverId}`)
-                .then(response => response.json())
-                .then(shipments => {
-                    const listContainer = document.getElementById('shipments-list');
-                    listContainer.innerHTML = '';
-                    
-                    shipments.forEach(shipment => {
-                        // Create shipment card
-                        const card = document.createElement('div');
-                        card.className = `shipment-card status-${shipment.driver_status}`;
-                        card.innerHTML = `
-                            <h3>Shipment #${shipment.id}</h3>
-                            <p><strong>From:</strong> ${shipment.origin_warehouse}</p>
-                            <p><strong>To:</strong> ${shipment.destination_warehouse}</p>
-                            <p><strong>Distance:</strong> ${shipment.distance_km} km</p>
-                            <p><strong>Status:</strong> <span class="status">${shipment.driver_status}</span></p>
-                            <button onclick="showRoute('${shipment.origin_warehouse}', '${shipment.destination_warehouse}', ${shipment.id})">
-                                Show Route
-                            </button>
-                            ${shipment.driver_status === 'pending' ? 
-                                `<button onclick="updateStatus(${shipment.id}, 'accepted')">
-                                    Accept Delivery
-                                </button>` : ''}
-                            ${shipment.driver_status === 'accepted' ? 
-                                `<button onclick="updateStatus(${shipment.id}, 'in_transit')">
-                                    Start Delivery
-                                </button>` : ''}
-                            ${shipment.driver_status === 'in_transit' ? 
-                                `<button onclick="updateStatus(${shipment.id}, 'delivered')">
-                                    Mark as Delivered
-                                </button>` : ''}
-                        `;
-                        listContainer.appendChild(card);
-                    });
-                    
-                    // Show first shipment's route by default
-                    if (shipments.length > 0) {
-                        showRoute(
-                            shipments[0].origin_warehouse,
-                            shipments[0].destination_warehouse,
-                            shipments[0].id
-                        );
-                    }
-                });
-        }
-        
-        function showRoute(start, end, shipmentId) {
-            directionsService.route({
-                origin: start,
-                destination: end,
-                travelMode: 'DRIVING',
-                provideRouteAlternatives: true
-            }, (response, status) => {
-                if (status === 'OK') {
-                    directionsRenderer.setDirections(response);
-                    
-                    // Add custom markers
-                    const route = response.routes[0];
-                    const leg = route.legs[0];
-                    
-                    // Start marker
-                    new google.maps.Marker({
-                        position: leg.start_location,
-                        map: map,
-                        title: "Pickup Location",
-                        icon: {
-                            url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
-                        }
-                    });
-                    
-                    // End marker
-                    new google.maps.Marker({
-                        position: leg.end_location,
-                        map: map,
-                        title: "Delivery Location",
-                        icon: {
-                            url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-                        }
-                    });
-                    
-                    // Center map on the route
-                    const bounds = new google.maps.LatLngBounds();
-                    bounds.extend(leg.start_location);
-                    bounds.extend(leg.end_location);
-                    map.fitBounds(bounds);
-                    
-                    // Highlight this shipment in the list
-                    document.querySelectorAll('.shipment-card').forEach(card => {
-                        card.style.border = '1px solid #ddd';
-                    });
-                    document.querySelector(`.shipment-card h3:contains("Shipment #${shipmentId}")`)
-                        .closest('.shipment-card').style.border = '2px solid blue';
-                }
-            });
-        }
-        
-        function updateStatus(shipmentId, status) {
-            fetch(`/api/update-shipment-status/${shipmentId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({ status })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    loadDriverShipments();
-                }
-            });
-        }
-        
-        // Refresh shipments every 30 seconds
-        setInterval(loadDriverShipments, 30000);
-        
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', initMap);
-    </script>
-    
+  
+      </script>
   </body>
 </html>

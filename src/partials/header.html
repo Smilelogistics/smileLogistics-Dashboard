@@ -178,10 +178,12 @@
 
         <!-- Notification Menu Area -->
         <div
-          class="relative"
-          x-data="{ dropdownOpen: false, notifying: true }"
-          @click.outside="dropdownOpen = false"
-        >
+        class="relative"
+        x-data="notificationData()"
+        x-init="init()"
+        @click.outside="dropdownOpen = false"
+    >
+      
           <button
             class="relative flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-full hover:text-dark-900 h-11 w-11 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
             @click.prevent="dropdownOpen = ! dropdownOpen; notifying = false"
@@ -246,60 +248,66 @@
                 </svg>
               </button>
             </div>
-
             <ul class="flex flex-col h-auto overflow-y-auto custom-scrollbar">
-             
-
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative block w-full h-10 rounded-full z-1 max-w-10"
-                  >
-                    <img
-                      src="./assets/images/user/user-03.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Alena Franci</span
-                      >
-                      New shipment created
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Shipment ID- #SML5655555555</span
-                      >
-                    </span>
-
-                    <span
-                      class="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400"
-                    >
-                      <span>Shipment</span>
-                      <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      <span>8 min ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-
+              <!-- Unread Notifications Section -->
+              <template x-if="unreadNotifications.length > 0">
+                <li class="px-3 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400">
+                  UNREAD
+                </li>
+              </template>
+              
+              <template x-for="notification in unreadNotifications" :key="notification.id">
+                <li class="mb-2 bg-blue-50 dark:bg-blue-900/20">
+                  <a href="#" @click="markAsRead(notification.id)" class="flex items-center rounded-lg p-3 transition-colors hover:bg-blue-100 dark:hover:bg-blue-900/30">
+                    <div class="ml-3 flex-1 overflow-hidden">
+                      <p class=" text-sm font-semibold text-gray-800 dark:text-white">
+                        <span x-text="notification.data.message"></span>
+                      </p>
+                      <p class="truncate text-xs text-gray-500 dark:text-gray-400" 
+                         x-text="timeAgo(notification.created_at)">
+                      </p>
+                    </div>
+                  </a>
+                </li>
+              </template>
+            
+              <!-- Read Notifications Section -->
+              <template x-if="readNotifications.length > 0">
+                <li class="px-3 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400">
+                  READ
+                </li>
+              </template>
+              
+              <template x-for="notification in readNotifications" :key="notification.id">
+                <li class="mb-2">
+                  <a href="#" class="flex items-center rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
+                  
+                    <div class="ml-3 flex-1 overflow-hidden">
+                      <p class="truncate text-sm font-medium text-gray-600 dark:text-gray-300">
+                        <span x-text="notification.data.message"></span>
+                      </p>
+                      <p class="truncate text-xs text-gray-400 dark:text-gray-500" 
+                         x-text="timeAgo(notification.created_at)">
+                      </p>
+                    </div>
+                  </a>
+                </li>
+              </template>
+            
+              <!-- Empty State -->
+              <template x-if="unreadNotifications.length === 0 && readNotifications.length === 0">
+                <li class="flex items-center justify-center p-4 text-gray-500 dark:text-gray-400">
+                  No notifications available
+                </li>
+              </template>
             </ul>
 
-            <a
+            <!-- <a
               href="#"
               class="mt-3 flex justify-center rounded-lg border border-gray-300 bg-white p-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
             >
               View All Notification
-            </a>
+            </a> -->
           </div>
           <!-- Dropdown End -->
         </div>
@@ -621,3 +629,89 @@ function logout() {
     <div class="loader"></div> 
   </div>
 </div>
+
+<script>
+  var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
+ // Replace the jQuery AJAX call with Alpine.js data and fetch
+function notificationData() {
+    return {
+        dropdownOpen: false,
+        notifying: true,
+        unreadNotifications: [],
+        readNotifications: [],
+        //notifications: [],
+        timeAgo(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const seconds = Math.floor((now - date) / 1000);
+            
+            let interval = Math.floor(seconds / 31536000);
+            if (interval >= 1) return interval + ' year' + (interval === 1 ? '' : 's') + ' ago';
+            
+            interval = Math.floor(seconds / 2592000);
+            if (interval >= 1) return interval + ' month' + (interval === 1 ? '' : 's') + ' ago';
+            
+            interval = Math.floor(seconds / 86400);
+            if (interval >= 1) return interval + ' day' + (interval === 1 ? '' : 's') + ' ago';
+            
+            interval = Math.floor(seconds / 3600);
+            if (interval >= 1) return interval + ' hour' + (interval === 1 ? '' : 's') + ' ago';
+            
+            interval = Math.floor(seconds / 60);
+            if (interval >= 1) return interval + ' minute' + (interval === 1 ? '' : 's') + ' ago';
+            
+            return Math.floor(seconds) + ' second' + (seconds === 1 ? '' : 's') + ' ago';
+        },
+        fetchNotifications() {
+            fetch(requestURL + '/notification/notifications', {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(response => {
+                console.log("Full API response:", response);
+                
+                if (response.data) {
+                    this.unreadNotifications = response.data.unread || [];
+                    this.readNotifications = response.data.read || [];
+                    this.notifying = this.unreadNotifications.length > 0;
+                } else {
+                    this.unreadNotifications = [];
+                    this.readNotifications = [];
+                    this.notifying = false;
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+                this.unreadNotifications = [];
+                this.readNotifications = [];
+                this.notifying = false;
+            });
+        },
+        markAsRead(notificationId) {
+            // Add API call to mark notification as read
+            fetch(`${requestURL}/notification/notifications/read/${notificationId}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                this.fetchNotifications();
+            })
+            .catch(console.error);
+        },
+        init() {
+            this.fetchNotifications();
+            // Fetch notifications every 30 seconds
+            setInterval(() => this.fetchNotifications(), 30000);
+        }
+    }
+}
+
+
+</script>

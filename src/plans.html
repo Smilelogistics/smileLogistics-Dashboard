@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+  <head>
+        <include src="./partials/mainhead.html"> </include>
+        <script src="./assets/js/main.js"></script>
+  </head>
+  <body
+    x-data="{ page: 'plan', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
+            <!-- Breadcrumb Start -->
+            <div x-data="{ pageName: `Driver`}">
+              <include src="./partials/breadcrumb.html" />
+            </div>
+            <!-- Breadcrumb End -->
+
+            <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+              <div x-data="stepperForm()" class="w-full mx-auto px-4">
+                <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xs dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 rtl:space-x-reverse">
+                    <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 1, 'text-gray-500 dark:text-gray-400': step !== 1 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 1, 'border-gray-500 dark:border-gray-400': step !== 1 }">
+                            1
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Basic Info</span>
+                    </li>
+                
+                    <!-- <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 2, 'text-gray-500 dark:text-gray-400': step !== 2 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 2, 'border-gray-500 dark:border-gray-400': step !== 2 }">
+                            2
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Backup Docs</span>
+                    </li> -->
+                </ol>
+                
+            
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newdriverForm">
+                    <!-- Step 1: Basic Info -->
+                    <div x-show="step === 1" >
+                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Name</label>
+                                <input type="text" x-model="formData.name" name="name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Price</label>
+                                <input type="text" x-model="formData.price" name="price" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Description</label>
+                                <textarea cols="1" rows="1" type="text" x-model="formData.description" name="description" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                            </div>
+                        </div>
+                        
+                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Features</label>
+                            
+                            <div class="flex flex-wrap gap-2 mb-2">
+                                <template x-for="(feature, index) in formData.features" :key="index">
+                                    <span class="bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded">
+                                        <span x-text="feature"></span>
+                                        <button type="button" @click="removeFeature(index)" class="ml-1 text-red-500 font-bold">×</button>
+                                    </span>
+                                </template>
+                            </div>
+                        
+                            <input type="text"
+                                   x-model="featureInput"
+                                   @keydown.space.prevent="addFeature"
+                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                   placeholder="Type and press space" />
+                        </div>
+                        </div>
+                    </div>
+
+                            
+                            
+                          
+                        </div>
+                    
+                    </div>
+
+                        
+                    
+                    <!-- Navigation Buttons -->
+                    <div class="flex justify-between mt-6">
+                        <!-- Previous Button -->
+                       
+
+                        <!-- Submit Button (Only shows on step 2) -->
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500">
+                            Submit
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+            </div>
+
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+
+    <script>
+        function stepperForm() {
+    return {
+        step: localStorage.getItem('Driver_step') ? parseInt(localStorage.getItem('Driver_step')) : 1,
+        featureInput: '',
+        formData: {
+            name: '',
+            price: '',
+            description: '',
+            features: []
+        },
+
+        init() {
+            // Load saved data from localStorage
+            const savedData = JSON.parse(localStorage.getItem('formData'));
+            if (savedData) {
+                this.formData = {
+                    ...this.formData,
+                    ...savedData,
+                    features: savedData.features || [] // Ensure features exists
+                };
+            }
+        },
+
+        addFeature() {
+            const word = this.featureInput.trim();
+            if (word) {
+                if (!this.formData.features.some(f => f.toLowerCase() === word.toLowerCase())) {
+                    this.formData.features.push(word);
+                    this.saveToLocalStorage();
+                }
+            }
+            this.featureInput = '';
+        },
+
+        removeFeature(index) {
+            this.formData.features.splice(index, 1);
+            this.saveToLocalStorage();
+        },
+
+        saveToLocalStorage() {
+            localStorage.setItem('formData', JSON.stringify(this.formData));
+        },
+
+        saveAndSubmit() {
+            const formData = new FormData();
+            
+            // Properly append all form data
+            formData.append('name', this.formData.name);
+            formData.append('price', this.formData.price);
+            formData.append('description', this.formData.description);
+            
+            // Append each feature individually
+            this.formData.features.forEach((feature, index) => {
+                formData.append(`features[${index}]`, feature);
+            });
+
+            // Debugging: Convert FormData to readable object
+            const formDataObj = {};
+            for (let [key, value] of formData.entries()) {
+                formDataObj[key] = value;
+            }
+            console.log('Submitting:', formDataObj);
+
+            // Uncomment to actually submit
+
+            $.ajax({
+                url: requestURL + '/plans/create-plan',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                    'Accept': 'application/json'
+                },
+                beforeSend: function() {
+                    document.getElementById("Ajaxbackdrop").style.display = 'flex';
+                },
+                success: (response) => {
+                    document.getElementById("Ajaxbackdrop").style.display = 'none';
+                    createToast('success', response.message);
+                    localStorage.removeItem('formData');
+                    // localStorage.removeItem('Driver_step');
+                    // Reset form
+                    this.formData = {
+                        name: '',
+                        price: '',
+                        description: '',
+                        features: []
+                    };
+                },
+                error: (xhr) => {
+                    document.getElementById("Ajaxbackdrop").style.display = 'none';
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        createToast('error', response.message || 'Error submitting form');
+                    } catch (e) {
+                        createToast('error', 'An error occurred');
+                    }
+                }
+            });
+        }
+    }
+}
+
+    </script>
+      
+  </body>
+</html>

@@ -283,7 +283,7 @@
                   <a href="#" class="flex items-center rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
                   
                     <div class="ml-3 flex-1 overflow-hidden">
-                      <p class="truncate text-sm font-medium text-gray-600 dark:text-gray-300">
+                      <p class=" text-sm font-medium text-gray-600 dark:text-gray-300">
                         <span x-text="notification.data.message"></span>
                       </p>
                       <p class="truncate text-xs text-gray-400 dark:text-gray-500" 
@@ -708,7 +708,7 @@ function notificationData() {
         init() {
             this.fetchNotifications();
             // Fetch notifications every 30 seconds
-            setInterval(() => this.fetchNotifications(), 30000);
+            setInterval(() => this.fetchNotifications(), 1000000);
         }
     }
 }

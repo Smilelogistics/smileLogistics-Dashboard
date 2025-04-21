@@ -445,6 +445,15 @@ try {
                     Businesses
                   </a>
                 </li>
+                <li>
+                  <a
+                    href="pricing.html"
+                    class="menu-dropdown-item group"
+                    :class="page === 'Users' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                  >
+                    SAAS Pricing Plans
+                  </a>
+                </li>
               </ul>
             </div>
             <!-- Dropdown Menu End -->
@@ -513,15 +522,6 @@ try {
                 :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                 class="flex flex-col gap-1 mt-2 menu-dropdown pl-9"
               >
-                <li>
-                  <a
-                    href="pricing.html"
-                    class="menu-dropdown-item group"
-                    :class="page === 'Users' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                  >
-                    SAAS Pricing Plans
-                  </a>
-                </li>
                 <li>
                   <a
                     href="plans.html"

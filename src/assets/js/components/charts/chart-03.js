@@ -17,7 +17,7 @@ const fetchChartData = async () => {
     }
 
     const apiData = await response.json();
-    console.log('API response:', apiData);
+    console.log('Chart API response:', apiData);
     // Validate response structure
     if (!apiData.data || !apiData.data.series || !apiData.data.categories) {
       throw new Error('Invalid API response structure');
@@ -163,16 +163,16 @@ const chart03 = async () => {
     // Add summary element
     const summaryEl = document.createElement('div');
     summaryEl.className = 'chart-summary';
-    summaryEl.innerHTML = `
-      <div class="summary-item">
-        <span>Total Sales:</span>
-        <strong>${totals.sales.toLocaleString()}</strong>
-      </div>
-      <div class="summary-item">
-        <span>Total Revenue:</span>
-        <strong>${totals.formatted_revenue}</strong>
-      </div>
-    `;
+    // summaryEl.innerHTML = `
+    //   <div class="summary-item">
+    //     <span>Total Sales:</span>
+    //     <strong>${totals.sales.toLocaleString()}</strong>
+    //   </div>
+    //   <div class="summary-item">
+    //     <span>Total Revenue:</span>
+    //     <strong>${totals.formatted_revenue}</strong>
+    //   </div>
+    // `;
     chartContainer.parentNode.insertBefore(summaryEl, chartContainer.nextSibling);
 
     // Set up auto-refresh every 5 minutes

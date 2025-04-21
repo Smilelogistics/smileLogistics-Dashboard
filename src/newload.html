@@ -122,7 +122,7 @@
 
             
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-              <div x-data="stepperForm()" class="w-full mx-auto px-4">
+              <div x-data="stepperForm()" class="w-full mt-5 mb-5 mx-auto px-4">
                 <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xs dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 rtl:space-x-reverse">
                     <template x-for="(heading, index) in ['Basic Info', 'Charges', 'Dispatch', 'Backup Docs', 'Expenses']" :key="index">
                         <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === index + 1, 'text-gray-500 dark:text-gray-400': step !== index + 1 }">
@@ -308,7 +308,7 @@
                                         <input type="text" x-model="formData.port_of_landing" name="port_of_landing" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="port_of_landing">
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Additional Note</label>
                                         <textarea type="text" rows="4" cols="4" x-model="formData.ocean_note" name="ocean_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_note"></textarea>
@@ -409,7 +409,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Signatory Company</label>
-                                            <input type="text" x-model="formData.signatory_company" name="signatory_company" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="signatory_company">
+                                            <input type="text" x-model="formData.signatory_company" name="signatory_company" class="w-full border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="signatory_company">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Authorize Signatory</label>
@@ -999,8 +999,39 @@
                                             <select x-model="charge.charge_type" name="charge_type[]" 
                                                     class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                                 <option value="" selected disabled></option>
-                                                <option value="pickup">Pickup</option>
-                                                <option value="pickup loaded">Pickup Loaded</option>
+                                                <option value="drayage">Drayage</option>
+                                                <option value="fuel_surcharge">Fuel Surcharge</option>
+                                                <option value="admin_fee">Admin Fee</option>
+                                                <option value="attempted_pickup">Attempted Pickup</option>
+                                                <option value="bonded_cargo_pickup">Bonded Cargo Pickup</option>
+                                                <option value="bonded_cargo_charge">Bonded Cargo Charge</option>
+                                                <option value="chasis_rental">Chasis Rental</option>
+                                                <option value="chasis_rental">Chasis Rental</option>
+                                                <option value="chasis_split">Chasis Split</option>
+                                                <option value="chasis_stack">Chasis Stack</option>
+                                                <option value="demurage">Demurage</option>
+                                                <option value="driver_assistance">Driver Assistance</option>
+                                                <option value="drop_charge">Drop Charge</option>
+                                                <option value="dry_run">Dry Run</option>
+                                                <option value="freight">Freight</option>
+                                                <option value="hauling_refrigerated_cargo">Hauling Refrigerated Cargo</option>
+                                                <option value="harzadous_material">Harzardous Material</option>
+                                                <option value="maintainance_repair">Maintainance & Repair</option>
+                                                <option value="other">Other</option>
+                                                <option value="Overweight">Overweight</option>
+                                                <option value="per_diem">Per Diem</option>
+                                                <option value="permits">Permits</option>
+                                                <option value="prepull">Prepull</option>
+                                                <option value="deliver">Delivery Charge</option>
+                                                <option value="shipping">SHIPPING</option>
+                                                <option value="scale load">Scale Load</option>
+                                                <option value="spot_empty">Spot Empty</option>
+                                                <option value="stop_off">Stop Off</option>
+                                                <option value="storage">Storage</option>
+                                                <option value="toll">Toll</option>
+                                                <option value="triaxle">Triaxle</option>
+                                                <!-- <option value="pickup">Pickup</option>
+                                                <option value="pickup loaded">Pickup Loaded</option> -->
                                                 <!-- Other options... -->
                                             </select>
                                         </div>
@@ -1290,7 +1321,7 @@
                             Previous
                         </button>
                         <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
-                            x-show="step < 8" @click="nextStep">
+                            x-show="step < 5" @click="nextStep">
                             Next
                         </button>
                         <button type="button" class="px-4 py-2 bg-yellow-500 text-white rounded dark:bg-yellow-400"

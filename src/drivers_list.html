@@ -290,7 +290,7 @@
           },
           deleteItem(id) {
               if (confirm('Are you sure you want to delete this item?')) {
-                  fetch(`${requestGetURL}/drivers/driver?id=${id}`, {
+                  fetch(`${requestGetURL}/drivers/driver/${id}`, {
                       method: 'DELETE',
                       headers: {
                           'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),

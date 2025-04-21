@@ -114,8 +114,8 @@
                       
                         
                             <option value="branch" x-show="userRole === 'superadministrator'">Branch</option>
-                            <option value="customer" x-show="userRole === 'superadministrator' || userRole === 'businessadministrator'">Customer</option>
-                            <option value="driver" x-show="userRole === 'superadministrator' || userRole === 'businessadministrator'">Driver</option>
+                            <option value="customer" x-show="userRole === 'businessadministrator'">Customer</option>
+                            <option value="driver" x-show="userRole === 'businessadministrator'">Driver</option>
                         </select>
                         
 
@@ -137,7 +137,7 @@
               </div>
             </div>
 
-            <div class="w-full">
+            <div class="w-full mt-10">
               <div class="space-y-12">
                 <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] p-2">
                   <div class="px-5 py-4 sm:px-6 sm:py-5">

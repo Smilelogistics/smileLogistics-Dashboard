@@ -919,6 +919,59 @@
                                     });
                                 }) 
                             </script>
+                            
+                            <div>
+                                <!-- <h4 class="mt-4 mb-3 block text-gray-700 dark:text-gray-300">Freight broker info ( if different from bill-to party )</h4> -->
+                                <div id="" class="grid grid-cols-1 md:grid-cols-10 gap-4 mb-6">
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
+                                        <a href="https://www.google.com/maps/dir//" class="mt-4 mb-3 block text-blue-700  dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer" target="_blank">Show Route</a>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Total Miles</label>
+                                        <input type="text" x-model="formData.total_miles" name="total_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_miles">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Loaded Miles</label>
+                                        <input type="text" x-model="formData.loaded_miles" name="loaded_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="loaded_miles">
+                                    </div>
+                                <!-- Load Note Radio Buttons and Checkbox -->
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Empty Miles</label>
+                                        <input type="text" x-model="formData.empty_miles" name="empty_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="empty_miles">
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">D/H Miles</label>
+                                        <input type="text" x-model="formData.dh_miles" name="dh_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="dh_miles">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
+                                        <a href="https://www.eia.gov/petroleum/gasdiesel/" target="_blank" class="block text-blue-700 dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer">Fuel Rate</a>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">$ / Gallon</label>
+                                        <input x-model="formData.fuel_rate_per_gallon" name="fuel_rate_per_gallon" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="fuel_rate_per_gallon" />
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">MPG</label>
+                                        <input type="text" x-model="formData.mpg" name="mpg" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="mpg" />
+                                    </div>
+                                <!-- Load Note Radio Buttons and Checkbox -->
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Fuel cost</label>
+                                        <input type="text" x-model="formData.total_fuel_cost" name="total_fuel_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_fuel_cost" />
+                                    </div>
+                                    
+                                    <!-- <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Seal #</label>
+                                        <input type="text" x-model="formData.seal_number" name="seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div> -->
+                                </div>
+                            </div>
+
+                            
                                 <div>
                                     <h4 class="mt-4 mb-3 block text-gray-700 dark:text-gray-300">Freight broker info ( if different from bill-to party )</h4>
                                     <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
@@ -1408,6 +1461,15 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                   sales_rep: '',
                   edi_number: '',
                   note: '',
+
+                  //miles
+                  total_miles:'',
+                  loaded_miles:'',
+                  empty_miles:'',
+                  dh_miles:'',
+                  fuel_rate_per_gallon:'',
+                  mpg:'',
+                  fuel_cototal_fuel_costst:'',
 
                 //   charge_type: '',
                 //   comment: '',

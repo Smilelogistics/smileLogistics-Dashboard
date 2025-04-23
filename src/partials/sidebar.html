@@ -442,7 +442,7 @@ try {
                     class="menu-dropdown-item group"
                     :class="page === 'Users' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
                   >
-                    Businesses
+                    Manage Users
                   </a>
                 </li>
                 <li>
@@ -451,7 +451,7 @@ try {
                     class="menu-dropdown-item group"
                     :class="page === 'Users' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
                   >
-                    SAAS Pricing Plans
+                    Pricing
                   </a>
                 </li>
               </ul>
@@ -984,7 +984,7 @@ try {
               
                <!-- Menu item BIke -->
                 
-               <template x-if="userRole === 'superadministrator' || userRole === 'businessadministrator'">
+               <template x-if="userRole === 'businessadministrator'">
                <li>
                 <a href="#" @click.prevent="selected = (selected === 'Manage BIke' ? '':'Manage BIke')" class="menu-item group"
                   :class=" (selected === 'Manage BIke') || (page === 'Manage BIke') ? 'menu-item-active' : 'menu-item-inactive'">
@@ -1040,7 +1040,7 @@ try {
 
               <!-- Menu item Carrier -->
                
-              <template x-if="userRole === 'superadministrator' || userRole === 'businessadministrator'">
+              <template x-if="userRole === 'businessadministrator'">
               <li>
                 <a href="#" @click.prevent="selected = (selected === 'Manage Carrier' ? '':'Manage Carrier')" class="menu-item group"
                   :class=" (selected === 'Manage Carrier') || (page === 'Manage Carrier') ? 'menu-item-active' : 'menu-item-inactive'">

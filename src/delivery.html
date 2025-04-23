@@ -204,9 +204,9 @@
 
                     <!-- Navigation Buttons -->
                     <div class="flex justify-between mt-6">
-                        <button type="submit" id="save-quote" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
                             >
-                            Submit
+                            Request
                         </button>
                     </div>
                 </form>
@@ -222,96 +222,112 @@
     <!-- ===== Page Wrapper End ===== -->
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <script>
+        // Global error handler
+window.addEventListener('error', function(event) {
+  // Prevent default error display
+  event.preventDefault();
+  
+  // In development, log to console
+  if (process.env.NODE_ENV === 'development') {
+    console.error('Global error handler caught:', event.error);
+  }
+  
+  // In production, show user-friendly toast
+  if (process.env.NODE_ENV === 'production') {
+    createToast('error', 'An unexpected error occurred. Please try again.');
+  }
+  
+  return true;
+});
+
+// Global unhandled promise rejection handler
+window.addEventListener('unhandledrejection', function(event) {
+  event.preventDefault();
+  
+  if (process.env.NODE_ENV === 'development') {
+    console.error('Unhandled rejection:', event.reason);
+  }
+  
+  if (process.env.NODE_ENV === 'production') {
+    createToast('error', 'Something went wrong. Please refresh the page.');
+  }
+});
+
         function stepperForm() {
           return {
               step: localStorage.getItem('consolidate_shipment_step') ? parseInt(localStorage.getItem('consolidate_shipment_step')) : 1,
               formData: JSON.parse(localStorage.getItem('formData')) || {
-                consolidation_type: '',
-                    consolidated_for: '',
-                    customer_email: '',
-                    customer_phone: '',
-                    receiver_name: '',
-                    receiver_address: '',
-                    receiver_phone: '',
-                    receiver_email: '',
-                    origin_warehouse: '',
-                    destination_warehouse: '',
-                    expected_departure_date: '',
-                    expected_arrival_date: '',
-                    total_weight: '',
-                    total_shipping_cost: '',
-                    handling_fee: '',
-                    payment_status: '',
-                    payment_method: '',
-                    internal_notes: '',
-                    driver_id: '',
-                    service_type: '',
-                    package_weight: '',
-                    package_description: '',
-                    from_address: '',
-                    pickup_address: '',
-                    files: []
-              },
-              nextStep() {
-                  this.step++;
-                  localStorage.setItem('consolidate_shipment_step', this.step);
-              },
-              prevStep() {
-                  this.step--;
-                  localStorage.setItem('consolidate_shipment_step', this.step);
-              },
-              saveProgress() {
-                  localStorage.setItem('formData', JSON.stringify(this.formData));
-                  localStorage.setItem('consolidate_shipment_step', this.step);
-                  alert("Progress saved successfully!");
+                from: '',
+                drop_off_address: '',
+                package_description: '',
+                package_weight: '',
+                isFragile: '',
+                service_type: '',
+                latitude: '',
+                longitude: ''
               },
               saveAndSubmit() {
-                  let form = document.getElementById("deliveryForm");
-                    let formData = new FormData(form);
-                    $.ajax({
-                        url: requestURL+'/consolidate/create',
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        headers: {
-                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
-                            'Accept': 'application/json'
-                        },
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        let form = document.getElementById("deliveryForm");
+                        let formData = new FormData(form);
 
-                        beforeSend:function(){
-                            document.getElementById("Ajaxbackdrop").style.display = 'flex'
-                        },
+                        // Append the latitude and longitude
+                        formData.append('latitude', position.coords.latitude);
+                        formData.append('longitude', position.coords.longitude);
+                        //Log FormData contents
+                        // console.log("FormData Contents:");
+                        // for (let pair of formData.entries()) {
+                        //     console.log(pair[0] + ": " + pair[1]);
+                        // }
+                        // console.log(localStorage.getItem('auth_token'))
+                        //  return
+                        
+                        $.ajax({
+                            url: requestURL + '/delivery/create',
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            headers: {
+                                'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                                'Accept': 'application/json'
+                            },
+                            beforeSend: function () {
+                                document.getElementById("Ajaxbackdrop").style.display = 'flex'
+                            },
+                            success: (response) => {
+                                document.getElementById("Ajaxbackdrop").style.display = 'none'
+                                createToast('success', response.message);
+                                localStorage.removeItem('formData');
+                            },
+                            error: (xhr, status, error) => {
+                                document.getElementById("Ajaxbackdrop").style.display = 'none'
+                                console.error('Form submission failed:', xhr.responseText);
 
-                        success: (response) => {
-                            document.getElementById("Ajaxbackdrop").style.display = 'none'
-                            //console.log('Form submitted successfully:', response);
-                            createToast('success', response.message);
-                            localStorage.removeItem('formData');
-                            localStorage.removeItem('consolidate_shipment_step');
-                            //alert("Form submitted successfully!");
-                        },
-                         error: (xhr, status, error) => {
-                            document.getElementById("Ajaxbackdrop").style.display = 'none'
-                            console.error('Form submission failed:', xhr.responseText);
+                                try {
+                                    let response = JSON.parse(xhr.responseText);
 
-                        try {
-                            let response = JSON.parse(xhr.responseText);
-                            
-                            if (response.errors) {
-                                let messages = Object.values(response.errors).flat().join('<br>'); // Combines multiple errors
-                                createToast('error', messages);
-                            } else if (response.message) {
-                                createToast('error', response.message);
-                            } else {
-                                createToast('error', 'An unexpected error occurred. Please try again.');
+                                    if (response.errors) {
+                                        let messages = Object.values(response.errors).flat().join('<br>');
+                                        createToast('error', messages);
+                                    } else if (response.message) {
+                                        createToast('error', response.message);
+                                    } else {
+                                        createToast('error', 'An unexpected error occurred. Please try again.');
+                                    }
+                                } catch (e) {
+                                    createToast('error', 'An error occurred. Please check your input and try again.');
+                                }
                             }
-                        } catch (e) {
-                            createToast('error', 'An error occurred. Please check your input and try again.');
-                        }
-                    }
-                });
-              },
+                        });
+                    }, (error) => {
+                        createToast('error', 'Failed to retrieve your location. Please allow location access.');
+                    });
+                } else {
+                    createToast('error', 'Geolocation is not supported by your browser.');
+                }
+            },
 
               getCoordinates() {
                 if(this.formData.from && this.formData.drop_off_address)
@@ -575,39 +591,39 @@
         }
         
         // Save to database
-        document.getElementById('save-quote').addEventListener('click', function() {
-            const distanceText = document.getElementById('distance-text').textContent;
-            const distanceKm = parseFloat(distanceText.match(/\(([\d.]+) km\)/)[1]);
-            const cost = parseFloat(document.getElementById('cost-text').textContent.replace('₦', ''));
-            const weight = parseFloat(document.getElementById('package-weight').value);
-            const serviceType = document.getElementById('service-type').value;
+        // document.getElementById('save-quote').addEventListener('click', function() {
+        //     const distanceText = document.getElementById('distance-text').textContent;
+        //     const distanceKm = parseFloat(distanceText.match(/\(([\d.]+) km\)/)[1]);
+        //     const cost = parseFloat(document.getElementById('cost-text').textContent.replace('₦', ''));
+        //     const weight = parseFloat(document.getElementById('package-weight').value);
+        //     const serviceType = document.getElementById('service-type').value;
             
-            fetch('/api/shipments', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({
-                    from_address: document.getElementById('from-address').value,
-                    to_address: document.getElementById('to-address').value,
-                    distance_km: distanceKm,
-                    weight_kg: weight,
-                    service_type: serviceType,
-                    delivery_cost: cost,
-                    estimated_duration: document.getElementById('duration-text').textContent
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert('Quote saved successfully!');
-                console.log(data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error saving quote');
-            });
-        });
+        //     fetch('/api/V1/quote', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        //         },
+        //         body: JSON.stringify({
+        //             from_address: document.getElementById('from-address').value,
+        //             to_address: document.getElementById('to-address').value,
+        //             distance_km: distanceKm,
+        //             weight_kg: weight,
+        //             service_type: serviceType,
+        //             delivery_cost: cost,
+        //             estimated_duration: document.getElementById('duration-text').textContent
+        //         })
+        //     })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         alert('Quote saved successfully!');
+        //         console.log(data);
+        //     })
+        //     .catch(error => {
+        //         console.error('Error:', error);
+        //         alert('Error saving quote');
+        //     });
+        // });
         
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {

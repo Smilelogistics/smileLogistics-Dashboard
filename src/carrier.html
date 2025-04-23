@@ -62,13 +62,22 @@
                         </span>
                         <span class="ml-2 hidden sm:inline">Basic Info</span>
                     </li>
-                
                     <!-- Step 2 -->
                     <li class="flex-1 flex items-center justify-center"
                         :class="{ 'text-blue-600 dark:text-blue-500': step === 2, 'text-gray-500 dark:text-gray-400': step !== 2 }">
                         <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
                             :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 2, 'border-gray-500 dark:border-gray-400': step !== 2 }">
                             2
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Other Details</span>
+                    </li>
+                
+                    <!-- Step 3 -->
+                    <li class="flex-1 flex items-center justify-center"
+                        :class="{ 'text-blue-600 dark:text-blue-500': step === 3, 'text-gray-500 dark:text-gray-400': step !== 3 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 3, 'border-gray-500 dark:border-gray-400': step !== 3 }">
+                            3
                         </span>
                         <span class="ml-2 hidden sm:inline">Backup Docs</span>
                     </li>
@@ -373,11 +382,201 @@
             calculate();
         });
                 </script>
-                    
-                    
-                    
-                    <!-- Step 2: Backup Docs -->
+
+                    <!-- Step 2: Other Details -->
                     <div x-show="step === 2">
+                        <div>
+                            <!-- <h4 class="mt-4 mb-3 block text-gray-700 dark:text-gray-300">Freight broker info ( if different from bill-to party )</h4> -->
+                            <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">
+                                        Insurance provider
+                                    </label>
+                                    <select type="text" x-model="formData.insurance_provider" name="insurance_provider" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> 
+                                        <option value="" selected disabled> Select</option>
+                                        <option value="NAIT">NAIT</option>
+                                        <option value="progressive">Progressive</option>
+                                        <option value="allstate">Allstate</option>
+                                        <option value="nation_wide">Nation wide</option>
+                                        <option value="hiscox_insuramce">Hiscox Insurance</option>
+                                        <option value="farmers_isurance">Farmers Insurance</option>
+                                        <option value="state_farm">State Farm</option>
+                                        <option value="titan_insurance">Titan Insurance</option>
+                                        <option value="other">Other</option>
+                                        </select>
+                                </div>
+                                <script>
+                                    $(document).ready(function() {
+                                        $("#insurance_expire").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1900:2100"
+                                    });
+                                    })
+                                </script>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Insurance Expires</label>
+                                    <input type="text" x-model="formData.insurance_expire" name="insurance_expire" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="insurance_expire">
+                                </div>
+                                </div>
+                                <div>
+                                    <div class="space-y-4">
+                                        <template x-for="(insurance, index) in formData.insurances" :key="index">
+                                          <div class="p-4 border rounded-lg dark:border-gray-600 relative">
+                                            <!-- Remove button (shown for all insurance including first one) -->
+                                            <button 
+                                              x-show="formData.insurances.length > 1" 
+                                              @click="removeInsurance(index)"
+                                              class="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                                              type="button"
+                                              title="Remove Insurance"
+                                            >
+                                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                              </svg>
+                                            </button>
+                                            
+                                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                              <div>
+                                                <label class="block text-gray-700 dark:text-gray-300">Coverage</label>
+                                                <select x-model="insurance.coverage" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                    <option value="" selected disabled> Choose</option>
+                                                    <option value="general_liability">General Liability</option>
+                                                    <option value="auto_liability">Auto Liability</option>
+                                                    <option value="excess_liability">Excess Liability</option>
+                                                    <option value="trailer_intercharge">Trailer Intercharge</option>
+                                                    <option value="cargo_insurance">Cargo Insurance</option>
+                                                    <option value="workers_compesation">Worker's Compesation</option>
+                                                </select>
+                                              </div>
+                                              <div>
+                                                <label class="block text-gray-700 dark:text-gray-300">Amount</label>
+                                                <input type="text" x-model="insurance.amount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                              </div>
+                                              
+                                              <div>
+                                                <label class="block text-gray-700 dark:text-gray-300">Policy #</label>
+                                                <input type="text" x-model="insurance.policy" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                              </div>
+                                              <script>
+                                                $("#iexpires").datepicker({
+                                                    dateFormat: "yy-mm-dd",
+                                                    changeMonth: true,
+                                                    changeYear: true,
+                                                    yearRange: "1900:2100"
+                                                });
+                                              </script>
+                                              <div>
+                                                <label class="block text-gray-700 dark:text-gray-300">Expires</label>
+                                                <input type="text" x-model="insurance.expires" id="iexpires" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </template>
+                                      </div>
+                                  
+                                      <!-- Add insurance Button (always visible) -->
+                                      <button
+                                        @click="addInsurance()"
+                                        type="button"
+                                        class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                      >
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                          <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        Add Another Provider
+                                      </button>
+                                </div>
+
+
+
+                                <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                    <!-- <h4 class="mt-4 mb-3 block text-gray-700 dark:text-gray-300">Insurance coverage detail</h4> -->
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Payment Terms</label>
+                                        <select type="text" x-model="formData.payment_terms" name="payment_terms" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="payment_terms">
+                                            <option value="" selected disabled> Choose</option>
+                                            <option value="general_liability">General Liability</option>
+                                            <option value="auto_liability">Auto Liability</option>
+                                            <option value="excess_liability">Excess Liability</option>
+                                            <option value="trailer_intercharge">Trailer Intercharge</option>
+                                            <option value="cargo_insurance">Cargo Insurance</option>
+                                            <option value="workers_compesation">Worker's Compesation</option>
+                                            </select>
+
+                                    </div>
+                                <!-- Load Note Radio Buttons and Checkbox -->
+                                    
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Paid via</label>
+                                    <select type="text" x-model="formData.paid_via" name="paid_via" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> 
+                                        <option value="" selected disabled> Select</option>
+                                        <option value="check">Check</option>
+                                        <option value="credit_card">Credit Card</option>
+                                        <option value="ach">ACH</option>
+                                        <option value="cash">Cash</option>
+                                        <option value="via_factoring">Via Factoring</option>
+                                        <option value="wex_fleet_one">Wex Fleet one</option>
+                                        <option value="zelle">Zelle</option>
+                                        <option value="direct_deposit">Direct Deposit</option>
+                                        <option value="other">Other</option>
+                                        </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Account #</label>
+                                    <input type="text" x-model="formData.account_number" name="account_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="account_number">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Routing #</label>
+                                    <input x-model="formData.routing_number" name="routing_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="routing_number" />
+                                </div>
+                            </div>
+                            <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Note About the Coverage</label>
+                                    <input type="email" x-model="formData.note_about_coverage" name="note_about_coverage" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="note_about_coverage" />
+                                </div>
+                            </div>
+                                <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Send settlements to these emails  (only if different from the main email)</label>
+                                        <input type="email" x-model="formData.settlement_email_address" name="settlement_email_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="settlement_email_address" />
+                                    </div>
+                                </div>
+
+                                <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Payment mailing address (if different from the main address)</label>
+                                        <textarea cols="1" rows="1" type="email" x-model="formData.payment_mailling_address" name="payment_mailling_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="payment_mailling_address" > </textarea>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300"> Payment contact (if different from the main contact)</label>
+                                        <textarea cols="1" rows="1" type="text" x-model="formData.payment_contact" name="payment_contact" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="payment_contact"> </textarea>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">
+                                            Payment related note</label>
+                                        <textarea cols="1" rows="1" type="text" x-model="formData.payment_related_notes" name="payment_related_notes" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="payment_related_notes" > </textarea>
+                                    </div>
+                                </div>
+
+                                
+                                <!-- <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Seal #</label>
+                                    <input type="text" x-model="formData.seal_number" name="seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                </div> -->
+                            </div>
+                        </div>
+
+                      
+                    
+                    <!-- Step 3: Backup Docs -->
+                    <div x-show="step === 3">
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-2">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
@@ -416,7 +615,7 @@
                 
                         <!-- Submit Button (Only shows on Step 3) -->
                         <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
-                            x-show="step === 2">
+                            x-show="step === 3">
                             Submit
                         </button>
                     </div>
@@ -471,7 +670,46 @@
                     flash_note_to_riders_about_this_carrier: '',
                     flash_note_to_payroll_about_this_carrier: '',
                     internal_note: '',
+
+                    insurance_provider:'',
+                    insurance_expire:'',
+                    payment_terms:'',
+                    paid_via:'',
+                    account_number:'',
+                    routing_number:'',
+                    note_about_coverage:'',
+                    settlement_email_address:'',
+                    payment_mailling_address:'',
+                    payment_contact:'',
+                    payment_related_notes:'',
+
+                    insurances: [{  // Initialize with one empty provider
+                    coverage: '',
+                    amount: '',
+                    policy_number: '',
+                    expires: ''
+                    }],
                 },
+                addInsurance() {
+                if (!this.formData.insurances) {
+                    this.formData.insurances = [];
+                }
+                this.formData.insurances.push({
+                    coverage: '',
+                    amount: '',
+                    policy_number: '',
+                    expires: ''
+                });
+                //this.saveProgress();
+                },
+
+                removeInsurance(index) {
+                if (this.formData.insurances && index > 0 && this.formData.insurances.length > 1) {
+                    this.formData.insurances.splice(index, 1);
+                    //this.saveProgress();
+                }
+                },
+
                 selectedState: '',
                 allStates: {
                     'United States': [

@@ -178,11 +178,11 @@
                                               <p class="text-xs text-gray-500 dark:text-gray-400">Document</p>
                                               
                                               <template x-if="doc.file.match(/\.(jpeg|jpg|png|gif)$/i)">
-                                                  <img :src="`https://laravel-production-077b.up.railway.app/api/v1/storage/${doc.file}`" class="w-32 h-32 object-cover rounded-md" alt="Document Image" />
+                                                  <img :src="doc.file" class="w-32 h-32 object-cover rounded-md" alt="Document Image" />
                                               </template>
 
                                               <template x-if="doc.file.match(/\.(pdf|docx?|xlsx?)$/i)">
-                                                  <a :href="`https://laravel-production-077b.up.railway.app/api/v1/storage/${doc.file}`" target="_blank" class="text-blue-500 underline">
+                                                  <a :href="doc.file" target="_blank" class="text-blue-500 underline">
                                                       View Document
                                                   </a>
                                               </template>

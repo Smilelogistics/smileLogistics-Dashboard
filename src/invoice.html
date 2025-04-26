@@ -288,6 +288,33 @@
                                                 <option value="" selected disabled></option>
                                                 <option value="Drayage">Drayage</option>
                                                 <option value="Fuel Surcharge">Fuel Surcharge</option>
+                                                <option value="admin_fee">Admin Fee</option>
+                                                <option value="attempted_pickup">Attempted Pickup</option>
+                                                <option value="bonded_cargo_charge">Bonded cargo charge</option>
+                                                <option value="chasis_rental">Chasis Rental</option>
+                                                <option value="chasis_split">Chasis Split</option>
+                                                <option value="chasis_stack">Chasis Stack</option>
+                                                <option value="demurage">Demurage</option>
+                                                <option value="driver_assistance">Driver Assistance</option>
+                                                <option value="drop_charge">Drop Charge</option>
+                                                <option value="dry\">Dry run</option>
+                                                <option value="freight">Frieght</option>
+                                                <option value="hauling_refrigerated_cargo">Hauling Refrigenerated Cargo</option>
+                                                <option value="harzadous_material">Hazardous Material</option>
+                                                <option value="maintainave_and_repair">Maintainance and Repair</option>
+                                                <option value="other">Other</option>
+                                                <option value="over_weight">Over Weight</option>
+                                                <option value="per_diem">Per Diem</option>
+                                                <option value="permits">Permit</option>
+                                                <option value="pre_pull">Pre Pull</option>
+                                                <option value="re_delivery_charge">Re Delivery Charge</option>
+                                                <option value="shipping">Shipping</option>
+                                                <option value="scale_load">Scale Load</option>
+                                                <option value="spot_empty">Spot Empty</option>
+                                                <option value="stop_off">Stop Off</option>
+                                                <option value="storage">Storage</option>
+                                                <option value="toll">Toll</option>
+                                                <option value="triaxle">Trixle</option>
                                                 <!-- Other options... -->
                                             </select>
                                         </div>
@@ -410,7 +437,7 @@
                     <div x-show="step === 3">
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
-                            <input type="file" x-model="formData.file_path" multiple name="file_path" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <input type="file" x-model="formData.file" multiple name="file[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         </div>
                     </div>
                 
@@ -597,7 +624,7 @@ function stepperForm() {
         saveAndSubmit() {
             let form = document.getElementById("newInvoice");
             let formData = new FormData(form);
-            formData.append('file_path', this.formData.file_path);
+            formData.append('file', this.formData.file);
             
             // Convert charges array to form data
             this.formData.charges.forEach((charge, index) => {
@@ -766,7 +793,7 @@ function stepperForm() {
                     //alert("Form submitted successfully!");
                     let form = document.getElementById("newInvoice");
                     let formData = new FormData(form);
-                    formData.append('file_path', this.formData.file_path);
+                    formData.append('file', this.formData.file);
                       // console.log("FormData Contents:");
                     for (let pair of formData.entries()) {
                         console.log(pair[0] + ": " + pair[1]);

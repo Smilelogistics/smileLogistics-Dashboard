@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="en">
+  <head>
+        <include src="./partials/mainhead.html"> </include>
+        <script src="./assets/js/main.js"></script>
+  </head>
+  <body
+    x-data="{ page: 'edit_customer', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
+            <!-- Breadcrumb Start -->
+            <div x-data="{ pageName: `Edit Customer`}">
+              <include src="./partials/breadcrumb.html" />
+            </div>
+            <!-- Breadcrumb End -->
+
+            <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+                <div x-data="stepperForm()" class="w-full mx-auto px-4">
+                  <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xs dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 rtl:space-x-reverse">
+                      <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 1, 'text-gray-500 dark:text-gray-400': step !== 1 }">
+                          <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                              :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 1, 'border-gray-500 dark:border-gray-400': step !== 1 }">
+                              1
+                          </span>
+                          <span class="ml-2 hidden sm:inline">Basic Info</span>
+                      </li>
+                  
+                      <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 2, 'text-gray-500 dark:text-gray-400': step !== 2 }">
+                          <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                              :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 2, 'border-gray-500 dark:border-gray-400': step !== 2 }">
+                              2
+                          </span>
+                          <span class="ml-2 hidden sm:inline">Backup Docs</span>
+                      </li>
+                  </ol>
+                  
+              
+                  <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="editCustomerForm">
+                      <!-- Step 1: Basic Info -->
+                      <div x-show="step === 1" >
+                          <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Customer Name</label>
+                                  <input type="text" x-model="formData.customer_name" name="customer_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Customer Type</label>
+                                  <select x-model="formData.customer_type" name="customer_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                      <option value="" selected disabled>Select Type</option>
+                                      <option value="owner_operator">Owner Operator (Single Truck)</option>
+                                      <option value="company_driver">Company Driver</option>
+                                      <option value="fleet_owner">river for fleet Owner Or Fleet Owner Himself</option>
+                                      <option value="temp">Temp</option>
+                                  </select>
+                              </div>
+                              <style>
+                                  .chosen-container-single .chosen-single {
+                                      height: 40px !important;
+                                      background: none !important;
+                                      border: none !important;
+                                      vertical-align: middle !important;
+                                    }
+                              </style>
+                              <div id="chosen-select">
+                                  <label class="block text-gray-700 dark:text-gray-300">Customer Office</label>
+                                  <select x-model="formData.customer_office" name="customer_office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select">
+                                      <!-- <option value="" selected disabled>Select Type</option> -->
+                                      <option value="IN">IN</option>
+                                     
+                                  </select>
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Customer Code</label>
+                                  <input type="text" x-model="formData.customer_code" name="customer_code" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                              
+                              
+                              <div id="chosen-select">
+                                  <label class="block text-gray-700 dark:text-gray-300">Sales Rep</label>
+                                  <select x-model="formData.customer_sales_rep" name="customer_sales_rep" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select">
+                                      <!-- <option value="" selected disabled>Select Type</option> -->
+                                      <option value="IN">IN</option>
+                                     
+                                  </select>
+                              </div>
+                            
+                          </div>
+  
+                          <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Phone No</label>
+                                  <input type="text" x-model="formData.customer_phone" name="customer_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Contact Name</label>
+                                  <input type="text" x-model="formData.contact_name" name="contact_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Email</label>
+                                  <input type="email" x-model="formData.customer_email" name="customer_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                          </div>
+                          <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Primary Address</label>
+                                  <input type="text" x-model="formData.customer_primary_address" name="customer_primary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Secondary Address</label>
+                                  <input type="text" x-model="formData.customer_secondary_address" name="customer_secondary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+  
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">City</label>
+                                  <input type="text" x-model="formData.customer_city" name="customer_city" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">State</label>
+                                  <select x-model="formData.customer_state" name="customer_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                  <option value="" selected disabled>Select Type</option>
+                              </select>
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Zip</label>
+                                  <input type="text" x-model="formData.customer_zip" name="customer_zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                              </div>
+                          </div>
+  
+                          <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Fax No</label>
+                                  <input type="text" x-model="formData.fax_no" name="fax_no" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Toll free No</label>
+                                  <input type="text" x-model="formData.toll_free" name="toll_free" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Other Contact Info</label>
+                                  <input type="text" x-model="formData.other_notes" name="other_notes" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                          </div>
+  
+                          <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Credit limit</label>
+                                  <input type="text" x-model="formData.credit_limit" name="credit_limit" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Alert at percentage</label>
+                                  <input type="text" x-model="formData.alert_percentage" name="alert_percentage" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Outstanding balance</label>
+                                  <input type="text" x-model="formData.outstanding_balance" name="outstanding_balance" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                          </div>
+  
+                          <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                              <div id="chosen-select">
+                                  <label class="block text-gray-700 dark:text-gray-300">Send invoices under this company</label>
+                                  <select x-model="formData.send_invoice_under_this_company" name="send_invoice_under_this_company" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select">
+                                      <!-- <option value="" selected disabled>Select Type</option> -->
+                                      <option value="IN">IN</option>
+                                     
+                                  </select>
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">A/R Account Code (If different from *Accounts Receivable*)</label>
+                                  <input type="text" x-model="formData.account_code" name="account_code" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                          </div>
+  
+                          <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">invoice footer note</label>
+                                  <textarea type="text" x-model="formData.invoice_footer_note" name="invoice_footer_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                              </div>
+                              <div>
+                                  <div>
+                                      <label class="block text-gray-700 dark:text-gray-300">Parent Account</label>
+                                      <textarea type="text" x-model="formData.subAccount_of" name="subAccount_of" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                                  </div>
+                              </div>
+                          </div>
+  
+                          <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                  <!-- <label class="block text-gray-700 dark:text-gray-300">Load Note</label> -->
+                                  <div class="flex items-center space-x-4">
+                                      <!-- Radio Option 1 -->
+                                      <label class="flex items-center space-x-2">
+                                          <input type="checkbox" x-model="formData.isSubAccount" name="isSubAccount" value="" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                          <span class="text-gray-700 dark:text-gray-300">Is sub Account</span>
+                                      </label>
+  
+                                      <!-- Radio Option 2 -->
+                                      <label class="flex items-center space-x-2">
+                                          <input type="radio" x-model="formData.create_invoices_under_this_parent" name="create_invoices_under_this_parent" value="Under Parent" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                          <span class="text-gray-700 dark:text-gray-300">Invoice Under this Parent </span>
+                                      </label>
+  
+                                      <!-- Radio Option 2 -->
+                                      <label class="flex items-center space-x-2">
+                                          <input type="radio" x-model="formData.create_invoices_under_this_parent" name="create_invoices_under_this_parent" value="Accounting Book" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                          <span class="text-gray-700 dark:text-gray-300">Invoice in Accountiong Book</span>
+                                      </label>
+                                  </div>
+                              </div>
+  
+                          <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Factoring Company</label>
+                                  <input type="text" x-model="formData.factoringCompany" name="factoringCompany" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                              <div>
+                                  <!-- <label class="block text-gray-700 dark:text-gray-300">Load Note</label> -->
+                                  <div class="flex items-center space-x-4">
+                                      <!-- Radio Option 1 -->
+                                      <!-- <label class="flex items-center space-x-2">
+                                          <input type="checkbox" x-model="formData.isFactoredInvoice" name="isFactoredInvoice" value="" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                          <span class="text-gray-700 dark:text-gray-300">Is Factored?</span>
+                                      </label> -->
+  
+                                      <!-- Radio Option 2 --><label class="flex items-center space-x-2">
+                                          <input 
+                                          type="checkbox" 
+                                          x-model="formData.isFactoredInvoice" 
+                                          name="isFactoredInvoice" 
+                                          :checked="formData.isFactoredInvoice == 1"
+                                          @change="formData.isFactoredInvoice = $event.target.checked ? 1 : 0"
+                                          class="text-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                                      >
+                                      <span class="text-gray-700 dark:text-gray-300">Is Factored?</span>
+                                      </label>
+                                      <label class="flex items-center space-x-2">
+                                          <input type="checkbox" 
+                                          x-model="formData.isPrepaid"
+                                           name="isPrepaid" 
+                                           :checked="formData.isPrepaid == 1"
+                                           @change="formData.isPrepaid = $event.target.checked ? 1 : 0"
+                                           class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                          <span class="text-gray-700 dark:text-gray-300">Pre pay? </span>
+                                      </label>
+  
+                                      <!-- Radio Option 2 -->
+                                      <label class="flex items-center space-x-2">
+                                          <input type="radio"
+                                           x-model="formData.isNonBillable" 
+                                           name="isNonBillable" 
+                                           :checked="formData.isNonBillable == 1"
+                                           @change="formData.isNonBillable = $event.target.checked ? 1 : 0"
+                                           class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                          <span class="text-gray-700 dark:text-gray-300">Non-Billable?</span>
+                                      </label>
+                                  </div>
+                              </div>
+                          </div>
+  
+                          <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300"> Flash note to dispatchers  (note will show up during order entry)</label>
+                                  <textarea type="text" x-model="formData.flash_note_for_drivers" name="flash_note_for_drivers" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Flash note to accounting  (note shows up in the charges section)</label>
+                                  <textarea type="text" x-model="formData.flash_note_for_accounting" name="flash_note_for_accounting" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                              
+                              </div>
+                          </div>
+  
+                          <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Start Date</label>
+                                  <input type="text" x-model="formData.start_date" name="start_date" id="start_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                              <!-- <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Tags</label>
+                                  <select x-model="formData.tags" name="tags" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                      <option value="" selected disabled>Select Type</option>
+                                  </select>
+                              </div> -->
+
+                              <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Tags</label>
+                                <input 
+                                  type="text" 
+                                  x-model="formData.tagsInput" 
+                                  @keydown.space.prevent="addTag()"
+                                  @keydown.enter.prevent="addTag()"
+                                  @keydown.backspace="removeLastTag()"
+                                  class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                                  placeholder="Type tags separated by space"
+                                  id="tags"
+                                >
+                                <!-- Display tags as chips -->
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                  <template x-for="(tag, index) in formData.tags" :key="index">
+                                    <div class="flex items-center bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full">
+                                      <span x-text="tag" class="text-sm"></span>
+                                      <button 
+                                        @click="removeTag(index)" 
+                                        class="ml-2 text-gray-500 hover:text-red-500"
+                                        type="button"
+                                      >
+                                        &times;
+                                      </button>
+                                    </div>
+                                  </template>
+                                </div>
+                              </div>
+
+                              <script>
+                                  $(document).ready(function () {
+                                      $("#start_date").datepicker([
+                                          {
+                                              format: "yyyy-mm-dd"
+                                          }
+                                      ]);
+                                  })
+                              </script>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Notes</label>
+                                  <textarea type="text" x-model="formData.note" name="note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Export to accounting in the next run? </label>
+                                  <input type="checkbox" x-model="formData.print_settlements_under_this_company" name="print_settlements_under_this_company" class="w-2 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                          </div>
+  <!-- 
+                          <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300"> Flash note to dispatchers (note will show up during order entry)
+                                  </label>
+                                  <textarea type="text" x-model="formData.flash_notes_to_dispatch" name="flash_notes_to_dispatch" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""></textarea>
+                              </div>
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300"> Flash note to payroll (shows up while creating settlements)</label>
+                                  <textarea type="text" x-model="formData.flash_notes_to_payroll" name="flash_notes_to_payroll" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""></textarea>
+                              </div>
+                          </div> -->
+  
+                          <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                              <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Internal Notes</label>
+                                  <textarea type="text" x-model="formData.internal_note" name="internal_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                              </div>
+                          </div>
+                      </div>
+  
+                          
+                      
+                      <!-- Step 2: Backup Docs -->
+                      <div x-show="step === 2" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <template x-for="(upload, index) in formData.customer_docs" :key="index">
+                            <div>
+                                <h3 class="font-medium text-gray-900 dark:text-gray-100">
+                                    Document #<span x-text="index + 1"></span>
+                                </h3>
+                                <img :src="upload.file_path" class="w-32 h-32 object-cover rounded-md" alt="Document Image" />
+                            </div>
+                        </template>
+                    
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
+                            <input type="file" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="file_path">
+                        </div>
+                    </div>
+                    
+<!-- 
+                      <div x-show="step === 2" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
+                            <input type="file" x-model="formData.file_path" multiple name="file_path" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount">
+                        </div>
+                      </div> -->
+                      
+                      <!-- Navigation Buttons -->
+                      <div class="flex justify-between mt-6">
+                          <!-- Previous Button -->
+                          <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded"
+                              x-show="step > 1" @click="prevStep">
+                              Previous
+                          </button>
+                      
+                          <!-- Next Button -->
+                          <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded"
+                              x-show="step < 2" @click="nextStep">
+                              Next
+                          </button>
+                      
+                          <!-- Submit Button -->
+                          <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded"
+                              x-show="step === 2">
+                              Submit
+                          </button>
+                      </div>
+  
+                  </form>
+              </div>
+              </div>
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+
+    <script>
+       document.addEventListener('alpine:init', () => {
+            Alpine.data('stepperForm', () => ({
+                step: localStorage.getItem('edit_customer') ? parseInt(localStorage.getItem('edit_customer')) : 1,
+                formData:{
+                    customer_name: '',
+                    customer_office: '',
+                    customer_code: '',
+                    customer_type: '',
+                    customer_sales_rep: '',
+                    customer_phone: '',
+                    contact_name: '',
+                    customer_email: '',
+                    customer_primary_address: '',
+                    customer_secondary_address: '',
+                    customer_city: '',
+                    customer_state: '',
+                    customer_zip: '',
+                    // customer_country: '',
+                    tags: [],
+                    fax_no: '',
+                    toll_free: '',
+                    other_notes: '',
+                    credit_limit: '',
+                    alert_percentage: '',
+                    outstanding_balance: '',
+                    send_invoice_under_this_company: '',
+                    account_code: '',
+                    invoice_footer_note: '',
+                    subAccount_of:'',
+                    isSubAccount: '',
+                    create_invoices_under_this_parent: '',
+                    factoringCompany: '',
+                    isFactoredInvoice: '',
+                    isPrepaid: '',
+                    isNonBillable: '',
+                    start_date: '',
+                    flash_note_for_drivers: '',
+                    flash_note_for_accounting: '',
+                    note: '',
+                    file_path: '',
+                    print_settlements_under_this_company: '',
+                    // flash_notes_to_dispatch: '',
+                    // flash_notes_to_payroll: '',
+                    internal_note: '',
+                },
+                step: 1,
+
+                init() {
+                    //this.fetchData();
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const encodedId = urlParams.get('id');
+                    if (encodedId) {
+                        this.id = atob(encodedId);
+                        this.fetchData();
+                    } else {
+                        console.error('No ID found in the URL');
+                    }
+                },
+
+                fetchData() {
+                    fetch(requestURL + '/customers/customer/' + this.id, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('show Customer Data:', data.customer);
+                        this.formData = {
+                            customer_name: data.customer.user.fname || '',
+                            customer_email: data.customer.user.email || '',
+                            customer_office: data.customer.customer_office || '',
+                            customer_code: data.customer.customer_code || '',
+                            customer_type: data.customer.customer_type || '',
+                            customer_sales_rep: data.customer.customer_sales_rep || '',
+                            customer_phone: data.customer.customer_phone || '',
+                            contact_name: data.customer.contact_name || '',
+                            customer_primary_address: data.customer.customer_primary_address || '',
+                            customer_secondary_address: data.customer.customer_secondary_address || '',
+                            customer_city: data.customer.customer_city || '',
+                            customer_state: data.customer.customer_state || '',
+                            customer_zip: data.customer.customer_zip || '',
+                            fax_no: data.customer.fax_no || '',
+                            toll_free: data.customer.toll_free || '',
+                            other_notes: data.customer.other_notes || '',
+                            //tags: data.customer.tags || '',
+                            credit_limit: data.customer.credit_limit || '',
+                            alert_percentage: data.customer.alert_percentage || '',
+                            outstanding_balance: data.customer.outstanding_balance || '',
+                            send_invoice_under_this_company: data.customer.send_invoice_under_this_company || '',
+                            account_code: data.customer.account_code || '',
+                            invoice_footer_note: data.customer.invoice_footer_note || '',
+                            subAccount_of: data.customer.subAccount_of || '',
+                            isSubAccount: data.customer.isSubAccount || '',
+                            create_invoices_under_this_parent: data.customer.create_invoices_under_this_parent || '',
+                            factoringCompany: data.customer.factoringCompany || '',
+                            isFactoredInvoice: data.customer.isFactoredInvoice ||'',
+                            isPrepaid: data.customer.isPrepaid ||'',
+                            isNonBillable: data.customer.isNonBillable ||'',
+                            start_date: data.customer.start_date ||'',
+                            flash_note_for_drivers: data.customer.flash_note_for_drivers ||'',
+                            flash_note_for_accounting: data.customer.flash_note_for_accounting ||'',
+                            note: data.customer.note ||'',
+                            print_settlements_under_this_company: data.customer.print_settlements_under_this_company ||'',
+                            internal_note: data.customer.internal_note ||'',
+                            
+                            //truck_driver: truckDriver,
+                            tags: Array.isArray(data.customer.tag) 
+                            ? data.customer.tag 
+                            : (data.customer.tag ? data.customer.tag.split(/\s*,\s*/) : []),
+                           
+                            customer_docs: data.customer.documents?.map(tdoc => ({
+                                id: tdoc.id || '',
+                                file_path: tdoc.file_path || 'Unknown',
+                            })) || [],
+                        };
+
+                        // Set the selected customer (if available)
+                        // this.selectedDriver = truckDriver || { fname: 'No Driver', lname: '' };
+                        // this.formData.driver_id = this.selectedDriver.id || '';
+                        
+                    })
+                },
+                 
+                nextStep() {
+                        this.step++;
+                        localStorage.setItem('edit_customer', this.step);
+                    },
+                    prevStep() {
+                        this.step--;
+                        localStorage.setItem('edit_customer', this.step);
+                    },
+                saveProgress() {
+                    localStorage.setItem('formData', JSON.stringify(this.formData));
+                },
+                addTag() {
+                if (this.formData.tagsInput.trim()) {
+                    // Split by spaces and filter out empty strings
+                    const newTags = this.formData.tagsInput.split(' ')
+                    .map(tag => tag.trim())
+                    .filter(tag => tag.length > 0);
+                    
+                    // Add new tags to the array, avoiding duplicates
+                    newTags.forEach(tag => {
+                    if (!this.formData.tags.includes(tag)) {
+                        this.formData.tags.push(tag);
+                    }
+                    });
+                    
+                    this.formData.tagsInput = '';
+                    //this.saveProgress();
+                }
+                },
+                removeTag(index) {
+                this.formData.tags.splice(index, 1);
+                //this.saveProgress();
+                },
+                
+                removeLastTag() {
+                if (this.formData.tagsInput === '' && this.formData.tags.length > 0) {
+                    this.formData.tags.pop();
+                    //this.saveProgress();
+                }
+                },
+                saveAndSubmit(e) {
+                    e.preventDefault();
+                    
+                    let form = document.getElementById("editCustomerForm");
+                    let formData = new FormData(form);
+                    formData.append('tags', this.formData.tags.join(','));
+
+                   
+                    if (typeof this.formData.tags === 'string') {
+                        this.formData.tags = this.formData.tags 
+                            ? this.formData.tags.split(/\s*,\s*/).filter(tag => tag.trim() !== '') 
+                            : [];
+                    }
+
+                    // Append tags as an array (Laravel expects this)
+                    if (Array.isArray(this.formData.tags)) {
+                        this.formData.tags.forEach((tag, index) => {
+                            formData.append(`tags[${index}]`, tag);
+                        });
+                    }
+
+                    formData.append("_method", "PUT");
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+                        console.log(localStorage.getItem('auth_token'))
+                                    
+                    console.log("FormData Debugging:");
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+
+                    $.ajax({
+                        url: requestURL + "/customers/update/" + this.id,
+                        type: "POST",
+                        data: formData,
+                        processData: false, 
+                        contentType: false,
+                        headers: {
+                            "Authorization": "Bearer " + localStorage.getItem("auth_token"),
+                            "Accept": "application/json"
+                        },
+                        beforeSend:function(){
+                            document.getElementById("Ajaxbackdrop").style.display = 'flex'
+                        },
+
+                        success: (response) => {
+                            console.log("Success:", response);
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            createToast('success', response.message);
+                        },
+                        error: (xhr) => {
+                            console.error("Error:", xhr.responseText);
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            createToast('error', xhr.responseText);
+                        }
+                    });
+                }
+            }));
+        })
+    
+
+      function handleLoadTypeChange(value) {
+    if (value === 'import') {
+        console.log(`Load type changed to ${value}`);
+        // You can add specific logic for import/export here
+        // For example, show/hide specific form sections
+        document.getElementById('container').style.display = '';
+        // Example: Show a message or change UI elements
+        //alert(`Selected load type: ${value}`);
+        
+        // You could show/hide specific form sections
+        // document.getElementById('importSection').style.display = value === 'import' ? 'block' : 'none';
+        // document.getElementById('exportSection').style.display = value === 'export' ? 'block' : 'none';
+    }
+    
+    // Trigger auto-save when selection changes
+    //handleInputChange();
+}
+      </script>
+      <script>
+        function duplicateContainer() {
+            var container = document.getElementById("container");
+            var containerList = document.getElementById("containerList");
+    
+            // Clone container and remove display:none
+            var newContainer = container.cloneNode(true);
+            newContainer.style.display = "block";
+    
+            // Append new container
+            containerList.appendChild(newContainer);
+        }
+
+        function removeContainer(element) {
+            element.parentElement.parentElement.remove();
+        }
+
+        function duplicateBillto()
+        {
+            var billto = document.getElementById("billto");
+            var billtoList = document.getElementById("billtoList");
+            var newBillto = billto.cloneNode(true);
+            billtoList.appendChild(newBillto);
+        }
+
+        function removeBillto(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+        //
+
+        function duplicatePickup()
+        {
+            var pickup = document.getElementById("pickUPP");
+            var pickupList = document.getElementById("pickupList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removePickup(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        
+        function duplicateDropAt()
+        {
+            var pickup = document.getElementById("dropAt");
+            var pickupList = document.getElementById("dropAtList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removeDropAt(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        function duplicateCharges()
+        {
+            var pickup = document.getElementById("chargesDuplicate");
+            var pickupList = document.getElementById("chargesList");
+            var newPickup = pickup.cloneNode(true);
+            pickupList.appendChild(newPickup);
+        }
+        function removeCharges(element)
+        {
+            element.parentElement.parentElement.remove();
+        }
+
+        
+    </script>
+      
+  </body>
+</html>

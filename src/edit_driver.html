@@ -58,9 +58,34 @@
                             :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 2, 'border-gray-500 dark:border-gray-400': step !== 2 }">
                             2
                         </span>
+                        <span class="ml-2 hidden sm:inline">Form w-9</span>
+                    </li>
+                    
+                    <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 3, 'text-gray-500 dark:text-gray-400': step !== 3 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 3, 'border-gray-500 dark:border-gray-400': step !== 3 }">
+                            3
+                        </span>
+                        <span class="ml-2 hidden sm:inline">License and Insurance</span>
+                    </li>
+
+                    <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 4, 'text-gray-500 dark:text-gray-400': step !== 4 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 4, 'border-gray-500 dark:border-gray-400': step !== 4 }">
+                            4
+                        </span>
+                        <span class="ml-2 hidden sm:inline">App Integration</span>
+                    </li>
+                
+                    <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 5, 'text-gray-500 dark:text-gray-400': step !== 5 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 5, 'border-gray-500 dark:border-gray-400': step !== 5 }">
+                            5
+                        </span>
                         <span class="ml-2 hidden sm:inline">Backup Docs</span>
                     </li>
                 </ol>
+                
                 
             
                 <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="editDriverForm">
@@ -195,10 +220,32 @@
                             </div> -->
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Tags</label>
-                                <select x-model="formData.tags" name="tags" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                    <option value="" selected disabled>Select Type</option>
-                                </select>
-                            </div>
+                                <input 
+                                  type="text" 
+                                  x-model="formData.tagsInput" 
+                                  @keydown.space.prevent="addTag()"
+                                  @keydown.enter.prevent="addTag()"
+                                  @keydown.backspace="removeLastTag()"
+                                  class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                                  placeholder="Type tags separated by space"
+                                  id="tags"
+                                >
+                                <!-- Display tags as chips -->
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                  <template x-for="(tag, index) in formData.tags" :key="index">
+                                    <div class="flex items-center bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full">
+                                      <span x-text="tag" class="text-sm"></span>
+                                      <button 
+                                        @click="removeTag(index)" 
+                                        class="ml-2 text-gray-500 hover:text-red-500"
+                                        type="button"
+                                      >
+                                        &times;
+                                      </button>
+                                    </div>
+                                  </template>
+                                </div>
+                              </div>
                         </div>
 
                         <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -282,10 +329,453 @@
                         </div>
                     </div>
 
+                     <!-- Step 2: Form w-9 -->
+                     <div x-show="step === 2">
+                   
+                        <div id="" class="grid grid-cols-4 md:grid-cols-4 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Name (as in tax return)</label>
+                                <input type="text" x-model="formData.name_tax_return" name="name_tax_return" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Business Name (if different from above)</label>
+                                <input type="text" x-model="formData.different_bussiness_name" name="different_bussiness_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Type</label>
+                                <select type="text" x-model="formData.wtype" name="wtype" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> 
+                                    <option value="" selected disabled>Select Type</option>
+                                    <option value="individual_sole_proprietorship">Individual / Sole Proprietorship or Single Member LLC</option>
+                                    <option value="c_corporiation">C Corporation</option>
+                                    <option value="s_corporation">S Corporation</option>
+                                    <option value="partnership">Partnership</option>
+                                    <option value="trust_estate">Trust/Estate</option>
+                                    <option value="liability">Liability</option>
+                                    <option value="other">Other</option>
+                                    </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">If 'Other' , explain here</label>
+                                <input type="text" x-model="formData.other_type" name="other_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Address</label>
+                                <input type="text" x-model="formData.waddress" name="waddress" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">State </label>
+                                <input type="text" x-model="formData.wstate" name="wstate" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">City</label>
+                                <input type="text" x-model="formData.wcity" name="wcity" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Zip</label>
+                                <input type="text" x-model="formData.wzip" name="wzip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 items-start">
+                            <!-- Label -->
+                            <div>
+                                <span class="block text-gray-700 dark:text-gray-300">
+                                    Which one is used as TIN (Tax ID)?
+                                </span>
+                            </div>
+                        
+                            <!-- Radio Inputs -->
+                            <div class="space-y-2 flex">
+                                <label class="flex items-center space-x-2">
+                                    <input type="radio" x-model="formData.wtaxid" name="wtaxid" value="wssn" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                    <span class="text-gray-700 dark:text-gray-300">Social Security #</span>
+                                </label>
+                                <label class="flex items-center space-x-2">
+                                    <input type="radio" x-model="formData.wtaxid" name="wtaxid" value="wein" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                    <span class="text-gray-700 dark:text-gray-300">Employer ID # (EIN)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">SSN</label>
+                                <input type="text" x-model="formData.wwssn" name="wwssn" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">EIN </label>
+                                <input type="text" x-model="formData.wwein" name="wwein" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Paid via</label>
+                                <select type="text" x-model="formData.wpaid_via" name="wpaid_via" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> 
+                                    <option value="" selected disabled> Select</option>
+                                    <option value="check">Check</option>
+                                    <option value="credit_card">Credit Card</option>
+                                    <option value="ach">ACH</option>
+                                    <option value="cash">Cash</option>
+                                    <option value="via_factoring">Via Factoring</option>
+                                    <option value="wex_fleet_one">Wex Fleet one</option>
+                                    <option value="zelle">Zelle</option>
+                                    <option value="direct_deposit">Direct Deposit</option>
+                                    <option value="other">Other</option>
+                                    </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Account #</label>
+                                <input type="text" x-model="formData.waccountNumber" name="waccountNumber" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Routing #</label>
+                                <input type="text" x-model="formData.wroutingNumber" name="wroutingNumber" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Internal Notes</label>
+                                <textarea type="text" x-model="formData.winternal_notes" name="winternal_notes" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                            </div>
+                        </div>
+                        
+                      </div>
+
+                        <!-- Step 3: License Info -->
+                    <div x-show="step === 3">
+                   
+                        <div id="" class="grid grid-cols-4 md:grid-cols-4 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Social Security numbe</label>
+                                <input type="text" x-model="formData.licensessn" name="licensessn" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+
+                            <script>
+                                $(document).ready(function() {
+                                    $("#dob").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1900:2100"
+                                    });
+                                });
+                                
+                                $(document).ready(function() {
+                                    $("#cdl_expires").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1900:2100"
+                                    });
+                                });
+                                
+                                
+                                $(document).ready(function() {
+                                    $("#medical_expires").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1900:2100"
+                                    });
+                                });
+                                
+                                $(document).ready(function() {
+                                    $("#twic_expires").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1900:2100"
+                                    });
+                                });
+                                $(document).ready(function() {
+                                    $("#sealink_expires").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1900:2100"
+                                    });
+                                });
+                            </script>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Date of Birth</label>
+                                <input type="text" x-model="formData.dob" name="dob" id="dob" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">CDL(Commercial driving license)#</label>
+                                <input type="text" x-model="formData.cdlnumber" name="cdlnumber" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">License state </label>
+                                <input type="text" x-model="formData.license_state" name="licenses_tate" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">CDL Expires </label>
+                                <input type="text" x-model="formData.cdl_expires" id="cdl_expires" name="cdl_expires" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Medical #</label>
+                                <input type="text" x-model="formData.medical_number" name="medical_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Medical Expires </label>
+                                <input type="text" x-model="formData.medical_expires" name="medical_expires" id="medical_expires" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">TWIC #</label>
+                                <input type="text" x-model="formData.twic_number" name="twic_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">TWIC Expires</label>
+                                <input type="text" x-model="formData.twic_expires" name="twic_expires" id="twic_expires" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Sealink #</label>
+                                <input type="text" x-model="formData.sealink_number" name="sealink_number" id="sealink_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Sealink expires</label>
+                                <input type="text" x-model="formData.sealink_expires" name="sealink_expires" id="sealink_expires" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Annual MVR </label>
+                                <input type="text" x-model="formData.annual_mvr" name="annual_mvr" id="annual_mvr" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Clearinghouse Annual </label>
+                                <input type="text" x-model="formData.clearing_annual" name="clearing_annual" id="clearing_annual" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                        </div>
+
+                        <script>
+                            $(document).ready(function(){
+                               
+                                $(document).ready(function() {
+                                    $("#clearing_annual").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1900:2100"
+                                    });
+                                });
+
+                                
+                                $(document).ready(function() {
+                                    $("#annual_mvr").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1900:2100"
+                                    });
+                                });
+
+                                
+                                $(document).ready(function() {
+                                    $("#liability_insurance_expires").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1900:2100"
+                                    });
+                                });
+
+                                $("#date_1").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1900:2100"
+                                    });
+                                    
+                                $("#date_2").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1900:2100"
+                                    });
+                                    
+                                $("#date_3").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1900:2100"
+                                    });
+                                    
+                                $("#date_4").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1900:2100"
+                                    });
+                                    
+                                $("#date_5").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1900:2100"
+                                    });
+                                    
+                                $("#date_6").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        yearRange: "1900:2100"
+                                    });
+                            })
+                        </script>
+
+                        
+                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Liability insurance expires</label>
+                                <input type="text" x-model="formData.liability_insurance_expires" name="liability_insurance_expires" id="liability_insurance_expires" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">
+                                    Insurance provider
+                                </label>
+                                <select type="text" x-model="formData.insurance_provider" name="insurance_provider" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> 
+                                    <option value="" selected disabled> Select</option>
+                                    <option value="NAIT">NAIT</option>
+                                    <option value="progressive">Progressive</option>
+                                    <option value="allstate">Allstate</option>
+                                    <option value="nation_wide">Nation wide</option>
+                                    <option value="hiscox_insuramce">Hiscox Insurance</option>
+                                    <option value="farmers_isurance">Farmers Insurance</option>
+                                    <option value="state_farm">State Farm</option>
+                                    <option value="titan_insurance">Titan Insurance</option>
+                                    <option value="other">Other</option>
+                                    </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">
+                                    Insurance Coverage
+                                </label>
+                                <select type="text" x-model="formData.insurance_coverage" name="insurance_coverage" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> 
+                                    <option value="" selected disabled> Select</option>
+                                    <option value="occupational_accident">Occupational Accident</option>
+                                    <option value="non_occupational_accident">Non Occupational Accident</option>
+                                    <option value="workers_compensation">Workers compesation</option>
+
+                                    </select>
+                            </div>
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <!-- <span>Addistional Dates </span> -->
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Date 1</label>
+                                <input type="text" x-model="formData.date_1" name="date_1" id="date_1" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Date 2</label>
+                                <input type="text" x-model="formData.date_2" name="date_2" id="date_2" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Date 3</label>
+                                <input type="text" x-model="formData.date_3" name="date_3" id="date_3" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                        </div>
+                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <!-- <span>Addistional Dates </span> -->
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Date 4</label>
+                                <input type="text" x-model="formData.date_4" name="date_4" id="date_4" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Date 2</label>
+                                <input type="text" x-model="formData.date_5" name="date_5" id="date_5" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Date 6</label>
+                                <input type="text" x-model="formData.date_6" name="date_6" id="date_6" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Internal Notes</label>
+                                <textarea type="text" x-model="formData.license_internal_notes" name="license_internal_notes" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                            </div>
+                        </div>
+                        
+                      </div>
+
+
+
+                        <!-- Step 4 - Original Section -->
+                        <div x-show="step === 4">
+                            <div class="space-y-4">
+                              <template x-for="(provider, index) in formData.providers" :key="index">
+                                <div class="p-4 border rounded-lg dark:border-gray-600 relative">
+                                  <!-- Remove button (shown for all providers including first one) -->
+                                  <button 
+                                    x-show="formData.providers.length > 1" 
+                                    @click="removeProvider(index)"
+                                    class="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                                    type="button"
+                                    title="Remove provider"
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                  </button>
+                                  
+                                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                      <label class="block text-gray-700 dark:text-gray-300">Provider</label>
+                                      <select x-model="provider.app_provider" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <option value="" selected disabled>Select</option>
+                                        <option value="comidata">Comidata</option>
+                                        <option value="comidata_advance">Comidata Advance</option>
+                                        <option value="efs">EFS</option>
+                                      </select>
+                                    </div>
+                                    <div>
+                                      <label class="block text-gray-700 dark:text-gray-300">Card # / Device # / Linking #</label>
+                                      <input type="text" x-model="provider.card_device_linking_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                    <div>
+                                      <label class="block text-gray-700 dark:text-gray-300">Quick note</label>
+                                      <textarea cols="1" rows="1" x-model="provider.quick_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""></textarea>
+                                    </div>
+                                  </div>
+                                </div>
+                              </template>
+                            </div>
+                        
+                            <!-- Add Provider Button (always visible) -->
+                            <button
+                              @click="addProvider()"
+                              type="button"
+                              class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                              </svg>
+                              Add Another Provider
+                            </button>
+                          </div>
+
                         
                     
-                    <!-- Step 2: Backup Docs -->
-                    <div x-show="step === 2" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Step 5: Backup Docs -->
+                    <div x-show="step === 5" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <template x-for="(upload, index) in formData.driver_docs" :key="index">
                             <h3 class="font-medium text-gray-900 dark:text-gray-100">Document #<span x-text="index + 1"></span></h3>
                             <img :src="`https://laravel-production-077b.up.railway.app/storage/${upload.file_path}`" class="w-32 h-32 object-cover rounded-md" alt="Document Image" />
@@ -305,7 +795,7 @@
 
                         <!-- Next Button (Only shows when on step 1) -->
                         <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
-                            x-show="step < 2" @click="step = step + 1">
+                            x-show="step < 5" @click="step = step + 1">
                             Next
                         </button>
 
@@ -317,7 +807,7 @@
 
                         <!-- Submit Button (Only shows on step 2) -->
                         <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
-                            x-show="step === 2">
+                            x-show="step === 5">
                             Submit
                         </button>
                     </div>
@@ -356,7 +846,8 @@
                     emergency_contact_info: '',
                     hired_on: '',
                     years_of_experience: '',
-                    tags: '',
+                    tags: [],
+                    tagsInput: '',
                     notes_about_the_choices_made: '',
                     mobile_settings_control: '',
                     pay_via: '',
@@ -368,6 +859,49 @@
                     flash_notes_to_payroll: '',
                     internal_notes: '',
                     driver_docs: [],
+
+
+                    //Form w-9
+                name_tax_return: '',
+                different_bussiness_name: '',
+                wtype: '',
+                other_type: '',
+                waddress: '',
+                wstate: '',
+                wcity: '',
+                wzip: '',
+                wtaxid: '',
+                wwssn: '',
+                wwein: '',
+                wpaid_via: '',
+                waccountNumber: '',
+                wroutingNumber: '',
+                winternal_notes: '',
+                licensessn: '',
+                dob: '',
+                cdlnumber: '',
+                license_state: '',
+                cdl_expires: '',
+                medical_number: '',
+                medical_expires: '',
+                twic_number: '',
+                twic_expires: '',
+                sealink_number: '',
+                sealink_expires: '',
+                annual_mvr: '',
+                clearing_annual: '',
+                liability_insurance_expires: '',
+                insurance_provider: '',
+                insurance_coverage: '',
+                date_1: '',
+                date_2: '',
+                date_3: '',
+                date_4: '',
+                date_5: '',
+                date_6: '',
+                license_internal_notes:'',
+
+                providers: []
                 },
                 step: 1,
 
@@ -413,7 +947,7 @@
                             emergency_contact_info: data.driver.emergency_contact_info || '',
                             hired_on: data.driver.hired_on || '',
                             years_of_experience: data.driver.years_of_experience || '',
-                            tags: data.driver.tags || '',
+                            //tags: data.driver.tags || '',
                             notes_about_the_choices_made: data.driver.notes_about_the_choices_made || '',
                             mobile_settings_control: data.driver.mobile_settings_control || '',
                             pay_via: data.driver.pay_via || '',
@@ -424,7 +958,54 @@
                             flash_notes_to_payroll: data.driver.flash_notes_to_payroll || '',
                             print_settlements_under_this_company: data.driver.print_settlements_under_this_company || '',
                             internal_notes: data.driver.internal_notes || '',
+                            name_tax_return: data.driver.name_tax_return ||'',
+                            different_bussiness_name: data.driver.different_bussiness_name ||'',
+                            wtype: data.driver.wtype ||'',
+                            other_type: data.driver.other_type ||'',
+                            waddress: data.driver.waddress ||'',
+                            wstate: data.driver.wstate ||'',
+                            wcity: data.driver.wcity ||'',
+                            wzip: data.driver.wzip ||'',
+                            wtaxid: data.driver.wtaxid ||'',
+                            wwssn: data.driver.wwssn ||'',
+                            wwein: data.driver.wwein ||'',
+                            wpaid_via: data.driver.wpaid_via ||'',
+                            waccountNumber: data.driver.waccountNumber ||'',
+                            wroutingNumber: data.driver.wroutingNumber ||'',
+                            winternal_notes: data.driver.winternal_notes || '',
+                            licensessn: data.driver.licensessn ||'',
+                            dob: data.driver.dob ||'',
+                            cdlnumber: data.driver.cdlnumber ||'',
+                            license_state: data.driver.license_state ||'',
+                            cdl_expires: data.driver.cdl_expires ||'',
+                            medical_number: data.driver.medical_number ||'',
+                            medical_expires: data.driver.medical_expires ||'',
+                            twic_number: data.driver.twic_number ||'',
+                            twic_expires: data.driver.twic_expires ||'',
+                            sealink_number: data.driver.sealink_number ||'',
+                            sealink_expires: data.driver.sealink_expires ||'',
+                            annual_mvr: data.driver.annual_mvr ||'',
+                            clearing_annual: data.driver.clearing_annual ||'',
+                            liability_insurance_expires: data.driver.liability_insurance_expires ||'',
+                            insurance_provider: data.driver.insurance_provider ||'',
+                            insurance_coverage: data.driver.insurance_coverage ||'',
+                            date_1: data.driver.date_1 ||'',
+                            date_2: data.driver.date_2 ||'',
+                            date_3: data.driver.date_3 ||'',
+                            date_4: data.driver.date_4 ||'',
+                            date_5: data.driver.date_5 ||'',
+                            date_6: data.driver.date_6 ||'',
+                            license_internal_notes: data.driver.license_internal_notes ||'',
+
                             //truck_driver: truckDriver,
+                            tags: Array.isArray(data.driver.tags) 
+                            ? data.driver.tags 
+                            : (data.driver.tags ? data.driver.tags.split(/\s*,\s*/) : []),
+                            providers: data.driver.providers?.map(p => ({
+                                app_provider: p.app_provider || '',
+                                card_device_linking_number: p.card_device_linking_number || '',
+                                quick_note: p.quick_note || '',
+                            })),
                             driver_docs: data.driver.driver_docs?.map(tdoc => ({
                                 id: tdoc.id || '',
                                 file_path: tdoc.file_path || 'Unknown',
@@ -437,6 +1018,25 @@
                         
                     })
                 },
+                  // Add a new provider
+                  addProvider() {
+                if (!this.formData.providers) {
+                    this.formData.providers = [];
+                }
+                this.formData.providers.push({
+                    app_provider: '',
+                    card_device_linking_number: '',
+                    quick_note: ''
+                });
+                //this.saveProgress();
+                },
+
+                removeProvider(index) {
+                if (this.formData.providers && index > 0 && this.formData.providers.length > 1) {
+                    this.formData.providers.splice(index, 1);
+                    //this.saveProgress();
+                }
+                },
                 nextStep() {
                         this.step++;
                         localStorage.setItem('edit_truck', this.step);
@@ -448,11 +1048,59 @@
                 saveProgress() {
                     localStorage.setItem('formData', JSON.stringify(this.formData));
                 },
+                addTag() {
+                if (this.formData.tagsInput.trim()) {
+                    // Split by spaces and filter out empty strings
+                    const newTags = this.formData.tagsInput.split(' ')
+                    .map(tag => tag.trim())
+                    .filter(tag => tag.length > 0);
+                    
+                    // Add new tags to the array, avoiding duplicates
+                    newTags.forEach(tag => {
+                    if (!this.formData.tags.includes(tag)) {
+                        this.formData.tags.push(tag);
+                    }
+                    });
+                    
+                    this.formData.tagsInput = '';
+                    //this.saveProgress();
+                }
+                },
+                removeTag(index) {
+                this.formData.tags.splice(index, 1);
+                //this.saveProgress();
+                },
+                
+                removeLastTag() {
+                if (this.formData.tagsInput === '' && this.formData.tags.length > 0) {
+                    this.formData.tags.pop();
+                    //this.saveProgress();
+                }
+                },
                 saveAndSubmit(e) {
                     e.preventDefault();
                     
                     let form = document.getElementById("editDriverForm");
                     let formData = new FormData(form);
+                    formData.append('tags', this.formData.tags.join(','));
+
+                    this.formData.providers.forEach((provider, index) => {
+                        formData.append(`providers[${index}][app_provider]`, provider.app_provider);
+                        formData.append(`providers[${index}][card_device_linking_number]`, provider.card_device_linking_number);
+                        formData.append(`providers[${index}][quick_note]`, provider.quick_note);
+                    });
+                    if (typeof this.formData.tags === 'string') {
+                        this.formData.tags = this.formData.tags 
+                            ? this.formData.tags.split(/\s*,\s*/).filter(tag => tag.trim() !== '') 
+                            : [];
+                    }
+
+                    // Append tags as an array (Laravel expects this)
+                    if (Array.isArray(this.formData.tags)) {
+                        this.formData.tags.forEach((tag, index) => {
+                            formData.append(`tags[${index}]`, tag);
+                        });
+                    }
 
                     formData.append("_method", "PUT");
                     for (let pair of formData.entries()) {

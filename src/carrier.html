@@ -100,7 +100,7 @@
                     <div x-show="step === 1">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Carrier Name</label>
+                                <label class="block text-gray-700 dark:text-gray-300">Carrier Name <span class="text-red-700 text-2xl">*</span></label>
                                 <input type="text" x-model="formData.name" name="name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                             </div>
                             <style>
@@ -115,6 +115,7 @@
                             <div class="choose-seleckt" style="z-index: 1 !important;">
                                 <label class="block text-gray-700 dark:text-gray-300">State served</label>
                                 <select x-model="formData.state_served" name="state_served[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select" multiple>
+                                    <!-- <option value="" selected disabled>Choose</option> -->
                                     <template x-for="(states, country) in allStates" :key="country">
                                         <optgroup :label="country">
                                             <template x-for="state in states" :key="state">
@@ -223,7 +224,7 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Email</label>
+                                <label class="block text-gray-700 dark:text-gray-300">Email <span class="text-red-700 text-2xl">*</span></label>
                                 <input type="email" x-model="formData.email" id="email" name="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                             </div>
                             <div>
@@ -286,9 +287,10 @@
                         </div>
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Power Units (Truck)</label>
+                            <input type="number" x-model="formData.power_units" id="power_units" name="power_units" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300">Other equipment (chassis, reefers, vans etc)</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm">Other equipment (chassis, reefers, vans etc)</label>
                             <input type="text" x-model="formData.other_equipments" id="other_equipments" name="other_equipments" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         </div>
                         <div id="choose-select">
@@ -309,7 +311,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-2">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300">( rating )Carrier belongs to these pay categories</label>
+                            <label class="block text-gray-700 dark:text-gray-300 text-sm">( rating )Carrier belongs to these pay categories</label>
                             <select x-model="formData.rating" name="rating" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select </option>
                                 <option value="1">None</option>
@@ -457,10 +459,10 @@
                                               
                                               <div>
                                                 <label class="block text-gray-700 dark:text-gray-300">Policy #</label>
-                                                <input type="text" x-model="insurance.policy" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                                <input type="text" x-model="insurance.policy_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                               </div>
                                               <script>
-                                                $("#iexpires").datepicker({
+                                                $(".iexpires").datepicker({
                                                     dateFormat: "yy-mm-dd",
                                                     changeMonth: true,
                                                     changeYear: true,
@@ -469,7 +471,7 @@
                                               </script>
                                               <div>
                                                 <label class="block text-gray-700 dark:text-gray-300">Expires</label>
-                                                <input type="text" x-model="insurance.expires" id="iexpires" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                                <input type="text" x-model="insurance.expires" id="iexpires" class="iexpires w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                               </div>
                                             </div>
                                           </div>
@@ -549,7 +551,7 @@
 
                                 <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                     <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Payment mailing address (if different from the main address)</label>
+                                        <label class="block text-gray-700 dark:text-gray-300 text-sm">Payment mailing address (if different from the main address)</label>
                                         <textarea cols="1" rows="1" type="email" x-model="formData.payment_mailling_address" name="payment_mailling_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="payment_mailling_address" > </textarea>
                                     </div>
 
@@ -580,7 +582,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-2">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
-                                <input type="file" x-model="formData.file_path" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <input type="file" x-model="formData.file" multiple name="file[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                             </div>
                         </div>
                     </div>
@@ -603,7 +605,7 @@
                 
                         <!-- Next Button -->
                         <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
-                            x-show="step < 2" @click="nextStep">
+                            x-show="step < 3" @click="nextStep">
                             Next
                         </button>
                 
@@ -750,6 +752,12 @@
                 saveAndSubmit() {
                     let form = document.getElementById("newCarrier");
                     let formData = new FormData(form);
+                    this.formData.insurances.forEach((insurance, index) => {
+                        formData.append(`insurances[${index}][coverage]`, insurance.coverage);
+                        formData.append(`insurances[${index}][amount]`, insurance.amount);
+                        formData.append(`insurances[${index}][policy_number]`, insurance.policy_number);
+                        formData.append(`insurances[${index}][expires]`, insurance.expires);
+                    });
                     // for (let pair of formData.entries()) {
                     //     console.log(pair[0] + ": " + pair[1]);
                     // }
@@ -806,7 +814,7 @@
                     // Reset form data
                     this.formData = {
                         name: '',
-                        state_served: '',
+                        state_served: [],
                         code: '',
                         offices: '',
                         type: '',
@@ -838,8 +846,23 @@
                         flash_note_to_riders_about_this_carrier: '',
                         flash_note_to_payroll_about_this_carrier: '',
                         internal_note: '',
+
+                        insurance_provider:'',
+                        insurance_expire:'',
+                        payment_terms:'',
+                        paid_via:'',
+                        account_number:'',
+                        routing_number:'',
+                        note_about_coverage:'',
+                        settlement_email_address:'',
+                        payment_mailling_address:'',
+                        payment_contact:'',
+                        payment_related_notes:'',
+
+                        insurances: [],
+
                     };
-                    this.step = 1;
+                    //this.step = 1;
                 }
             }
         }

@@ -65,7 +65,7 @@
                 </ol>
                 
             
-                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data">
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newCustomer">
                     <!-- Step 1: Basic Info -->
                     <div x-show="step === 1" >
                         <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
@@ -127,7 +127,7 @@
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Email</label>
-                                <input type="email" x-model="formData.customer_email" name="customer_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                                <input type="email" x-model="formData.customer_email" name="customer_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                         </div>
                         <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
@@ -225,18 +225,17 @@
 
                                     <!-- Radio Option 2 -->
                                     <label class="flex items-center space-x-2">
-                                        <input type="radio" x-model="formData.create_invoices_under_this_parent" name="create_invoices_under_this_parent" value="Right" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                        <input type="radio" x-model="formData.create_invoices_under_this_parent" name="create_invoices_under_this_parent" value="Under Parent" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
                                         <span class="text-gray-700 dark:text-gray-300">Invoice Under this Parent </span>
                                     </label>
 
                                     <!-- Radio Option 2 -->
                                     <label class="flex items-center space-x-2">
-                                        <input type="radio" x-model="formData.create_invoices_under_this_parent" name="create_invoices_under_this_parent" value="Right" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                        <input type="radio" x-model="formData.create_invoices_under_this_parent" name="create_invoices_under_this_parent" value="Accounting Book" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
                                         <span class="text-gray-700 dark:text-gray-300">Invoice in Accountiong Book</span>
                                     </label>
                                 </div>
                             </div>
-                        </div>
 
                         <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                             <div>
@@ -247,20 +246,40 @@
                                 <!-- <label class="block text-gray-700 dark:text-gray-300">Load Note</label> -->
                                 <div class="flex items-center space-x-4">
                                     <!-- Radio Option 1 -->
-                                    <label class="flex items-center space-x-2">
+                                    <!-- <label class="flex items-center space-x-2">
                                         <input type="checkbox" x-model="formData.isFactoredInvoice" name="isFactoredInvoice" value="" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
                                         <span class="text-gray-700 dark:text-gray-300">Is Factored?</span>
-                                    </label>
+                                    </label> -->
 
-                                    <!-- Radio Option 2 -->
+                                    <!-- Radio Option 2 --><label class="flex items-center space-x-2">
+                                        <input 
+                                        type="checkbox" 
+                                        x-model="formData.isFactoredInvoice" 
+                                        name="isFactoredInvoice" 
+                                        :value="formData.isFactoredInvoice ? 1 : 0"
+                                        @change="formData.isFactoredInvoice = $event.target.checked ? 1 : 0"
+                                        class="text-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                                    >
+                                    <span class="text-gray-700 dark:text-gray-300">Is Factored?</span>
+                                    </label>
                                     <label class="flex items-center space-x-2">
-                                        <input type="checkbox" x-model="formData.isPrepaid" name="isPrepaid" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                        <input type="checkbox" 
+                                        x-model="formData.isPrepaid"
+                                         name="isPrepaid" 
+                                         :value="formData.isPrepaid ? 1 : 0"
+                                         @change="formData.isPrepaid = $event.target.checked ? 1 : 0"
+                                         class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
                                         <span class="text-gray-700 dark:text-gray-300">Pre pay? </span>
                                     </label>
 
                                     <!-- Radio Option 2 -->
                                     <label class="flex items-center space-x-2">
-                                        <input type="radio" x-model="formData.isNonBillable" name="isNonBillable" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                        <input type="radio"
+                                         x-model="formData.isNonBillable" 
+                                         name="isNonBillable" 
+                                         :value="formData.isNonBillable ? 1 : 0"
+                                         @change="formData.isNonBillable = $event.target.checked ? 1 : 0"
+                                         class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
                                         <span class="text-gray-700 dark:text-gray-300">Non-Billable?</span>
                                     </label>
                                 </div>
@@ -270,7 +289,7 @@
                         <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300"> Flash note to dispatchers  (note will show up during order entry)</label>
-                                <textarea type="text" x-model="formData.flash_note_for_accounting" name="flash_nflash_note_for_driversote_for_flash_note_for_driversaccounting" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                                <textarea type="text" x-model="formData.flash_note_for_drivers" name="flash_note_for_drivers" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Flash note to accounting  (note shows up in the charges section)</label>
@@ -282,7 +301,7 @@
                         <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Start Date</label>
-                                <input type="date" x-model="formData.start_date" name="start_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <input type="text" x-model="formData.start_date" name="start_date" id="start_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Tags</label>
@@ -290,16 +309,25 @@
                                     <option value="" selected disabled>Select Type</option>
                                 </select>
                             </div>
+                            <script>
+                                $(document).ready(function () {
+                                    $("#start_date").datepicker([
+                                        {
+                                            format: "yyyy-mm-dd"
+                                        }
+                                    ]);
+                                })
+                            </script>
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Internal Notes</label>
-                                <textarea type="text" x-model="formData.start_date" name="start_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                                <label class="block text-gray-700 dark:text-gray-300">Notes</label>
+                                <textarea type="text" x-model="formData.note" name="note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Export to accounting in the next run? </label>
                                 <input type="checkbox" x-model="formData.print_settlements_under_this_company" name="print_settlements_under_this_company" class="w-2 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                         </div>
-
+<!-- 
                         <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300"> Flash note to dispatchers (note will show up during order entry)
@@ -310,14 +338,15 @@
                                 <label class="block text-gray-700 dark:text-gray-300"> Flash note to payroll (shows up while creating settlements)</label>
                                 <textarea type="text" x-model="formData.flash_notes_to_payroll" name="flash_notes_to_payroll" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""></textarea>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Internal Notes</label>
-                                <textarea type="text" x-model="formData.internal_notes" name="internal_notes" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                                <textarea type="text" x-model="formData.internal_note" name="internal_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
                             </div>
                         </div>
+                    </div>
 
                         
                     
@@ -331,25 +360,19 @@
                     <!-- Navigation Buttons -->
                     <div class="flex justify-between mt-6">
                         <!-- Previous Button -->
-                        <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white"
-                            x-show="step > 1" @click="step = step - 1">
+                        <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded"
+                            x-show="step > 1" @click="prevStep">
                             Previous
                         </button>
-
-                        <!-- Next Button (Only shows when on step 1) -->
-                        <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
-                            x-show="step < 2" @click="step = step + 1">
+                    
+                        <!-- Next Button -->
+                        <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded"
+                            x-show="step < 2" @click="nextStep">
                             Next
                         </button>
-
-                        <!-- Save & Continue Later Button -->
-                        <button type="button" class="px-4 py-2 bg-yellow-500 text-white rounded dark:bg-yellow-400"
-                            @click="saveProgress">
-                            Save & Continue Later
-                        </button>
-
-                        <!-- Submit Button (Only shows on step 2) -->
-                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
+                    
+                        <!-- Submit Button -->
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded"
                             x-show="step === 2">
                             Submit
                         </button>
@@ -370,65 +393,161 @@
     <script>
       function stepperForm() {
           return {
-              step: localStorage.getItem('Driver_step') ? parseInt(localStorage.getItem('Driver_step')) : 1,
+              step: localStorage.getItem('customer_step') ? parseInt(localStorage.getItem('customer_step')) : 1,
               formData: JSON.parse(localStorage.getItem('formData')) || {
                 customer_name: '',
-                customer_email: '',
+                customer_office: '',
+                customer_code: '',
+                customer_type: '',
+                customer_sales_rep: '',
                 customer_phone: '',
+                contact_name: '',
+                customer_email: '',
                 customer_primary_address: '',
                 customer_secondary_address: '',
-                customer_code: '',
-                customer_sales_rep: '',
-                customer_office: '',
-                customer_type: '',
                 customer_city: '',
                 customer_state: '',
                 customer_zip: '',
-                customer_country: '',
+                // customer_country: '',
                 fax_no: '',
                 toll_free: '',
                 other_notes: '',
                 credit_limit: '',
                 alert_percentage: '',
                 outstanding_balance: '',
-                due_date: '',
                 send_invoice_under_this_company: '',
                 account_code: '',
                 invoice_footer_note: '',
+                subAccount_of:'',
                 isSubAccount: '',
                 create_invoices_under_this_parent: '',
-                subAccount_of:'',
                 factoringCompany: '',
                 isFactoredInvoice: '',
                 isPrepaid: '',
                 isNonBillable: '',
+                start_date: '',
+                flash_note_for_drivers: '',
                 flash_note_for_accounting: '',
-                payment_terms: '',
-                notes: '',
+                note: '',
                 file_path: '',
                 print_settlements_under_this_company: '',
-                flash_notes_to_dispatch: '',
-                flash_notes_to_payroll: '',
-                internal_notes: '',
+                // flash_notes_to_dispatch: '',
+                // flash_notes_to_payroll: '',
+                internal_note: '',
                 
               },
               nextStep() {
                   this.step++;
-                  localStorage.setItem('Driver_step', this.step);
+                  localStorage.setItem('customer_step', this.step);
               },
               prevStep() {
                   this.step--;
-                  localStorage.setItem('Driver_step', this.step);
+                  localStorage.setItem('customer_step', this.step);
               },
               saveProgress() {
                   localStorage.setItem('formData', JSON.stringify(this.formData));
-                  localStorage.setItem('Driver_step', this.step);
+                  localStorage.setItem('customer_step', this.step);
                   alert("Progress saved successfully!");
               },
               saveAndSubmit() {
-                  localStorage.removeItem('formData');
-                  localStorage.removeItem('Driver_step');
-                  alert("Form submitted successfully!");
+                let form = document.getElementById("newCustomer");
+                    let formData = new FormData(form);
+                   
+                    // for (let pair of formData.entries()) {
+                    //     console.log(pair[0] + ": " + pair[1]);
+                    // }
+                     console.log(localStorage.getItem('auth_token'))
+                    // return
+                    $.ajax({
+                        url: requestURL+'/customers/create',
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        },
+
+                        beforeSend:function(){
+                            document.getElementById("Ajaxbackdrop").style.display = 'flex'
+                        },
+
+                        success: (response) => {
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            //console.log('Form submitted successfully:', response);
+                            createToast('success', response.message);
+                            localStorage.removeItem('formData');
+                            localStorage.removeItem('customer_step');
+                            //alert("Form submitted successfully!");
+                        },
+                         error: (xhr, status, error) => {
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            console.error('Form submission failed:', xhr.responseText);
+
+                        try {
+                            let response = JSON.parse(xhr.responseText);
+                            
+                            if (response.errors) {
+                                let messages = Object.values(response.errors).flat().join('<br>'); // Combines multiple errors
+                                createToast('error', messages);
+                            } else if (response.message) {
+                                createToast('error', response.message);
+                            } else {
+                                createToast('error', 'An unexpected error occurred. Please try again.');
+                            }
+                        } catch (e) {
+                            createToast('error', 'An error occurred. Please check your input and try again.');
+                        }
+                    }
+                    });
+
+                    // Clear stored data after submission
+                    localStorage.removeItem('formData');
+                    localStorage.removeItem('customer_step');
+
+                    // Reset form data
+                    this.formData = {
+                        customer_name: '',
+                        customer_email: '',
+                        customer_phone: '',
+                        customer_primary_address: '',
+                        customer_secondary_address: '',
+                        customer_code: '',
+                        customer_sales_rep: '',
+                        customer_office: '',
+                        customer_type: '',
+                        customer_city: '',
+                        customer_state: '',
+                        customer_zip: '',
+                        customer_country: '',
+                        fax_no: '',
+                        toll_free: '',
+                        other_notes: '',
+                        credit_limit: '',
+                        alert_percentage: '',
+                        outstanding_balance: '',
+                        start_date: '',
+                        send_invoice_under_this_company: '',
+                        account_code: '',
+                        invoice_footer_note: '',
+                        isSubAccount: '',
+                        create_invoices_under_this_parent: '',
+                        subAccount_of:'',
+                        factoringCompany: '',
+                        isFactoredInvoice: '',
+                        isPrepaid: '',
+                        isNonBillable: '',
+                        flash_note_for_dispatchers: '',
+                        flash_note_for_accounting: '',
+                        notes: '',
+                        file_path: '',
+                        print_settlements_under_this_company: '',
+                        // flash_notes_to_dispatch: '',
+                        //flash_notes_to_payroll: '',
+                        internal_note: '',
+                    };
+                    //this.step = 1;
               }
           }
       }

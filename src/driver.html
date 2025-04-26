@@ -217,12 +217,40 @@
                                     <option value="" selected disabled>Select Type</option>
                                 </select>
                             </div>
-                            <div>
+                            <!-- <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Tags</label>
                                 <select x-model="formData.tags" name="tags" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Select Type</option>
                                 </select>
-                            </div>
+                            </div> -->
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Tags</label>
+                                <input 
+                                  type="text" 
+                                  x-model="formData.tagsInput" 
+                                  @keydown.space.prevent="addTag()"
+                                  @keydown.enter.prevent="addTag()"
+                                  @keydown.backspace="removeLastTag()"
+                                  class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                                  placeholder="Type tags separated by space"
+                                  id="tags"
+                                >
+                                <!-- Display tags as chips -->
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                  <template x-for="(tag, index) in formData.tags" :key="index">
+                                    <div class="flex items-center bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full">
+                                      <span x-text="tag" class="text-sm"></span>
+                                      <button 
+                                        @click="removeTag(index)" 
+                                        class="ml-2 text-gray-500 hover:text-red-500"
+                                        type="button"
+                                      >
+                                        &times;
+                                      </button>
+                                    </div>
+                                  </template>
+                                </div>
+                              </div>
                         </div>
 
                         <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -822,7 +850,8 @@
                 years_of_experience: '',
                 endorsements: '',
                 rating: '',
-                tags: '',
+                  tags: [],
+                  tagsInput: '',
                 notes_about_the_choices_made: '',
                 isAccessToMobileApp: '',
                 mobile_settings: '',
@@ -917,9 +946,40 @@
                   localStorage.setItem('Driver_step', this.step);
                   alert("Progress saved successfully!");
               },
+              addTag() {
+                if (this.formData.tagsInput.trim()) {
+                    // Split by spaces and filter out empty strings
+                    const newTags = this.formData.tagsInput.split(' ')
+                    .map(tag => tag.trim())
+                    .filter(tag => tag.length > 0);
+                    
+                    // Add new tags to the array, avoiding duplicates
+                    newTags.forEach(tag => {
+                    if (!this.formData.tags.includes(tag)) {
+                        this.formData.tags.push(tag);
+                    }
+                    });
+                    
+                    this.formData.tagsInput = '';
+                    //this.saveProgress();
+                }
+                },
+                
+                removeTag(index) {
+                this.formData.tags.splice(index, 1);
+                //this.saveProgress();
+                },
+                
+                removeLastTag() {
+                if (this.formData.tagsInput === '' && this.formData.tags.length > 0) {
+                    this.formData.tags.pop();
+                    //this.saveProgress();
+                }
+                },
               saveAndSubmit() {
                     let form = document.getElementById("newdriverForm");
                     let formData = new FormData(form);
+                    formData.append('tags', this.formData.tags.join(','));
                     $.ajax({
                         url: requestURL+'/drivers/driver',
                         type: 'POST',

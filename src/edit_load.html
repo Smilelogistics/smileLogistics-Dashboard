@@ -718,10 +718,39 @@
                                         <option value="Other">Other</option>
                                     </select>
                                 </div>
-                                <div>
+                                <!-- <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Tags</label>
                                     <input type="text" x-model="formData.tags" name="tags" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="tags">
-                                </div>
+                                </div> -->
+
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Tags</label>
+                                    <input 
+                                      type="text" 
+                                      x-model="formData.tagsInput" 
+                                      @keydown.space.prevent="addTag()"
+                                      @keydown.enter.prevent="addTag()"
+                                      @keydown.backspace="removeLastTag()"
+                                      class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                                      placeholder="Type tags separated by space"
+                                      id="tags"
+                                    >
+                                    <!-- Display tags as chips -->
+                                    <div class="flex flex-wrap gap-2 mt-2">
+                                      <template x-for="(tag, index) in formData.tags" :key="index">
+                                        <div class="flex items-center bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full">
+                                          <span x-text="tag" class="text-sm"></span>
+                                          <button 
+                                            @click="removeTag(index)" 
+                                            class="ml-2 text-gray-500 hover:text-red-500"
+                                            type="button"
+                                          >
+                                            &times;
+                                          </button>
+                                        </div>
+                                      </template>
+                                    </div>
+                                  </div>
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Genset #</label>
                                     <input type="text" x-model="formData.genset_number" name="genset_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="genset_number">
@@ -918,6 +947,58 @@
                                     });
                                 }) 
                             </script>
+                            <div>
+                                <!-- <h4 class="mt-4 mb-3 block text-gray-700 dark:text-gray-300">Freight broker info ( if different from bill-to party )</h4> -->
+                                <div id="" class="grid grid-cols-1 md:grid-cols-10 gap-4 mb-6">
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
+                                        <a href="https://www.google.com/maps/dir//" class="mt-4 mb-3 block text-blue-700  dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer" target="_blank">Show Route</a>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Total Miles</label>
+                                        <input type="text" x-model="formData.total_miles" name="total_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_miles">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Loaded Miles</label>
+                                        <input type="text" x-model="formData.loaded_miles" name="loaded_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="loaded_miles">
+                                    </div>
+                                <!-- Load Note Radio Buttons and Checkbox -->
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Empty Miles</label>
+                                        <input type="text" x-model="formData.empty_miles" name="empty_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="empty_miles">
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">D/H Miles</label>
+                                        <input type="text" x-model="formData.dh_miles" name="dh_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="dh_miles">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
+                                        <a href="https://www.eia.gov/petroleum/gasdiesel/" target="_blank" class="block text-blue-700 dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer">Fuel Rate</a>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">$ / Gallon</label>
+                                        <input x-model="formData.fuel_rate_per_gallon" name="fuel_rate_per_gallon" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="fuel_rate_per_gallon" />
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">MPG</label>
+                                        <input type="text" x-model="formData.mpg" name="mpg" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="mpg" />
+                                    </div>
+                                <!-- Load Note Radio Buttons and Checkbox -->
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Fuel cost</label>
+                                        <input type="text" x-model="formData.total_fuel_cost" name="total_fuel_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_fuel_cost" />
+                                    </div>
+                                    
+                                    <!-- <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Seal #</label>
+                                        <input type="text" x-model="formData.seal_number" name="seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div> -->
+                                </div>
+                            </div>
+
+                            
                                 <div>
                                     <h4 class="mt-4 mb-3 block text-gray-700 dark:text-gray-300">Freight broker info ( if different from bill-to party )</h4>
                                     <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
@@ -1119,9 +1200,7 @@
                                 <select x-model="formData.driver_id" name="driver_id" id="driver_id"
                                     class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="truck_driver">
                                     <option value="" selected disabled>Choose Driver</option>
-                                    <option value="1">John Doe</option>
-                                    <option value="2">Billy John</option>
-                                    <option value="3">Jane Doe</option>
+                                    
                                 </select>
                             </div>
                         
@@ -1130,7 +1209,7 @@
                                 <label class="block text-gray-700 dark:text-gray-300">Assign Carrier</label>
                                 <select x-model="formData.carrier_id" name="carrier_id"
                                     class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="carrier_driver">
-                                    <option value="" selected disabled>Choose Driver</option>
+                                    <option value="" selected disabled>Choose Carrier</option>
                                     <option value="1">John Doe</option>
                                     <option value="2">Billy John</option>
                                     <option value="3">Jane Doe</option>
@@ -1345,7 +1424,8 @@ document.addEventListener('alpine:init', () => {
                   pieces: '',
                   pick_up_number: '',
                   over_weight: '',
-                  tags: '',
+                  tags: [],
+                  tagsInput: '',
                   genset_number: '',
                   seal_number: '',
                   pick_up: '',
@@ -1370,6 +1450,18 @@ document.addEventListener('alpine:init', () => {
                   sales_rep: '',
                   edi_number: '',
                   note: '',
+
+                   //miles
+                   total_miles:'',
+                  loaded_miles:'',
+                  empty_miles:'',
+                  dh_miles:'',
+                  fuel_rate_per_gallon:'',
+                  mpg:'',
+                  fuel_cototal_fuel_costst:'',
+
+
+
                   charge_type: '',
                   comment: '',
                   units: '',
@@ -1507,6 +1599,37 @@ document.addEventListener('alpine:init', () => {
             });
         },
 
+        addTag() {
+            if (this.formData.tagsInput.trim()) {
+                // Split by spaces and filter out empty strings
+                const newTags = this.formData.tagsInput.split(' ')
+                .map(tag => tag.trim())
+                .filter(tag => tag.length > 0);
+                
+                // Add new tags to the array, avoiding duplicates
+                newTags.forEach(tag => {
+                if (!this.formData.tags.includes(tag)) {
+                    this.formData.tags.push(tag);
+                }
+                });
+                
+                this.formData.tagsInput = '';
+                this.saveProgress();
+            }
+            },
+            
+            removeTag(index) {
+            this.formData.tags.splice(index, 1);
+            //this.saveProgress();
+            },
+            
+            removeLastTag() {
+            if (this.formData.tagsInput === '' && this.formData.tags.length > 0) {
+                this.formData.tags.pop();
+                //this.saveProgress();
+            }
+            },
+
         // Charge Management Methods
         addCharge() {
             this.formData.shipment_charges.push({
@@ -1611,6 +1734,7 @@ document.addEventListener('alpine:init', () => {
 
                     let form = document.getElementById("editloadForm");
                     let formData = new FormData(form);
+                    formData.append('tags', this.formData.tags.join(','));
                     // console.log('id is', this.id)
                     // return
                     // Ensure expenses are included

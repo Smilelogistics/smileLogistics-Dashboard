@@ -2,7 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <include src="./partials/mainhead.html"> </include>
+    <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'>
+    <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- jQuery UI -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+  <!-- Chosen Plugin -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
+<link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+
     <script src="./assets/js/main.js"></script>
     <title>Sign In| </title>
     <style>
@@ -189,38 +200,38 @@
     </style>
     <script>
       //var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
-      $(document).ready(function() {
+    //   $(document).ready(function() {
         
       
-          const notifications = $(".Toastnotifications");
-          const toastDetails = {
-              timer: 5000,
-              success: {
-                  icon: "fa-circle-check",
-              },
-              error: {
-                  icon: "fa-circle-xmark",
-              }
-          };
-          window.createToast = function(id, text) {
-              const { icon } = toastDetails[id];
-              const toast = $("<li>").addClass(`Toasttoast ${id}`).html(`
-                  <div class="column">
-                      <i class="fa-solid ${icon}"></i>
-                      <span>${text}</span>
-                  </div>
-                  <i class="fa-solid fa-xmark" onclick="removeToast($(this).parent())"></i>
-              `);
-              notifications.append(toast);
-              toast[0].timeoutId = setTimeout(() => removeToast(toast), toastDetails.timer);
-          };
+    //       const notifications = $(".Toastnotifications");
+    //       const toastDetails = {
+    //           timer: 5000,
+    //           success: {
+    //               icon: "fa-circle-check",
+    //           },
+    //           error: {
+    //               icon: "fa-circle-xmark",
+    //           }
+    //       };
+    //       window.createToast = function(id, text) {
+    //           const { icon } = toastDetails[id];
+    //           const toast = $("<li>").addClass(`Toasttoast ${id}`).html(`
+    //               <div class="column">
+    //                   <i class="fa-solid ${icon}"></i>
+    //                   <span>${text}</span>
+    //               </div>
+    //               <i class="fa-solid fa-xmark" onclick="removeToast($(this).parent())"></i>
+    //           `);
+    //           notifications.append(toast);
+    //           toast[0].timeoutId = setTimeout(() => removeToast(toast), toastDetails.timer);
+    //       };
     
-          const removeToast = (toast) => {
-              toast.addClass("hide");
-              if (toast.timeoutId) clearTimeout(toast.timeoutId);
-              setTimeout(() => toast.remove(), 1000);
-          };
-    })
+    //       const removeToast = (toast) => {
+    //           toast.addClass("hide");
+    //           if (toast.timeoutId) clearTimeout(toast.timeoutId);
+    //           setTimeout(() => toast.remove(), 1000);
+    //       };
+    // })
     // try {
     //     const token = localStorage.getItem('auth_token');
     //     if (token) {

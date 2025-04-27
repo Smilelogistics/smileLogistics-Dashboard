@@ -74,7 +74,7 @@
                             <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-600 flex justify-between items-center">
                               <div>
                                 <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Driver Details</h2>
-                                <p class="text-sm text-gray-500 dark:text-gray-300" x-text="'Reference #: ' + (formData.reference_number || 'N/A')"></p>
+                                <p class="text-sm text-gray-500 dark:text-gray-300" x-text="'Reference #: ' + (formData?.id || 'N/A')"></p>
                               </div>
                               <!-- <span class="px-3 py-1 text-xs font-semibold rounded-full dark:text-white" 
                                     :class="{
@@ -99,42 +99,41 @@
                                       
                                     <!-- Shippint type == land -->
                                       
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">First Name</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.fname || 'N/A'"></p>
-                                      </div>
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400"> Last Name</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.lname || 'N/A'"></p>
-                                      </div>
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Other Name</p>
-                                      
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.mname || 'N/A'"></p>
-                                      </div>
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Email?</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                        x-text="formData.email || 'N/A'">
-                                    </p>
-                                      </div>
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Driver Type</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                        x-text="formData.driver_type == '1' ? 'Owner Operator Single Driver' : 
-                                                formData.driver_type == '2' ? 'Company Driver' : 
-                                                formData.driver_type == '3' ? 'Contracted Driver' : 'N/A'">
-                                      </p>
-                                      </div>
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Quick Note</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.quick_note || 'N/A'"></p>
-                                      </div>
+                                    <div>
+                                      <p class="text-xs text-gray-500 dark:text-gray-400">First Name</p>
+                                      <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                         x-text="formData?.fname || 'N/A'"></p>
+                                    </div>
+                                    
+                                    <div>
+                                      <p class="text-xs text-gray-500 dark:text-gray-400">Last Name</p>
+                                      <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                         x-text="formData?.lname || 'N/A'"></p>
+                                    </div>
+                                    
+                                    <div>
+                                      <p class="text-xs text-gray-500 dark:text-gray-400">Other Name</p>
+                                      <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                         x-text="formData?.mname || 'N/A'"></p>
+                                    </div>
+                                    
+                                    <div>
+                                      <p class="text-xs text-gray-500 dark:text-gray-400">Email</p>
+                                      <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                         x-text="formData?.email || 'N/A'"></p>
+                                    </div>
+                                    
+                                    <div>
+                                      <p class="text-xs text-gray-500 dark:text-gray-400">Driver Type</p>
+                                      <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                         x-text="getDriverType(formData?.driver_type)"></p>
+                                    </div>
+                                    
+                                    <div>
+                                      <p class="text-xs text-gray-500 dark:text-gray-400">Quick Note</p>
+                                      <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                         x-text="formData?.quick_note || 'N/A'"></p>
+                                    </div>
                                      
                                       
                                     </div>
@@ -142,60 +141,71 @@
                                     <!-- Column 2 -->
                                     <div class="flex-1 space-y-4 min-w-[200px]"> <!-- flex-1 for equal width -->
                                       <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">ADDITIONAL INFO</h3>
-                                      
+                                         
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Phone</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.driver_phone || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                          x-text="formData?.driver_phone || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Phone Carrier</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.driver_phone_carrier || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                          x-text="formData?.driver_phone_carrier || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Primary Address</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.driver_primary_address || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                          x-text="formData?.driver_primary_address || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Secondary Address</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.driver_secondary_address || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                          x-text="formData?.driver_secondary_address || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">City</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.driver_city || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                          x-text="formData?.driver_city || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">State</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.driver_state || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                          x-text="formData?.driver_state || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Zip</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.driver_zip || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                          x-text="formData?.driver_zip || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Emergency Contact Info</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.emergency_contact_info || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                          x-text="formData?.emergency_contact_info || 'N/A'"></p>
                                       </div>
-                                      
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Hired On</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.hired_on || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                          x-text="formData?.hired_on || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Years of Experience</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.years_of_experience || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                          x-text="formData?.years_of_experience || 'N/A'"></p>
                                       </div>
+                                      
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Driver endors / options</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.endorsements || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                          x-text="formData?.endorsements || 'N/A'"></p>
                                       </div>
                                       
                                     </div>
@@ -207,54 +217,63 @@
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">( rating )/categories</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.rating || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                           x-text="formData?.rating || 'N/A'"></p>
                                       </div>
                                      
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Tags</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.tags || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                           x-text="formData?.tags ? formData.tags.join(', ') : 'N/A'"></p>
                                       </div>
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">notes_about_the_choices_made</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.notes_about_the_choices_made || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                           x-text="formData?.notes_about_the_choices_made || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Paid via</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.pay_via || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                           x-text="formData?.pay_via || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Company name / Pay-to</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.company_name_paid_to || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                           x-text="formData?.company_name_paid_to || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Employer ID number</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.employer_identification_number || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                           x-text="formData?.employer_identification_number || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Settlement email, if Different from main</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.send_settlements_mail || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                           x-text="formData?.send_settlements_mail || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">settlement company</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.print_settlements_under_this_company || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                           x-text="formData?.print_settlements_under_this_company || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Flash note to dispatchers (note will show up during order entry)</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.flash_notes_to_dispatch || 'N/A'"></p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Flash note to dispatchers</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                           x-text="formData?.flash_notes_to_dispatch || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Internal Notes</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.internal_notes || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
+                                           x-text="formData?.internal_notes || 'N/A'"></p>
                                       </div>
-
                                     </div>
                                     
                                   </div>
@@ -264,23 +283,43 @@
                             <div class="space-y-4">
                               <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">Backup Docs</h3>
 
-                              <template x-if="Array.isArray(formData.file)">
+                              <template x-if="formData?.driver_docs && formData.driver_docs.length > 0">
                                 <div class="grid grid-cols-2 gap-4">
-                                  <template x-for="(doc, index) in formData.file" :key="index">
-                                    <div>
-                                      <p class="text-xs text-gray-500 dark:text-gray-400">Document</p>
-                                      <img :src="`/path/to/your/files/${doc}`" class="w-32 h-32 object-cover rounded-md" alt="Document" />
+                                  <template x-for="(doc, index) in formData.driver_docs" :key="index">
+                                    <div class="border rounded-lg p-2">
+                                      <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Document</p>
+                                      <div class="relative">
+                                        <img 
+                                          :src="doc.file_path" 
+                                          class="w-full h-32 object-contain rounded-md bg-gray-100 dark:bg-gray-700"
+                                          alt="Driver document"
+                                          @error="doc.file_path = '/path/to/placeholder-image.png'"
+                                        />
+                                        <div class="absolute top-2 right-2 bg-white/80 dark:bg-gray-800/80 rounded-full p-1">
+                                          <a 
+                                            :href="doc.file_path" 
+                                            target="_blank" 
+                                            class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+                                            title="View full size"
+                                          >
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                                            </svg>
+                                          </a>
+                                        </div>
+                                      </div>
+                                      <p x-text="doc.file_title || 'Untitled document'" class="text-xs mt-1 truncate"></p>
                                     </div>
                                   </template>
                                 </div>
                               </template>
 
-                              <template x-if="!Array.isArray(formData.documents)">
+                              <!-- <template x-if="!Array.isArray(formData.driver_docs)">
                                 <div>
                                   <p class="text-xs text-gray-500 dark:text-gray-400">Document</p>
-                                  <img :src="`/path/to/your/files/${formData.file}`" class="w-32 h-32 object-cover rounded-md" alt="Document" />
+                                  <img :src="FormData.file_path" class="w-32 h-32 object-cover rounded-md" alt="Document" />
                                 </div>
-                              </template>
+                              </template> -->
                             </div>
                             
                              
@@ -339,6 +378,14 @@
               console.error('No ID found in the URL');
             }
           },
+          getDriverType(type) {
+          switch(type) {
+            case '1': return 'Owner Operator Single Driver';
+            case '2': return 'Company Driver';
+            case '3': return 'Contracted Driver';
+            default: return 'N/A';
+          }
+        },
 
           fetchData() {
             this.isLoading = true;
@@ -358,8 +405,9 @@
               console.log('API Response:', data);
               this.formData = {
                 // Basic Information
+                id: data.driver.id || '',
                 fname: data.driver.user.fname || '',
-                lname: data.driver.user.nname || '',
+                lname: data.driver.user.lname || '',
                 mname: data.driver.user.mname || '',
                 email: data.driver.user.email || '',
                 driver_type: data.driver.driver_type || '',
@@ -389,6 +437,11 @@
                 print_settlements_under_this_company: data.driver.print_settlements_under_this_company || '',
                 flash_notes_to_dispatch: data.driver.flash_notes_to_dispatch || '',
                 internal_notes: data.driver.internal_notes || '',
+
+                driver_docs: data.driver.driver_docs?.map(doc => ({
+                  id: doc.id || '',
+                  file_path: doc.file || ''
+                })) || [],
 
                 
                 //shipment_expenses: data.shipment_expenses || [],

@@ -207,11 +207,14 @@
                                         <!-- If image -->
                                         <template x-if="doc.file_path && doc.file_path.match(/\.(jpeg|jpg|png|gif)$/i)">
                                             <img :src="doc.file_path" class="w-32 h-32 object-cover rounded-md" alt="Document Image" />
+                                            <a :href="doc.file_path" target="_blank" class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 hover:text-gray-600 dark:hover:text-gray-300">
+                                              View Document
+                                          </a>
                                         </template>
                                 
                                         <!-- If document -->
                                         <template x-if="doc.file_path && doc.file_path.match(/\.(pdf|docx?|xlsx?)$/i)">
-                                            <a :href="doc.file_path" target="_blank" class="text-blue-500 underline">
+                                            <a :href="doc.file_path" target="_blank" class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 hover:text-gray-600 dark:hover:text-gray-300">
                                                 View Document
                                             </a>
                                         </template>
@@ -220,18 +223,25 @@
                                 
                                 </div>
                             </template>
+                            <!-- If image -->
+                           <!-- <div>
+                            <template x-if="proof_of_delivery_path && proof_of_delivery_path.match(/\.(jpeg|jpg|png|gif)$/i)">
+                              <p class="text-xs text-gray-500 dark:text-gray-400">Proof of Delivery</p>
+                              <img :src="proof_of_delivery_path" class="w-32 h-32 object-cover rounded-md" alt="Document Image" />
+                          </template>
+                           </div> -->
                                 </div>
                             </template>
                             
                                       <!-- Check for proof_of_delivery_path -->
                                       
 
-                            <!-- <template x-if="formData.documents.proof_of_delivery_path && formData.documents.proof_of_delivery_path !== ''">
+                            <template x-if="formData.proof_of_delivery_path && formData.proof_of_delivery_path !== ''">
                               <div class="mt-3">
-                                  <img :src="formData.documents.proof_of_delivery_path" class="w-32 h-32 object-cover rounded-md" alt="Proof of Delivery" />
+                                  <img :src="formData.proof_of_delivery_path" class="w-32 h-32 object-cover rounded-md" alt="Proof of Delivery" />
                                   <p class="text-sm text-gray-600 mt-1">Signature</p>
                               </div>
-                          </template> -->
+                          </template>
                           
                             
 

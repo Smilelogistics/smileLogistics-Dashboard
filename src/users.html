@@ -171,8 +171,9 @@
                               <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ACTION</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Code</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Address</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Full Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Role</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Address</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">About us</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"> Email</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"> Date Created </th>
@@ -207,12 +208,16 @@
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
                                       x-text="item.branch_code ? item.branch_code : ' '">
                                   </td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.address ? item.address : ' '"></td>
-                                  
                                  
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
                                       x-text="item.user ? item.user.fname + ' ' + item.user.lname : 'N/A'">
                                   </td>
+
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.user.user_type ? item.user.user_type : ' '"></td>
+                                  
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.address ? item.address : ' '"></td>
+                                  
+                                  
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
                                       x-text="item.about_us ? (item.about_us.length > 10 ? item.about_us.substring(0, 10) + '...' : item.about_us) : ' '">
                                   </td>
@@ -291,9 +296,18 @@
         });
         const data = await response.json();
         
-        if (data.branch && Array.isArray(data.branch)) {
-          this.items = data.branch;
-          console.log("Businesses:",this.items);
+        // if (data.customers && Array.isArray(data.customers)) {
+        //   this.items = data.branch;
+        //   console.log("Businesses:",this.items);
+        // }
+        if (data.customers && Array.isArray(data.customers)) {
+          this.items = data.customers;
+          console.log("Customers:", this.items);
+        }
+
+        if (data.drivers && Array.isArray(data.drivers)) {
+          this.drivers = data.drivers;
+          console.log("Drivers:", this.drivers);
         }
       } catch (error) {
         console.error('Error:', error);

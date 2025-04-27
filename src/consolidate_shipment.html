@@ -140,13 +140,21 @@
                             :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 2, 'border-gray-500 dark:border-gray-400': step !== 2 }">
                             2
                         </span>
-                        <span class="ml-2 hidden sm:inline">Assign Driver</span>
+                        <span class="ml-2 hidden sm:inline">Charges</span>
                     </li>
 
                     <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 3, 'text-gray-500 dark:text-gray-400': step !== 3 }">
                         <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
                             :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 3, 'border-gray-500 dark:border-gray-400': step !== 3 }">
                             3
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Delivery Mode</span>
+                    </li>
+
+                    <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 4, 'text-gray-500 dark:text-gray-400': step !== 4 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 4, 'border-gray-500 dark:border-gray-400': step !== 4 }">
+                            4
                         </span>
                         <span class="ml-2 hidden sm:inline">Backup Docs</span>
                     </li>
@@ -282,24 +290,202 @@
 
                     </div>
 
-                    <!-- Step 2: Assign Driver -->
-                    <div x-show="step === 2" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div id="">
+
+                    <!-- Step 2: Charges -->
+                    <div x-show="step === 2">
+                        <template x-for="(charge, index) in formData.charges" :key="index">
+                            <div class="mb-6 chargecalc">
+                                <div class="flex justify-end mb-2">
+                                    <span @click="addCharge()" 
+                                          class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                        +
+                                    </span>
+                                    <span @click="removeCharge(index)" 
+                                          class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
+                                        x
+                                    </span>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Charge Type</label>
+                                        <select x-model="charge.charge_type" name="charge_type[]" 
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <option value="" selected disabled></option>
+                                            <option value="drayage">Drayage</option>
+                                            <option value="fuel_surcharge">Fuel Surcharge</option>
+                                            <option value="admin_fee">Admin Fee</option>
+                                            <option value="attempted_pickup">Attempted Pickup</option>
+                                            <option value="bonded_cargo_pickup">Bonded Cargo Pickup</option>
+                                            <option value="bonded_cargo_charge">Bonded Cargo Charge</option>
+                                            <option value="chasis_rental">Chasis Rental</option>
+                                            <option value="chasis_rental">Chasis Rental</option>
+                                            <option value="chasis_split">Chasis Split</option>
+                                            <option value="chasis_stack">Chasis Stack</option>
+                                            <option value="demurage">Demurage</option>
+                                            <option value="driver_assistance">Driver Assistance</option>
+                                            <option value="drop_charge">Drop Charge</option>
+                                            <option value="dry_run">Dry Run</option>
+                                            <option value="freight">Freight</option>
+                                            <option value="hauling_refrigerated_cargo">Hauling Refrigerated Cargo</option>
+                                            <option value="harzadous_material">Harzardous Material</option>
+                                            <option value="maintainance_repair">Maintainance & Repair</option>
+                                            <option value="other">Other</option>
+                                            <option value="Overweight">Overweight</option>
+                                            <option value="per_diem">Per Diem</option>
+                                            <option value="permits">Permits</option>
+                                            <option value="prepull">Prepull</option>
+                                            <option value="deliver">Delivery Charge</option>
+                                            <option value="shipping">SHIPPING</option>
+                                            <option value="scale load">Scale Load</option>
+                                            <option value="spot_empty">Spot Empty</option>
+                                            <option value="stop_off">Stop Off</option>
+                                            <option value="storage">Storage</option>
+                                            <option value="toll">Toll</option>
+                                            <option value="triaxle">Triaxle</option>
+                                            <!-- <option value="pickup">Pickup</option>
+                                            <option value="pickup loaded">Pickup Loaded</option> -->
+                                            <!-- Other options... -->
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Comment</label>
+                                        <input type="text" x-model="charge.comment" name="comment[]" 
+                                               class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Units</label>
+                                        <input type="number" x-model="charge.units" @input="calculateAmount(charge)" 
+                                               name="units[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Rate</label>
+                                        <input type="number" x-model="charge.rate" @input="calculateAmount(charge)" 
+                                               name="rate[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                </div>
+                    
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Amount</label>
+                                        <input type="number" x-model="charge.amount" name="amount[]" readonly 
+                                               class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Discount</label>
+                                        <input type="number" x-model="charge.discount" @input="calculateTotals()" 
+                                               name="discount[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Internal Note</label>
+                                        <input type="text" x-model="charge.internal_notes" name="internal_notes[]" 
+                                               class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Total</label>
+                                <input type="number" x-model="formData.total" name="total" readonly 
+                                       class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Total Discount</label>
+                                <input type="number" x-model="formData.total_discount" name="total_discount" readonly 
+                                       class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Net Total</label>
+                                <input type="number" x-model="formData.net_total" name="net_total" readonly 
+                                       class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                        </div>
+                        
+                </div>
+
+
+
+                    <!-- Step 3: Assign Driver -->
+                    <div x-show="step === 3" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- <div id="">
                             <label class="block text-gray-700 dark:text-gray-300">Drivers Assigned</label>
                             
                             <select x-model="formData.driver_id" name="driver_id" id="driver_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select Type</option>
                                 <option value="">List of Drivers</option>
                             </select>
+                        </div> -->
+                        <div x-data="{ formData: { delivery_type: '', driver_id: '' } }">
+
+                            <div class="flex items-center space-x-4 mt-6">
+                                <!-- Radio Option 1 -->
+                                <label class="flex items-center space-x-2">
+                                    <input type="radio" x-model="formData.delivery_type" name="delivery_type" value="Carrier"
+                                    @click="formData.truck_id = ''"
+                                        class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                    <span class="text-gray-700 dark:text-gray-300">Carrier?</span>
+                                </label>
+                        
+                                <!-- Radio Option 2 -->
+                                <label class="flex items-center space-x-2">
+                                    <input type="radio" x-model="formData.delivery_type" name="delivery_type" value="Truck"
+                                    @click="formData.driver_id = ''" 
+                                        class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                    <span class="text-gray-700 dark:text-gray-300">Truck</span>
+                                </label>
+                                <!-- Radio Option 3 Bike -->
+                                <!-- <label class="flex items-center space-x-2">
+                                    <input type="radio" x-model="formData.delivery_type" name="delivery_type" value="Bike"
+                                        class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                    <span class="text-gray-700 dark:text-gray-300">Bike</span>
+                                </label> -->
+                            </div>
+                        
+                            <!-- Show when "Truck" is selected -->
+                            <div x-show="formData.delivery_type === 'Truck'" class="isDrive mt-4">
+                                <label class="block text-gray-700 dark:text-gray-300">Assign Driver</label>
+                                <select x-model="formData.driver_id" name="driver_id" id="driver_id"
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="truck_driver">
+                                    <option value="" selected disabled>Choose Driver</option>
+                                
+                                </select>
+                            </div>
+                        
+                            <!-- Show when "Carrier" is selected -->
+                            <div x-show="formData.delivery_type === 'Carrier'" class="isTruc mt-4">
+                                <label class="block text-gray-700 dark:text-gray-300">Assign Carrier</label>
+                                <select x-model="formData.carrier_id" name="carrier_id"
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="carrier_driver">
+                                    <option value="" selected disabled>Choose Driver</option>
+                                    <option value="1">John Doe</option>
+                                    <option value="2">Billy John</option>
+                                    <option value="3">Jane Doe</option>
+                                </select>
+                            </div>
+
+                             <!-- Show when "Bike" is selected -->
+                             <!-- <div x-show="formData.delivery_type === 'Bike'" class="isBike mt-4">
+                                <label class="block text-gray-700 dark:text-gray-300">Assign Bike</label>
+                                <select x-model="formData.bike_id" name="bike_id"
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="bike_driver">
+                                    <option value="" selected disabled>Choose Bike</option>
+                                    <option value="1">John Doe</option>
+                                    <option value="2">Billy John</option>
+                                    <option value="3">Jane Doe</option>
+                                </select>
+                            </div> -->
+                        
                         </div>
                     </div>
 
-                    <!-- Step 2: Backup Docs -->
-                    <div x-show="step === 3" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Step 4: Backup Docs -->
+                    <div x-show="step === 4" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
-                            <input type="file" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount" id="file_path">
+                            <input type="file" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="file_path">
                         </div>
                     </div>
 
@@ -314,7 +500,7 @@
 
                         <!-- Next Button (Shows on steps 1 and 2) -->
                         <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
-                            x-show="step < 3" @click="nextStep">
+                            x-show="step < 4" @click="nextStep">
                             Next
                         </button>
 
@@ -326,7 +512,7 @@
 
                         <!-- Submit Button (Only shows on final step) -->
                         <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
-                            x-show="step === 3">
+                            x-show="step === 4">
                             Submit
                         </button>
                     </div>
@@ -367,7 +553,20 @@
                     internal_notes: '',
                     driver_id: '',
                     proof_of_delivery_path: '',
-                    files: []
+                    files: [],
+                    charges: [{
+                    charge_type: '',
+                    comment: '',
+                    units: '',
+                    rate: '',
+                    amount: '',
+                    discount: '',
+                    internal_notes: ''
+                    }],
+                    
+                    total_amount: '',
+                    total_discount: '',
+                    net_total: '',
               },
               nextStep() {
                   this.step++;
@@ -382,6 +581,51 @@
                   localStorage.setItem('consolidate_shipment_step', this.step);
                   alert("Progress saved successfully!");
               },
+              addCharge() {
+                    this.formData.charges.push({
+                        charge_type: '',
+                        comment: '',
+                        units: '',
+                        rate: '',
+                        amount: '',
+                        discount: '',
+                        internal_notes: ''
+                    });
+                    //this.saveProgress();
+                },
+                
+                removeCharge(index) {
+                    if (this.formData.charges.length > 1) {
+                        this.formData.charges.splice(index, 1);
+                        this.calculateTotals();
+                        //this.saveProgress();
+                    }
+                },
+                
+                calculateAmount(charge) {
+                    const units = parseFloat(charge.units) || 0;
+                    const rate = parseFloat(charge.rate) || 0;
+                    charge.amount = (units * rate).toFixed(2);
+                    this.calculateTotals();
+                    //this.saveProgress();
+                },
+                
+                calculateTotals() {
+                    let total = 0;
+                    let totalDiscount = 0;
+                    
+                    this.formData.charges.forEach(charge => {
+                        const amount = parseFloat(charge.amount) || 0;
+                        const discount = parseFloat(charge.discount) || 0;
+                        
+                        total += amount;
+                        totalDiscount += discount;
+                    });
+                    
+                    this.formData.total = total.toFixed(2);
+                    this.formData.total_discount = totalDiscount.toFixed(2);
+                    this.formData.net_total = (total - totalDiscount).toFixed(2);
+                },
               saveAndSubmit() {
                   let form = document.getElementById("ConsolidateShipmentForm");
                     let formData = new FormData(form);

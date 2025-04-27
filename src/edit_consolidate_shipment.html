@@ -131,19 +131,27 @@
                         </span>
                         <span class="ml-2 hidden sm:inline">Basic Info</span>
                     </li>
-                
+
                     <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 2, 'text-gray-500 dark:text-gray-400': step !== 2 }">
                         <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
                             :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 2, 'border-gray-500 dark:border-gray-400': step !== 2 }">
                             2
                         </span>
-                        <span class="ml-2 hidden sm:inline">Assign Driver</span>
+                        <span class="ml-2 hidden sm:inline">Charges</span>
                     </li>
-
+                
                     <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 3, 'text-gray-500 dark:text-gray-400': step !== 3 }">
                         <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
                             :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 3, 'border-gray-500 dark:border-gray-400': step !== 3 }">
                             3
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Delivery Mode</span>
+                    </li>
+
+                    <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 4, 'text-gray-500 dark:text-gray-400': step !== 4 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 4, 'border-gray-500 dark:border-gray-400': step !== 4 }">
+                            4
                         </span>
                         <span class="ml-2 hidden sm:inline">Backup Docs</span>
                     </li>
@@ -281,9 +289,116 @@
                         </div>
 
                     </div>
+                    <!-- Step2 Charges -->
+                    <div x-show="step === 2" class="space-y-6">
+                        <template x-for="(charge, index) in formData.consolidate_shipment_charges" :key="index">
+                            <div class="p-4 border rounded-lg bg-white dark:bg-gray-800 shadow-sm dark:border-gray-700">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="font-medium text-gray-900 dark:text-gray-100">Charge #<span x-text="index + 1"></span></h3>
+                                    <button @click="removeCharge(index)" type="button" 
+                                            class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm">
+                                        Remove
+                                    </button>
+                                </div>
 
-                    <!-- Step 2: Assign Driver -->
-                    <div x-show="step === 2" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                                    <!-- Charge Type -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Charge Type</label>
+                                        <select x-model="charge.charge_type" 
+                                                class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
+                                            <option value="" class="dark:bg-gray-700">Select Type</option>
+                                            <option value="pickup" class="dark:bg-gray-700">Pickup</option>
+                                            <option value="delivery" class="dark:bg-gray-700">Delivery</option>
+                                            <!-- Add other options -->
+                                        </select>
+                                    </div>
+
+                                    <!-- Comment -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Comment</label>
+                                        <input type="text" x-model="charge.comment" 
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
+
+                                    <!-- Units -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Units</label>
+                                        <input type="number" x-model="charge.units" 
+                                            @change="calculateChargeAmount(index)"
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
+
+                                    <!-- Rate -->
+                                    <!-- <span x-text="JSON.stringify(charge)"></span> -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Rate</label>
+                                        <input type="text" name="rate" x-model="charge.rate" 
+                                            @change="calculateChargeAmount(index)"
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 numberOnly">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                    <!-- Amount -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Amount</label>
+                                        <input type="text" name="amount" x-model="charge.amount" readonly 
+                                            class="w-full rounded bg-gray-100 dark:bg-gray-600 dark:text-gray-200 border-gray-300 dark:border-gray-500 ">
+                                    </div>
+
+                                    <!-- Discount -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Discount</label>
+                                        <input type="text" x-model="charge.discount" 
+                                            @change="calculateTotals()"
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 numberOnly">
+                                    </div>
+
+                                    <!-- Internal Notes -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Internal Notes</label>
+                                        <input type="text" x-model="charge.internal_notes" 
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
+
+                                    <!-- Billed -->
+                                    <div class="flex items-end">
+                                        <label class="flex items-center text-gray-700 dark:text-gray-300">
+                                            <input type="checkbox" x-model="charge.billed" 
+                                                class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-blue-600 focus:ring-blue-500">
+                                            <span class="ml-2 text-sm">Billed</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- Add Charge Button -->
+                        <button @click="addCharge" type="button"
+                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors">
+                            + Add New Charge
+                        </button>
+
+                        <!-- Totals Section -->
+                        <div class="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block font-medium text-gray-700 dark:text-gray-300">Total Charges</label>
+                                <div class="text-xl text-gray-900 dark:text-gray-100" x-text="'$' + formData.total"></div>
+                            </div>
+                            <div>
+                                <label class="block font-medium text-gray-700 dark:text-gray-300">Total Discount</label>
+                                <div class="text-xl text-gray-900 dark:text-gray-100" x-text="'$' + formData.total_discount"></div>
+                            </div>
+                            <div>
+                                <label class="block font-medium text-gray-700 dark:text-gray-300">Net Total</label>
+                                <div class="text-2xl font-bold text-gray-900 dark:text-gray-100" x-text="'$' + formData.net_total"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Assign Driver -->
+                    <div x-show="step === 3" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div id="">
                             <label class="block text-gray-700 dark:text-gray-300">Drivers Assigned (<span class="text-gray-700 dark:text-gray-300" x-text="selectedDriver ? selectedDriver.fname + ' ' + selectedDriver.lname : 'No Driver'"></span>)</label>
                             
@@ -295,8 +410,8 @@
                         </div>
                     </div>
 
-                    <!-- Step 2: Backup Docs -->
-                    <div x-show="step === 3" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Step 4: Backup Docs -->
+                    <div x-show="step === 4" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
@@ -315,7 +430,7 @@
 
                         <!-- Next Button (Shows on steps 1 and 2) -->
                         <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
-                            x-show="step < 3" @click="nextStep">
+                            x-show="step < 4" @click="nextStep">
                             Next
                         </button>
 
@@ -327,7 +442,7 @@
 
                         <!-- Submit Button (Only shows on final step) -->
                         <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
-                            x-show="step === 3">
+                            x-show="step === 4">
                             Submit
                         </button>
                     </div>
@@ -383,7 +498,8 @@
                     driver_id: '',
                     invoice_path: '',
                     proof_of_delivery_path: '',
-                    file_path: []
+                    file_path: [],
+                    consolidate_shipment_charges: [],
                 },
                 selectedDriver: null,
                 //step: 1,
@@ -450,6 +566,21 @@
                                 id: tdoc.id || '',
                                 file_path: tdoc.file_path || 'Unknown',
                             })) || [],
+
+                            
+                            consolidate_shipment_charges: data.consolidate_shipment_charges?.map(charge => ({
+                                id: charge.id || '',
+                                charge_type: charge.type || '',
+                                comment: charge.comment || '',
+                                units: charge.unit || '',
+                                rate: charge.rate || '',
+                                amount: charge.amount || '',
+                                discount: charge.discount || '',
+                                internal_notes: charge.internal_notes || '',
+                                billed: charge.billed || false,
+                                invoice_date: charge.invoice_date || '',
+                                invoice_number: charge.invoice_number || ''
+                            })) || [],
                         };
 
                         
@@ -466,11 +597,62 @@
                 saveProgress() {
                     localStorage.setItem('formData', JSON.stringify(this.formData));
                 },
+                addCharge() {
+                this.formData.consolidate_shipment_charges.push({
+                    id: '',
+                    charge_type: '',
+                    comment: '',
+                    units: '',
+                    rate: '',
+                    amount: '',
+                    discount: '',
+                    internal_notes: '',
+                    billed: false,
+                    invoice_date: '',
+                    invoice_number: ''
+                });
+            },
+
+            removeCharge(index) {
+                this.formData.consolidate_shipment_charges.splice(index, 1);
+                this.calculateTotals();
+            },
+
+            calculateChargeAmount(index) {
+                const charge = this.formData.consolidate_shipment_charges[index];
+                charge.amount = parseFloat(charge.units) || 0 * parseFloat(charge.rate) || 0;
+                this.calculateTotals();
+            },
+
+            calculateTotals() {
+                this.formData.total = this.formData.consolidate_shipment_charges.reduce(
+                    (sum, charge) => sum + (parseFloat(charge.amount) || 0), 0
+                ).toFixed(2);
+                
+                this.formData.total_discount = this.formData.consolidate_shipment_charges.reduce(
+                    (sum, charge) => sum + (parseFloat(charge.discount) || 0), 0
+                ).toFixed(2);
+                
+                this.formData.net_total = (
+                    parseFloat(this.formData.total) - 
+                    parseFloat(this.formData.total_discount)
+                ).toFixed(2);
+            },
                 saveAndSubmit(e) {
                     e.preventDefault();
                     
                     let form = document.getElementById("consolidateShipmentForm");
                     let formData = new FormData(form);
+                    this.formData.consolidate_shipment_charges.forEach((charge, index) => {
+                        formData.append(`consolidate_shipment_charges[${index}][charge_type]`, charge.charge_type);
+                        formData.append(`consolidate_shipment_charges[${index}][comment]`, charge.comment);
+                        formData.append(`consolidate_shipment_charges[${index}][units]`, charge.units);
+                        formData.append(`consolidate_shipment_charges[${index}][rate]`, charge.rate);
+                        formData.append(`consolidate_shipment_charges[${index}][amount]`, charge.amount);
+                        formData.append(`consolidate_shipment_charges[${index}][discount]`, charge.discount);
+                        formData.append(`consolidate_shipment_charges[${index}][internal_notes]`, charge.internal_notes);
+                        formData.append(`consolidate_shipment_charges[${index}][billed]`, charge.billed ? 1 : 0);  // Convert checkbox boolean to 1/0
+                    });
 
                     formData.append("_method", "PUT");
                                     for (let pair of formData.entries()) {

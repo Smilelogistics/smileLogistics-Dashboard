@@ -111,7 +111,7 @@
                           
                         </div>
 
-                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                            
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Driver Type</label>
@@ -129,6 +129,14 @@
                                 <option value="" selected disabled>Select Type</option>
                             </select>
                             </div> -->
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Transport Type</label>
+                                <select x-model="formData.transport_type" name="transport_type" id="transport_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="" selected disabled>Select Type</option>
+                                <option value="1">Truck</option>
+                                <option value="2">Bike</option>
+                            </select>
+                            </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Quick Note</label>
                                 <input type="text" x-model="formData.quick_note" name="quick_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
@@ -834,6 +842,7 @@
                     mname:'',
                     email: '',
                     driver_type: '',
+                    transport_type: '',
                     quick_note: '',
                     dispatcher_note: '',
                     driver_phone: '',
@@ -935,6 +944,7 @@
                             vehicle_number: data.driver.vehicle_number || '',
                             license_plate_number: data.driver.license_plate_number || '',
                             driver_type: data.driver.driver_type || '',
+                            transport_type: data.driver.transport_type || '',
                             quick_note: data.driver.quick_note || '',
                             dispatcher_note: data.driver.dispatcher_note || '',
                             driver_phone: data.driver.driver_phone || '',

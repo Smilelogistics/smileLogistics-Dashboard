@@ -958,7 +958,7 @@
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Total Miles</label>
-                                        <input type="text" x-model="formData.total_miles" name="total_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_miles">
+                                        <input type="text" x-model="formData.total_miles" name="total_miles" @input="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_miles">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Loaded Miles</label>
@@ -980,17 +980,17 @@
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">$ / Gallon</label>
-                                        <input x-model="formData.fuel_rate_per_gallon" name="fuel_rate_per_gallon" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="fuel_rate_per_gallon" />
+                                        <input x-model="formData.fuel_rate_per_gallon" name="fuel_rate_per_gallon" @input="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="fuel_rate_per_gallon" />
                                     </div>
                                     
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">MPG</label>
-                                        <input type="text" x-model="formData.mpg" name="mpg" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="mpg" />
+                                        <input type="text" x-model="formData.mpg" name="mpg" @input="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="mpg" />
                                     </div>
                                 <!-- Load Note Radio Buttons and Checkbox -->
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Fuel cost</label>
-                                        <input type="text" x-model="formData.total_fuel_cost" name="total_fuel_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_fuel_cost" />
+                                        <input type="text" x-model="formData.total_fuel_cost" name="total_fuel_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_fuel_cost" readonly />
                                     </div>
                                     
                                     <!-- <div>
@@ -1226,7 +1226,7 @@
                                 <!-- Radio Option 1 -->
                                 <label class="flex items-center space-x-2">
                                     <input type="radio" x-model="formData.delivery_type" name="delivery_type" value="Carrier"
-                                    @click="formData.truck_id = ''"
+                                    @click="formData.carrier_id = ''"
                                         class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
                                     <span class="text-gray-700 dark:text-gray-300">Carrier?</span>
                                 </label>
@@ -1642,6 +1642,12 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                     this.formData.tags.pop();
                     //this.saveProgress();
                 }
+                },
+                calculateFuelCost() {
+                    const totalMiles = parseFloat(this.formData.total_miles) || 0;
+                    const fuelPerGallon = parseFloat(this.formData.fuel_rate_per_gallon) || 0;
+                    const mpg = parseFloat(this.formData.mpg) || 1; 
+                    this.formData.total_fuel_cost = (totalMiles * fuelPerGallon / mpg).toFixed(2);
                 },
               // Charge calculation methods
                 addCharge() {

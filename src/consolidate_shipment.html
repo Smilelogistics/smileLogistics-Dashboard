@@ -423,7 +423,7 @@
                                 <!-- Radio Option 1 -->
                                 <label class="flex items-center space-x-2">
                                     <input type="radio" x-model="formData.delivery_type" name="delivery_type" value="Carrier"
-                                    @click="formData.truck_id = ''"
+                                    @click="formData.carrier_id = ''"
                                         class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
                                     <span class="text-gray-700 dark:text-gray-300">Carrier?</span>
                                 </label>
@@ -458,7 +458,7 @@
                                 <label class="block text-gray-700 dark:text-gray-300">Assign Carrier</label>
                                 <select x-model="formData.carrier_id" name="carrier_id"
                                     class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="carrier_driver">
-                                    <option value="" selected disabled>Choose Driver</option>
+                                    <option value="" selected disabled>Choose Carrier</option>
                                     <option value="1">John Doe</option>
                                     <option value="2">Billy John</option>
                                     <option value="3">Jane Doe</option>

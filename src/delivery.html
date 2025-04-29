@@ -222,40 +222,9 @@
     <!-- ===== Page Wrapper End ===== -->
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <script>
-        // Global error handler
-window.addEventListener('error', function(event) {
-  // Prevent default error display
-  event.preventDefault();
-  
-  // In development, log to console
-  if (process.env.NODE_ENV === 'development') {
-    console.error('Global error handler caught:', event.error);
-  }
-  
-  // In production, show user-friendly toast
-  if (process.env.NODE_ENV === 'production') {
-    createToast('error', 'An unexpected error occurred. Please try again.');
-  }
-  
-  return true;
-});
-
-// Global unhandled promise rejection handler
-window.addEventListener('unhandledrejection', function(event) {
-  event.preventDefault();
-  
-  if (process.env.NODE_ENV === 'development') {
-    console.error('Unhandled rejection:', event.reason);
-  }
-  
-  if (process.env.NODE_ENV === 'production') {
-    createToast('error', 'Something went wrong. Please refresh the page.');
-  }
-});
-
         function stepperForm() {
           return {
-              step: localStorage.getItem('consolidate_shipment_step') ? parseInt(localStorage.getItem('consolidate_shipment_step')) : 1,
+              step: localStorage.getItem('bike_delivery_step') ? parseInt(localStorage.getItem('bike_delivery_step')) : 1,
               formData: JSON.parse(localStorage.getItem('formData')) || {
                 from: '',
                 drop_off_address: '',

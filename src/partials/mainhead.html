@@ -233,14 +233,67 @@ button {
     
     function populateDriverSelect() {
       $.ajax({
-          url: requestGetURL + '/drivers/driver',
+          url: requestGetURL + '/drivers/truckdrivers',
           type: 'GET',
           headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('auth_token'), // Add space after 'Bearer'
               'Accept': 'application/json'
           },
           success: (response) => {
-              console.log('Driver data:', response);
+              console.log('Truck Driver data:', response);
+              if(response.length == 0){
+                  createToast('error', 'No drivers found.');
+                  return
+              }
+              if (Array.isArray(response)) {
+                  var driverSelect = document.getElementById('driver_id');
+                  driverSelect.innerHTML = '';
+                  var defaultOption = document.createElement('option');
+                  defaultOption.value = '';
+                  defaultOption.text = 'Select a driver';
+                  driverSelect.appendChild(defaultOption);
+  
+                  response.forEach(driver => {
+                      var option = document.createElement('option');
+                      option.value = driver.id;
+                      option.text = driver.user.fname + ' ' + driver.user.lname;
+                      driverSelect.appendChild(option);
+                  });
+              } else {
+                  console.error('Invalid response format:', response);
+                  createToast('error', 'Invalid driver data received.');
+              }
+          },
+          error: (xhr, status, error) => {
+              console.error('API request failed:', xhr.responseText);
+  
+              if (xhr.status === 401) {
+                  alert("Session expired. Please log in again.");
+                  localStorage.removeItem('auth_token');
+                  window.location.href = "/signin";
+              } else {
+                  try {
+                      let response = JSON.parse(xhr.responseText);
+                      let message = response.message || "An error occurred. Please try again.";
+                      createToast('error', message);
+                  } catch (e) {
+                      createToast("error", "An unexpected error occurred.");
+                  }
+              }
+          }
+      });
+  }
+
+  function populateBikeDriverSelect() {
+      $.ajax({
+          url: requestGetURL + '/drivers/bikedrivers',
+          type: 'GET',
+          headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('auth_token'), // Add space after 'Bearer'
+              'Accept': 'application/json'
+          },
+          success: (response) => {
+              console.log('Truck Driver data:', response);
               if(response.length == 0){
                   createToast('error', 'No drivers found.');
                   return

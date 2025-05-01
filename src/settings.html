@@ -331,6 +331,14 @@
                             
                               
                             </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                              <div>
+                                <label class="block mb-2 dark:text-white">MPG</label>
+                                <input x-model="formData.mpg" name="mpg" type="number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                            
+                            </div>
                             <button type="submit" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded" :disabled="isLoading">
                               <span x-show="!isLoading">Save Changes</span>
                               <span x-show="isLoading" class="flex items-center justify-center">
@@ -1172,6 +1180,7 @@
       enable_email_otp: '',
       enable_2fa: '',
       logo1: '',
+      mpg: '',
 
 
       //customer and Driver variables

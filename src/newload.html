@@ -1672,12 +1672,21 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                     //this.saveProgress();
                 }
                 },
+                // calculateFuelCost() {
+                //     const totalMiles = parseFloat(this.formData.total_miles) || 0;
+                //     const fuelPerGallon = parseFloat(this.formData.fuel_rate_per_gallon) || 0;
+                //     const mpg = parseFloat(this.formData.mpg) || 1; 
+                //     // this calculation does not include round-trip, oops you must pay for it
+                //     this.formData.total_fuel_cost = (totalMiles * fuelPerGallon / mpg).toFixed(2);
+                // },
                 calculateFuelCost() {
                     const totalMiles = parseFloat(this.formData.total_miles) || 0;
                     const fuelPerGallon = parseFloat(this.formData.fuel_rate_per_gallon) || 0;
-                    const mpg = parseFloat(this.formData.mpg) || 1; 
-                    this.formData.total_fuel_cost = (totalMiles * fuelPerGallon / mpg).toFixed(2);
+                    const mpg = parseFloat(this.formData.mpg) || 1;
+                    // Updated to include round-trip
+                    this.formData.total_fuel_cost = ((totalMiles * 2) * fuelPerGallon / mpg).toFixed(2);
                 },
+
               // Charge calculation methods
                 addCharge() {
                     this.formData.charges.push({

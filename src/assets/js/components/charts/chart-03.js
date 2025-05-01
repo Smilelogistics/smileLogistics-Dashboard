@@ -1,5 +1,7 @@
 import ApexCharts from "apexcharts";
 
+
+
 const fetchChartData = async () => {
   try {
     const response = await fetch(`${requestGetURL}/dashboard/monthly-income`, {

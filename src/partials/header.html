@@ -487,6 +487,8 @@ function userData() {
                   console.log(data);
                     if (data) {
                         localStorage.setItem('userLoggedIn', JSON.stringify(data)); // Store user data in localStorage
+                        console.log("Fetched user data:", data);
+                       
                         this.user = data; // Update Alpine.js user data
                     }
                 })
@@ -497,6 +499,12 @@ function userData() {
         }
     };
 }
+
+                          const userDat = JSON.parse(localStorage.getItem('userLoggedIn'));
+                          console.log("verified status:", userDat.email_verified_at);
+                          if(userDat.email_verified_at === null) {
+                            window.location.href = '/verify.html';
+                          }
 
 
 function logout() {

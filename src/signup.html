@@ -479,7 +479,7 @@
             formData.append('password', this.formData.password);
             formData.append('password_confirmation', this.formData.password_confirmation);
 
-            fetch(requestURL + '/register', {
+            fetch(requestURL + '/guest-register', {
                 method: 'POST',
                 body: formData,
                     headers: {
@@ -497,7 +497,7 @@
             })
             .then(data => {
                 alert('Registration successfull');
-                window.location.href = '/signin.html';
+                window.location.href = '/verify.html';
             })
             .catch(error => {
                 console.error('User registration failed:', error);

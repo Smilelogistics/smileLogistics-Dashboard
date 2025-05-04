@@ -109,11 +109,11 @@
                             
                             <div id="chosen-select">
                                 <label class="block text-gray-700 dark:text-gray-300">Sales Rep</label>
-                                <select x-model="formData.customer_sales_rep" name="customer_sales_rep" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select">
+                                <input type="text" x-model="formData.customer_sales_rep" name="customer_sales_rep" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
                                     <!-- <option value="" selected disabled>Select Type</option> -->
-                                    <option value="IN">IN</option>
+                                    <!-- <option value="IN">IN</option>
                                    
-                                </select>
+                                </input> -->
                             </div>
                           
                         </div>
@@ -144,13 +144,13 @@
 
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">City</label>
-                                <input type="text" x-model="formData.customer_city" name="customer_city" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <input type="text" x-model="formData.customer_city" name="customer_city" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" />
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">State</label>
-                                <select x-model="formData.customer_state" name="customer_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                <option value="" selected disabled>Select Type</option>
-                            </select>
+                                <input x-model="formData.customer_state" name="customer_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <!-- <option value="" selected disabled>Select Type</option>
+                            </input> -->
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Zip</label>
@@ -176,7 +176,7 @@
                         <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Credit limit</label>
-                                <input type="text" x-model="formData.credit_limit" name="credit_limit" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <input type="text" x-model="formData.credit_limit" name="credit_limit" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Alert at percentage</label>
@@ -225,17 +225,32 @@
                                         <span class="text-gray-700 dark:text-gray-300">Is sub Account</span>
                                     </label>
 
-                                    <!-- Radio Option 2 -->
-                                    <label class="flex items-center space-x-2">
-                                        <input type="radio" x-model="formData.create_invoices_under_this_parent" name="create_invoices_under_this_parent" value="Under Parent" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                                        <span class="text-gray-700 dark:text-gray-300">Invoice Under this Parent </span>
-                                    </label>
+                                  <!-- Radio options with Alpine.js initialization -->
+                                    <div class="flex" x-data="{ 
+                                        formData: {
+                                            create_invoices_under_this_parent: '1'
+                                        }
+                                    }">
+                                        <!-- Radio Option 1 -->
+                                        <label class="flex items-center space-x-2">
+                                            <input type="radio" 
+                                                x-model="formData.create_invoices_under_this_parent" 
+                                                name="create_invoices_under_this_parent" 
+                                                value="1" 
+                                                class="text-blue-500 dark:bg-gray-700 dark:border-gray-600" />
+                                            <span class="text-gray-700 dark:text-gray-300">Invoice Under this Parent</span>
+                                        </label>
 
-                                    <!-- Radio Option 2 -->
-                                    <label class="flex items-center space-x-2">
-                                        <input type="radio" x-model="formData.create_invoices_under_this_parent" name="create_invoices_under_this_parent" value="Accounting Book" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                                        <span class="text-gray-700 dark:text-gray-300">Invoice in Accountiong Book</span>
-                                    </label>
+                                        <!-- Radio Option 2 -->
+                                        <label class="flex items-center space-x-2">
+                                            <input type="radio" 
+                                                x-model="formData.create_invoices_under_this_parent" 
+                                                name="create_invoices_under_this_parent" 
+                                                value="2" 
+                                                class="text-blue-500 dark:bg-gray-700 dark:border-gray-600" />
+                                            <span class="text-gray-700 dark:text-gray-300">Invoice in Accounting Book</span>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -305,12 +320,40 @@
                                 <label class="block text-gray-700 dark:text-gray-300">Start Date</label>
                                 <input type="text" x-model="formData.start_date" name="start_date" id="start_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
-                            <div>
+                            <!-- <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Tags</label>
                                 <select x-model="formData.tag" name="tag" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Select Type</option>
                                 </select>
-                            </div>
+                            </div> -->
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Tags</label>
+                                <input 
+                                  type="text" 
+                                  x-model="formData.tagsInput" 
+                                  @keydown.space.prevent="addTag()"
+                                  @keydown.enter.prevent="addTag()"
+                                  @keydown.backspace="removeLastTag()"
+                                  class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                                  placeholder="Type tags separated by space"
+                                  id="tags"
+                                >
+                                <!-- Display tags as chips -->
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                  <template x-for="(tag, index) in formData.tags" :key="index">
+                                    <div class="flex items-center bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full">
+                                      <span x-text="tag" class="text-sm"></span>
+                                      <button 
+                                        @click="removeTag(index)" 
+                                        class="ml-2 text-gray-500 hover:text-red-500"
+                                        type="button"
+                                      >
+                                        &times;
+                                      </button>
+                                    </div>
+                                  </template>
+                                </div>
+                              </div>
                             <script>
                                 $(document).ready(function () {
                                     $("#start_date").datepicker([
@@ -372,6 +415,11 @@
                             x-show="step < 2" @click="nextStep">
                             Next
                         </button>
+
+                        <button type="button" class="px-4 py-2 bg-yellow-500 text-white rounded dark:bg-yellow-400"
+                        @click="saveProgress">
+                        Save & Continue Later
+                    </button>
                     
                         <!-- Submit Button -->
                         <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded"
@@ -416,13 +464,15 @@
                 other_notes: '',
                 credit_limit: '',
                 alert_percentage: '',
+                  tags: [],
+                  tagsInput: '',
                 outstanding_balance: '',
                 send_invoice_under_this_company: '',
                 account_code: '',
                 invoice_footer_note: '',
                 subAccount_of:'',
                 isSubAccount: '',
-                create_invoices_under_this_parent: '',
+                create_invoices_under_this_parent: '1',
                 factoringCompany: '',
                 isFactoredInvoice: '',
                 isPrepaid: '',
@@ -451,9 +501,41 @@
                   localStorage.setItem('customer_step', this.step);
                   alert("Progress saved successfully!");
               },
+              
+              addTag() {
+                if (this.formData.tagsInput.trim()) {
+                    // Split by spaces and filter out empty strings
+                    const newTags = this.formData.tagsInput.split(' ')
+                    .map(tag => tag.trim())
+                    .filter(tag => tag.length > 0);
+                    
+                    // Add new tags to the array, avoiding duplicates
+                    newTags.forEach(tag => {
+                    if (!this.formData.tags.includes(tag)) {
+                        this.formData.tags.push(tag);
+                    }
+                    });
+                    
+                    this.formData.tagsInput = '';
+                    //this.saveProgress();
+                }
+                },
+                
+                removeTag(index) {
+                this.formData.tags.splice(index, 1);
+                //this.saveProgress();
+                },
+                
+                removeLastTag() {
+                if (this.formData.tagsInput === '' && this.formData.tags.length > 0) {
+                    this.formData.tags.pop();
+                    //this.saveProgress();
+                }
+                },
               saveAndSubmit() {
                 let form = document.getElementById("newCustomer");
                     let formData = new FormData(form);
+                    formData.append('tags', this.formData.tags.join(','));
                    
                     // for (let pair of formData.entries()) {
                     //     console.log(pair[0] + ": " + pair[1]);
@@ -482,6 +564,48 @@
                             localStorage.removeItem('formData');
                             localStorage.removeItem('customer_step');
                             //alert("Form submitted successfully!");
+
+                              // Reset form data
+                        this.formData = {
+                            customer_name: '',
+                            customer_email: '',
+                            customer_phone: '',
+                            customer_primary_address: '',
+                            customer_secondary_address: '',
+                            customer_code: '',
+                            customer_sales_rep: '',
+                            customer_office: '',
+                            customer_type: '',
+                            customer_city: '',
+                            customer_state: '',
+                            customer_zip: '',
+                            customer_country: '',
+                            fax_no: '',
+                            toll_free: '',
+                            other_notes: '',
+                            credit_limit: '',
+                            alert_percentage: '',
+                            outstanding_balance: '',
+                            start_date: '',
+                            send_invoice_under_this_company: '',
+                            account_code: '',
+                            invoice_footer_note: '',
+                            isSubAccount: '',
+                            create_invoices_under_this_parent: '',
+                            subAccount_of:'',
+                            factoringCompany: '',
+                            isFactoredInvoice: '',
+                            isPrepaid: '',
+                            isNonBillable: '',
+                            flash_note_for_dispatchers: '',
+                            flash_note_for_accounting: '',
+                            notes: '',
+                            file_path: '',
+                            print_settlements_under_this_company: '',
+                            // flash_notes_to_dispatch: '',
+                            //flash_notes_to_payroll: '',
+                            internal_note: '',
+                        };
                         },
                          error: (xhr, status, error) => {
                             document.getElementById("Ajaxbackdrop").style.display = 'none'
@@ -508,47 +632,47 @@
                     localStorage.removeItem('formData');
                     localStorage.removeItem('customer_step');
 
-                    // Reset form data
-                    this.formData = {
-                        customer_name: '',
-                        customer_email: '',
-                        customer_phone: '',
-                        customer_primary_address: '',
-                        customer_secondary_address: '',
-                        customer_code: '',
-                        customer_sales_rep: '',
-                        customer_office: '',
-                        customer_type: '',
-                        customer_city: '',
-                        customer_state: '',
-                        customer_zip: '',
-                        customer_country: '',
-                        fax_no: '',
-                        toll_free: '',
-                        other_notes: '',
-                        credit_limit: '',
-                        alert_percentage: '',
-                        outstanding_balance: '',
-                        start_date: '',
-                        send_invoice_under_this_company: '',
-                        account_code: '',
-                        invoice_footer_note: '',
-                        isSubAccount: '',
-                        create_invoices_under_this_parent: '',
-                        subAccount_of:'',
-                        factoringCompany: '',
-                        isFactoredInvoice: '',
-                        isPrepaid: '',
-                        isNonBillable: '',
-                        flash_note_for_dispatchers: '',
-                        flash_note_for_accounting: '',
-                        notes: '',
-                        file_path: '',
-                        print_settlements_under_this_company: '',
-                        // flash_notes_to_dispatch: '',
-                        //flash_notes_to_payroll: '',
-                        internal_note: '',
-                    };
+                    // // Reset form data
+                    // this.formData = {
+                    //     customer_name: '',
+                    //     customer_email: '',
+                    //     customer_phone: '',
+                    //     customer_primary_address: '',
+                    //     customer_secondary_address: '',
+                    //     customer_code: '',
+                    //     customer_sales_rep: '',
+                    //     customer_office: '',
+                    //     customer_type: '',
+                    //     customer_city: '',
+                    //     customer_state: '',
+                    //     customer_zip: '',
+                    //     customer_country: '',
+                    //     fax_no: '',
+                    //     toll_free: '',
+                    //     other_notes: '',
+                    //     credit_limit: '',
+                    //     alert_percentage: '',
+                    //     outstanding_balance: '',
+                    //     start_date: '',
+                    //     send_invoice_under_this_company: '',
+                    //     account_code: '',
+                    //     invoice_footer_note: '',
+                    //     isSubAccount: '',
+                    //     create_invoices_under_this_parent: '',
+                    //     subAccount_of:'',
+                    //     factoringCompany: '',
+                    //     isFactoredInvoice: '',
+                    //     isPrepaid: '',
+                    //     isNonBillable: '',
+                    //     flash_note_for_dispatchers: '',
+                    //     flash_note_for_accounting: '',
+                    //     notes: '',
+                    //     file_path: '',
+                    //     print_settlements_under_this_company: '',
+                    //     // flash_notes_to_dispatch: '',
+                    //     //flash_notes_to_payroll: '',
+                    //     internal_note: '',
+                    // };
                     //this.step = 1;
               }
           }

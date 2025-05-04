@@ -5,6 +5,11 @@
 
         <include src="./partials/mainhead.html"> </include>
         <script src="./assets/js/main.js"></script>
+        <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Flatpickr Dark Theme CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+<!-- Flatpickr JS -->
         <script>
         // blow Up modal
         $(document).ready(function() {
@@ -190,8 +195,8 @@
                                         <label class="block text-gray-700 dark:text-gray-300">Carrier Name</label>
                                         <select x-model="formData.carrier_name" name="carrier_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="carrier_name">
                                         <option value="" selected disabled>Selet carrier</option>
-                                        <option value="import">Joen Doe</option>
-                                        <option value="export">Export</option>
+                                        <!-- <option value="import">Joen Doe</option>
+                                        <option value="export">Export</option> -->
                                     </select>
                                     </div>
                                     <div>
@@ -268,8 +273,8 @@
                                             <label class="block text-gray-700 dark:text-gray-300">Pre Carried</label>
                                             <select x-model="formData.pre_carrier" name="pre_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="pre_carrier">
                                                 <option value="" selected disabled>Selet carrier</option>
-                                                <option value="import">Joen Doe</option>
-                                                <option value="export">Export</option>
+                                                <!-- <option value="import">Joen Doe</option>
+                                                <option value="export">Export</option> -->
                                             </select>
                                         </div>
                                         <div>
@@ -289,11 +294,11 @@
                                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Port Discharged</label>
-                                        <select x-model="formData.port_of_discharge" name="port_of_discharge" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="port_of_discharge">
-                                            <option value="" selected disabled>Selet carrier</option>
+                                        <input x-model="formData.port_of_discharge" name="port_of_discharge" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="port_of_discharge" />
+                                            <!-- <option value="" selected disabled>Selet carrier</option>
                                             <option value="import">Joen Doe</option>
                                             <option value="export">Export</option>
-                                        </select>
+                                        </input> -->
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Place of Delivery</label>
@@ -702,8 +707,8 @@
                             <!-- numbers -->
                             <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                                 <div id="chosen-select">
-                                    <label class="block text-gray-700 dark:text-gray-300">OverWeight/Hazmat etc</label>
-                                    <select x-model="formData.over_weight" name="over_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select" multiple id="over_weight">
+                                    <label class="block text-gray-700 dark:text-gray-300 text-sm">OverWeight/Hazmat etc</label>
+                                    <select x-model="formData.over_weight" name="over_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white  chosen-select" multiple id="over_weight">
                                         <!-- <option value="" selected disabled>Select Type</option> -->
                                         <option value="Tri-axle">Tri-axle</option>
                                         <option value="8-pin">8-pin</option>
@@ -846,7 +851,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Time</label>
-                                            <input type="text" x-model="formData.no_latter_than_time" name="no_latter_than_time[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.no_latter_than_time" id="no_latter_than_time" name="no_latter_than_time[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                         </div>
                                     </div>
                                 </div>
@@ -933,7 +938,7 @@
                                             </div>
                                             <div>
                                                 <label class="block text-gray-700 dark:text-gray-300">Time</label>
-                                                <input type="text" x-model="formData.drop_at_no_latter_than_time" name="drop_at_no_latter_than_time[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white drop_at_no_latter_than_time" placeholder="">
+                                                <input type="text" x-model="formData.drop_at_no_latter_than_time" name="drop_at_no_latter_than_time[]" id="drop_at_no_latter_than_time" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white drop_at_no_latter_than_time" placeholder="">
                                             </div>
                                         </div>
                                     </div>
@@ -951,11 +956,17 @@
                             
                             <div>
                                 <!-- <h4 class="mt-4 mb-3 block text-gray-700 dark:text-gray-300">Freight broker info ( if different from bill-to party )</h4> -->
-                                <div id="" class="grid grid-cols-1 md:grid-cols-10 gap-4 mb-6">
-                                    <div>
+                                <div>
+                                <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-2">
+                                    <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
+                                    <a href="https://www.google.com/maps/dir//" class="mt-4 mb-3 block text-blue-700  dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer" target="_blank">Show Route</a>
+                                </div>
+                                </div>
+                                <div id="" class="grid grid-cols-1 md:grid-cols-8 gap-4 mb-2">
+                                    <!-- <div>
                                         <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
                                         <a href="https://www.google.com/maps/dir//" class="mt-4 mb-3 block text-blue-700  dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer" target="_blank">Show Route</a>
-                                    </div>
+                                    </div> -->
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Total Miles</label>
                                         <input type="text" min="200" x-model="formData.total_miles" name="total_miles" @input="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Min:200" id="total_miles">
@@ -974,10 +985,10 @@
                                         <label class="block text-gray-700 dark:text-gray-300">D/H Miles</label>
                                         <input type="text" x-model="formData.dh_miles" name="dh_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="dh_miles">
                                     </div>
-                                    <div>
+                                    <!-- <div>
                                         <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
                                         <a href="https://www.eia.gov/petroleum/gasdiesel/" target="_blank" class="block text-blue-700 dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer">Fuel Rate</a>
-                                    </div>
+                                    </div> -->
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">$ / Gallon</label>
                                         <input x-model="formData.fuel_rate_per_gallon" name="fuel_rate_per_gallon" @input="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="fuel_rate_per_gallon" />
@@ -998,6 +1009,13 @@
                                         <input type="text" x-model="formData.seal_number" name="seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                     </div> -->
                                 </div>
+                                
+                                <div>
+                                    <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-6">
+                                        <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
+                                        <a href="https://www.eia.gov/petroleum/gasdiesel/" target="_blank" class="block text-blue-700 dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer">Fuel Rate</a>
+                                    </div>
+                                    </div>
                             </div>
 
                             
@@ -1019,12 +1037,12 @@
                                     <!-- Load Note Radio Buttons and Checkbox -->
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Broker Ref #</label>
-                                            <input type="text" x-model="formData.broker_reference_number" name="broker_reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="broker_reference_number">
+                                            <input type="text" x-model="formData.broker_reference_number" name="broker_reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="broker_reference_number">
                                         </div>
                                         
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Batch #</label>
-                                            <input type="text" x-model="formData.batch_number" name="batch_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="batch_number">
+                                            <input type="number" x-model="formData.batch_number" name="batch_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="batch_number">
                                         </div>
                                     </div>
                                     <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -1034,14 +1052,13 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Sales Rep</label>
-                                            <select x-model="formData.sales_rep" name="sales_rep" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="sales_rep">
+                                            <input type="text" x-model="formData.sales_rep" name="sales_rep" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="sales_rep" />
                                                 <!-- <option value="" selected disabled>Select Type</option> -->
-                                            </select>
                                         </div>
                                         
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">EDI/API Shipment #</label>
-                                            <input type="text" x-model="formData.edi_number" name="edi_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="edi_number">
+                                            <input type="text" x-model="formData.edi_number" name="edi_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="edi_number">
                                         </div>
                                     <!-- Load Note Radio Buttons and Checkbox -->
                                         <div>
@@ -1250,11 +1267,11 @@
                             <div x-show="formData.delivery_type === 'Truck'" class="isDrive mt-4">
                                 <label class="block text-gray-700 dark:text-gray-300">Assign Driver</label>
                                 <select x-model="formData.driver_id" name="driver_id" id="driver_id"
-                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="truck_driver">
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Choose Driver</option>
-                                    <option value="1">John Doe</option>
+                                    <!-- <option value="1">John Doe</option>
                                     <option value="2">Billy John</option>
-                                    <option value="3">Jane Doe</option>
+                                    <option value="3">Jane Doe</option> -->
                                 </select>
                             </div>
                         
@@ -1262,11 +1279,11 @@
                             <div x-show="formData.delivery_type === 'Carrier'" class="isTruc mt-4">
                                 <label class="block text-gray-700 dark:text-gray-300">Assign Carrier</label>
                                 <select x-model="formData.carrier_id" name="carrier_id"
-                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="carrier_driver">
-                                    <option value="" selected disabled>Choose Driver</option>
-                                    <option value="1">John Doe</option>
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="carrier_id">
+                                    <option value="" selected disabled>Choose Carrier</option>
+                                    <!-- <option value="1">John Doe</option>
                                     <option value="2">Billy John</option>
-                                    <option value="3">Jane Doe</option>
+                                    <option value="3">Jane Doe</option> -->
                                 </select>
                             </div>
 
@@ -1437,16 +1454,136 @@
     </div>
     <!-- ===== Page Wrapper End ===== -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     
     <script>
+ populateCarrierSelect() 
+function populateCarrierSelect() {
+      $.ajax({
+          url: requestGetURL + '/carriers/carriers',
+          type: 'GET',
+          headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+              'Accept': 'application/json'
+          },
+          success: (response) => {
+              console.log('Carrier data:', response.carriers);
+              if(response.carriers.length == 0){
+                  //createToast('error', 'No customer found.');
+                  return
+              }
+              if (Array.isArray(response.carriers)) {
+                  var carrierselect = document.getElementById('carrier_id');
+                  var preCarrierselect = document.getElementById('pre_carrier');
+                  var CarrierNameselect = document.getElementById('carrier_name');
+
+                  carrierselect.innerHTML = '';
+                  preCarrierselect.innerHTML = '';
+                  CarrierNameselect.innerHTML = '';
+
+                  var defaultOption = document.createElement('option');
+                  defaultOption.value = '';
+                  defaultOption.text = 'Carrier';
+                  //defaultOption.disabled = true;
+                  defaultOption.hidden = true;
+                  carrierselect.appendChild(defaultOption);
+
+                  var defaultPreOption = document.createElement('option');
+                  defaultPreOption.value = '';
+                  defaultPreOption.text = 'Carrier';
+                  //defaultOption.disabled = true;
+                  defaultPreOption.hidden = true;
+                  preCarrierselect.appendChild(defaultPreOption);
+
+                //   carrien name
+                  var defaultCarrierNameOption = document.createElement('option');
+                  defaultCarrierNameOption.value = '';
+                  defaultCarrierNameOption.text = 'Carrier';
+                  //defaultOption.disabled = true;
+                  defaultCarrierNameOption.hidden = true;
+                  CarrierNameselect.appendChild(defaultCarrierNameOption);
+  
+                  response.carriers.forEach(carrier => {
+                      var option = document.createElement('option');
+                      option.value = carrier.id;
+                      option.text = carrier.name;
+                      carrierselect.appendChild(option);
+
+                    //   pre carried
+                    var preoption = document.createElement('option');
+                    preoption.value = carrier.id;
+                    preoption.text = carrier.name;
+                    preCarrierselect.appendChild(preoption);
+
+                    //   carrier name
+                    var carrierNameoption = document.createElement('option');
+                    carrierNameoption.value = carrier.id;
+                    carrierNameoption.text = carrier.name;
+                    CarrierNameselect.appendChild(carrierNameoption);
+
+                  });
+              } else {
+                  console.error('Invalid response format:', response);
+                  createToast('error', 'Invalid customer data received.');
+              }
+          },
+          error: (xhr, status, error) => {
+              console.error('API request failed:', xhr.responseText);
+  
+              if (xhr.status === 401) {
+                  alert("Session expired. Please log in again.");
+                  localStorage.removeItem('auth_token');
+                  window.location.href = "/signin";
+              } else {
+                  try {
+                      let response = JSON.parse(xhr.responseText);
+                      let message = response.message || "An error occurred. Please try again.";
+                      createToast('error', message);
+                  } catch (e) {
+                      createToast("error", "An unexpected error occurred.");
+                  }
+              }
+          }
+      });
+  }
+
     
        // $(document).ready(function(){
             
-            flatpickr(".drop_at_no_latter_than_time", {
-                enableTime: true,
-                timeFormat: 'HH:mm',
-            });
+       $("#no_latter_than_time").flatpickr({
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "h:i K",
+        time_24hr: false,
+        minuteIncrement: 15,
+        defaultHour: 12,
+        // onChange: function(selectedDates, dateStr, instance) {
+        //     // Update Alpine.js model when the time changes
+        //     const inputElement = instance.input;
+        //     const event = new Event('input', { bubbles: true });
+        //     inputElement.dispatchEvent(event);
+        // },
+        // onReady: function(dateObj, dateStr, instance) {
+        //     // Apply dark mode to Flatpickr if dark mode is active
+        //     if (document.documentElement.classList.contains('dark') || 
+        //         document.body.classList.contains('dark')) {
+        //         instance.calendarContainer.classList.add('dark-theme');
+        //     }
+        // }
+    });
+
+    $("#drop_at_no_latter_than_time").flatpickr({
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "h:i K",
+        time_24hr: false,
+        minuteIncrement: 15,
+        defaultHour: 12,
+    });
+
+
+    
             flatpickr(".no_latter_than_date", {
                 enableTime: true,
                 timeFormat: 'HH:mm',
@@ -1719,12 +1856,17 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                 // },
                 calculateFuelCost() {
                     const totalMiles = parseFloat(this.formData.total_miles) || 0;
-                    // setTimeout(() => {
-                    //     if(totalMiles < 200){
-                    //     alert("Total Miles must be greater than 200");
-                    //     return;
-                    //     }
-                    // }, 5000)
+                    setTimeout(() => {
+                        if(totalMiles < 200){
+                            document.getElementById('total_miles').style.borderColor = 'red';
+                            //createToast('error', 'Total Miles must be greater than 200');
+                        ///alert("Total Miles must be greater than 200");
+                        return;
+                        }
+                        else{
+                            document.getElementById('total_miles').style.borderColor = '';
+                        }
+                    }, 500)
 
                     const fuelPerGallon = parseFloat(this.formData.fuel_rate_per_gallon) || 0;
                     const mpg = parseFloat(mpgGoten) || 1;

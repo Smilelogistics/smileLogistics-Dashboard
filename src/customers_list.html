@@ -237,7 +237,7 @@
         // Delete item
         deleteItem(id) {
             if (confirm('Are you sure you want to delete this item?')) {
-                fetch(`${requestGetURL}/customer/delete/${id}`, {
+                fetch(`${requestGetURL}/customers/delete/${id}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),

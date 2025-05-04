@@ -958,7 +958,7 @@
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Total Miles</label>
-                                        <input type="text" x-model="formData.total_miles" name="total_miles" @input="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_miles">
+                                        <input type="text" min="200" x-model="formData.total_miles" name="total_miles" @input="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Min:200" id="total_miles">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Loaded Miles</label>
@@ -985,7 +985,7 @@
                                     
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">MPG</label>
-                                        <input type="text" x-model="formData.mpg" name="mpg" @input="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="mpg" />
+                                        <input type="text" x-model="formData.mpg" name="mpg" @input="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="mpg" readonly />
                                     </div>
                                 <!-- Load Note Radio Buttons and Checkbox -->
                                     <div>
@@ -1470,6 +1470,44 @@
             
 
         //})
+
+        var mpgGoten = '';
+
+function fetchSettings() {
+    return fetch(requestURL + '/settings/data', {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(datas => {
+        let data = Array.isArray(datas) ? datas[0] : datas;
+        
+        console.log('FORM DATA', data.mpg);
+        mpgValue = document.getElementById('mpg');
+        mpgValue.value = data.mpg || 1;
+        mpgGoten = data.mpg || 1;
+        
+        //console.log('mpgGoten inside fetch', mpgGoten);
+    
+        //return mpgGoten;
+    })
+    .catch(error => {
+        console.error('Error fetching settings data:', error);
+    });
+}
+
+fetchSettings().then(result => {
+    console.log('mpgGoten outside fetch', mpgGoten);
+});
+
+//console.log('mpgGoten immediately after fetch call (will be empty):', mpgGoten);
        
         
 var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
@@ -1681,8 +1719,15 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                 // },
                 calculateFuelCost() {
                     const totalMiles = parseFloat(this.formData.total_miles) || 0;
+                    // setTimeout(() => {
+                    //     if(totalMiles < 200){
+                    //     alert("Total Miles must be greater than 200");
+                    //     return;
+                    //     }
+                    // }, 5000)
+
                     const fuelPerGallon = parseFloat(this.formData.fuel_rate_per_gallon) || 0;
-                    const mpg = parseFloat(this.formData.mpg) || 1;
+                    const mpg = parseFloat(mpgGoten) || 1;
                     // Updated to include round-trip
                     this.formData.total_fuel_cost = ((totalMiles * 2) * fuelPerGallon / mpg).toFixed(2);
                 },
@@ -1795,6 +1840,7 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                     discount: '',
                     internal_notes: ''
                     }];
+
                 }
 
                 // Initialize expenses if undefined (extra safety)
@@ -1849,6 +1895,8 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                 this.formData.total_discount = totalDiscount.toFixed(2);
                 this.formData.net_total = (total - totalDiscount).toFixed(2);
                 },
+
+    
 
               saveAndSubmit(e) {
                 var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
@@ -1919,7 +1967,6 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
     //populate driver select
 
 populateDriverSelect();
-
 
     function user()
     {

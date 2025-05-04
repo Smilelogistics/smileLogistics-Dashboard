@@ -242,7 +242,7 @@ button {
           success: (response) => {
               console.log('Truck Driver data:', response);
               if(response.length == 0){
-                  createToast('error', 'No drivers found.');
+                  //createToast('error', 'No drivers found.');
                   return
               }
               if (Array.isArray(response)) {

@@ -29,72 +29,197 @@
 
 <script>
     document.addEventListener('alpine:init', () => {
-          Alpine.data('metricGroup', () => ({
-              items: [],
-              searchQuery: '',
-              isLoading: false,
+        Alpine.data('metricGroup', () => ({
+            items: [],
+            searchQuery: '',
+            isLoading: false,
+            userRole: '', // Add userRole to store the role
+            
+            init() {
+                this.fetchUserRole(); // Get user role first
+                this.fetchData();
+            },
+
+            fetchUserRole() {
+                // Assuming you have a function to get user role
+                this.userRole = localStorage.getItem('user_role') || '';
+            },
+
+            fetchData() {
+                this.isLoading = true;
+                fetch(requestGetURL + '/dashboard/dashboardstats', {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.status === 401) {
+                        throw new Error('Unauthorized');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('dashboard stats', data.data);
+                    if (data.data) {
+                        // Initialize empty array
+                        this.items = [];
+                        
+                        // Only add superadministrator metrics if role matches businessadministrator
+                        if (this.userRole === 'superadministrator') {
+                            this.items.push(
+                                {
+                                    title: 'Total Income',
+                                    value: data.data.totalincome || 0,
+                                    icon: 'money',
+                                    bgColor: 'bg-orange-600'
+                                },
+                                {
+                                    title: 'Users',
+                                    value: data.data.userCount || 0,
+                                    icon: 'users',
+                                    bgColor: 'bg-red-500'
+                                },
+                                {
+                                    title: 'Plans',
+                                    value: data.data.plans || 0,
+                                    icon: 'puzzle',
+                                    bgColor: 'bg-orange-200'
+                                },
+                                {
+                                    title: 'Branches',
+                                    value: data.data.branches || 0,
+                                    icon: 'building',
+                                    bgColor: 'bg-blue-500'
+                                }
+                            );
+                        }
+                        else if (this.userRole === 'businessadministrator') {
+                            
+                            this.items.push(
+                                
+                                {
+                                    title: 'Total Users',
+                                    value: data.data.userCount || 0,
+                                    icon: 'users',
+                                    bgColor: 'bg-red-500'
+                                },
+                                {
+                                    title: 'Total Shipments',
+                                    value: data.data.myShipments || 0,
+                                    icon: 'puzzle',
+                                    bgColor: 'bg-orange-200'
+                                },
+                                {
+                                    title: 'Total Consolidated Shipments',
+                                    value: data.data.myConsolidate || 0,
+                                    icon: 'building',
+                                    bgColor: 'bg-blue-500'
+                                }
+                            );
+                        }
+                        
+                        // Add common metrics for all roles here if needed
+                        // this.items.push({...});
+                        
+                        console.log(this.items);
+                    } else {
+                        console.error('Invalid data format:', data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    if (error.message === 'Unauthorized') {
+                        alert("Session expired. Please log in again.");
+                        localStorage.removeItem('auth_token');
+                        window.location.href = "/login";
+                    }
+                })
+                .finally(() => {
+                    this.isLoading = false;
+                });
+            }
+        }));
+    });
+
+    // If you have a global fetchUserRole function
+    if (typeof window.fetchUserRole === 'function') {
+        window.fetchUserRole();
+    }
+
+
+
+    // document.addEventListener('alpine:init', () => {
+    //       Alpine.data('metricGroup', () => ({
+    //           items: [],
+    //           searchQuery: '',
+    //           isLoading: false,
           
-              init() {
-                  this.fetchData();
-              },
+    //           init() {
+    //               this.fetchData();
+    //           },
 
-              fetchData() {
-              this.isLoading = true;
-              fetch(requestGetURL + '/dashboard/dashboardstats', {
-                  headers: {
-                      'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
-                      'Accept': 'application/json'
-                  }
-              })
-              .then(response => response.json())
-              .then(data => {
-                  console.log('dashboard stats', data.data);
-                  if (data.data) {
-                      // Access the specific properties directly instead of treating as array
-                      this.items = [
-                          {
-                              title: 'Total Income',
-                              value: data.data.totalincome,
-                              icon: 'money',
-                              bgColor: 'bg-orange-600'
-                          },
-                          {
-                              title: 'Users',
-                              value: data.data.userCount,
-                              icon: 'users',
-                              bgColor: 'bg-red-500'
-                          },
-                          {
-                              title: 'Plans',
-                              value: data.data.plans,
-                              icon: 'puzzle',
-                              bgColor: 'bg-orange-200'
-                          },
-                          {
-                              title: 'Branches',
-                              value: data.data.branches || 0, // Use default if not provided
-                              icon: 'building',
-                              bgColor: 'bg-blue-500'
-                          }
-                      ];
-                      console.log(this.items);
-                  } else {
-                      console.error('Invalid data format:', data);
-                  }
-              })
-              .catch(error => {
-                  console.error('Error fetching data:', error);
-                  if (error.status === 401) {
-                      alert("Session expired. Please log in again.");
-                      localStorage.removeItem('auth_token');
-                      window.location.href = "/login";
-                  }
-              })
-              .finally(() => {
-                  this.isLoading = false;
-              });
-          }
+    //           fetchData() {
+    //           this.isLoading = true;
+    //           fetch(requestGetURL + '/dashboard/dashboardstats', {
+    //               headers: {
+    //                   'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+    //                   'Accept': 'application/json'
+    //               }
+    //           })
+    //           .then(response => response.json())
+    //           .then(data => {
+    //               console.log('dashboard stats', data.data);
+    //               if (data.data) {
+    //                   // Access the specific properties directly instead of treating as array
+    //                   this.items = [
+    //                       {
+    //                           title: 'Total Income',
+    //                           value: data.data.totalincome,
+    //                           icon: 'money',
+    //                           bgColor: 'bg-orange-600'
+    //                       },
+    //                       {
+    //                           title: 'Users',
+    //                           value: data.data.userCount,
+    //                           icon: 'users',
+    //                           bgColor: 'bg-red-500'
+    //                       },
+    //                       {
+    //                           title: 'Plans',
+    //                           value: data.data.plans,
+    //                           icon: 'puzzle',
+    //                           bgColor: 'bg-orange-200'
+    //                       },
+    //                       {
+    //                           title: 'Branches',
+    //                           value: data.data.branches || 0, // Use default if not provided
+    //                           icon: 'building',
+    //                           bgColor: 'bg-blue-500'
+    //                       }
+    //                   ];
+    //                   console.log(this.items);
+    //               } else {
+    //                   console.error('Invalid data format:', data);
+    //               }
+    //           })
+    //           .catch(error => {
+    //               console.error('Error fetching data:', error);
+    //               if (error.status === 401) {
+    //                   alert("Session expired. Please log in again.");
+    //                   localStorage.removeItem('auth_token');
+    //                   window.location.href = "/login";
+    //               }
+    //           })
+    //           .finally(() => {
+    //               this.isLoading = false;
+    //           });
+    //       }
 
-          }));
-      });
+    //       }));
+    //   });
+
+    //   if (typeof window.fetchUserRole === 'function') {
+    //   window.fetchUserRole();
+    // }
 </script>

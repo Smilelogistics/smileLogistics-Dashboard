@@ -1193,48 +1193,7 @@
 
 
                     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
-                    <script>
-                        function calculate() {
-                $(".chargecalc").each(function() {
-                    let units = parseFloat($(this).find(".unit").val()) || 0;
-                    let rate = parseFloat($(this).find(".rate").val()) || 0;
-                    let discount = parseFloat($(this).find(".discount").val()) || 0;
-
-                    let total = units * rate;
-                    let netTotal = total - discount;
-
-                    $(this).find(".amount").val(total);
-                    $(this).find(".total").val(total);
-                    $(this).find(".net_total").val(netTotal);
-                });
-            }
-
-            // Trigger calculation on input change
-            $(document).on("input", ".calc-field", function() {
-                calculate();
-            });
-                    //     function calculate() {
-                    //     let units = parseFloat($("#unit").val()) || 0;
-                    //     let rate = parseFloat($("#rate").val()) || 0;
-                    //     let discount = parseFloat($("#discount").val()) || 0;
-
-                    //     let total = units * rate;
-                    //     let netTotal = total - discount;
-                    //     console.log("Net total is",netTotal)
-
-                    //     $("#amount").val(total);
-                    //     $("#total").val(total);
-                    //     $("#net_total").val(netTotal);
-                    //     $("#total_discount").val(discount);
-                    // }
-
-                    //     $(".calc-field").on("input", function() {
-                    //         calculate();
-                    //     });
-
-                    //     calculate();
-                    </script>
-
+                  
                     <!-- Step 3: Dispatch -->
                     <div x-show="step === 3" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div x-data="{ formData: { delivery_type: '', driver_id: '' } }">

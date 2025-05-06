@@ -127,14 +127,12 @@
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.total_miles"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.seal_number"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.shipment_type"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                  x-text="'$' + parseFloat(item.net_total).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})">
-                              </td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                  x-text="'$' + parseFloat(item.net_total).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})">
-                              </td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                  x-text="'$' + parseFloat(item.total_fuel_cost).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})">
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.booking_number"></td>
+
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
+                              x-text="'$' + ((Number(item?.shipment_charges?.net_total) || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}))">
+                          </td>
+
                               </td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.broker_name"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.commodity"></td>

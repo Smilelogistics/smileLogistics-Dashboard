@@ -278,7 +278,7 @@ try {
   x-data="{ userRole: 'Loading...', user_type: null }"
   x-init="
       document.addEventListener('userRoleLoaded', () => {
-          userRole = window.userRole;
+        userRole = window.userRole;
           console.log('Updated userRole:', userRole);
       });
   ">
@@ -1857,6 +1857,7 @@ async function fetchUserRole() {
 
         let data = await response.json();
         console.log("Fetched user role:", data.role);
+        localStorage.setItem('user_role', data.role);
 
         // Store globally
         window.userRole = data.role;

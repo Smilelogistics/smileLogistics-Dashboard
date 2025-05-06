@@ -1099,8 +1099,8 @@
                                     </div>
 
                                     <!-- Rate -->
-                                    <!-- <span x-text="JSON.stringify(charge)"></span> -->
                                     <div>
+                                        <!-- <span x-text="JSON.stringify(charge)"></span> -->
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Rate</label>
                                         <input type="text" name="rate" x-model="charge.rate" 
                                             @change="calculateChargeAmount(index)"
@@ -1176,6 +1176,7 @@
                                 <!-- Radio Option 1 -->
                                 <label class="flex items-center space-x-2">
                                     <input type="radio" x-model="formData.delivery_type" name="delivery_type" value="Carrier"
+                                    @click="formData.carrier_id = ''"
                                         class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
                                     <span class="text-gray-700 dark:text-gray-300">Carrier?</span>
                                 </label>
@@ -1183,15 +1184,16 @@
                                 <!-- Radio Option 2 -->
                                 <label class="flex items-center space-x-2">
                                     <input type="radio" x-model="formData.delivery_type" name="delivery_type" value="Truck"
+                                    @click="formData.driver_id = ''" 
                                         class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
                                     <span class="text-gray-700 dark:text-gray-300">Truck</span>
                                 </label>
                                 <!-- Radio Option 3 Bike -->
-                                <label class="flex items-center space-x-2">
+                                <!-- <label class="flex items-center space-x-2">
                                     <input type="radio" x-model="formData.delivery_type" name="delivery_type" value="Bike"
                                         class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
                                     <span class="text-gray-700 dark:text-gray-300">Bike</span>
-                                </label>
+                                </label> -->
                             </div>
                         
                             <!-- Show when "Truck" is selected -->
@@ -1208,16 +1210,16 @@
                             <div x-show="formData.delivery_type === 'Carrier'" class="isTruc mt-4">
                                 <label class="block text-gray-700 dark:text-gray-300">Assign Carrier</label>
                                 <select x-model="formData.carrier_id" name="carrier_id"
-                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="carrier_driver">
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="carrier_id">
                                     <option value="" selected disabled>Choose Carrier</option>
-                                    <option value="1">John Doe</option>
+                                    <!-- <option value="1">John Doe</option>
                                     <option value="2">Billy John</option>
-                                    <option value="3">Jane Doe</option>
+                                    <option value="3">Jane Doe</option> -->
                                 </select>
                             </div>
 
                              <!-- Show when "Bike" is selected -->
-                             <div x-show="formData.delivery_type === 'Bike'" class="isBike mt-4">
+                             <!-- <div x-show="formData.delivery_type === 'Bike'" class="isBike mt-4">
                                 <label class="block text-gray-700 dark:text-gray-300">Assign Bike</label>
                                 <select x-model="formData.bike_id" name="bike_id"
                                     class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="bike_driver">
@@ -1226,7 +1228,7 @@
                                     <option value="2">Billy John</option>
                                     <option value="3">Jane Doe</option>
                                 </select>
-                            </div>
+                            </div> -->
                         
                         </div>
                         
@@ -1392,6 +1394,96 @@
     <!-- ===== Page Wrapper End ===== -->
 
     <script>
+         populateCarrierSelect() 
+function populateCarrierSelect() {
+      $.ajax({
+          url: requestGetURL + '/carriers/carriers',
+          type: 'GET',
+          headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+              'Accept': 'application/json'
+          },
+          success: (response) => {
+              console.log('Carrier data:', response.carriers);
+              if(response.carriers.length == 0){
+                  //createToast('error', 'No customer found.');
+                  return
+              }
+              if (Array.isArray(response.carriers)) {
+                  var carrierselect = document.getElementById('carrier_id');
+                  var preCarrierselect = document.getElementById('pre_carrier');
+                  var CarrierNameselect = document.getElementById('carrier_name');
+
+                  carrierselect.innerHTML = '';
+                  preCarrierselect.innerHTML = '';
+                  CarrierNameselect.innerHTML = '';
+
+                  var defaultOption = document.createElement('option');
+                  defaultOption.value = '';
+                  defaultOption.text = 'Carrier';
+                  //defaultOption.disabled = true;
+                  defaultOption.hidden = true;
+                  carrierselect.appendChild(defaultOption);
+
+                  var defaultPreOption = document.createElement('option');
+                  defaultPreOption.value = '';
+                  defaultPreOption.text = 'Carrier';
+                  //defaultOption.disabled = true;
+                  defaultPreOption.hidden = true;
+                  preCarrierselect.appendChild(defaultPreOption);
+
+                //   carrien name
+                  var defaultCarrierNameOption = document.createElement('option');
+                  defaultCarrierNameOption.value = '';
+                  defaultCarrierNameOption.text = 'Carrier';
+                  //defaultOption.disabled = true;
+                  defaultCarrierNameOption.hidden = true;
+                  CarrierNameselect.appendChild(defaultCarrierNameOption);
+  
+                  response.carriers.forEach(carrier => {
+                      var option = document.createElement('option');
+                      option.value = carrier.id;
+                      option.text = carrier.name;
+                      carrierselect.appendChild(option);
+
+                    //   pre carried
+                    var preoption = document.createElement('option');
+                    preoption.value = carrier.id;
+                    preoption.text = carrier.name;
+                    preCarrierselect.appendChild(preoption);
+
+                    //   carrier name
+                    var carrierNameoption = document.createElement('option');
+                    carrierNameoption.value = carrier.id;
+                    carrierNameoption.text = carrier.name;
+                    CarrierNameselect.appendChild(carrierNameoption);
+
+                  });
+              } else {
+                  console.error('Invalid response format:', response);
+                  createToast('error', 'Invalid customer data received.');
+              }
+          },
+          error: (xhr, status, error) => {
+              console.error('API request failed:', xhr.responseText);
+  
+              if (xhr.status === 401) {
+                  alert("Session expired. Please log in again.");
+                  localStorage.removeItem('auth_token');
+                  window.location.href = "/signin";
+              } else {
+                  try {
+                      let response = JSON.parse(xhr.responseText);
+                      let message = response.message || "An error occurred. Please try again.";
+                      createToast('error', message);
+                  } catch (e) {
+                      createToast("error", "An unexpected error occurred.");
+                  }
+              }
+          }
+      });
+  }
+
         
 var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
 document.addEventListener('alpine:init', () => {
@@ -1655,9 +1747,10 @@ document.addEventListener('alpine:init', () => {
 
         calculateChargeAmount(index) {
             const charge = this.formData.shipment_charges[index];
-            charge.amount = parseFloat(charge.units) || 0 * parseFloat(charge.rate) || 0;
+            charge.amount = (parseFloat(charge.units)) || 0 * (parseFloat(charge.rate)) || 0;
             this.calculateTotals();
         },
+
 
         calculateTotals() {
             this.formData.total = this.formData.shipment_charges.reduce(
@@ -1699,7 +1792,7 @@ document.addEventListener('alpine:init', () => {
 
         calculateExpenseAmount(index) {
             const expense = this.formData.shipment_expenses[index];
-            expense.expense_amount = parseFloat(expense.expense_unit) || 0 * parseFloat(expense.expense_rate) || 0;
+            expense.expense_amount = (parseFloat(expense.expense_unit)) || 0 * (parseFloat(expense.expense_rate)) || 0;
             this.calculateExpenseTotals();
         },
 
@@ -1731,7 +1824,7 @@ document.addEventListener('alpine:init', () => {
                   localStorage.removeItem('formData');
                   localStorage.removeItem('step');
                   e.preventDefault();
-                  var shipment_type = document.getAnimations("shipment_type").value
+                  var shipment_type = document.getElementById("shipment_type").value
 
                     let form = document.getElementById("editloadForm");
                     let formData = new FormData(form);

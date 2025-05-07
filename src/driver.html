@@ -1002,6 +1002,12 @@
                     let form = document.getElementById("newdriverForm");
                     let formData = new FormData(form);
                     formData.append('tags', this.formData.tags.join(','));
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+                          console.log(localStorage.getItem('auth_token'))
+                     return
+
                     $.ajax({
                         url: requestURL+'/drivers/driver',
                         type: 'POST',

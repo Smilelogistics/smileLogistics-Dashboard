@@ -1733,7 +1733,9 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                     goods_name: '',
                     ocean_vin: '',
                     ocean_weight: '',
-
+                    expense_total: 0,
+                    charges: [],
+                    expenses: [],
                     charges: [{
                     charge_type: '',
                     comment: '',
@@ -1741,8 +1743,17 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                     rate: '',
                     amount: '',
                     discount: '',
-                    internal_notes: ''
+                    internal_notes: '',
                     }],
+
+                credit_total: 0,
+                net_expense: 0,
+                total: 0,
+                total_discount: 0,
+                net_total: 0,
+              },
+
+                   
                     expenses: [{
                     expense_type: '',
                     expense_unit: '',
@@ -1755,13 +1766,7 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                     expense_disputed: false,
                     paid: false
                     }],
-                expense_total: 0,
-                credit_total: 0,
-                net_expense: 0,
-                total: 0,
-                total_discount: 0,
-                net_total: 0,
-              },
+                
               nextStep() {
                   this.step++;
                   localStorage.setItem('step', this.step);
@@ -2012,11 +2017,12 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                     //formData.append('tags', JSON.stringify(this.formData.tags));
                     //Log FormData contents
                     // console.log("FormData Contents:");
-                    // for (let pair of formData.entries()) {
-                    //     console.log(pair[0] + ": " + pair[1]);
-                    // }
-                    //       console.log(localStorage.getItem('auth_token'))
-                    //  return
+                    
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+                          console.log(localStorage.getItem('auth_token'))
+                    // return
 
                     $.ajax({
                         url: requestURL+'/shipments/create',

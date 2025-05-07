@@ -332,10 +332,18 @@
                               
                             </div>
                             
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                               <div>
                                 <label class="block mb-2 dark:text-white">MPG</label>
                                 <input x-model="formData.mpg" name="mpg" type="number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                              <div>
+                                <label class="block mb-2 dark:text-white">Bike Delivery Base Rate</label>
+                                <input x-model="formData.base_rate" name="base_rate" type="number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                              </div>
+                              <div>
+                                <label class="block mb-2 dark:text-white">Bike Delivery Base Fee</label>
+                                <input x-model="formData.base_fee" name="base_fee" type="number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                               </div>
                             
                             </div>
@@ -1190,6 +1198,8 @@
       enable_2fa: 0,   
       logo1: '',
       mpg: '',
+      base_rate: '',
+      base_fee: '',
 
 
       //customer and Driver variables

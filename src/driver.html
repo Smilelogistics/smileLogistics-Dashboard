@@ -481,49 +481,69 @@
 
                             <script>
                                 $(document).ready(function() {
-                                    $("#dob").datepicker({
-                                        dateFormat: "yy-mm-dd",
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        yearRange: "1900:2100"
-                                    });
+                                var today = new Date();
+                                var eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+
+                                $("#dob").datepicker({
+                                    dateFormat: "yy-mm-dd",
+                                    changeMonth: true,
+                                    changeYear: true,
+                                    yearRange: "1900:" + (today.getFullYear() - 18),
+                                    maxDate: eighteenYearsAgo
                                 });
+                            });
+
+                            $(document).ready(function() {
+                                var today = new Date();
+
+                                const options = {
+                                    dateFormat: "yy-mm-dd",
+                                    changeMonth: true,
+                                    changeYear: true,
+                                    yearRange: "1900:2100",
+                                    minDate: today // disallow past dates
+                                };
+
+                                $("#cdl_expires, #medical_expires, #twic_expires, #sealink_expires,#liability_insurance_expires").datepicker(options);
+                            });
+
+
                                 
-                                $(document).ready(function() {
-                                    $("#cdl_expires").datepicker({
-                                        dateFormat: "yy-mm-dd",
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        yearRange: "1900:2100"
-                                    });
-                                });
+                                // $(document).ready(function() {
+                                //     $("#cdl_expires").datepicker({
+                                //         dateFormat: "yy-mm-dd",
+                                //         changeMonth: true,
+                                //         changeYear: true,
+                                //         yearRange: "1900:2100"
+                                //     });
+                                // });
                                 
                                 
-                                $(document).ready(function() {
-                                    $("#medical_expires").datepicker({
-                                        dateFormat: "yy-mm-dd",
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        yearRange: "1900:2100"
-                                    });
-                                });
+                                // $(document).ready(function() {
+                                //     $("#medical_expires").datepicker({
+                                //         dateFormat: "yy-mm-dd",
+                                //         changeMonth: true,
+                                //         changeYear: true,
+                                //         yearRange: "1900:2100"
+                                //     });
+                                // });
                                 
-                                $(document).ready(function() {
-                                    $("#twic_expires").datepicker({
-                                        dateFormat: "yy-mm-dd",
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        yearRange: "1900:2100"
-                                    });
-                                });
-                                $(document).ready(function() {
-                                    $("#sealink_expires").datepicker({
-                                        dateFormat: "yy-mm-dd",
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        yearRange: "1900:2100"
-                                    });
-                                });
+                                // $(document).ready(function() {
+                                //     $("#twic_expires").datepicker({
+                                //         dateFormat: "yy-mm-dd",
+                                //         changeMonth: true,
+                                //         changeYear: true,
+                                //         yearRange: "1900:2100"
+                                //     });
+                                // });
+                                // $(document).ready(function() {
+                                //     $("#sealink_expires").datepicker({
+                                //         dateFormat: "yy-mm-dd",
+                                //         changeMonth: true,
+                                //         changeYear: true,
+                                //         yearRange: "1900:2100"
+                                //     });
+                                // });
                             </script>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Date of Birth</label>
@@ -608,14 +628,14 @@
                                 });
 
                                 
-                                $(document).ready(function() {
-                                    $("#liability_insurance_expires").datepicker({
-                                        dateFormat: "yy-mm-dd",
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        yearRange: "1900:2100"
-                                    });
-                                });
+                                // $(document).ready(function() {
+                                //     $("#liability_insurance_expires").datepicker({
+                                //         dateFormat: "yy-mm-dd",
+                                //         changeMonth: true,
+                                //         changeYear: true,
+                                //         yearRange: "1900:2100"
+                                //     });
+                                // });
 
                                 $("#date_1").datepicker({
                                         dateFormat: "yy-mm-dd",

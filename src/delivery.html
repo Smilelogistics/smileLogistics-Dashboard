@@ -142,7 +142,7 @@
                         <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
                             <div id="">
                                 <label class="block text-gray-700 dark:text-gray-300">Package Weight</label>
-                                <input type="text" x-model="formData.package_weight" id="package-weight" name="package_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                                <input type="text" x-model="formData.package_weight" @input="getCoordinates" id="package-weight" name="package_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Fragile?</label>
@@ -152,7 +152,7 @@
                                     <option value="false">No</option>
                                     </select>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group hidden">
                                 <label for="service-type">Service Type:</label>
                                 <select name="service_type" x-model="formData.service_type" id="service-type">
                                     <option value="standard">Standard (3-5 days)</option>
@@ -163,7 +163,7 @@
                         </div>
 
                         
-                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6 hidden">
                               
                             <div id="standard-rates" class="price-tier">
                                 <h3 class="font-bold dark:text-white ">Standard Rates</h3>
@@ -186,6 +186,10 @@
 
                         <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
                             <!-- <button id="calculate-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Calculate Delivery Cost</button> -->
+                            <div id="loading-indicator" style="display: none;">
+                                <div class="spinner"></div>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Calculating shipment cost...</p>
+                            </div>
                         
                             <div id="results" class="results" style="display:none;">
                                 <h2 class="text-2xl font-bold mb-4 dark:text-white">Delivery Quote</h2>
@@ -480,69 +484,163 @@
             // Show initial tier
             document.getElementById('standard-rates').classList.add('visible');
         }
+
+        async function calculateDistance() {
+    const fromAddress = document.getElementById('from-address').value;
+    const toAddress = document.getElementById('to-address').value;
+    const weight = parseFloat(document.getElementById('package-weight').value) || 1;
+    const serviceType = document.getElementById('service-type').value;
+    
+    if (!fromAddress || !toAddress) {
+        alert("Please select both pickup and delivery locations");
+        return;
+    }
+    
+    try {
+        // Show loading indicator
+        document.getElementById('results').style.display = 'none';
+        document.getElementById('loading-indicator').style.display = 'block';
         
-        // Calculate distance and cost
-        function calculateDistance() {
-            const fromAddress = document.getElementById('from-address').value;
-            const toAddress = document.getElementById('to-address').value;
-            const weight = parseFloat(document.getElementById('package-weight').value) || 1;
-            const serviceType = document.getElementById('service-type').value;
-            
-            if (!fromAddress || !toAddress) {
-                alert("Please select both pickup and delivery locations");
-                return;
+        // 1. Fetch pricing data from backend
+        const pricingResponse = await fetch(`${requestURL}/settings/rates`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('auth_token')
             }
-            
+        });
+        
+        if (!pricingResponse.ok) {
+            throw new Error(`Failed to fetch pricing data: ${pricingResponse.status}`);
+        }
+        
+        const pricingData = await pricingResponse.json();
+        
+        // Validate pricing data
+        if (!pricingData || typeof pricingData.base_rate === 'undefined' || typeof pricingData.base_fee === 'undefined') {
+            throw new Error('Invalid pricing data received from server');
+        }
+        
+        const baseFee = parseFloat(pricingData.base_fee);
+        const ratePerKm = parseFloat(pricingData.base_rate);
+        
+        // 2. Calculate distance with Google Maps
+        const distanceResponse = await new Promise((resolve, reject) => {
             service.getDistanceMatrix({
                 origins: [fromAddress],
                 destinations: [toAddress],
                 travelMode: 'DRIVING',
                 unitSystem: google.maps.UnitSystem.METRIC
-            }, function(response, status) {
+            }, (response, status) => {
                 if (status !== 'OK') {
-                    alert('Error calculating distance: ' + status);
+                    reject(new Error('Error calculating distance: ' + status));
                     return;
                 }
-                
-                const element = response.rows[0].elements[0];
-                const distance = element.distance;
-                const duration = element.duration;
-                const distanceKm = distance.value / 1000;
-                
-                // Calculate cost based on service type
-                let ratePerKm, baseFee;
-                switch(serviceType) {
-                    case 'express':
-                        ratePerKm = 75;
-                        baseFee = 200;
-                        break;
-                    case 'same-day':
-                        ratePerKm = 100;
-                        baseFee = 300;
-                        break;
-                    default: // standard
-                        ratePerKm = 50;
-                        baseFee = 100;
-                }
-                
-                // Weight multiplier (10% extra for every 5kg over 5kg)
-                const weightMultiplier = weight > 5 ? 1 + (Math.ceil((weight - 5)/5) * 0.1) : 1;
-                const cost = (distanceKm * ratePerKm * weightMultiplier) + baseFee;
-                
-                // Display results
-                document.getElementById('distance-text').textContent = 
-                    `${distance.text} (${distanceKm.toFixed(2)} km)`;
-                document.getElementById('duration-text').textContent = duration.text;
-                document.getElementById('weight-text').textContent = weight;
-                document.getElementById('service-text').textContent = 
-                    document.getElementById('service-type').options[document.getElementById('service-type').selectedIndex].text;
-                document.getElementById('cost-text').textContent = `₦${cost.toFixed(2)}`;
-                document.getElementById('results').style.display = 'block';
-                
-                // Show route on map
-                showRoute(fromAddress, toAddress);
+                resolve(response);
             });
+        });
+        
+        const element = distanceResponse.rows[0].elements[0];
+        
+        // Check if distance calculation was successful
+        if (element.status !== 'OK') {
+            throw new Error('Could not calculate route between locations');
         }
+        
+        const distance = element.distance;
+        const duration = element.duration;
+        const distanceKm = distance.value / 1000;
+        
+        // Calculate cost with weight multiplier
+        const weightMultiplier = weight > 5 ? 1 + (Math.ceil((weight - 5)/5) * 0.1) : 1;
+        const cost = (distanceKm * ratePerKm * weightMultiplier) + baseFee;
+        
+        // Display results
+        document.getElementById('distance-text').textContent = 
+            `${distance.text} (${distanceKm.toFixed(2)} km)`;
+        document.getElementById('duration-text').textContent = duration.text;
+        document.getElementById('weight-text').textContent = weight;
+        document.getElementById('service-text').textContent = 
+            document.getElementById('service-type').options[document.getElementById('service-type').selectedIndex].text;
+        document.getElementById('cost-text').textContent = `₦${cost.toFixed(2)}`;
+        
+        // Show results and hide loading
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('loading-indicator').style.display = 'none';
+        
+        // Show route on map
+        showRoute(fromAddress, toAddress);
+        
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('loading-indicator').style.display = 'none';
+        alert('Error calculating shipment cost: ' + error.message);
+    }
+}
+        
+        // Calculate distance and cost
+        //THIS WHEN WILL MAY USE MULTIPLR SERVICE TYPES
+        // function calculateDistance() {
+        //     const fromAddress = document.getElementById('from-address').value;
+        //     const toAddress = document.getElementById('to-address').value;
+        //     const weight = parseFloat(document.getElementById('package-weight').value) || 1;
+        //     const serviceType = document.getElementById('service-type').value;
+            
+        //     if (!fromAddress || !toAddress) {
+        //         alert("Please select both pickup and delivery locations");
+        //         return;
+        //     }
+            
+        //     service.getDistanceMatrix({
+        //         origins: [fromAddress],
+        //         destinations: [toAddress],
+        //         travelMode: 'DRIVING',
+        //         unitSystem: google.maps.UnitSystem.METRIC
+        //     }, function(response, status) {
+        //         if (status !== 'OK') {
+        //             alert('Error calculating distance: ' + status);
+        //             return;
+        //         }
+                
+        //         const element = response.rows[0].elements[0];
+        //         const distance = element.distance;
+        //         const duration = element.duration;
+        //         const distanceKm = distance.value / 1000;
+                
+        //         // Calculate cost based on service type
+        //         let ratePerKm, baseFee;
+        //         switch(serviceType) {
+        //             case 'express':
+        //                 ratePerKm = 75;
+        //                 baseFee = 200;
+        //                 break;
+        //             case 'same-day':
+        //                 ratePerKm = 100;
+        //                 baseFee = 300;
+        //                 break;
+        //             default: // standard
+        //                 ratePerKm = 50;
+        //                 baseFee = 100;
+        //         }
+                
+        //         // Weight multiplier (10% extra for every 5kg over 5kg)
+        //         const weightMultiplier = weight > 5 ? 1 + (Math.ceil((weight - 5)/5) * 0.1) : 1;
+        //         const cost = (distanceKm * ratePerKm * weightMultiplier) + baseFee;
+                
+        //         // Display results
+        //         document.getElementById('distance-text').textContent = 
+        //             `${distance.text} (${distanceKm.toFixed(2)} km)`;
+        //         document.getElementById('duration-text').textContent = duration.text;
+        //         document.getElementById('weight-text').textContent = weight;
+        //         document.getElementById('service-text').textContent = 
+        //             document.getElementById('service-type').options[document.getElementById('service-type').selectedIndex].text;
+        //         document.getElementById('cost-text').textContent = `₦${cost.toFixed(2)}`;
+        //         document.getElementById('results').style.display = 'block';
+                
+        //         // Show route on map
+        //         showRoute(fromAddress, toAddress);
+        //     });
+        // }
         
         // Display route on map
         function showRoute(start, end) {

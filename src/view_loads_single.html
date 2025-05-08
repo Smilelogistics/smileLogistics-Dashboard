@@ -627,7 +627,7 @@
                                             <div class="flex justify-between items-start">
                                               <div>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">Expense Type</p>
-                                                <p class="text-sm font-medium" x-text="expense.expense_type || 'N/A'"></p>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="expense.expense_type || 'N/A'"></p>
                                               </div>
                                               <span class="px-2 py-1 text-xs rounded-full"
                                                     :class="{
@@ -641,24 +641,24 @@
                                             <div class="grid grid-cols-2 gap-4">
                                               <div>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">Rate</p>
-                                                <p class="text-sm font-medium" x-text="expense.expense_rate ? '$' + expense.expense_rate : 'N/A'"></p>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="expense.expense_rate ? '$' + expense.expense_rate : 'N/A'"></p>
                                               </div>
                                               <div>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">Amount</p>
-                                                <p class="text-sm font-medium" x-text="'$' + (expense.expense_amount || '0.00')"></p>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="'$' + (expense.expense_amount || '0.00')"></p>
                                               </div>
                                             </div>
                                             
                                             <div x-show="expense.expense_disputed">
                                               <p class="text-xs text-gray-500 dark:text-gray-400">Dispute Note</p>
-                                              <p class="text-sm font-medium text-red-600" x-text="expense.disputed_note || 'No details provided'"></p>
+                                              <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="expense.disputed_note || 'No details provided'"></p>
                                             </div>
                                             
                                             <template x-if="expense.vendor_invoice_number || expense.payment_reference_note">
                                               <div class="pt-2 border-t">
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">References</p>
-                                                <p class="text-sm" x-text="expense.vendor_invoice_number ? 'Invoice: ' + expense.vendor_invoice_number : ''"></p>
-                                                <p class="text-sm" x-text="expense.payment_reference_note ? 'Note: ' + expense.payment_reference_note : ''"></p>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="expense.vendor_invoice_number ? 'Invoice: ' + expense.vendor_invoice_number : ''"></p>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="expense.payment_reference_note ? 'Note: ' + expense.payment_reference_note : ''"></p>
                                               </div>
                                             </template>
                                           </div>

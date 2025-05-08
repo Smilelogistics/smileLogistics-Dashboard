@@ -250,7 +250,7 @@
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Name</label>
-                                            <input type="text" x-model="formData.second_notify_party_phone" name="second_notify_party_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="second_notify_party_phone">
+                                            <input type="text" x-model="formData.second_notify_party_name" name="second_notify_party_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="second_notify_party_name">
                                         </div>
                                         
                                         
@@ -402,7 +402,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Shipped on board Date</label>
-                                            <input type="text" x-model="formData.shipped_on_board_date" id="shipped_on_board_date" name="shipped_on_board_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.shipped_on_board_date" id="shipped_on_board_date" name="shipped_on_board_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white shipped_on_board_date" placeholder="">
                                         </div>
                                     </div>
 
@@ -832,7 +832,7 @@
                                     <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300"> Appt</label>
-                                            <input type="text" x-model="formData.appt_date" name="appt_date[]" id="appt_date1" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.appt_date" name="appt_date[]" id="appt_dates" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">From</label>
@@ -847,7 +847,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">No latter than</label>
-                                            <input type="text" x-model="formData.no_latter_than_date" name="no_latter_than_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.no_latter_than_date" name="no_latter_than_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white no_latter_than_date" placeholder="">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Time</label>
@@ -1559,25 +1559,31 @@ function populateCarrierSelect() {
 
     $("#drop_at_no_latter_than_time").flatpickr({
         enableTime: true,
-        noCalendar: true,
+        noCalendar: true,   
         dateFormat: "h:i K",
         time_24hr: false,
         minuteIncrement: 15,
         defaultHour: 12,
     });
 
+    
+    
 
+     flatpickr(".drop_at_no_latter_than_date", {
+                enableTime: true,
+                timeFormat: 'HH:mm',
+            });
     
             flatpickr(".no_latter_than_date", {
                 enableTime: true,
                 timeFormat: 'HH:mm',
             });
-            flatpickr(".drop_at_appt_date", {
+            flatpickr(".shipped_on_board_date", {
                 enableTime: true,
                 timeFormat: 'HH:mm',
             });
             
-            flatpickr("#appt_date1", {
+            flatpickr("#appt_dates", {
                 enableTime: true,
                 timeFormat: 'HH:mm',
             });

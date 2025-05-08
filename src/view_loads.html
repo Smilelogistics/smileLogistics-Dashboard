@@ -58,21 +58,45 @@
                   <div class="border-t border-gray-100 p-5 dark:border-gray-800 sm:p-6">
                     <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
                     >
-                      <div class="max-w-full overflow-x-auto">
-                        <div x-data="datatable" class="p-4">
-                            <!-- Loader -->
-                            <div x-show="isLoading" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                              <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-                            </div>
-                            <!-- Search Input -->
-                            <div class="mb-4">
-                              <input
-                                type="text"
-                                x-model="searchQuery"
-                                placeholder="Search..."
-                                class="w-100 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                              />
-                            </div>
+                    <div class="max-w-full overflow-x-auto">
+                      <div x-data="datatable" class="p-4">
+                        <!-- Loader -->
+                        <div x-show="isLoading" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                          <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                        </div>
+                        
+                        <!-- Search and Controls -->
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+                          <!-- Items per page selector -->
+                          <div class="flex items-center">
+                            <span class="mr-2 text-sm text-gray-600 dark:text-gray-400">Show</span>
+                            <select 
+                              x-model="perPage" 
+                              @change="currentPage = 1; updateDisplayedItems()"
+                              class="px-2 py-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white text-sm"
+                            >
+                              <option value="10">10</option>
+                              <option value="25">25</option>
+                              <option value="50">50</option>
+                              <option value="100">100</option>
+                            </select>
+                            <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">entries</span>
+                          </div>
+                          
+                          <!-- Search Input -->
+                          <div class="w-full sm:w-auto">
+                            <input
+                              type="text"
+                              x-model="searchQuery"
+                              @input.debounce.300ms="currentPage = 1; updateDisplayedItems()"
+                              placeholder="Search..."
+                              class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                            />
+                          </div>
+                        </div>
+                        
+                        <!-- Table -->
+                        <div class="overflow-x-auto">
                           <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
                             <!-- Table Header -->
                             <thead class="bg-gray-50 dark:bg-gray-900">
@@ -100,7 +124,7 @@
                             </thead>
                             <!-- Table Body -->
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                              <template x-for="(item, index) in items" :key="index">
+                              <template x-for="(item, index) in displayedItems" :key="index">
                                 <tr>
                                   <td class="px-5 py-4 sm:px-6">
                                     <div x-data="{ open: false }" class="relative">
@@ -128,12 +152,11 @@
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.seal_number"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.shipment_type"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.booking_number"></td>
-
-                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                              x-text="'$' + ((Number(item?.shipment_charges?.net_total) || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}))">
-                          </td>
-
-                              </td>
+                    
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
+                                    x-text="'$' + ((Number(item?.shipment_charges?.net_total) || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}))">
+                                  </td>
+                    
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.broker_name"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.commodity"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.shipment_weight"></td>
@@ -145,10 +168,80 @@
                                   </td>
                                 </tr>
                               </template>
+                              
+                              <!-- Empty state -->
+                              <tr x-show="displayedItems.length === 0">
+                                <td colspan="19" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                                  No records found
+                                </td>
+                              </tr>
                             </tbody>
                           </table>
                         </div>
+                        
+                        <!-- Pagination -->
+                        <div class="flex flex-col sm:flex-row items-center justify-between mt-4 space-y-4 sm:space-y-0">
+                          <div class="text-sm text-gray-600 dark:text-gray-400">
+                            Showing <span x-text="(currentPage - 1) * perPage + 1"></span> to 
+                            <span x-text="Math.min(currentPage * perPage, filteredItems.length)"></span> of 
+                            <span x-text="filteredItems.length"></span> entries
+                            <span x-show="filteredItems.length !== items.length">(filtered from <span x-text="items.length"></span> total entries)</span>
+                          </div>
+                          
+                          <div class="flex space-x-1">
+                            <!-- First Page -->
+                            <button 
+                              @click="currentPage = 1; updateDisplayedItems()" 
+                              :disabled="currentPage === 1"
+                              :class="{'opacity-50 cursor-not-allowed': currentPage === 1}"
+                              class="px-3 py-1 border rounded-md text-sm"
+                            >
+                              &laquo;
+                            </button>
+                            
+                            <!-- Previous Page -->
+                            <button 
+                              @click="currentPage--; updateDisplayedItems()" 
+                              :disabled="currentPage === 1"
+                              :class="{'opacity-50 cursor-not-allowed': currentPage === 1}"
+                              class="px-3 py-1 border rounded-md text-sm"
+                            >
+                              &lsaquo;
+                            </button>
+                            
+                            <!-- Page Numbers -->
+                            <template x-for="page in getPageNumbers()" :key="page">
+                              <button 
+                                @click="currentPage = page; updateDisplayedItems()" 
+                                :class="{'bg-blue-500 text-white': currentPage === page, 'hover:bg-gray-100 dark:hover:bg-gray-700': currentPage !== page}"
+                                class="px-3 py-1 border rounded-md text-sm"
+                                x-text="page"
+                              ></button>
+                            </template>
+                            
+                            <!-- Next Page -->
+                            <button 
+                              @click="currentPage++; updateDisplayedItems()" 
+                              :disabled="currentPage === totalPages"
+                              :class="{'opacity-50 cursor-not-allowed': currentPage === totalPages}"
+                              class="px-3 py-1 border rounded-md text-sm"
+                            >
+                              &rsaquo;
+                            </button>
+                            
+                            <!-- Last Page -->
+                            <button 
+                              @click="currentPage = totalPages; updateDisplayedItems()" 
+                              :disabled="currentPage === totalPages"
+                              :class="{'opacity-50 cursor-not-allowed': currentPage === totalPages}"
+                              class="px-3 py-1 border rounded-md text-sm"
+                            >
+                              &raquo;
+                            </button>
+                          </div>
+                        </div>
                       </div>
+                    </div>
                     </div>
 
                   </div>
@@ -167,112 +260,139 @@
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script> -->
     <script>
-
       document.addEventListener('alpine:init', () => {
-          Alpine.data('datatable', () => ({
-              items: [],
-              searchQuery: '',
-              isLoading: false,
-              get filteredItems() {
-                  if (!this.searchQuery) return this.items;
-                  const query = this.searchQuery.toLowerCase();
-                  return this.items.filter(item => {
-                    return (
-                      item.load_number.toString().toLowerCase().includes(query) ||
-                      item.bill_to.toString().toLowerCase().includes(query) ||
-                      item.container.toLowerCase().includes(query) ||
-                      item.size.toLowerCase().includes(query) ||
-                      item.eq_type.toLowerCase().includes(query) ||
-                      item.load_type.toLowerCase().includes(query) ||
-                      item.booking_number.toLowerCase().includes(query) ||
-                      item.from.toLowerCase().includes(query) ||
-                      item.to.toLowerCase().includes(query) ||
-                      item.return.toLowerCase().includes(query) ||
-                      item.port_appt.toLowerCase().includes(query) ||
-                      item.cust_appt.toLowerCase().includes(query) ||
-                      item.stop_list.toLowerCase().includes(query) ||
-                      item.pickup_number.toLowerCase().includes(query) ||
-                      item.bol_number.toLowerCase().includes(query) ||
-                      item.po_number.toLowerCase().includes(query) ||
-                      item.lfd.toLowerCase().includes(query) ||
-                      item.status.toLowerCase().includes(query)
-                    );
-                  });
-              },
-
-              init() {
-                  this.fetchData();
-              },
-
-              fetchData() {
-                  this.isLoading = true;
-                  fetch(requestGetURL + '/shipments', {
-                      headers: {
-                          'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
-                          'Accept': 'application/json'
-                      }
-                  })
-                  .then(response => response.json())
-                  .then(data => {
-                    //console.log('shipments', data.shipments);
-                    if (data.shipments && Array.isArray(data.shipments)) {
-                      this.items = data.shipments;
-                      console.log(this.items);
-                    } else {
-                      console.error('Invalid data format:', data);
-                    }
-                  })
-                  .catch(error => {
-                    console.error('Error fetching data:', error);
-                    if (error.status === 401) {
-                      alert("Session expired. Please log in again.");
-                      localStorage.removeItem('auth_token');
-                      window.location.href = "/login";
-                    }
-                  })
-                      .finally(() => {
-                          this.isLoading = false;
-                      });
-              },
-
-
-              // Edit item
-              
-              editItem(id) {
-                const encodedId = btoa(id);
-                  window.location.href = `/edit_load.html?id=${encodedId}`;
-              },
-
-              // View item
-              viewItem(id) {
-                const encodedId = btoa(id);
-                  window.location.href = `/view_loads_single.html?id=${encodedId}`;
-              },
-
-              // Delete item
-              deleteItem(id) {
-                  if (confirm('Are you sure you want to delete this item?')) {
-                      fetch(`${requestGetURL}/shipments/delete/${id}`, {
-                          method: 'DELETE',
-                          headers: {
-                              'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
-                              'Accept': 'application/json'
-                          }
-                      })
-                          .then(response => {
-                              if (response.ok) {
-                                  alert('Item deleted successfully');
-                                  this.fetchData();
-                              } else {
-                                  alert('Failed to delete item');
-                              }
-                          })
-                          .catch(error => {
-                              console.error('Error deleting item:', error);
-                          });
-                  }
+        Alpine.data('datatable', () => ({
+          items: [],
+          displayedItems: [],
+          searchQuery: '',
+          isLoading: false,
+          currentPage: 1,
+          perPage: 10,
+          totalPages: 1,
+          maxVisiblePages: 5,
+          
+          init() {
+            this.fetchData();
+          },
+          
+          fetchData() {
+            this.isLoading = true;
+            fetch(requestGetURL + '/shipments', {
+              headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                'Accept': 'application/json'
               }
-          }));
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.shipments && Array.isArray(data.shipments)) {
+                this.items = data.shipments;
+                this.updateDisplayedItems();
+              } else {
+                console.error('Invalid data format:', data);
+              }
+            })
+            .catch(error => {
+              console.error('Error fetching data:', error);
+              if (error.status === 401) {
+                alert("Session expired. Please log in again.");
+                localStorage.removeItem('auth_token');
+                window.location.href = "/login";
+              }
+            })
+            .finally(() => {
+              this.isLoading = false;
+            });
+          },
+          
+          get filteredItems() {
+            if (!this.searchQuery) return this.items;
+            
+            const query = this.searchQuery.toLowerCase();
+            return this.items.filter(item => {
+              // Check if item exists and has properties before accessing them
+              return (
+                (item.shipment_tracking_number && item.shipment_tracking_number.toString().toLowerCase().includes(query)) ||
+                (item.bill_to && item.bill_to.toString().toLowerCase().includes(query)) ||
+                (item.container && item.container.toLowerCase().includes(query)) ||
+                (item.total_miles && item.total_miles.toString().toLowerCase().includes(query)) ||
+                (item.seal_number && item.seal_number.toLowerCase().includes(query)) ||
+                (item.shipment_type && item.shipment_type.toLowerCase().includes(query)) ||
+                (item.booking_number && item.booking_number.toLowerCase().includes(query)) ||
+                (item.broker_name && item.broker_name.toLowerCase().includes(query)) ||
+                (item.commodity && item.commodity.toLowerCase().includes(query)) ||
+                (item.shipment_weight && item.shipment_weight.toString().toLowerCase().includes(query)) ||
+                (item.bill_of_laden_number && item.bill_of_laden_number.toLowerCase().includes(query)) ||
+                (item.po_number && item.po_number.toLowerCase().includes(query)) ||
+                (item.lfd && item.lfd.toLowerCase().includes(query)) ||
+                (item.status && item.status.toLowerCase().includes(query))
+              );
+            });
+          },
+          
+          updateDisplayedItems() {
+            const start = (this.currentPage - 1) * this.perPage;
+            const end = start + this.perPage;
+            this.displayedItems = this.filteredItems.slice(start, end);
+            this.totalPages = Math.ceil(this.filteredItems.length / this.perPage);
+            
+            // Ensure currentPage doesn't exceed totalPages after filtering
+            if (this.currentPage > this.totalPages && this.totalPages > 0) {
+              this.currentPage = this.totalPages;
+              this.updateDisplayedItems(); // Recursive call with corrected page
+            }
+          },
+          
+          getPageNumbers() {
+            const half = Math.floor(this.maxVisiblePages / 2);
+            let start = Math.max(1, this.currentPage - half);
+            let end = Math.min(this.totalPages, start + this.maxVisiblePages - 1);
+            
+            // Adjust if we're at the end
+            if (end - start + 1 < this.maxVisiblePages) {
+              start = Math.max(1, end - this.maxVisiblePages + 1);
+            }
+            
+            const pages = [];
+            for (let i = start; i <= end; i++) {
+              pages.push(i);
+            }
+            return pages;
+          },
+          
+          editItem(id) {
+            const encodedId = btoa(id);
+            window.location.href = `/edit_load.html?id=${encodedId}`;
+          },
+          
+          viewItem(id) {
+            const encodedId = btoa(id);
+            window.location.href = `/view_loads_single.html?id=${encodedId}`;
+          },
+          
+          deleteItem(id) {
+            if (confirm('Are you sure you want to delete this item?')) {
+              fetch(`${requestGetURL}/shipments/delete/${id}`, {
+                method: 'DELETE',
+                headers: {
+                  'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                  'Accept': 'application/json'
+                }
+              })
+              .then(response => {
+                if (response.ok) {
+                  alert('Item deleted successfully');
+                  this.fetchData();
+                } else {
+                  alert('Failed to delete item');
+                }
+              })
+              .catch(error => {
+                console.error('Error deleting item:', error);
+              });
+            }
+          }
+        }));
       });
       
       </script>

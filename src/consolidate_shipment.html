@@ -547,12 +547,8 @@ function populateCarrierSelect() {
               }
               if (Array.isArray(response.carriers)) {
                   var carrierselect = document.getElementById('carrier_id');
-                  var preCarrierselect = document.getElementById('pre_carrier');
-                  var CarrierNameselect = document.getElementById('carrier_name');
 
                   carrierselect.innerHTML = '';
-                  preCarrierselect.innerHTML = '';
-                  CarrierNameselect.innerHTML = '';
 
                   var defaultOption = document.createElement('option');
                   defaultOption.value = '';
@@ -561,20 +557,7 @@ function populateCarrierSelect() {
                   defaultOption.hidden = true;
                   carrierselect.appendChild(defaultOption);
 
-                  var defaultPreOption = document.createElement('option');
-                  defaultPreOption.value = '';
-                  defaultPreOption.text = 'Carrier';
-                  //defaultOption.disabled = true;
-                  defaultPreOption.hidden = true;
-                  preCarrierselect.appendChild(defaultPreOption);
-
-                //   carrien name
-                  var defaultCarrierNameOption = document.createElement('option');
-                  defaultCarrierNameOption.value = '';
-                  defaultCarrierNameOption.text = 'Carrier';
-                  //defaultOption.disabled = true;
-                  defaultCarrierNameOption.hidden = true;
-                  CarrierNameselect.appendChild(defaultCarrierNameOption);
+                  
   
                   response.carriers.forEach(carrier => {
                       var option = document.createElement('option');
@@ -582,17 +565,6 @@ function populateCarrierSelect() {
                       option.text = carrier.name;
                       carrierselect.appendChild(option);
 
-                    //   pre carried
-                    var preoption = document.createElement('option');
-                    preoption.value = carrier.id;
-                    preoption.text = carrier.name;
-                    preCarrierselect.appendChild(preoption);
-
-                    //   carrier name
-                    var carrierNameoption = document.createElement('option');
-                    carrierNameoption.value = carrier.id;
-                    carrierNameoption.text = carrier.name;
-                    CarrierNameselect.appendChild(carrierNameoption);
 
                   });
               } else {

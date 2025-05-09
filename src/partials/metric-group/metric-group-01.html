@@ -125,6 +125,57 @@
                             );
                         }
                         
+                        else if (this.userRole === 'customer') {
+                            
+                            this.items.push(
+                                
+                                // {
+                                //     title: 'Transactions',
+                                //     value: data.data.cardTransaction || 0,
+                                //     icon: 'puzzle',
+                                //     bgColor: 'bg-orange-200'
+                                // },
+                                {
+                                    title: 'Total Shipments',
+                                    value: data.data.myShipments || 0,
+                                    icon: 'puzzle',
+                                    bgColor: 'bg-orange-200'
+                                },
+                                {
+                                    title: 'Total Consolidated Shipments',
+                                    value: data.data.myConsolidate || 0,
+                                    icon: 'building',
+                                    bgColor: 'bg-blue-500'
+                                }
+                            );
+                        }
+                        
+                        else if (this.userRole === 'driver') {
+                            
+                            this.items.push(
+                                
+                               
+                                // {
+                                //     title: 'Transactions',
+                                //     value: data.data.cardTransaction || 0,
+                                //     icon: 'puzzle',
+                                //     bgColor: 'bg-orange-200'
+                                // },
+                                {
+                                    title: 'Total Shipments',
+                                    value: data.data.myShipments || 0,
+                                    icon: 'puzzle',
+                                    bgColor: 'bg-orange-200'
+                                },
+                                {
+                                    title: 'Total Consolidated Shipments',
+                                    value: data.data.myConsolidate || 0,
+                                    icon: 'building',
+                                    bgColor: 'bg-blue-500'
+                                }
+                            );
+                        }
+                        
                         // Add common metrics for all roles here if needed
                         // this.items.push({...});
                         

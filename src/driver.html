@@ -181,10 +181,8 @@
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">State</label>
-                                <select x-model="formData.driver_state" name="driver_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                <option value="" selected disabled>Select Type</option>
-                            </select>
-                            </div>
+                                <input type="text" x-model="formData.driver_state" name="driver_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                            </div> 
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Zip</label>
                                 <input type="text" x-model="formData.driver_zip" name="driver_zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
@@ -1026,7 +1024,7 @@
                         console.log(pair[0] + ": " + pair[1]);
                     }
                           console.log(localStorage.getItem('auth_token'))
-                     return
+                     //return
 
                     $.ajax({
                         url: requestURL+'/drivers/driver',

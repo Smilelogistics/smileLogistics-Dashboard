@@ -266,82 +266,137 @@
                     </div>
 
                     <div>
-                        <h4 class="mb-1 text-sm font-medium text-gray-800 dark:text-white/90">Charges</h4>
-                        <div id="chargesDuplicate">
-                            <span onclick="duplicateCharges()" 
-                                class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
-                                +
-                            </span>
-                            <span onclick="removeCharges(this)" 
-                                class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
-                                x
-                                <!-- 🗑 -->
-                            </span>
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 chargecalc">
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300">Charge Type</label>
-                                    <select x-model="formData.charge_type" name="charge_type[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                        <option value="" selected disabled></option>
-                                        <option value="Drayage">Drayage</option>
-                                        <option value="Fuel Surcharge">Fuel Surcharge</option>
-                                        <option value="Admin Fee">Admin Fee</option>
-                                        <hr class="mt-3 mb-3 text-white">
-                                        <option value="Attempted pickup">Attempted pickup</option>
-                                        <option value="Bonded Cargo">Bonded Cargo Charge</option>
-                                        <hr>
-                                        <option value="Chasis Split">Chasis Split</option>
-                                        <option value="Chasis Stack">Chasis Stack</option>
-                                        <option value="Demurge">Demurage</option>
-                                        <option value="driver assistance">Deriver Assistance</option>
-                                    </select>
+                        <template x-for="(charge, index) in formData.invoicecharges" :key="index">
+                            <div class="p-4 border rounded-lg bg-white dark:bg-gray-800 shadow-sm dark:border-gray-700">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="font-medium text-gray-900 dark:text-gray-100">Charge #<span x-text="index + 1"></span></h3>
+                                    <button @click="removeCharge(index)" type="button" 
+                                            class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm">
+                                        Remove
+                                    </button>
                                 </div>
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300">comment (Will appear on Invoice)</label>
-                                    <input type="text" x-model="formData.comment" name="comment[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                </div>
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300">Units</label>
-                                    <input type="text" x-model="formData.units" id="unit" name="units[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly calc-field unit" placeholder="">
-                                </div>
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300">Rate</label>
-                                    <input type="text" x-model="formData.rate" id="rate" name="rate[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly calc-field rate" placeholder="">
-                                </div>
-                            </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300">Amount</label>
-                                    <input type="text" id="amount" x-model="formData.amount" name="amount[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly amount" placeholder="">
-                                </div>
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300">Discount</label>
-                                    <input type="text" id="discount" x-model="formData.discount" name="discount[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly calc-field discount" placeholder="">
-                                </div>
-                                <div>
-                                    <label class="block text-gray-700 dark:text-gray-300">Internal Note</label>
-                                    <input type="text" x-model="formData.internal_notes" name="internal_notes[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                </div>
-                                <!-- <div>
-                                    <label class="block text-gray-700 dark:text-gray-300">Rate</label>
-                                    <input type="text" x-model="formData.rate" name="rate" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
-                                </div> -->
-                            </div>
-                        </div>
-                        <div id="chargesList" class="chargesList"></div>
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                                    <!-- Charge Type -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Charge Type</label>
+                                        <select x-model="charge.charge_type" name="charge_type[]"
+                                                class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
+                                                <option value="" selected disabled></option>
+                                                <option value="drayage">Drayage</option>
+                                                <option value="fuel_surcharge">Fuel Surcharge</option>
+                                                <option value="admin_fee">Admin Fee</option>
+                                                <option value="attempted_pickup">Attempted Pickup</option>
+                                                <option value="bonded_cargo_pickup">Bonded Cargo Pickup</option>
+                                                <option value="bonded_cargo_charge">Bonded Cargo Charge</option>
+                                                <option value="chasis_rental">Chasis Rental</option>
+                                                <option value="chasis_rental">Chasis Rental</option>
+                                                <option value="chasis_split">Chasis Split</option>
+                                                <option value="chasis_stack">Chasis Stack</option>
+                                                <option value="demurage">Demurage</option>
+                                                <option value="driver_assistance">Driver Assistance</option>
+                                                <option value="drop_charge">Drop Charge</option>
+                                                <option value="dry_run">Dry Run</option>
+                                                <option value="freight">Freight</option>
+                                                <option value="hauling_refrigerated_cargo">Hauling Refrigerated Cargo</option>
+                                                <option value="harzadous_material">Harzardous Material</option>
+                                                <option value="maintainance_repair">Maintainance & Repair</option>
+                                                <option value="other">Other</option>
+                                                <option value="Overweight">Overweight</option>
+                                                <option value="per_diem">Per Diem</option>
+                                                <option value="permits">Permits</option>
+                                                <option value="prepull">Prepull</option>
+                                                <option value="deliver">Delivery Charge</option>
+                                                <option value="shipping">SHIPPING</option>
+                                                <option value="scale load">Scale Load</option>
+                                                <option value="spot_empty">Spot Empty</option>
+                                                <option value="stop_off">Stop Off</option>
+                                                <option value="storage">Storage</option>
+                                                <option value="toll">Toll</option>
+                                                <option value="triaxle">Triaxle</option>
+                                            <!-- Add other options -->
+                                        </select>
+                                    </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                            <div id="totalCharges" style="display: ;">
-                                <label class="block text-gray-700 dark:text-gray-300">Total</label>
-                                <input type="text" x-model="formData.total" name="total" id="total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total numberOnly" placeholder="">
+                                    <!-- Comment -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Comment</label>
+                                        <input type="text" x-model="charge.comment" name="comment[]"
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
+
+                                    <!-- Units -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Units</label>
+                                        <input type="number" x-model="charge.units" name="units[]"
+                                            @change="calculateChargeAmount(index)"
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
+
+                                    <!-- Rate -->
+                                    <div>
+                                        <!-- <span x-text="JSON.stringify(charge)"></span> -->
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Rate</label>
+                                        <input type="text" name="rate" x-model="charge.rate" name="rate[]"
+                                            @change="calculateChargeAmount(index)"
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 numberOnly">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                    <!-- Amount -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Amount</label>
+                                        <input type="text" name="amount" x-model="charge.amount" name="amount[]" readonly 
+                                            class="w-full rounded bg-gray-100 dark:bg-gray-600 dark:text-gray-200 border-gray-300 dark:border-gray-500 ">
+                                    </div>
+
+                                    <!-- Discount -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Discount</label>
+                                        <input type="text" x-model="charge.discount" name="discount[]"
+                                            @change="calculateTotals()"
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 numberOnly">
+                                    </div>
+
+                                    <!-- Internal Notes -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Internal Notes</label>
+                                        <input type="text" x-model="charge.internal_notes" name="internal_notes[]"
+                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
+                                    </div>
+
+                                    <!-- Billed -->
+                                    <div class="flex items-end">
+                                        <label class="flex items-center text-gray-700 dark:text-gray-300">
+                                            <input type="checkbox" x-model="charge.billed" name="billed[]"
+                                                class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-blue-600 focus:ring-blue-500">
+                                            <span class="ml-2 text-sm">Billed</span>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="totalDiscount" style="display: ;">
-                                <label class="block text-gray-700 dark:text-gray-300">Total Discount</label>
-                                <input type="text" x-model="formData.total_discount" name="total_discount" id="total_discount" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white total_discount numberOnly" placeholder="">
+                        </template>
+
+                        <!-- Add Charge Button -->
+                        <button @click="addCharge" type="button"
+                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors">
+                            + Add New Charge
+                        </button>
+
+                        <!-- Totals Section -->
+                        <div class="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block font-medium text-gray-700 dark:text-gray-300">Total Charges</label>
+                                <div class="text-xl text-gray-900 dark:text-gray-100" x-text="'$' + formData.total"></div>
                             </div>
-                            <div id="netTotal" style="display: ;">
-                                <label class="block text-gray-700 dark:text-gray-300">Net Total</label>
-                                <input type="text" x-model="formData.net_total" name="net_total" id="net_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly net_total" placeholder="">
+                            <div>
+                                <label class="block font-medium text-gray-700 dark:text-gray-300">Total Discount</label>
+                                <div class="text-xl text-gray-900 dark:text-gray-100" x-text="'$' + formData.total_discount"></div>
+                            </div>
+                            <div>
+                                <label class="block font-medium text-gray-700 dark:text-gray-300">Net Total</label>
+                                <div class="text-2xl font-bold text-gray-900 dark:text-gray-100" x-text="'$' + formData.net_total"></div>
                             </div>
                         </div>
                     </div>
@@ -524,6 +579,7 @@ document.addEventListener('alpine:init', () => {
                     net_total: '',
                     invoicedocs: [],
                     invoicepayments: [],
+                    invoicecharges:[],
                 },
                 step: 1,
 
@@ -586,6 +642,16 @@ document.addEventListener('alpine:init', () => {
                             processing_fee_flate_rate: repay.processing_fee_flate_rate || '',
                             processing_fee_percent: repay.processing_fee_percent || '',
                         })) || [],
+                        invoicecharges: data.invoice.invoicecharges?.map(charge => ({
+                            id: charge.id || '',
+                            charge_type: charge.charge_type || '',
+                            comment: charge.comment || '',
+                            units: charge.units || '',
+                            rate: charge.rate || '',
+                            amount: charge.amount || '',
+                            discount: charge.discount || '',
+                            internal_notes: charge.internal_notes || '',
+                        })) || [],
 
                         invoicedocs: data.invoice.invoicedocs?.map(doc => ({
                                 id: doc.id || '',
@@ -634,6 +700,48 @@ document.addEventListener('alpine:init', () => {
                     this.formData.invoicepayments.splice(index, 1);
                     //this.calculateTotals();
                 },
+                addCharge() {
+                this.formData.invoicecharges.push({
+                    id: '',
+                    charge_type: '',
+                    comment: '',
+                    units: '',
+                    rate: '',
+                    amount: '',
+                    discount: '',
+                    internal_notes: '',
+                    billed: false,
+                    invoice_date: '',
+                    invoice_number: ''
+                });
+            },
+
+            removeCharge(index) {
+                this.formData.invoicecharges.splice(index, 1);
+                this.calculateTotals();
+            },
+
+            calculateChargeAmount(index) {
+                const charge = this.formData.invoicecharges[index];
+                charge.amount = (parseFloat(charge.units)) || 0 * (parseFloat(charge.rate)) || 0;
+                this.calculateTotals();
+            },
+
+
+            calculateTotals() {
+                this.formData.total = this.formData.invoicecharges.reduce(
+                    (sum, charge) => sum + (parseFloat(charge.amount) || 0), 0
+                ).toFixed(2);
+                
+                this.formData.total_discount = this.formData.invoicecharges.reduce(
+                    (sum, charge) => sum + (parseFloat(charge.discount) || 0), 0
+                ).toFixed(2);
+                
+                this.formData.net_total = (
+                    parseFloat(this.formData.total) - 
+                    parseFloat(this.formData.total_discount)
+                ).toFixed(2);
+            },
 
 
                 saveAndSubmit(e) {

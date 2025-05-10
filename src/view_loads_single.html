@@ -99,7 +99,7 @@
                                     
                                     <div>
                                       <p class="text-xs text-gray-500 dark:text-gray-400">Load Type Note</p>
-                                      <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.                  load_type_note || 'N/A'"></p>
+                                      <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.load_type_note || 'N/A'"></p>
                                     </div>
                                     
                                     <div>
@@ -563,19 +563,19 @@
                                                 <div>
                                                   <p class="text-xs text-gray-500 dark:text-gray-400">Units</p>
                                                   <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="charge.units || 'N/A'"></p>
+                                                     x-text="charge.charge_unit || 'N/A'"></p>
                                                 </div>
                                                 
                                                 <div>
                                                   <p class="text-xs text-gray-500 dark:text-gray-400">Rate</p>
                                                   <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="charge.rate ? '$' + parseFloat(charge.rate).toFixed(2) : 'N/A'"></p>
+                                                     x-text="charge.charge_rate ? '$' + parseFloat(charge.charge_rate).toFixed(2) : 'N/A'"></p>
                                                 </div>
                                                 
                                                 <div>
                                                   <p class="text-xs text-gray-500 dark:text-gray-400">Amount</p>
                                                   <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="charge.amount ? '$' + parseFloat(charge.amount).toFixed(2) : 'N/A'"></p>
+                                                     x-text="charge.charge_amount ? '$' + parseFloat(charge.charge_amount).toFixed(2) : 'N/A'"></p>
                                                 </div>
                                                 
                                                 <div>
@@ -888,6 +888,58 @@
                 id:data.id || '',
                 shipment_type:data.shipment_type || '',
                 shipment_tracking_number: data.shipment_tracking_number || '',
+                load_type: data.load_type || '',
+                load_type_note: data.load_type_note || '',
+                //Land shipment data
+                shipper_name: data.shipper_name || '',
+                shipper_address: data.shipper_address || '',
+                shipper_reference_number: data.shipper_reference_number || '',
+                carrier_name: data.carrier_name || '',
+                carrier_reference_number: data.carrier_reference_number || '',
+                bill_of_laden_number: data.bill_of_laden_number || '',
+                pick_up: data.pick_up || '',
+                pick_up_address: data.pick_up_address || '',
+                pieces: data.pieces || '',
+                commodity: data.commodity || '',
+                load_weight: data.load_weight || '',
+                booking_number: data.booking_number || '',
+                genset_number: data.genset_number || '',
+                reefer_temp: data.reefer_temp || '',
+                po_number: data.po_number || '',
+                seal_number: data.seal_number || '',
+                broker_email: data.broker_email || '',
+                broker_name: data.broker_name || '',
+                broker_number: data.broker_number || '',
+                broker_reference_number: data.broker_reference_number || '',
+                batch_number: data.batch_number || '',
+                sales_rep: data.sales_rep || '',
+                edi_number: data.edi_number || '',
+                batch_req: data.batch_req || '',
+                fuel_rate_per_gallon: data.fuel_rate_per_gallon || '',
+                mpg: data.mpg || '',
+                over_weight: data.over_weight || [],
+                tags: data.tags || [],
+                total_miles: data.total_miles || '',
+                empty_miles: data.empty_miles || '',
+                dh_miles: data.dh_miles || '',
+                loaded_miles: data.loaded_miles || '',
+                isBroker: data.isBroker || '',
+                consignee_name: data.consignee_name || '',
+                consignee_phone: data.consignee_phone || '',
+                consignee_email: data.consignee_email || '',
+                first_notify_party_name: data.first_notify_party_name || '',
+                first_notify_party_phone: data.first_notify_party_phone || '',
+                first_notify_party_email: data.first_notify_party_email || '',
+                second_notify_party_name: data.second_notify_party_name || '',
+                second_notify_party_phone: data.second_notify_party_phone || '',
+                second_notify_party_email: data.second_notify_party_email || '',
+                pre_carrier_name: data.pre_carrier_name || '',
+                port_of_discharge: data.port_of_discharge || '',
+                vessel_aircraft_name: data.vessel_aircraft_name || '',
+                voyage_number: data.voyage_number || '',
+                port_of_discharge: data.port_of_discharge || '',
+                place_of_delivery: data.place_of_delivery || '',
+                final_destination: data.final_destination || '',
                 //ocean data
                 
                 shipper_name: data.shipper_name || '',

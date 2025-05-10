@@ -5,10 +5,10 @@
 
     <include src="./partials/mainhead.html"> </include>
     <script src="./assets/js/main.js"></script>
-    <title>Carriers | </title>
+    <title>Delivery List | </title>
   </head>
   <body
-    x-data="{ page: 'carriers_list', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-data="{ page: 'delivery_list', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
     x-init="
          darkMode = JSON.parse(localStorage.getItem('darkMode'));
          $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
@@ -40,7 +40,7 @@
         <main>
           <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
             <!-- Breadcrumb Start -->
-            <div x-data="{ pageName: `carriers List`}">
+            <div x-data="{ pageName: `Delivery List`}">
               <include src="./partials/breadcrumb.html" />
             </div>
             <!-- Breadcrumb End -->
@@ -50,15 +50,48 @@
                 <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] p-2">
                   <div class="px-5 py-4 sm:px-6 sm:py-5">
                     <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
-                      All Carriers
+                      All Deliveries
                     </h3>
                   </div>
+
+                  <!-- Status Update Modal -->
+<!-- Status Modal -->
+<div x-data="$store.statusModal"
+     x-show="showStatusModal"
+     x-transition
+     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+     style="display: none;">
+     
+    <!-- Modal Content -->
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+        <h3 class="text-lg font-medium mb-4">Update Invoice Status</h3>
+        
+        <select x-model="currentStatus" class="w-full p-2 border rounded mb-4">
+            <option value="awaiting payment">Awaiting Payment</option>
+            <option value="paid">Paid</option>
+            <option value="unpaid">Unpaid</option>
+        </select>
+        
+        <div class="flex justify-end space-x-2">
+            <button @click="showStatusModal = false" class="px-4 py-2 bg-gray-200 rounded">Cancel</button>
+            <button @click="updateStatus()" class="px-4 py-2 bg-blue-500 text-white rounded">Update</button>
+        </div>
+    </div>
+</div>
+
+<!-- In your table row -->
+<!-- <td>
+    <button @click="$store.statusModal.openModal(item.id, item.status)" 
+            class="text-blue-500 hover:text-blue-700">
+        Update Status
+    </button>
+</td> -->
           
                   <!-- Inputs Container -->
                   <div class="border-t border-gray-100 p-5 dark:border-gray-800 sm:p-6">
                     <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
                     >
-                      
+                    
                     <div class="max-w-full overflow-x-auto">
                       <div x-data="datatable" class="p-4">
                         <!-- Loader -->
@@ -103,13 +136,10 @@
                             <thead class="bg-gray-50 dark:bg-gray-900">
                               <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ACTION</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Carrier Name</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Carrier Type</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Carrier Office</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Office Tel</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">No of Drivers</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">State Served</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Toll Free</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tracking Number</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Reciever</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"></th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Cost</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
                               </tr>
                             </thead>
@@ -127,8 +157,11 @@
                                    
                                       <div x-show="open" @click.away="open = false" class="absolute left-0 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">
                                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                                          <!-- <li><a href="#" x-on:click="viewItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View</a></li> -->
                                           <li><a href="#" x-on:click="editItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a></li>
-                                          <li><a href="#" x-on:click="viewItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View</a></li>
+                                          <li>
+                                            <a href="#" @click.prevent="$store.statusModal.openModal(item.id, item.status); open = false" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update Status</a>
+                                          </li>
                                         </ul>
                                         <div class="py-2">
                                           <a href="#" x-on:click="deleteItem(item.id)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
@@ -136,18 +169,36 @@
                                       </div>
                                     </div>
                                   </td>
+                                  
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
+                                      x-text="item.delivery_tracking_number ? item.delivery_tracking_number : ' '">
+                                  </td>
                                  
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.name ? item.name : ' '"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.type ? item.type : ' '"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.offices ? item.offices : ' '"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.office_phone ? item.office_phone : 'N/A'"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.no_of_drivers ? item.no_of_drivers : ' '"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.state ? item.state : ' '"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.toll_free ? item.toll_free : ' '"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
+                                      x-text="item.receiver_address ? item.receiver_address : ' '">
+                                  </td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.payment_method ? item.payment_method : ' '"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
+                                      x-text="item.customer_name ? item.customer_name : ' '">
+                                  </td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.customer_office ? item.customer_office : ' '"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.bill_of_landing_number ? item.bill_of_landing_number : ' '"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
+                                      x-text="item.total ? '$' + parseFloat(item.total).toFixed(2) : '$0.00'">
+                                  </td>
                                   <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full" 
-                                          :class="item.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" 
-                                          x-text="item.status ? item.status.charAt(0).toUpperCase() + item.status.slice(1) : 'N/A'">
+                                    <span class="px-3 py-1 text-xs font-semibold rounded-full border"
+                                      :class="{
+                                        'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-200 dark:border-amber-800': 
+                                          item.status === 'awaiting payment',
+                                        'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-200 dark:border-emerald-800': 
+                                          item.status === 'paid',
+                                        'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-900/30 dark:text-rose-200 dark:border-rose-800': 
+                                          item.status === 'unpaid',
+                                        'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700': 
+                                          !['awaiting payment', 'paid', 'unpaid'].includes(item.status)
+                                      }"
+                                      x-text="item.status ? item.status.charAt(0).toUpperCase() + item.status.slice(1) : 'N/A'">
                                     </span>
                                   </td>
                                 </tr>
@@ -156,7 +207,7 @@
                               <!-- Empty state -->
                               <tr x-show="displayedItems.length === 0">
                                 <td colspan="9" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                                  No carriers found
+                                  No Deliveries found found
                                 </td>
                               </tr>
                             </tbody>
@@ -227,7 +278,67 @@
                       </div>
                     </div>
                     
-
+                    <!-- Status Update Modal -->
+                    <div x-data="{ show: false }" x-show="$store.statusModal.showStatusModal" class="fixed inset-0 z-50 overflow-y-auto">
+                      <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <!-- Background overlay -->
+                        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                        </div>
+                    
+                        <!-- Modal -->
+                        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full dark:bg-gray-800"
+                             x-show="$store.statusModal.showStatusModal"
+                             x-transition:enter="ease-out duration-300"
+                             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                             x-transition:leave="ease-in duration-200"
+                             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 dark:bg-gray-800">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4">Update Invoice Status</h3>
+                            
+                            <div class="mb-4">
+                              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Status</label>
+                              <div class="px-3 py-2 rounded border bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                                <span x-text="$store.statusModal.currentStatus ? $store.statusModal.currentStatus.charAt(0).toUpperCase() + $store.statusModal.currentStatus.slice(1) : 'N/A'"></span>
+                              </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">New Status</label>
+                              <select x-model="$store.statusModal.currentStatus" 
+                                      class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="awaiting payment">Awaiting Payment</option>
+                                <option value="paid">Paid</option>
+                                <option value="unpaid">Unpaid</option>
+                              </select>
+                            </div>
+                          </div>
+                          
+                          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse dark:bg-gray-800">
+                            <button type="button" 
+                                    @click="$store.statusModal.updateStatus()"
+                                    :disabled="$store.statusModal.isUpdating"
+                                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50">
+                              <span x-show="!$store.statusModal.isUpdating">Update</span>
+                              <span x-show="$store.statusModal.isUpdating" class="flex items-center">
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Updating...
+                              </span>
+                            </button>
+                            <button type="button" 
+                                    @click="$store.statusModal.showStatusModal = false"
+                                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:bg-gray-600">
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     </div>
 
                   </div>
@@ -246,7 +357,8 @@
 
     <!-- <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script> -->
     <script>
-  document.addEventListener('alpine:init', () => {
+
+document.addEventListener('alpine:init', () => {
   Alpine.data('datatable', () => ({
     items: [],
     displayedItems: [],
@@ -263,7 +375,7 @@
     
     fetchData() {
       this.isLoading = true;
-      fetch(requestGetURL + '/carriers/carriers', {
+      fetch(requestGetURL + '/delivery/my-deliveries', {
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
           'Accept': 'application/json'
@@ -274,12 +386,10 @@
         return response.json();
       })
       .then(data => {
-        if (data.carriers && Array.isArray(data.carriers)) {
-          this.items = data.carriers;
-          this.updateDisplayedItems();
-        } else {
-          console.error('Invalid data format:', data);
-        }
+        this.items = Array.isArray(data.deliveries) 
+          ? data.deliveries 
+          : Array.isArray(data) ? data : [];
+        this.updateDisplayedItems();
       })
       .catch(error => {
         console.error('Error:', error);
@@ -298,14 +408,12 @@
       const query = this.searchQuery.toLowerCase();
       return this.items.filter(item => {
         return (
-          (item.name || '').toLowerCase().includes(query) ||
-          (item.type || '').toLowerCase().includes(query) ||
-          (item.offices || '').toLowerCase().includes(query) ||
-          (item.office_phone || '').toLowerCase().includes(query) ||
-          (item.no_of_drivers || '').toString().toLowerCase().includes(query) ||
-          (item.state || '').toLowerCase().includes(query) ||
-          (item.toll_free || '').toLowerCase().includes(query) ||
-          (item.status || '').toLowerCase().includes(query)
+          (item.invoice_number || '').toString().toLowerCase().includes(query) ||
+          (item.customer_name || '').toLowerCase().includes(query) ||
+          (item.customer_office || '').toLowerCase().includes(query) ||
+          (item.bill_of_landing_number || '').toLowerCase().includes(query) ||
+          (item.status || '').toLowerCase().includes(query) ||
+          (item.total || '').toString().toLowerCase().includes(query)
         );
       });
     },
@@ -345,18 +453,17 @@
     },
     
     editItem(id) {
-      const encodedId = btoa(id);
-      window.location.href = `/edit_carrier.html?id=${encodedId}`;
+      window.location.href = `/edit_invoice.html?id=${btoa(id)}`;
     },
     
     viewItem(id) {
-      const encodedId = btoa(id);
-      window.location.href = `/view_carrier_single.html?id=${encodedId}`;
+      window.location.href = `/view_invoice_single.html?id=${btoa(id)}`;
     },
     
     deleteItem(id) {
-      if (confirm('Are you sure you want to delete this carrier?')) {
-        fetch(`${requestGetURL}/carriers/delete/${id}`, {
+      if (confirm('Are you sure you want to delete this invoice?')) {
+        this.isLoading = true;
+        fetch(`${requestGetURL}/invoices/delete/${id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
@@ -365,17 +472,73 @@
         })
         .then(response => {
           if (!response.ok) throw new Error('Delete failed');
-          createToast('success', 'Carrier deleted successfully');
+          createToast('success', 'Invoice deleted successfully');
           this.fetchData();
         })
         .catch(error => {
           console.error('Error:', error);
-          createToast('error', 'Failed to delete carrier');
+          createToast('error', 'Failed to delete invoice');
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
       }
     }
   }));
+
+  // Status Modal Store
+  Alpine.store('statusModal', {
+    showStatusModal: false,
+    currentInvoiceId: null,
+    currentStatus: '',
+    isUpdating: false,
+
+    openModal(id, status) {
+      this.currentInvoiceId = id;
+      this.currentStatus = status;
+      this.showStatusModal = true;
+    },
+    
+    async updateStatus() {
+      this.isUpdating = true;
+      
+      try {
+        const response = await fetch(`${requestGetURL}/invoices/updatestatus/${this.currentInvoiceId}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            status: this.currentStatus
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to update status');
+        }
+        
+        const data = await response.json();
+        createToast('success', data.message || 'Status updated successfully');
+        
+        // Refresh the table data
+        const datatable = document.querySelector('[x-data="datatable"]').__x.$data;
+        datatable.fetchData();
+        
+        this.showStatusModal = false;
+      } catch (error) {
+        console.error('Error updating status:', error);
+        createToast('error', 'Failed to update status');
+      } finally {
+        this.isUpdating = false;
+      }
+    }
+  });
 });
+
+   
+  
       </script>
   </body>
 </html>

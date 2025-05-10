@@ -231,14 +231,14 @@
                             
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Arrival Date</label>
-                                <input type="text" id="expected_arrival_date" x-model="formData.expected_arrival_date" name="expected_arrival_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <input type="text" id="expected_arrival_date" x-model="formData.expected_arrival_date" id="expected_arrival_date" name="expected_arrival_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                         </div>
 
                         <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
                             <div id="">
                                 <label class="block text-gray-700 dark:text-gray-300">Total Weight</label>
-                                <input type="text" x-model="formData.total_weight" name="total_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                                <input type="text" x-model="formData.total_weight" name="total_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" />
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Total Shipping Cost</label>
@@ -529,7 +529,16 @@
     <!-- ===== Page Wrapper End ===== -->
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <script>
-        
+   $(document).ready(function() {
+    $("#expected_departure_date, #expected_arrival_date").datepicker({
+        dateFormat: "yy-mm-dd",
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "1900:2100",
+        minDate: 0
+    });
+});
+
  populateCarrierSelect() 
 function populateCarrierSelect() {
       $.ajax({
@@ -639,10 +648,38 @@ function populateCarrierSelect() {
                   this.step--;
                   localStorage.setItem('consolidate_shipment_step', this.step);
               },
+              init() {
+                    if (!this.formData.charges) {
+                    this.formData.charges = [{
+                    charge_type: '',
+                    comment: '',
+                    units: '',
+                    rate: '',
+                    amount: '',
+                    discount: '',
+                    internal_notes: ''
+                    }];
+
+                }
+
+                // Calculate initial totals
+                this.calculateTotals();
+                
+                // Watch for changes in charges
+                this.$watch('formData.charges', () => {
+                    if (this.formData.charges) { // Added null check
+                    this.calculateTotals();
+                    }
+                }, { deep: true });
+
+                
+                },
+
               saveProgress() {
                   localStorage.setItem('formData', JSON.stringify(this.formData));
                   localStorage.setItem('consolidate_shipment_step', this.step);
-                  alert("Progress saved successfully!");
+                //  alert("Progress saved successfully!");
+                createToast('success', 'Progress saved successfully');
               },
               addCharge() {
                     this.formData.charges.push({

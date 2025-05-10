@@ -752,12 +752,23 @@
                 saveAndSubmit() {
                     let form = document.getElementById("newCarrier");
                     let formData = new FormData(form);
-                    this.formData.insurances.forEach((insurance, index) => {
-                        formData.append(`insurances[${index}][coverage]`, insurance.coverage);
-                        formData.append(`insurances[${index}][amount]`, insurance.amount);
-                        formData.append(`insurances[${index}][policy_number]`, insurance.policy_number);
-                        formData.append(`insurances[${index}][expires]`, insurance.expires);
-                    });
+                    if (this.formData && Array.isArray(this.formData.insurances)) {
+                        this.formData.insurances.forEach((insurance, index) => {
+                            if (insurance) {  // Additional check for each insurance object
+                                formData.append(`insurances[${index}][coverage]`, insurance.coverage || '');
+                                formData.append(`insurances[${index}][amount]`, insurance.amount || '');
+                                formData.append(`insurances[${index}][policy_number]`, insurance.policy_number || '');
+                                formData.append(`insurances[${index}][expires]`, insurance.expires || '');
+                            }
+                        });
+                    }
+
+                    // this.formData.insurances.forEach((insurance, index) => {
+                    //     formData.append(`insurances[${index}][coverage]`, insurance.coverage);
+                    //     formData.append(`insurances[${index}][amount]`, insurance.amount);
+                    //     formData.append(`insurances[${index}][policy_number]`, insurance.policy_number);
+                    //     formData.append(`insurances[${index}][expires]`, insurance.expires);
+                    // });
                     // for (let pair of formData.entries()) {
                     //     console.log(pair[0] + ": " + pair[1]);
                     // }

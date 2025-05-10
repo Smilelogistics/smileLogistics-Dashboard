@@ -180,7 +180,7 @@
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Alert at percentage</label>
-                                <input type="text" x-model="formData.alert_percentage" name="alert_percentage" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <input type="text" x-model="formData.alert_percentage" name="alert_percentage" id="alert_percentage" @input="alertPercentage" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Outstanding balance</label>
@@ -501,6 +501,22 @@
                   localStorage.setItem('customer_step', this.step);
                   alert("Progress saved successfully!");
               },
+              alertPercentage() {
+                const creditLimit = parseFloat(this.formData.alert_percentage);
+                const creditInput = document.querySelector('#alert_percentage');
+
+            if (creditLimit > 100) {
+                if (creditInput) {
+                    creditInput.style.border = '2px solid red';
+                }
+                createToast('error', 'Alert Percentage cannot be greater than 100%');
+            } else {
+                if (creditInput) {
+                    creditInput.style.border = '';
+                }
+            }
+        },
+
               
               addTag() {
                 if (this.formData.tagsInput.trim()) {

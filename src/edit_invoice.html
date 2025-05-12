@@ -337,7 +337,7 @@
                                     <div>
                                         <!-- <span x-text="JSON.stringify(charge)"></span> -->
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Rate</label>
-                                        <input type="text" name="rate" x-model="charge.rate" name="rate[]"
+                                        <input type="text" x-model="charge.rate" name="rate[]"
                                             @change="calculateChargeAmount(index)"
                                             class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 numberOnly">
                                     </div>
@@ -347,7 +347,7 @@
                                     <!-- Amount -->
                                     <div>
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Amount</label>
-                                        <input type="text" name="amount" x-model="charge.amount" name="amount[]" readonly 
+                                        <input type="text" x-model="charge.amount" name="amount[]" readonly 
                                             class="w-full rounded bg-gray-100 dark:bg-gray-600 dark:text-gray-200 border-gray-300 dark:border-gray-500 ">
                                     </div>
 
@@ -426,7 +426,7 @@
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Credit Memo</label>
                                         <input type="text" 
                                                x-model="repay.credit_memo" 
-                                               :name="`credit_memo[${index}]`" 
+                                               name="`credit_memo[]`" 
                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     </div>
                     
@@ -435,7 +435,7 @@
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Credit Amount</label>
                                         <input type="text" 
                                                x-model="repay.credit_amount" 
-                                               :name="`credit_amount[${index}]`"
+                                               name="`credit_amount[]`"
                                                class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
                                     </div>
                     
@@ -444,7 +444,7 @@
                                         <label class="block text-gray-700 dark:text-gray-300">Note</label>
                                         <textarea cols="1" rows="1" 
                                                   x-model="repay.credit_note" 
-                                                  :name="`credit_note[${index}]`" 
+                                                  name="`credit_note[]`" 
                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                         </textarea>
                                     </div>
@@ -454,7 +454,7 @@
                                         <label class="block text-gray-700 dark:text-gray-300">Date</label>
                                         <input type="date" 
                                                x-model="repay.credit_date" 
-                                               :name="`credit_date[${index}]`" 
+                                               name="`credit_date[]`" 
                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     </div>
                                 </div>
@@ -465,7 +465,7 @@
                                         <label class="block text-gray-700 dark:text-gray-300">Balance Before Credit</label>
                                         <input type="text" 
                                                x-model="repay.balance_before_credit" 
-                                               :name="`balance_before_credit[${index}]`" 
+                                               name="`balance_before_credit[]`" 
                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
                                                readonly>
                                     </div>
@@ -475,7 +475,7 @@
                                         <label class="block text-gray-700 dark:text-gray-300">Balance After Credit</label>
                                         <input type="text" 
                                                x-model="repay.balance_after_credit" 
-                                               :name="`balance_after_credit[${index}]`" 
+                                               name="`balance_after_credit[]`" 
                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
                                                >
                                     </div>
@@ -647,7 +647,7 @@ document.addEventListener('alpine:init', () => {
                             charge_type: charge.charge_type || '',
                             comment: charge.comment || '',
                             units: charge.units || '',
-                            rate: charge.rate || '',
+                            rate: charge.unit_rate || '',
                             amount: charge.amount || '',
                             discount: charge.discount || '',
                             internal_notes: charge.internal_notes || '',
@@ -753,18 +753,18 @@ document.addEventListener('alpine:init', () => {
                     formData.append("_method", "PUT");
 
                     
-                    this.formData.invoicepayments.forEach((repay, index) => {
-                        formData.append(`invoicepayments[${index}][credit_memo]`, repay.credit_memo);
-                        formData.append(`invoicepayments[${index}][credit_amount]`, repay.credit_amount);
-                        formData.append(`invoicepayments[${index}][credit_note]`, repay.credit_note);
-                        formData.append(`invoicepayments[${index}][credit_date]`, repay.credit_date);
-                        formData.append(`invoicepayments[${index}][check_number]`, repay.check_number);
-                        formData.append(`invoicepayments[${index}][notes]`, repay.notes);
-                        formData.append(`invoicepayments[${index}][payment_date]`, repay.payment_date);
-                        formData.append(`invoicepayments[${index}][payment_method]`, repay.payment_method); 
-                        formData.append(`invoicepayments[${index}][processing_fee_flate_rate]`, repay.processing_fee_flate_rate);      
-                        formData.append(`invoicepayments[${index}][processing_fee_percent]`, repay.processing_fee_percent);      
-                                        });
+                    // this.formData.invoicepayments.forEach((repay, index) => {
+                    //     formData.append(`invoicepayments[${index}][credit_memo]`, repay.credit_memo);
+                    //     formData.append(`invoicepayments[${index}][credit_amount]`, repay.credit_amount);
+                    //     formData.append(`invoicepayments[${index}][credit_note]`, repay.credit_note);
+                    //     formData.append(`invoicepayments[${index}][credit_date]`, repay.credit_date);
+                    //     formData.append(`invoicepayments[${index}][check_number]`, repay.check_number);
+                    //     formData.append(`invoicepayments[${index}][notes]`, repay.notes);
+                    //     formData.append(`invoicepayments[${index}][payment_date]`, repay.payment_date);
+                    //     formData.append(`invoicepayments[${index}][payment_method]`, repay.payment_method); 
+                    //     formData.append(`invoicepayments[${index}][processing_fee_flate_rate]`, repay.processing_fee_flate_rate);      
+                    //     formData.append(`invoicepayments[${index}][processing_fee_percent]`, repay.processing_fee_percent);      
+                    //                     });
 
 
           
@@ -782,7 +782,7 @@ document.addEventListener('alpine:init', () => {
                     for (let pair of formData.entries()) {
                         console.log(pair[0] + ": " + pair[1]);
                     }
-                   // return;
+                    //return;
 
                     $.ajax({
                         url: requestURL + "/invoices/update/" + this.id,

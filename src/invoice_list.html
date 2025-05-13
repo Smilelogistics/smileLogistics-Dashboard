@@ -56,13 +56,12 @@
 
                   <!-- Status Update Modal -->
 <!-- Status Modal -->
-<div x-data="$store.statusModal"
+<!-- <div x-data="$store.statusModal"
      x-show="showStatusModal"
      x-transition
      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
      style="display: none;">
      
-    <!-- Modal Content -->
     <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
         <h3 class="text-lg font-medium mb-4">Update Invoice Status</h3>
         
@@ -77,15 +76,15 @@
             <button @click="updateStatus()" class="px-4 py-2 bg-blue-500 text-white rounded">Update</button>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- In your table row -->
-<td>
+<!-- <td >
     <button @click="$store.statusModal.openModal(item.id, item.status)" 
             class="text-blue-500 hover:text-blue-700">
         Update Status
     </button>
-</td>
+</td> -->
           
                   <!-- Inputs Container -->
                   <div class="border-t border-gray-100 p-5 dark:border-gray-800 sm:p-6">
@@ -529,7 +528,7 @@ document.addEventListener('alpine:init', () => {
         this.showStatusModal = false;
       } catch (error) {
         console.error('Error updating status:', error);
-        createToast('error', 'Failed to update status');
+        //createToast('error', 'Failed to update status');
       } finally {
         this.isUpdating = false;
       }

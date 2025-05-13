@@ -1179,18 +1179,21 @@
                         </button>
 
                         <!-- Totals Section -->
-                        <div class="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-3 gap-4">
+                       <div class="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <label class="block font-medium text-gray-700 dark:text-gray-300">Total Charges</label>
-                                <div class="text-xl text-gray-900 dark:text-gray-100" x-text="'$' + formData.total"></div>
+                                <div class="text-xl text-gray-900 dark:text-gray-100" 
+                                    x-text="'$' + formData.total"></div>
                             </div>
                             <div>
                                 <label class="block font-medium text-gray-700 dark:text-gray-300">Total Discount</label>
-                                <div class="text-xl text-gray-900 dark:text-gray-100" x-text="'$' + formData.total_discount"></div>
+                                <div class="text-xl text-gray-900 dark:text-gray-100" 
+                                    x-text="'$' + formData.total_discount"></div>
                             </div>
                             <div>
                                 <label class="block font-medium text-gray-700 dark:text-gray-300">Net Total</label>
-                                <div class="text-2xl font-bold text-gray-900 dark:text-gray-100" x-text="'$' + formData.net_total"></div>
+                                <div class="text-2xl font-bold text-gray-900 dark:text-gray-100" 
+                                    x-text="'$' + formData.net_total"></div>
                             </div>
                         </div>
                     </div>
@@ -1680,80 +1683,151 @@ document.addEventListener('alpine:init', () => {
                 }
                 },
 
-        fetchData() {
-            //this.isLoading = true;
-            fetch(`${requestGetURL}/shipments/show/${this.id}`, {
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
-                    'Accept': 'application/json'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Fetched Data:', data);
-                    localStorage.setItem('Fetched Data: ', data)
-                    this.formData = {
-                    ...this.formData,
-                    ...data,
-                    shipment_type: data.shipment_type || '',
-                    over_weight: data.over_weight || [],
-                    tags: data.tags || [],
-                    shipment_charges: data.shipment_charges?.map(charge => ({
-                        id: charge.id || '',
-                        charge_type: charge.type || '',
-                        comment: charge.comment || '',
-                        units: charge.unit || '',
-                        rate: charge.rate || '',
-                        amount: charge.amount || '',
-                        discount: charge.discount || '',
-                        internal_notes: charge.internal_notes || '',
-                        billed: charge.billed || false,
-                        invoice_date: charge.invoice_date || '',
-                        invoice_number: charge.invoice_number || ''
-                    })) || [],
+                fetchData() {
+                    fetch(`${requestGetURL}/shipments/show/${this.id}`, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        this.formData = {
+                            ...this.formData,
+                            ...data,
+                            shipment_type: data.shipment_type || '',
+                            over_weight: data.over_weight || [],
+                            tags: data.tags || [],
+                            
+                            // Initialize charges with proper numeric values
+                            shipment_charges: data.shipment_charges?.map(charge => ({
+                                id: charge.id || '',
+                                charge_type: charge.type || '',
+                                comment: charge.comment || '',
+                                units: charge.unit ? parseFloat(charge.unit) : 0,
+                                rate: charge.rate ? parseFloat(charge.rate) : 0,
+                                amount: charge.amount ? parseFloat(charge.amount) : 0,
+                                discount: charge.discount ? parseFloat(charge.discount) : 0,
+                                internal_notes: charge.internal_notes || '',
+                                billed: charge.billed || false,
+                                invoice_date: charge.invoice_date || '',
+                                invoice_number: charge.invoice_number || ''
+                            })) || [],
+                            
+                            // Initialize expenses with proper numeric values
+                            shipment_expenses: data.shipment_expenses?.map(expense => ({
+                                id: expense.id || '',
+                                expense_type: expense.expense_type || '',
+                                expense_unit: expense.units ? parseFloat(expense.units) : 0,
+                                expense_rate: expense.rate ? parseFloat(expense.rate) : 0,
+                                expense_amount: expense.amount ? parseFloat(expense.amount) : 0,
+                                disputed_amount: expense.disputed_amount ? parseFloat(expense.disputed_amount) : 0,
+                                expense_billed: expense.billed || false,
+                                credit_reimbursement_amount: expense.credit_reimbursement_amount ? parseFloat(expense.credit_reimbursement_amount) : 0,
+                                vendor_invoice_number: expense.vendor_invoice_number || '',
+                                payment_reference_note: expense.payment_reference_note || '',
+                                disputed_note: expense.disputed_note || '',
+                                expense_disputed: expense.expense_disputed || false,
+                                vendor_invoice_name: expense.vendor_invoice_name || '',
+                                paid: expense.paid || false
+                            })) || [],
+                            
+                            // Other data
+                            shipment_notes: data.shipment_notes?.map(notes => ({
+                                id: notes.id || '',
+                                note: notes.note || '',
+                            })) || [],
+                            
+                            shipment_uploads: data.shipment_uploads?.map(upload => ({
+                                id: upload.id || '',
+                                file_name: upload.file_name || '',
+                                file_path: upload.file_path || '',
+                            })) || [],
+                        };
+                        
+                        // Calculate initial totals
+                        this.calculateChargeTotals();
+                        this.calculateExpenseTotals();
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                    });
+                },
 
-                    //expenses
-                    shipment_expenses: data.shipment_expenses?.map(expense => ({
-                        id: expense.id || '',
-                        expense_type: expense.expense_type || '',
-                        expense_unit: expense.units || '',
-                        expense_rate: expense.rate || '',
-                        expense_amount: expense.amount || '',
-                        expense_amount: expense.disputed_amount || '',
-                        expense_billed: expense.billed || '',
-                        credit_reimbursement_amount: expense.credit_reimbursement_amount || '',
-                        vendor_invoice_number: expense.vendor_invoice_number || '',
-                        payment_reference_note: expense.payment_reference_note || '',
-                        disputed_note: expense.disputed_note || '',
-                        expense_disputed: expense.expense_disputed || false,
-                        vendor_invoice_number: expense.vendor_invoice_number,
-                        vendor_invoice_name: expense.vendor_invoice_name,
-                        paid: expense.paid || false
-                    })) || [],
+        // fetchData() {
+        //     //this.isLoading = true;
+        //     fetch(`${requestGetURL}/shipments/show/${this.id}`, {
+        //         headers: {
+        //             'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+        //             'Accept': 'application/json'
+        //         }
+        //     })
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             console.log('Fetched Data:', data);
+        //             localStorage.setItem('Fetched Data: ', data)
+        //             this.formData = {
+        //             ...this.formData,
+        //             ...data,
+        //             shipment_type: data.shipment_type || '',
+        //             over_weight: data.over_weight || [],
+        //             tags: data.tags || [],
+        //             shipment_charges: data.shipment_charges?.map(charge => ({
+        //                 id: charge.id || '',
+        //                 charge_type: charge.type || '',
+        //                 comment: charge.comment || '',
+        //                 units: charge.unit || '',
+        //                 rate: charge.rate || '',
+        //                 amount: charge.amount || '',
+        //                 discount: charge.discount || '',
+        //                 internal_notes: charge.internal_notes || '',
+        //                 billed: charge.billed || false,
+        //                 invoice_date: charge.invoice_date || '',
+        //                 invoice_number: charge.invoice_number || ''
+        //             })) || [],
 
-                    //notes
-                    shipment_notes: data.shipment_notes?.map(notes => ({
-                        id: notes.id || '',
-                        note: notes.note || '',
-                    })) || [],
+        //             //expenses
+        //             shipment_expenses: data.shipment_expenses?.map(expense => ({
+        //                 id: expense.id || '',
+        //                 expense_type: expense.expense_type || '',
+        //                 expense_unit: expense.units || '',
+        //                 expense_rate: expense.rate || '',
+        //                 expense_amount: expense.amount || '',
+        //                 expense_amount: expense.disputed_amount || '',
+        //                 expense_billed: expense.billed || '',
+        //                 credit_reimbursement_amount: expense.credit_reimbursement_amount || '',
+        //                 vendor_invoice_number: expense.vendor_invoice_number || '',
+        //                 payment_reference_note: expense.payment_reference_note || '',
+        //                 disputed_note: expense.disputed_note || '',
+        //                 expense_disputed: expense.expense_disputed || false,
+        //                 vendor_invoice_number: expense.vendor_invoice_number,
+        //                 vendor_invoice_name: expense.vendor_invoice_name,
+        //                 paid: expense.paid || false
+        //             })) || [],
 
-                    //docs
-                    shipment_uploads: data.shipment_uploads?.map(upload => ({
-                        id: upload.id || '',
-                        file_name: upload.file_name || '',
-                        file_path: upload.file_path || '',
-                    })) || [],
-                };
-                })
+        //             //notes
+        //             shipment_notes: data.shipment_notes?.map(notes => ({
+        //                 id: notes.id || '',
+        //                 note: notes.note || '',
+        //             })) || [],
+
+        //             //docs
+        //             shipment_uploads: data.shipment_uploads?.map(upload => ({
+        //                 id: upload.id || '',
+        //                 file_name: upload.file_name || '',
+        //                 file_path: upload.file_path || '',
+        //             })) || [],
+        //         };
+        //         })
                 
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                })
+        //         .catch(error => {
+        //             console.error('Error fetching data:', error);
+        //         })
                 
-            .finally(() => {
-                //this.isLoading = false;
-            });
-        },
+        //     .finally(() => {
+        //         //this.isLoading = false;
+        //     });
+        // },
 
       
 
@@ -1763,10 +1837,10 @@ document.addEventListener('alpine:init', () => {
                 id: '',
                 charge_type: '',
                 comment: '',
-                units: '',
-                rate: '',
-                amount: '',
-                discount: '',
+                units: 0,
+                rate: 0,
+                amount: 0,
+                discount: 0,
                 internal_notes: '',
                 billed: false,
                 invoice_date: '',
@@ -1776,40 +1850,41 @@ document.addEventListener('alpine:init', () => {
 
         removeCharge(index) {
             this.formData.shipment_charges.splice(index, 1);
-            this.calculateTotals();
+            this.calculateChargeTotals();
         },
 
         calculateChargeAmount(index) {
             const charge = this.formData.shipment_charges[index];
-            charge.amount = (parseFloat(charge.units)) || 0 * (parseFloat(charge.rate)) || 0;
-            this.calculateTotals();
+            const units = parseFloat(charge.units) || 0;
+            const rate = parseFloat(charge.rate) || 0;
+            charge.amount = (units * rate).toFixed(2);
+            this.calculateChargeTotals();
         },
 
+        calculateChargeTotals() {
+            const totals = this.formData.shipment_charges.reduce((acc, charge) => {
+                acc.total += parseFloat(charge.amount) || 0;
+                acc.discount += parseFloat(charge.discount) || 0;
+                return acc;
+            }, { total: 0, discount: 0 });
 
-        calculateTotals() {
-            this.formData.total = this.formData.shipment_charges.reduce(
-                (sum, charge) => sum + (parseFloat(charge.amount) || 0), 0
-            ).toFixed(2);
-            
-            this.formData.total_discount = this.formData.shipment_charges.reduce(
-                (sum, charge) => sum + (parseFloat(charge.discount) || 0), 0
-            ).toFixed(2);
-            
-            this.formData.net_total = (
-                parseFloat(this.formData.total) - 
-                parseFloat(this.formData.total_discount)
-            ).toFixed(2);
+            // Update the formData with the calculated totals
+            this.formData.total = totals.total.toFixed(2);
+            this.formData.total_discount = totals.discount.toFixed(2);
+            this.formData.net_total = (totals.total - totals.discount).toFixed(2);
         },
+
+        // For Shipment Expenses
         addExpense() {
             this.formData.shipment_expenses.push({
                 id: '',
                 expense_type: '',
-                expense_unit: '',
-                expense_rate: '',
-                expense_amount: '',
-                disputed_amount: '',
+                expense_unit: 0,
+                expense_rate: 0,
+                expense_amount: 0,
+                disputed_amount: 0,
                 expense_billed: false,
-                credit_reimbursement_amount: '',
+                credit_reimbursement_amount: 0,
                 vendor_invoice_number: '',
                 payment_reference_note: '',
                 disputed_note: '',
@@ -1826,8 +1901,22 @@ document.addEventListener('alpine:init', () => {
 
         calculateExpenseAmount(index) {
             const expense = this.formData.shipment_expenses[index];
-            expense.expense_amount = (parseFloat(expense.expense_unit)) || 0 * (parseFloat(expense.expense_rate)) || 0;
+            const units = parseFloat(expense.expense_unit) || 0;
+            const rate = parseFloat(expense.expense_rate) || 0;
+            expense.expense_amount = (units * rate).toFixed(2);
             this.calculateExpenseTotals();
+        },
+
+        calculateExpenseTotals() {
+            const totals = this.formData.shipment_expenses.reduce((acc, expense) => {
+                acc.total += parseFloat(expense.expense_amount) || 0;
+                acc.credit += parseFloat(expense.credit_reimbursement_amount) || 0;
+                return acc;
+            }, { total: 0, credit: 0 });
+
+            this.formData.expenses_total = totals.total.toFixed(2);
+            this.formData.expenses_credit = totals.credit.toFixed(2);
+            this.formData.expenses_net_total = (totals.total - totals.credit).toFixed(2);
         },
 
         calculateExpenseTotals() {

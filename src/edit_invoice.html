@@ -112,7 +112,7 @@
                             </div> -->
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Invoice Date</label>
-                                <input type="text" x-model="formData.invoice_date" id="invoice_datepicker" name="invoice_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <input type="text" x-model="formData.invoice_date" id="invoice_datepicker" name="invoice_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white invoice_datepicker">
                         </div>
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Is Factored?</label>
@@ -166,7 +166,7 @@
                         </div> -->
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Invoice Due Date</label>
-                            <input type="text" x-model="formData.invoice_due_date" id="invoice_due_datepicker" name="invoice_due_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <input type="text" x-model="formData.invoice_due_date" id="invoice_due_datepicker" name="invoice_due_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white invoice_due_datepicker">
                         </div>
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Attention Invoice</label>
@@ -209,7 +209,7 @@
                         </div>
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Trailer</label>
-                            <input type="text" x-model="formData.trailer" id="trailer" name="trailer" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <input type="text" x-model="formData.trailer" id="trailer" name="trailer" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white move_date_datepicker">
                         </div>
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Container</label>
@@ -426,7 +426,7 @@
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Credit Memo</label>
                                         <input type="text" 
                                                x-model="repay.credit_memo" 
-                                               name="`credit_memo[]`" 
+                                               name="credit_memo[]" 
                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     </div>
                     
@@ -435,7 +435,7 @@
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Credit Amount</label>
                                         <input type="text" 
                                                x-model="repay.credit_amount" 
-                                               name="`credit_amount[]`"
+                                               name="credit_amount[]"
                                                class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200">
                                     </div>
                     
@@ -444,7 +444,7 @@
                                         <label class="block text-gray-700 dark:text-gray-300">Note</label>
                                         <textarea cols="1" rows="1" 
                                                   x-model="repay.credit_note" 
-                                                  name="`credit_note[]`" 
+                                                  name="credit_note[]" 
                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                         </textarea>
                                     </div>
@@ -452,10 +452,10 @@
                                     <!-- Credit Date -->
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Date</label>
-                                        <input type="date" 
+                                        <input type="text" 
                                                x-model="repay.credit_date" 
-                                               name="`credit_date[]`" 
-                                               class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                               name="credit_date[]" id="credit_date"
+                                               class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white credit_date_picker">
                                     </div>
                                 </div>
                     
@@ -465,9 +465,9 @@
                                         <label class="block text-gray-700 dark:text-gray-300">Balance Before Credit</label>
                                         <input type="text" 
                                                x-model="repay.balance_before_credit" 
-                                               name="`balance_before_credit[]`" 
-                                               class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
-                                               readonly>
+                                               name="balance_before_credit[]" 
+                                               class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" readonly
+                                               >
                                     </div>
                 
                                 
@@ -476,7 +476,7 @@
                                         <input type="text" 
                                                x-model="repay.balance_after_credit" 
                                                name="`balance_after_credit[]`" 
-                                               class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                                               class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" readonly
                                                >
                                     </div>
                                     <!-- Other balance fields... -->
@@ -642,15 +642,16 @@ document.addEventListener('alpine:init', () => {
                             processing_fee_flate_rate: repay.processing_fee_flate_rate || '',
                             processing_fee_percent: repay.processing_fee_percent || '',
                         })) || [],
-                        invoicecharges: data.invoice.invoicecharges?.map(charge => ({
+                         invoicecharges: data.invoice.invoicecharges?.map(charge => ({
                             id: charge.id || '',
                             charge_type: charge.charge_type || '',
                             comment: charge.comment || '',
-                            units: charge.units || '',
-                            rate: charge.unit_rate || '',
-                            amount: charge.amount || '',
-                            discount: charge.discount || '',
+                            units: charge.units ? parseFloat(charge.units) : 0,
+                            rate: charge.unit_rate ? parseFloat(charge.unit_rate) : 0,
+                            amount: charge.amount ? parseFloat(charge.amount) : 0,
+                            discount: charge.discount ? parseFloat(charge.discount) : 0,
                             internal_notes: charge.internal_notes || '',
+                            billed: charge.billed || false
                         })) || [],
 
                         invoicedocs: data.invoice.invoicedocs?.map(doc => ({
@@ -660,6 +661,7 @@ document.addEventListener('alpine:init', () => {
 
                         
                         };
+                        this.calculateTotals();
 
                         // Set the selected driver (if available)
                         // this.selectedDriver = truckDriver || { fname: 'No Driver', lname: '' };
@@ -701,47 +703,46 @@ document.addEventListener('alpine:init', () => {
                     //this.calculateTotals();
                 },
                 addCharge() {
-                this.formData.invoicecharges.push({
-                    id: '',
-                    charge_type: '',
-                    comment: '',
-                    units: '',
-                    rate: '',
-                    amount: '',
-                    discount: '',
-                    internal_notes: '',
-                    billed: false,
-                    invoice_date: '',
-                    invoice_number: ''
-                });
-            },
+                    this.formData.invoicecharges.push({
+                        id: '',
+                        charge_type: '',
+                        comment: '',
+                        units: 0,
+                        rate: 0,
+                        amount: 0,
+                        discount: 0,
+                        internal_notes: '',
+                        billed: false,
+                        invoice_date: '',
+                        invoice_number: ''
+                    });
+                },
 
-            removeCharge(index) {
-                this.formData.invoicecharges.splice(index, 1);
-                this.calculateTotals();
-            },
+                removeCharge(index) {
+                    this.formData.invoicecharges.splice(index, 1);
+                    this.calculateTotals();
+                },
 
-            calculateChargeAmount(index) {
-                const charge = this.formData.invoicecharges[index];
-                charge.amount = (parseFloat(charge.units)) || 0 * (parseFloat(charge.rate)) || 0;
-                this.calculateTotals();
-            },
+                calculateChargeAmount(index) {
+                    const charge = this.formData.invoicecharges[index];
+                    const units = parseFloat(charge.units) || 0;
+                    const rate = parseFloat(charge.rate) || 0;
+                    charge.amount = (units * rate).toFixed(2);
+                    this.calculateTotals();
+                },
 
+                calculateTotals() {
+                    // Calculate totals from all charges (both existing and new)
+                    const totals = this.formData.invoicecharges.reduce((acc, charge) => {
+                        acc.total += parseFloat(charge.amount) || 0;
+                        acc.discount += parseFloat(charge.discount) || 0;
+                        return acc;
+                    }, { total: 0, discount: 0 });
 
-            calculateTotals() {
-                this.formData.total = this.formData.invoicecharges.reduce(
-                    (sum, charge) => sum + (parseFloat(charge.amount) || 0), 0
-                ).toFixed(2);
-                
-                this.formData.total_discount = this.formData.invoicecharges.reduce(
-                    (sum, charge) => sum + (parseFloat(charge.discount) || 0), 0
-                ).toFixed(2);
-                
-                this.formData.net_total = (
-                    parseFloat(this.formData.total) - 
-                    parseFloat(this.formData.total_discount)
-                ).toFixed(2);
-            },
+                    this.formData.total = totals.total.toFixed(2);
+                    this.formData.total_discount = totals.discount.toFixed(2);
+                    this.formData.net_total = (totals.total - totals.discount).toFixed(2);
+                },
 
 
                 saveAndSubmit(e) {
@@ -814,22 +815,30 @@ document.addEventListener('alpine:init', () => {
         })
         
                         $(function() {
-                            $("#move_date_datepicker").datepicker({
+                            $(".move_date_datepicker").datepicker({
                                 
                             });
                         });
 
                         $(function() {
-                            $("#invoice_due_datepicker").datepicker({
+                            $(".invoice_due_datepicker").datepicker({
                                 
                             });
                         });
 
                         $(function() {
-                            $("#invoice_datepicker, #credit_date").datepicker({
+                            $(".invoice_datepicker").datepicker({
                                 
                             });
                         });
+
+                           $(function() {
+                            $(".credit_date_picker").datepicker({
+                               
+                            });
+                        });
+
+              
               
                     function calculate() {
                     let units = parseFloat($("#unit").val()) || 0;

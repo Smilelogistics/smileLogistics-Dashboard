@@ -99,40 +99,59 @@
       <!-- Application nav menu button -->
 
       <div class="hidden lg:block">
-        <form action="https://formbold.com/s/unique_form_id" method="POST">
-          <div class="relative">
-            <button class="absolute -translate-y-1/2 left-4 top-1/2">
-              <svg
-                class="fill-gray-500 dark:fill-gray-400"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M3.04175 9.37363C3.04175 5.87693 5.87711 3.04199 9.37508 3.04199C12.8731 3.04199 15.7084 5.87693 15.7084 9.37363C15.7084 12.8703 12.8731 15.7053 9.37508 15.7053C5.87711 15.7053 3.04175 12.8703 3.04175 9.37363ZM9.37508 1.54199C5.04902 1.54199 1.54175 5.04817 1.54175 9.37363C1.54175 13.6991 5.04902 17.2053 9.37508 17.2053C11.2674 17.2053 13.003 16.5344 14.357 15.4176L17.177 18.238C17.4699 18.5309 17.9448 18.5309 18.2377 18.238C18.5306 17.9451 18.5306 17.4703 18.2377 17.1774L15.418 14.3573C16.5365 13.0033 17.2084 11.2669 17.2084 9.37363C17.2084 5.04817 13.7011 1.54199 9.37508 1.54199Z"
-                  fill=""
-                />
-              </svg>
-            </button>
-            <input
-              type="text"
-              placeholder="Search or type command..."
-              class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[430px]"
-            />
+        <div x-data="searchApp()" class="relative">
+          <form @submit.prevent="goToSelectedUrl">
+            <div class="relative">
+              <button type="button" class="absolute -translate-y-1/2 left-4 top-1/2">
+                <svg class="fill-gray-500 dark:fill-gray-400" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M3.04175 9.37363C3.04175 5.87693 5.87711 3.04199 9.37508 3.04199C12.8731 3.04199 15.7084 5.87693 15.7084 9.37363C15.7084 12.8703 12.8731 15.7053 9.37508 15.7053C5.87711 15.7053 3.04175 12.8703 3.04175 9.37363ZM9.37508 1.54199C5.04902 1.54199 1.54175 5.04817 1.54175 9.37363C1.54175 13.6991 5.04902 17.2053 9.37508 17.2053C11.2674 17.2053 13.003 16.5344 14.357 15.4176L17.177 18.238C17.4699 18.5309 17.9448 18.5309 18.2377 18.238C18.5306 17.9451 18.5306 17.4703 18.2377 17.1774L15.418 14.3573C16.5365 13.0033 17.2084 11.2669 17.2084 9.37363C17.2084 5.04817 13.7011 1.54199 9.37508 1.54199Z" fill=""/>
+                </svg>
+              </button>
+              
+              <input
+                type="text"
+                x-model="searchQuery"
+                @input="filterSites"
+                @keydown.arrow-down="moveSelection(1)"
+                @keydown.arrow-up="moveSelection(-1)"
+                @keydown.enter.prevent="goToSelectedUrl"
+                @keydown.escape="searchQuery = ''"
+                placeholder="Search or type command..."
+                class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[430px]"
+                x-ref="searchInput"
+              />
 
-            <button
-              class="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-[7px] py-[4.5px] text-xs -tracking-[0.2px] text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400"
-            >
-              <span> ⌘ </span>
-              <span> K </span>
-            </button>
-          </div>
-        </form>
-      </div>
+              <button type="button" @click="$refs.searchInput.focus()" class="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-[7px] py-[4.5px] text-xs -tracking-[0.2px] text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400">
+                <span> ⌘ </span>
+                <span> K </span>
+              </button>
+            </div>
+            
+            <!-- Results dropdown -->
+            <div x-show="filteredSites.length > 0 && searchQuery.length > 0" 
+                x-transition
+                @click.away="searchQuery = ''"
+                class="absolute z-10 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
+              <ul class="max-h-60 overflow-auto py-1">
+                <template x-for="(site, index) in filteredSites" :key="index">
+                  <li>
+                    <button type="button"
+                            @click="goToUrl(site.url)"
+                            @mouseenter="selectedIndex = index"
+                            :class="{
+                              'bg-gray-100 dark:bg-gray-700': selectedIndex === index,
+                              'bg-white dark:bg-gray-800': selectedIndex !== index
+                            }"
+                            class="flex w-full items-center px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
+                      <span x-text="site.name"></span>
+                      <span class="ml-2 text-xs text-gray-500 dark:text-gray-400" x-text="site.url"></span>
+                    </button>
+                  </li>
+                </template>
+              </ul>
+            </div>
+          </form>
+        </div>
     </div>
 
     <div
@@ -471,6 +490,103 @@
 </div>
 
 <script>
+  document.addEventListener('alpine:init', () => {
+  Alpine.data('searchApp', () => ({
+    sites: [
+      // Common pages for all roles
+      { name: 'Home', url: '/', roles: ['*'] },
+      { name: 'Dashboard', url: '/index.html', roles: ['*'] },
+      { name: 'Settings', url: '/settings.html', roles: ['*'] },
+      { name: 'Shipments', url: '/shipment.html', roles: ['*'] },
+      { name: 'Shipments List', url: '/shipment_list.html', roles: ['*'] },
+      { name: 'Consolidate Shipments', url: '/consolidate_shipment.html', roles: ['*'] },
+      { name: 'Consolidate Shipments List', url: '/consolidate_list.html', roles: ['*'] },
+      
+      // Business Administrator specific pages
+      { name: 'Customer List', url: '/customer_list.html', roles: ['businessadministrator'] },
+      { name: 'Customer', url: '/customer.html', roles: ['businessadministrator'] },
+      { name: 'Drivers', url: '/driver.html', roles: ['businessadministrator'] },
+      { name: 'Drivers List', url: '/driver_list.html', roles: ['businessadministrator'] },
+      { name: 'Invoice', url: '/invoices.html', roles: ['businessadministrator'] },
+      { name: 'Users', url: '/users.html', roles: ['businessadministrator'] },
+      { name: 'Users List', url: '/user_list.html', roles: ['businessadministrator'] },
+      { name: 'Bikes', url: '/bike.html', roles: ['businessadministrator'] },
+      { name: 'Bikes List', url: '/bike_list.html', roles: ['businessadministrator'] },
+      { name: 'Trucks', url: '/truck.html', roles: ['businessadministrator'] },
+      { name: 'Trucks List', url: '/truck_list.html', roles: ['businessadministrator'] },
+      { name: 'Carriers', url: '/carriers.html', roles: ['businessadministrator'] },
+      { name: 'Carriers List', url: '/carriers_list.html', roles: ['businessadministrator'] },
+      
+      // Customer specific pages
+      { name: 'Invoice List', url: '/invoice_list.html', roles: ['customer'] },
+      
+      // Admin specific pages
+      // { name: 'Reports', url: '/reports', roles: ['admin'] },
+      // { name: 'Admin Panel', url: '/admin', roles: ['admin'] }
+    ],
+    searchQuery: '',
+    filteredSites: [],
+    selectedIndex: 0,
+    userRole: '', // Will be set based on actual user role
+    
+    init() {
+      // Get user role from your authentication system
+      this.userRole = this.getUserRole(); // Implement this method
+      this.filteredSites = this.getFilteredSites();
+    },
+    
+    getUserRole() {
+      // Implement how you get the user's role
+      // Example: return localStorage.getItem('userRole') || 'customer';
+      return 'businessadministrator'; // Default for demo
+    },
+    
+    getFilteredSites() {
+      return this.sites.filter(site => 
+        site.roles.includes('*') || 
+        site.roles.includes(this.userRole)
+      );
+    },
+    
+    filterSites() {
+      if (this.searchQuery.length === 0) {
+        this.filteredSites = this.getFilteredSites();
+        return;
+      }
+      
+      const query = this.searchQuery.toLowerCase();
+      this.filteredSites = this.getFilteredSites().filter(site => 
+        site.name.toLowerCase().includes(query) || 
+        site.url.toLowerCase().includes(query)
+      );
+      this.selectedIndex = 0;
+    },
+    
+    moveSelection(change) {
+      const newIndex = this.selectedIndex + change;
+      if (newIndex >= 0 && newIndex < this.filteredSites.length) {
+        this.selectedIndex = newIndex;
+        // Scroll into view if needed
+        this.$nextTick(() => {
+          const selectedElement = this.$el.querySelector(`li:nth-child(${this.selectedIndex + 1}) button`);
+          selectedElement?.scrollIntoView({ block: 'nearest' });
+        });
+      }
+    },
+    
+    goToSelectedUrl() {
+      if (this.filteredSites.length > 0) {
+        const selectedSite = this.filteredSites[this.selectedIndex];
+        this.goToUrl(selectedSite.url);
+      }
+    },
+    
+    goToUrl(url) {
+      window.location.href = url;
+    }
+  }));
+});
+  
 function userData() {
     return {
         user: JSON.parse(localStorage.getItem('userLoggedIn')) || null, // Get user data from localStorage

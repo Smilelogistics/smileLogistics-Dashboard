@@ -355,11 +355,11 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 mb-6">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Total</label>
-                                        <input type="text" x-model="formData.ocean_total" name="ocean_total" id="ocean_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_total" readonly>
+                                        <input type="text" x-model="formData.ocean_total" name="ocean_total" id="ocean_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_total">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Consignment Total</label>
-                                        <input type="text" x-model="formData.ocean_consignment_total" name="ocean_consignment_total" id="ocean_consignment_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_consignment_total" readonly>
+                                        <input type="text" x-model="formData.ocean_consignment_total" name="ocean_consignment_total" id="ocean_consignment_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_consignment_total">
                                     </div>
                                 </div>
                                 <div>
@@ -390,7 +390,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Payable at</label>
-                                            <input type="text" x-model="formData.original_bill_of_landing_payable_at" name="original_bill_of_landing_payable_at" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="original_bill_of_landing_payable_at">
+                                            <input type="text" x-model="formData.original_bill_of_landing_payable_at" name="original_bill_of_landing_payable_at" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white shipped_on_board_date" placeholder="" id="original_bill_of_landing_payable_at">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Freight Charges</label>
@@ -805,12 +805,12 @@
                                             <option value="Other">Other</option>
                                         </select>
                                     </div>
-                                    <div>
+                                    <!-- <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Quick lookup</label>
                                         <select x-model="formData.look_up" name="look_up" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="look_up">
                                             <option value="" selected disabled></option>
                                         </select>
-                                    </div>
+                                    </div> -->
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
                                         <input type="text" x-model="formData.pick_up_location_name" name="pick_up_location_name[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
@@ -834,17 +834,17 @@
                                             <label class="block text-gray-700 dark:text-gray-300"> Appt</label>
                                             <input type="text" x-model="formData.appt_date" name="appt_date[]" id="appt_dates" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                         </div>
-                                        <div>
+                                        <!-- <div>
                                             <label class="block text-gray-700 dark:text-gray-300">From</label>
                                             <select x-model="formData.from" name="from[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                                 <option value="" selected disabled></option>
                                             
                                             </select>
-                                        </div>
-                                        <div>
+                                        </div> -->
+                                        <!-- <div>
                                             <label class="block text-gray-700 dark:text-gray-300">To</label>
                                             <input type="text" x-model="formData.to" name="to[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                        </div>
+                                        </div> -->
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">No latter than</label>
                                             <input type="text" x-model="formData.no_latter_than_date" name="no_latter_than_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white no_latter_than_date" placeholder="">
@@ -890,13 +890,13 @@
                                                     <option value="Other">Other</option>
                                                 </select>
                                             </div>
-                                            <div>
+                                            <!-- <div>
                                                 <label class="block text-gray-700 dark:text-gray-300">Quick lookup</label>
                                                 <select x-model="formData.drop_at_look_up" name="drop_at_look_up[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                                     <option value="" selected disabled></option>
                                                 
                                                 </select>
-                                            </div>
+                                            </div> -->
                                             <div>
                                                 <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
                                                 <input type="text" x-model="formData.drop_at_location_name" name="drop_at_location_name[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
@@ -921,17 +921,17 @@
                                                 <label class="block text-gray-700 dark:text-gray-300"> Appt</label>
                                                 <input type="text" x-model="formData.drop_at_appt_date" name="drop_at_appt_date[]" id="appt_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white drop_at_appt_date" placeholder="">
                                             </div>
-                                            <div>
+                                            <!-- <div>
                                                 <label class="block text-gray-700 dark:text-gray-300">From</label>
                                                 <select x-model="formData.drop_at_from" name="drop_at_from[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                                     <option value="" selected disabled></option>
                                                 
                                                 </select>
-                                            </div>
-                                            <div>
+                                            </div> -->
+                                            <!-- <div>
                                                 <label class="block text-gray-700 dark:text-gray-300">To</label>
                                                 <input type="text" x-model="formData.drop_at_to" name="drop_at_to[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                            </div>
+                                            </div> -->
                                             <div>
                                                 <label class="block text-gray-700 dark:text-gray-300">No latter than</label>
                                                 <input type="text" x-model="formData.drop_at_no_latter_than_date" name="drop_at_no_latter_than_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white drop_at_no_latter_than_date" placeholder="">
@@ -1570,22 +1570,22 @@ function populateCarrierSelect() {
     
 
      flatpickr(".drop_at_no_latter_than_date", {
-                enableTime: true,
-                timeFormat: 'HH:mm',
+                enableTime: false,
+                //timeFormat: 'HH:mm',
             });
     
             flatpickr(".no_latter_than_date", {
-                enableTime: true,
-                timeFormat: 'HH:mm',
+                enableTime: false,
+                //timeFormat: 'HH:mm',
             });
             flatpickr(".shipped_on_board_date", {
-                enableTime: true,
-                timeFormat: 'HH:mm',
+                enableTime: false,
+                //timeFormat: 'HH:mm',
             });
             
             flatpickr("#appt_dates", {
-                enableTime: true,
-                timeFormat: 'HH:mm',
+                enableTime: false,
+                //timeFormat: 'HH:mm',
             });
 
             $("#appt_date").datepicker({
@@ -1677,15 +1677,15 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                   genset_number: '',
                   seal_number: '',
                   pick_up: '',
-                  look_up: '',
+                  //look_up: '',
                   pick_up_location_name: '',
                   pick_up_address:'',
                   pick_up_address: '',
                   pick_up_city: '',
                   zip: '',
                   appt_date: '',
-                  from: '',
-                  to: '',
+                //   from: '',
+                //   to: '',
                   no_latter_than_date: '',
                   drop_at_no_latter_than_time: '',
                   broker_name: '',

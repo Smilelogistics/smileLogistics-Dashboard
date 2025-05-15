@@ -969,7 +969,7 @@
                                     </div> -->
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Total Miles</label>
-                                        <input type="text" min="200" x-model="formData.total_miles" name="total_miles" @input="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Min:200" id="total_miles">
+                                        <input type="text" min="200" x-model="formData.total_miles" name="total_miles" @change="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Min:200" id="total_miles">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Loaded Miles</label>
@@ -991,12 +991,12 @@
                                     </div> -->
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">$ / Gallon</label>
-                                        <input x-model="formData.fuel_rate_per_gallon" name="fuel_rate_per_gallon" @input="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="fuel_rate_per_gallon" />
+                                        <input x-model="formData.fuel_rate_per_gallon" name="fuel_rate_per_gallon" @change="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="fuel_rate_per_gallon" />
                                     </div>
                                     
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">MPG</label>
-                                        <input type="text" x-model="formData.mpg" name="mpg" @input="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="mpg" readonly />
+                                        <input type="text" x-model="formData.mpg" name="mpg" @change="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="mpg" readonly />
                                     </div>
                                 <!-- Load Note Radio Buttons and Checkbox -->
                                     <div>

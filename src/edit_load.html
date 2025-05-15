@@ -1131,7 +1131,7 @@
                                     <div>
                                         <!-- <span x-text="JSON.stringify(charge)"></span> -->
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Rate</label>
-                                        <input type="text" name="rate" x-model="charge.rate" name="rate[]"
+                                        <input type="text" x-model="charge.rate" name="rate[]"
                                             @change="calculateChargeAmount(index)"
                                             class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 numberOnly">
                                     </div>
@@ -1141,7 +1141,7 @@
                                     <!-- Amount -->
                                     <div>
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Amount</label>
-                                        <input type="text" name="amount" x-model="charge.amount" name="amount[]" readonly 
+                                        <input type="text" x-model="charge.amount" name="amount[]" readonly 
                                             class="w-full rounded bg-gray-100 dark:bg-gray-600 dark:text-gray-200 border-gray-300 dark:border-gray-500 ">
                                     </div>
 

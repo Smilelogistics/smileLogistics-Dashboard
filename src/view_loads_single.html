@@ -602,16 +602,16 @@
                                       </template>
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Total</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.total || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_charges ? '$' + parseFloat(formData.total_charges).toFixed(2) : 'N/A'"></p>
                                       </div>                                  
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Discount</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_discount || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_discount_charges ? '$' + parseFloat(formData.total_discount_charges).toFixed(2) : 'N/A'"></p>
                                       </div>
                                         
                                       <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Net Total</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.net_total || 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100"  x-text="formData.net_total_charges ? '$' + parseFloat(formData.net_total_charges).toFixed(2) : 'N/A'"></p>
                                       </div>
                                   
                                     </div>
@@ -851,6 +851,10 @@
                 net_total: 0,
             shipment_uploads: []
           },
+          
+          net_total_charges: '',
+          total_discount_charges:'',
+          total_charges:'',
           id: null,
           isLoading: true,
 
@@ -984,6 +988,10 @@
                 authorized_signatory:data.authorized_signatory || '',
                 ocean_signature:data.ocean_signature || '',
                 status:data.status || '',
+                
+                net_total_charges:data.net_total_charges || '',
+                total_discount_charges:data.total_discount_charges || '',
+                total_charges:data.total_charges || '',
 
 
 

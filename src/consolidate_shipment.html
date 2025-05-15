@@ -238,15 +238,15 @@
                         <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
                             <div id="">
                                 <label class="block text-gray-700 dark:text-gray-300">Total Weight</label>
-                                <input type="text" x-model="formData.total_weight" name="total_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" />
+                                <input type="text" x-model="formData.total_weight" name="total_weight"  class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" @change="calculateTotalWeight()"/>
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Total Shipping Cost</label>
-                                <input type="text" x-model="formData.total_shipping_cost" name="total_shipping_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <input type="text" x-model="formData.total_shipping_cost" name="total_shipping_cost" readonly class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Handling Fee</label>
-                                <input type="text" x-model="formData.handling_fee" name="handling_fee" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <input type="text" x-model="formData.handling_fee" name="handling_fee" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" @change="calculateTotalWeight()" placeholder="">
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300 flex">Signature <span id="openModal" class="">
@@ -664,6 +664,7 @@ function populateCarrierSelect() {
 
                 // Calculate initial totals
                 this.calculateTotals();
+                this.calculateTotalWeight();
                 
                 // Watch for changes in charges
                 this.$watch('formData.charges', () => {
@@ -673,6 +674,12 @@ function populateCarrierSelect() {
                 }, { deep: true });
 
                 
+                },
+                calculateTotalWeight() {
+                    const fee = parseFloat(this.formData.handling_fee) || 0;
+                    const weight = parseFloat(this.formData.total_weight) || 0;
+                    this.formData.total_shipping_cost = fee * weight;
+                    //this.saveProgress();
                 },
 
               saveProgress() {

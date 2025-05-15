@@ -34,6 +34,42 @@
             modal.style.display = "none";
         }, 300); // Match the duration of the animation
         });
+
+        function getLocation() {
+            const status = document.getElementById("status");
+
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    status.textContent = `Latitude: ${latitude}, Longitude: ${longitude}`;
+                },
+                (error) => {
+                    switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        status.textContent = "Location permission denied.";
+                        console.log("Location permission denied.");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        status.textContent = "Location information is unavailable.";
+                        console.log("Location information is unavailable.");
+                        break;
+                    case error.TIMEOUT:
+                        status.textContent = "Location request timed out.";
+                        console.log("Location request timed out.");
+                        break;
+                    case error.UNKNOWN_ERROR:
+                        status.textContent = "An unknown error occurred.";
+                        console.log("An unknown error occurred.");
+                        break;
+                    }
+                }
+                );
+            } else {
+                status.textContent = "Geolocation is not supported by this browser.";
+            }
+            }
+            document.addEventListener("DOMContentLoaded", getLocation);
     </script>
   </head>
   <body

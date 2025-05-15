@@ -1587,12 +1587,17 @@ function populateCarrierSelect() {
                 enableTime: false,
                 //timeFormat: 'HH:mm',
             });
-
-            $("#appt_date").datepicker({
-                format: "yyyy-mm-dd",
-                autoclose: true,
-                todayHighlight: true,
+            
+               flatpickr("#appt_date", {
+                enableTime: false,
+                //timeFormat: 'HH:mm',
             });
+
+            // $("#appt_date").datepicker({
+            //     format: "yyyy-mm-dd",
+            //     autoclose: true,
+            //     todayHighlight: true,
+            // });
             // $("#no_latter_than_date").datepicker({
             //     format: "yyyy-mm-dd",
             //     autoclose: true,

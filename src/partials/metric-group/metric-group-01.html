@@ -37,7 +37,7 @@
           </svg>
         </template>
         <!-- Default icon if none match -->
-        <template x-if="!['money', 'users', 'puzzle', 'building', 'fa-user'].includes(item.icon)">
+        <template x-if="!['money', 'users', 'puzzle', 'building', 'fa-user', 'shipment'].includes(item.icon)">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
           </svg>
@@ -98,7 +98,7 @@
                                     title: 'Total Income',
                                     value: data.data.totalincome || 0,
                                     icon: 'money',
-                                    bgColor: 'bg-orange-600'
+                                    bgColor: 'bg-yellow-800'
                                 },
                                 {
                                     title: 'Users',
@@ -110,7 +110,7 @@
                                     title: 'Plans',
                                     value: data.data.plans || 0,
                                     icon: 'puzzle',
-                                    bgColor: 'bg-orange-200'
+                                    bgColor: 'bg-orange-400'
                                 },
                                 {
                                     title: 'Branches',
@@ -134,19 +134,19 @@
                                     title: 'Transactions',
                                     value: data.data.cardTransaction || 0,
                                     icon: 'Transactions',
-                                    bgColor: 'bg-orange-200'
+                                    bgColor: 'bg-orange-400'
                                 },
                                 {
                                     title: 'Total Shipments',
                                     value: data.data.myShipments || 0,
                                     icon: 'puzzle',
-                                    bgColor: 'bg-orange-200'
+                                    bgColor: 'bg-blue-500'
                                 },
                                 {
                                     title: 'Total Consolidated Shipments',
                                     value: data.data.myConsolidate || 0,
                                     icon: 'building',
-                                    bgColor: 'bg-blue-500'
+                                    bgColor: 'bg-orange-400'
                                 }
                             );
                         }
@@ -165,13 +165,13 @@
                                     title: 'Total Shipments',
                                     value: data.data.myShipments || 0,
                                     icon: 'shipment',
-                                    bgColor: 'bg-orange-200'
+                                    bgColor: 'bg-blue-500'
                                 },
                                 {
                                     title: 'Total Consolidated Shipments',
                                     value: data.data.myConsolidate || 0,
                                     icon: 'shipment',
-                                    bgColor: 'bg-blue-500'
+                                    bgColor: 'bg-orange-400'
                                 },
                                 
                                 {
@@ -198,13 +198,13 @@
                                     title: 'Total Shipments',
                                     value: data.data.myShipments || 0,
                                     icon: 'shipment',
-                                    bgColor: 'bg-orange-200'
+                                    bgColor: 'bg-blue-500'
                                 },
                                 {
                                     title: 'Total Consolidated Shipments',
                                     value: data.data.myConsolidate || 0,
                                     icon: 'shipment',
-                                    bgColor: 'bg-blue-500'
+                                    bgColor: 'bg-orange-400'
                                 },
                                 
                                 {

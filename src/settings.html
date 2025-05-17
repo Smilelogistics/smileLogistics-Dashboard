@@ -62,7 +62,6 @@
                     console.log('Updated userRole:', userRole);
                 });
             ">
-            <>
               <template x-if="userRole === 'businessadministrator' ">
                 <div x-data="{ activeTab: 'general' }" class="w-full mx-auto bg-white p-6 shadow-lg rounded-md dark:bg-white/[0.03]">
                     <!-- Tabs -->
@@ -71,22 +70,22 @@
                             <li class="me-2">
                                 <a href="#" @click.prevent="activeTab = 'general'"
                                     :class="activeTab === 'general' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
-                                    class="inline-block p-4 border-b-2 rounded-t-lg dark:text-white" id="profile-tab">General Setiings</a>
+                                    class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300" id="profile-tab">General Setiings</a>
                             </li>
                             <li class="me-2">
                                 <a href="#" @click.prevent="activeTab = 'payment'"
                                     :class="activeTab === 'payment' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
-                                    class="inline-block p-4 border-b-2 rounded-t-lg dark:text-white">Payment Gateway Setup</a>
+                                    class="inline-block p-4 text-gray-300 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300">Payment Gateway Setup</a>
                             </li>
                             <li class="me-2">
                                 <a href="#" @click.prevent="activeTab = 'sms'"
                                     :class="activeTab === 'sms' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
-                                    class="inline-block p-4 border-b-2 rounded-t-lg dark:text-white">SMS Settings</a>
+                                    class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300">SMS Settings</a>
                             </li>
                             <li class="me-2">
                                 <a href="#" @click.prevent="activeTab = 'security'"
                                     :class="activeTab === 'security' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
-                                    class="inline-block p-4 border-b-2 rounded-t-lg dark:text-white">Security</a>
+                                    class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300">Security</a>
                             </li>
                         </ul>
                     </div>
@@ -95,39 +94,39 @@
                     <div class="mt-4">
                         <!-- General Settings Form -->
                         <div x-show="activeTab === 'general'">
-                            <h2 class="text-lg font-semibold mb-3 dark:text-white">General Settings</h2>
+                            <h2 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">General Settings</h2>
                             <form id="generalForm" @submit.prevent="submitForm('general')" x-ref="generalForm" enctype="multipart/form-data">
                               <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                 <div x-data="{ user: { fame: 'John', lname: 'Doe', mname: 'Smith' } }">
-                                  <label class="block mb-2 dark:text-white">Name:</label>
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Name:</label>
                                   <input type="text" :value="user.fame + ' ' + user.lname + ' ' + user.mname" name="name" 
-                                         class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                                         class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" 
                                          placeholder="Enter Name" readonly>
                                 </div>
                                   <div>
-                                      <label class="block mb-2 dark:text-white">Email:</label>
-                                      <input type="email" x-model="user.email" name="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" readonly>
+                                      <label class="block mb-2 text-gray-700 dark:text-gray-300">Email:</label>
+                                      <input type="email" x-model="user.email" name="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="" readonly>
                                   </div>
                                   
                                   <div>
-                                    <label class="block mb-2 dark:text-white">Phone:</label>
-                                    <input type="text" x-model="formData.phone" name="phone" class="numberOnly w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter Phone number">
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Phone:</label>
+                                    <input type="text" x-model="formData.phone" name="phone" class="numberOnly w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="Enter Phone number">
                                 </div>
                               </div>
 
                               <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                 <div>
-                                    <label class="block mb-2 dark:text-white">Address:</label>
-                                    <input type="text" x-model="formData.address" name="address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="No 123, Street">
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Address:</label>
+                                    <input type="text" x-model="formData.address" name="address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="No 123, Street">
                                 </div>
                                 <div>
-                                    <label class="block mb-2 dark:text-white">Parcel Prefix:</label>
-                                    <input type="text" x-model="formData.parcel_prefix" name="parcel_prefix" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="SML">
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Parcel Prefix:</label>
+                                    <input type="text" x-model="formData.parcel_prefix" name="parcel_prefix" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="SML">
                                 </div>
                                 
                                 <div>
-                                  <label class="block mb-2 dark:text-white">Invoice Prefix:</label>
-                                  <input type="text" x-model="formData.invoice_prefix" name="invoice_prefix" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="SMLINV">
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Invoice Prefix:</label>
+                                  <input type="text" x-model="formData.invoice_prefix" name="invoice_prefix" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="SMLINV">
                               </div>
                             </div>
                             <style>
@@ -141,8 +140,8 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                               <div id="chosen-select">
-                                <label class="block mb-2 dark:text-white">Currency:</label>
-                                <select x-model="formData.currency" name="currency" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select">
+                                <label class="block mb-2 text-gray-700 dark:text-gray-300">Currency:</label>
+                                <select x-model="formData.currency" name="currency" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 chosen-select">
                                   <option value="" selected disabled>Select a currency</option>
                                   <option value="AED">AED - United Arab Emirates Dirham</option>
                                   <option value="AFN">AFN - Afghan Afghani</option>
@@ -320,13 +319,13 @@
                               </div>
                               
                               <div>
-                                  <label class="block mb-2 dark:text-white">Copyright:</label>
-                                  <input x-model="formData.copyright" name="copyright" type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Alright Reserved SML">
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Copyright:</label>
+                                  <input x-model="formData.copyright" name="copyright" type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="Alright Reserved SML">
                               </div>
 
                               <div>
-                                <label class="block mb-2 dark:text-white">Logo</label>
-                                <input x-model="formData.logo1" name="logo1" type="file" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <label class="block mb-2 text-gray-700 dark:text-gray-300">Logo</label>
+                                <input x-model="formData.logo1" name="logo1" type="file" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                               </div>
                             
                               
@@ -334,22 +333,22 @@
                             
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                               <div>
-                                <label class="block mb-2 dark:text-white">MPG</label>
-                                <input x-model="formData.mpg" name="mpg" type="number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <label class="block mb-2 text-gray-700 dark:text-gray-300">MPG</label>
+                                <input x-model="formData.mpg" name="mpg" type="number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                               </div>
                               <div>
-                                <label class="block mb-2 dark:text-white">Bike Delivery Base Rate</label>
-                                <input x-model="formData.base_rate" name="base_rate" type="number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <label class="block mb-2 text-gray-700 dark:text-gray-300">Bike Delivery Base Rate</label>
+                                <input x-model="formData.base_rate" name="base_rate" type="number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                               </div>
                               <div>
-                                <label class="block mb-2 dark:text-white">Bike Delivery Base Fee</label>
-                                <input x-model="formData.base_fee" name="base_fee" type="number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <label class="block mb-2 text-gray-700 dark:text-gray-300">Bike Delivery Base Fee</label>
+                                <input x-model="formData.base_fee" name="base_fee" type="number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                               </div>
 
                               
                               <div>
-                                <label class="block mb-2 dark:text-white">Handling Fee</label>
-                                <input x-model="formData.handling_fee" name="handling_fee" type="number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <label class="block text-gray-700 text-gray-700 dark:text-gray-300">Handling Fee</label>
+                                <input x-model="formData.handling_fee" name="handling_fee" type="number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                               </div>
                             
                             </div>
@@ -368,63 +367,63 @@
             
                        <!-- Payment Gateway Form -->
                         <div x-show="activeTab === 'payment'">
-                          <h2 class="text-lg font-semibold mb-3 dark:text-white">Payment Gateway Setup</h2>
+                          <h2 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Payment Gateway Setup</h2>
                           <form  @submit.prevent="submitForm('payment')" x-ref="paymentForm">
                               <!-- Paystack Settings -->
                               <div>
-                                  <h6 class="text-md font-medium mb-3 dark:text-white">Paystack Settings</h6>
+                                  <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">Paystack Settings</h6>
                                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                       <div>
-                                          <label class="block mb-2 dark:text-white">Public Key:</label>
-                                          <input type="text" x-model="formData.paystack_publicKey" name="paystack_publicKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXX">
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Public Key:</label>
+                                          <input type="text" x-model="formData.paystack_publicKey" name="paystack_publicKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXX">
                                       </div>
                                       <div>
-                                          <label class="block mb-2 dark:text-white">Secret Key:</label>
-                                          <input type="text" x-model="formData.paystack_secretKey" name="paystack_secretKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Secret Key:</label>
+                                          <input type="text" x-model="formData.paystack_secretKey" name="paystack_secretKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXXXX">
                                       </div>
                                   </div> <!-- ✅ Correctly closed grid div -->
                               </div>
 
                               <!-- Flutterwave Settings -->
                               <div>
-                                  <h6 class="text-md font-medium mb-3 dark:text-white">Flutterwave Settings</h6>
+                                  <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">Flutterwave Settings</h6>
                                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                       <div>
-                                          <label class="block mb-2 dark:text-white">Public Key:</label>
-                                          <input type="text" x-model="formData.FLW_pubKey" name="FLW_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXX">
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Public Key:</label>
+                                          <input type="text" x-model="formData.FLW_pubKey" name="FLW_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXX">
                                       </div>
                                       <div>
-                                          <label class="block mb-2 dark:text-white">Secret Key:</label>
-                                          <input type="text" x-model="formData.FLW_secKey" name="FLW_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Secret Key:</label>
+                                          <input type="text" x-model="formData.FLW_secKey" name="FLW_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXXXX">
                                       </div>
                                   </div>
                               </div>
 
                                <!-- Razor Settings -->
                               <div>
-                                <h6 class="text-md font-medium mb-3 dark:text-white">RazorPay Settings</h6>
+                                <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">RazorPay Settings</h6>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Public Key:</label>
-                                        <input type="text" x-model="formData.Razor_pubKey" name="Razor_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXX">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Public Key:</label>
+                                        <input type="text" x-model="formData.Razor_pubKey" name="Razor_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXX">
                                     </div>
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Secret Key:</label>
-                                        <input type="text" x-model="formData.Razor_secKey" name="Razor_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Secret Key:</label>
+                                        <input type="text" x-model="formData.Razor_secKey" name="Razor_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXXXX">
                                     </div>
                                   </div>
                               </div>
                                <!-- Stripe Settings -->
                                <div>
-                                <h6 class="text-md font-medium mb-3 dark:text-white">Stripe Settings</h6>
+                                <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">Stripe Settings</h6>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Public Key:</label>
-                                        <input type="text" x-model="formData.stripe_pubKey" name="stripe_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXX">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Public Key:</label>
+                                        <input type="text" x-model="formData.stripe_pubKey" name="stripe_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXX">
                                     </div>
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Secret Key:</label>
-                                        <input type="text" x-model="formData.stripe_secKey" name="stripe_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Secret Key:</label>
+                                        <input type="text" x-model="formData.stripe_secKey" name="stripe_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXXXX">
                                     </div>
                                   </div>
                                 </div>
@@ -445,48 +444,48 @@
             
                         <!-- Mail Settings Form -->
                         <div x-show="activeTab === 'sms'">
-                            <h2 class="text-lg font-semibold mb-3 dark:text-white">Mail Settings</h2>
+                            <h2 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Mail Settings</h2>
                             <form @submit.prevent="submitForm('sms')" x-ref="smsForm">
                               <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                 <div>
-                                    <label class="block mb-2 dark:text-white">Mail Driver:</label>
-                                    <input type="text" x-model="formData.mail_driver" name="mail_driver" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="smtp">
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Mail Driver:</label>
+                                    <input type="text" x-model="formData.mail_driver" name="mail_driver" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="smtp">
                                 </div>
                                 <div>
-                                    <label class="block mb-2 dark:text-white">Mail Host:</label>
-                                    <input type="text" x-model="formData.mail_host" name="mail_host" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="smtp.mailtrap.io">
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Mail Host:</label>
+                                    <input type="text" x-model="formData.mail_host" name="mail_host" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="smtp.mailtrap.io">
                                 </div>
                                 
                                 <div>
-                                  <label class="block mb-2 dark:text-white">Mail Port:</label>
-                                  <input type="text" x-model="formData.mail_port" name="mail_port" class="numberOnly w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="465">
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Mail Port:</label>
+                                  <input type="text" x-model="formData.mail_port" name="mail_port" class="numberOnly w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="465">
                               </div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                               <div>
-                                  <label class="block mb-2 dark:text-white">Mail Encryption:</label>
-                                  <input type="text" x-model="formData.mail_encryption" name="mail_encryption" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="SSL TLS">
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Mail Encryption:</label>
+                                  <input type="text" x-model="formData.mail_encryption" name="mail_encryption" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="SSL TLS">
                               </div>
                               <div>
-                                  <label class="block mb-2 dark:text-white">Mail Username:</label>
-                                  <input type="text" x-model="formData.mail_username" name="mail_username" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="example@mail.com">
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Mail Username:</label>
+                                  <input type="text" x-model="formData.mail_username" name="mail_username" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="example@mail.com">
                               </div>
                               
                               <div>
-                                <label class="block mb-2 dark:text-white">Mail Password:</label>
-                                <input type="password" x-model="formData.mail_password" name="mail_password" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
+                                <label class="block mb-2 text-gray-700 dark:text-gray-300">Mail Password:</label>
+                                <input type="password" x-model="formData.mail_password" name="mail_password" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXXXX">
                               </div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                               <div>
-                                  <label class="block mb-2 dark:text-white">Mail From:</label>
-                                  <input type="text" x-model="formData.mail_from" name="mail_from" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="example.com">
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Mail From:</label>
+                                  <input type="text" x-model="formData.mail_from" name="mail_from" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="example.com">
                               </div>
                               <div>
-                                  <label class="block mb-2 dark:text-white">Mail Fron Name:</label>
-                                  <input type="text" x-model="formData.mail_from_name" name="mail_from_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="SMILE LOGISTICS">
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Mail Fron Name:</label>
+                                  <input type="text" x-model="formData.mail_from_name" name="mail_from_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="SMILE LOGISTICS">
                               </div>
                               
                             </div>
@@ -508,7 +507,7 @@
                                                  @change="formData.enable_email_otp = $event.target.checked ? 1 : 0"
                                                  :checked="formData.enable_email_otp == 1"
                                                  class="sr-only peer">
-                                          <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                                          <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-4 after:h-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
                                       </label>
                                   </div>
                                   <div>
@@ -520,7 +519,7 @@
                                                  @change="formData.enable_2fa = $event.target.checked ? 1 : 0"
                                                  :checked="formData.enable_2fa == 1"
                                                  class="sr-only peer">
-                                          <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                                          <div class="relative w-11 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-4 after:h-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
                                       </label>
                                   </div>
                               </div>
@@ -541,17 +540,17 @@
                             <li class="me-2">
                                 <a href="#" @click.prevent="activeTab = 'address'"
                                     :class="activeTab === 'address' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
-                                    class="inline-block p-4 border-b-2 rounded-t-lg dark:text-white" id="profile-tab">Address Setiings</a>
+                                    class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300" id="profile-tab">Address Setiings</a>
                             </li>
                             <li class="me-2">
                                 <a href="#" @click.prevent="activeTab = 'basic'"
                                     :class="activeTab === 'basic' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
-                                    class="inline-block p-4 border-b-2 rounded-t-lg dark:text-white">Basic Setup</a>
+                                    class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300">Basic Setup</a>
                             </li>
                             <li class="me-2">
                                 <a href="#" @click.prevent="activeTab = 'other'"
                                     :class="activeTab === 'other' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
-                                    class="inline-block p-4 border-b-2 rounded-t-lg dark:text-white">Other</a>
+                                    class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300">Other</a>
                             </li>
                         </ul>
                     </div>
@@ -560,55 +559,55 @@
                     <div class="mt-4">
                         <!-- General Settings Form -->
                         <div x-show="activeTab === 'address'">
-                            <h2 class="text-lg font-semibold mb-3 dark:text-white">Address Settings</h2>
+                            <h2 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Address Settings</h2>
                             <form id="basicForm" @submit.prevent="submitCustomerForm('address')" x-ref="addressForm" enctype="multipart/form-data">
                               <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                 <div x-data="{ user: { fame: 'John', lname: 'Doe', mname: 'Smith' } }">
-                                  <label class="block mb-2 dark:text-white">Name:</label>
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Name:</label>
                                   <input type="text" :value="user.fame + ' ' + user.lname + ' ' + user.mname" name="name" 
-                                         class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                                         class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" 
                                          placeholder="Enter Name" readonly>
                                 </div>
                                   <div>
-                                      <label class="block mb-2 dark:text-white">Email:</label>
-                                      <input type="email" x-model="user.email" name="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" readonly>
+                                      <label class="block mb-2 text-gray-700 dark:text-gray-300">Email:</label>
+                                      <input type="email" x-model="user.email" name="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="" readonly>
                                   </div>
                                   
                                   <div>
-                                    <label class="block mb-2 dark:text-white">Phone:</label>
-                                    <input type="text" x-model="formData.customer_phone" name="customer_phone" class="numberOnly w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter Phone number">
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Phone:</label>
+                                    <input type="text" x-model="formData.customer_phone" name="customer_phone" class="numberOnly w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="Enter Phone number">
                                 </div>
                               </div>
 
                               <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                 <div>
-                                    <label class="block mb-2 dark:text-white">Primary Address:</label>
-                                    <input type="text" x-model="formData.customer_primary_address" name="customer_primary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="No 123, Street">
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Primary Address:</label>
+                                    <input type="text" x-model="formData.customer_primary_address" name="customer_primary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="No 123, Street">
                                 </div>
                                 <div>
-                                    <label class="block mb-2 dark:text-white">Secondary Address:</label>
-                                    <input type="text" x-model="formData.customer_secondary_address" name="customer_secondary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="SML">
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Secondary Address:</label>
+                                    <input type="text" x-model="formData.customer_secondary_address" name="customer_secondary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="SML">
                                 </div>
                                 
                                 <div>
-                                  <label class="block mb-2 dark:text-white">Country:</label>
-                                  <input type="text" x-model="formData.customer_country" name="customer_country" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Country:</label>
+                                  <input type="text" x-model="formData.customer_country" name="customer_country" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                               </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                               <div>
-                                <label class="block mb-2 dark:text-white">State:</label>
-                                <input type="text" x-model="formData.customer_state" name="customer_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <label class="block mb-2 text-gray-700 dark:text-gray-300">State:</label>
+                                <input type="text" x-model="formData.customer_state" name="customer_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                               </div>
 
                               <div>
-                                  <label class="block mb-2 dark:text-white">Zip:</label>
-                                  <input type="text" x-model="formData.customer_zip" name="customer_zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="No 123, Street">
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Zip:</label>
+                                  <input type="text" x-model="formData.customer_zip" name="customer_zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="No 123, Street">
                               </div>
 
                               <div>
-                                <label class="block mb-2 dark:text-white">Office:</label>
-                                <input type="text" x-model="formData.customer_office" name="customer_office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="No 123, Street">
+                                <label class="block mb-2 text-gray-700 dark:text-gray-300">Office:</label>
+                                <input type="text" x-model="formData.customer_office" name="customer_office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="No 123, Street">
                             </div>
                               
                           </div>
@@ -624,8 +623,8 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                               <div id="chosen-select">
-                                <label class="block mb-2 dark:text-white">Currency:</label>
-                                <select x-model="formData.currency" name="currency" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select">
+                                <label class="block mb-2 text-gray-700 dark:text-gray-300">Currency:</label>
+                                <select x-model="formData.currency" name="currency" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 chosen-select">
                                   <option value="" selected disabled>Select a currency</option>
                                   <option value="AED">AED - United Arab Emirates Dirham</option>
                                   <option value="AFN">AFN - Afghan Afghani</option>
@@ -639,13 +638,13 @@
                               </div>
                               
                               <div>
-                                  <label class="block mb-2 dark:text-white">Copyright:</label>
-                                  <input x-model="formData.copyright" name="copyright" type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Alright Reserved SML">
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Copyright:</label>
+                                  <input x-model="formData.copyright" name="copyright" type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="Alright Reserved SML">
                               </div>
 
                               <div>
-                                <label class="block mb-2 dark:text-white">Logo</label>
-                                <input x-model="formData.logo1" name="logo1" type="file" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <label class="block mb-2 text-gray-700 dark:text-gray-300">Logo</label>
+                                <input x-model="formData.logo1" name="logo1" type="file" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                               </div>
                             
                               
@@ -665,65 +664,65 @@
             
                        <!-- Basic info Form -->
                         <div x-show="activeTab === 'basic'">
-                          <h2 class="text-lg font-semibold mb-3 dark:text-white">Basic Information</h2>
+                          <h2 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Basic Information</h2>
                           <form  @submit.prevent="submitCustomerForm('basic')" x-ref="basicForm">
                               <!-- Paystack Settings -->
                               <div>
-                                  <h6 class="text-md font-medium mb-3 dark:text-white">Basic Settings</h6>
+                                  <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">Basic Settings</h6>
                                   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                       <div>
-                                          <label class="block mb-2 dark:text-white">Invoice Footer Note:</label>
-                                          <input type="text" x-model="formData.invoice_footer_note" name="invoice_footer_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Invoice Footer Note:</label>
+                                          <input type="text" x-model="formData.invoice_footer_note" name="invoice_footer_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                       </div>
                                       <div>
-                                          <label class="block mb-2 dark:text-white">Sales Rep:</label>
-                                          <input type="text" x-model="formData.customer_sales_rep" name="customer_sales_rep" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Sales Rep:</label>
+                                          <input type="text" x-model="formData.customer_sales_rep" name="customer_sales_rep" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                       </div>
                                       <div>
-                                        <label class="block mb-2 dark:text-white">Fax No:</label>
-                                        <input type="text" x-model="formData.fax_no" name="fax_no" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Fax No:</label>
+                                        <input type="text" x-model="formData.fax_no" name="fax_no" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                     </div>
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Toll Free No:</label>
-                                        <input type="text" x-model="formData.toll_free" name="toll_free" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Toll Free No:</label>
+                                        <input type="text" x-model="formData.toll_free" name="toll_free" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                     </div>
                                   </div> <!-- ✅ Correctly closed grid div -->
                               </div>
 
                               <!-- Flutterwave Settings -->
                               <div>
-                                  <!-- <h6 class="text-md font-medium mb-3 dark:text-white">Flutterwave Settings</h6> -->
+                                  <!-- <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">Flutterwave Settings</h6> -->
                                   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                       <div>
-                                          <label class="block mb-2 dark:text-white">Note:</label>
-                                          <input type="text" x-model="formData.note" name="note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Note:</label>
+                                          <input type="text" x-model="formData.note" name="note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                       </div>
                                       <div>
-                                          <label class="block mb-2 dark:text-white">Internal Note:</label>
-                                          <input type="text" x-model="formData.internal_note" name="internal_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Internal Note:</label>
+                                          <input type="text" x-model="formData.internal_note" name="internal_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                       </div>
                                       <div>
-                                        <label class="block mb-2 dark:text-white">tag:</label>
-                                        <input type="text" x-model="formData.tag" name="tag" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">tag:</label>
+                                        <input type="text" x-model="formData.tag" name="tag" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                     </div>
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Flash Note for Drivers:</label>
-                                        <input type="text" x-model="formData.flash_note_for_drivers" name="flash_note_for_drivers" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Flash Note for Drivers:</label>
+                                        <input type="text" x-model="formData.flash_note_for_drivers" name="flash_note_for_drivers" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                     </div>
                                   </div>
                               </div>
 
                                <!-- Razor Settings -->
                               <div>
-                                <!-- <h6 class="text-md font-medium mb-3 dark:text-white">RazorPay Settings</h6> -->
+                                <!-- <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">RazorPay Settings</h6> -->
                                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Flash Note for Accounting:</label>
-                                        <input type="text" x-model="formData.flash_note_for_accounting" name="flash_note_for_accounting" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Flash Note for Accounting:</label>
+                                        <input type="text" x-model="formData.flash_note_for_accounting" name="flash_note_for_accounting" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                     </div>
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Other Notes:</label>
-                                        <input type="text" x-model="formData.other_notes" name="other_notes" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Other Notes:</label>
+                                        <input type="text" x-model="formData.other_notes" name="other_notes" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                     </div>
                                     <script>
                                       $(document).ready(function () {
@@ -735,26 +734,26 @@
                                       }) 
                                   </script>
                                     <div>
-                                      <label class="block mb-2 dark:text-white">Start Date:</label>
-                                      <input type="text" x-model="formData.start_date" name="start_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                      <label class="block mb-2 text-gray-700 dark:text-gray-300">Start Date:</label>
+                                      <input type="text" x-model="formData.start_date" name="start_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                   </div>
                                   <div>
-                                      <label class="block mb-2 dark:text-white">Credit Limit:</label>
-                                      <input type="text" x-model="formData.credit_limit" name="credit_limit" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                                      <label class="block mb-2 text-gray-700 dark:text-gray-300">Credit Limit:</label>
+                                      <input type="text" x-model="formData.credit_limit" name="credit_limit" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 numberOnly" placeholder="">
                                   </div>
                                   </div>
                               </div>
                                <!-- Stripe Settings -->
                                <!-- <div>
-                                <h6 class="text-md font-medium mb-3 dark:text-white">Stripe Settings</h6>
+                                <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">Stripe Settings</h6>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Public Key:</label>
-                                        <input type="text" x-model="formData.stripe_pubKey" name="stripe_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXX">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Public Key:</label>
+                                        <input type="text" x-model="formData.stripe_pubKey" name="stripe_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXX">
                                     </div>
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Secret Key:</label>
-                                        <input type="text" x-model="formData.stripe_secKey" name="stripe_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Secret Key:</label>
+                                        <input type="text" x-model="formData.stripe_secKey" name="stripe_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXXXX">
                                     </div>
                                   </div>
                                 </div> -->
@@ -789,8 +788,8 @@
                                   </div>
                                   
                                   <div x-show="formData.isSubAccount === 1" x-transition>
-                                    <label class="block mb-2 dark:text-white">Sub Account of?:</label>
-                                    <input type="text" x-model="formData.subAccount_of" name="subAccount_of" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Sub Account of?:</label>
+                                    <input type="text" x-model="formData.subAccount_of" name="subAccount_of" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                 </div>
                               </div>
                               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -804,8 +803,8 @@
                                 </div>
                                 
                                   <div x-show="formData.isFactoredInvoice === 1" x-transition>
-                                    <label class="block mb-2 dark:text-white">Factoring Company:</label>
-                                    <input type="text" x-model="formData.factoringCompany" name="factoringCompany" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Factoring Company:</label>
+                                    <input type="text" x-model="formData.factoringCompany" name="factoringCompany" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                 </div>
                                 </div>
                                   <div>
@@ -850,17 +849,17 @@
                             <li class="me-2">
                                 <a href="#" @click.prevent="activeTab = 'address'"
                                     :class="activeTab === 'address' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
-                                    class="inline-block p-4 border-b-2 rounded-t-lg dark:text-white" id="profile-tab">Address Setiings</a>
+                                    class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300" id="profile-tab">Address Setiings</a>
                             </li>
                             <li class="me-2">
                                 <a href="#" @click.prevent="activeTab = 'basic'"
                                     :class="activeTab === 'basic' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
-                                    class="inline-block p-4 border-b-2 rounded-t-lg dark:text-white">Basic Setup</a>
+                                    class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300">Basic Setup</a>
                             </li>
                             <li class="me-2">
                                 <a href="#" @click.prevent="activeTab = 'other'"
                                     :class="activeTab === 'other' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
-                                    class="inline-block p-4 border-b-2 rounded-t-lg dark:text-white">Other</a>
+                                    class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300">Other</a>
                             </li>
                         </ul>
                     </div>
@@ -869,27 +868,27 @@
                     <div class="mt-4">
                         <!-- General Settings Form -->
                         <div x-show="activeTab === 'address'">
-                            <h2 class="text-lg font-semibold mb-3 dark:text-white">Address Settings</h2>
+                            <h2 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Address Settings</h2>
                             <form id="DbasicForm" @submit.prevent="submitDriverForm('Daddress')" x-ref="driverAddressForm" enctype="multipart/form-data">
                               <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                 <div x-data="{ user: { fame: 'John', lname: 'Doe', mname: 'Smith' } }">
-                                  <label class="block mb-2 dark:text-white">Name:</label>
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Name:</label>
                                   <input type="text" :value="user.fame + ' ' + user.lname + ' ' + user.mname" name="name" 
-                                         class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                                         class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" 
                                          placeholder="Enter Name" readonly>
                                 </div>
                                   <div>
-                                      <label class="block mb-2 dark:text-white">Email:</label>
-                                      <input type="email" x-model="user.email" name="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" readonly>
+                                      <label class="block mb-2 text-gray-700 dark:text-gray-300">Email:</label>
+                                      <input type="email" x-model="user.email" name="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="" readonly>
                                   </div>
                                   
                                   <div>
-                                    <label class="block mb-2 dark:text-white">Phone:</label>
-                                    <input type="text" x-model="formData.driver_phone" name="driver_phone" class="numberOnly w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter Phone number">
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Phone:</label>
+                                    <input type="text" x-model="formData.driver_phone" name="driver_phone" class="numberOnly w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="Enter Phone number">
                                 </div>
                                 <div>
-                                  <label class="block mb-2 dark:text-white">Phone Carrier:</label>
-                                  <select type="text" x-model="formData.driver_phone_carrier" name="driver_phone_carrier" class=" w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> 
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Phone Carrier:</label>
+                                  <select type="text" x-model="formData.driver_phone_carrier" name="driver_phone_carrier" class=" w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder=""> 
                                     <option value="Vodafone">Vodafone</option>
                                     <option value="Airtel">Airtel</option>
                                     <option value="MTN">MTN</option>
@@ -902,37 +901,37 @@
 
                               <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                 <div>
-                                    <label class="block mb-2 dark:text-white">Primary Address:</label>
-                                    <input type="text" x-model="formData.driver_primary_address" name="driver_primary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="No 123, Street">
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Primary Address:</label>
+                                    <input type="text" x-model="formData.driver_primary_address" name="driver_primary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="No 123, Street">
                                 </div>
                                 <div>
-                                    <label class="block mb-2 dark:text-white">Secondary Address:</label>
-                                    <input type="text" x-model="formData.driver_secondary_address" name="driver_secondary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="SML">
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Secondary Address:</label>
+                                    <input type="text" x-model="formData.driver_secondary_address" name="driver_secondary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="SML">
                                 </div>
                                 
                                 <div>
-                                  <label class="block mb-2 dark:text-white">Country:</label>
-                                  <input type="text" x-model="formData.driver_country" name="driver_country" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Country:</label>
+                                  <input type="text" x-model="formData.driver_country" name="driver_country" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                               </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                               <div>
-                                <label class="block mb-2 dark:text-white">State:</label>
-                                <input type="text" x-model="formData.driver_state" name="driver_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <label class="block mb-2 text-gray-700 dark:text-gray-300">State:</label>
+                                <input type="text" x-model="formData.driver_state" name="driver_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                               </div>
                               
                               <div>
-                                  <label class="block mb-2 dark:text-white">City:</label>
-                                  <input type="text" x-model="formData.driver_city" name="driver_city" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">City:</label>
+                                  <input type="text" x-model="formData.driver_city" name="driver_city" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                               </div>
                               <div>
-                                <label class="block mb-2 dark:text-white">Zip:</label>
-                                <input type="text" x-model="formData.driver_zip" name="driver_zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <label class="block mb-2 text-gray-700 dark:text-gray-300">Zip:</label>
+                                <input type="text" x-model="formData.driver_zip" name="driver_zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                             </div>
 
                               <div>
-                                <label class="block mb-2 dark:text-white">Office:</label>
-                                <select type="text" x-model="formData.office" name="office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> 
+                                <label class="block mb-2 text-gray-700 dark:text-gray-300">Office:</label>
+                                <select type="text" x-model="formData.office" name="office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder=""> 
                                   <option value="" selected disabled> Choose</option>
                                   <option value="IN">IN</option>
                                   </select>
@@ -954,15 +953,15 @@
             
                        <!-- Basic info Form -->
                         <div x-show="activeTab === 'basic'">
-                          <h2 class="text-lg font-semibold mb-3 dark:text-white">Basic Information</h2>
+                          <h2 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Basic Information</h2>
                           <form  @submit.prevent="submitDriverForm('Dbasic')" x-ref="driverBasicForm">
                               <!-- Paystack Settings -->
                               <div>
-                                  <h6 class="text-md font-medium mb-3 dark:text-white">Basic Settings</h6>
+                                  <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">Basic Settings</h6>
                                   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                       <div>
-                                          <label class="block mb-2 dark:text-white">Driver Type:</label>
-                                          <select type="text" x-model="formData.driver_type" name="driver_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Driver Type:</label>
+                                          <select type="text" x-model="formData.driver_type" name="driver_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                             <option value="" selected disabled> Choose</option>
                                             <option value="1">Owner Operator (single Truck)</option>
                                             <option value="2">Company Driver</option>
@@ -973,8 +972,8 @@
                                           </select>
                                       </div>
                                       <div>
-                                          <label class="block mb-2 dark:text-white">Emergency contact phone:</label>
-                                          <input type="text" x-model="formData.emergency_contact_info" name="emergency_contact_info" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Emergency contact phone:</label>
+                                          <input type="text" x-model="formData.emergency_contact_info" name="emergency_contact_info" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                       </div>
                                       <script>
                                         $(document).ready(function() {
@@ -985,51 +984,51 @@
                                         })
                                       </script>
                                       <div>
-                                        <label class="block mb-2 dark:text-white">Hired on:</label>
-                                        <input type="text" x-model="formData.hired_on" name="hired_on" id="hired_on" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Hired on:</label>
+                                        <input type="text" x-model="formData.hired_on" name="hired_on" id="hired_on" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                     </div>
 
                                     <div>
-                                        <label class="block mb-2 dark:text-white">terminated_on:</label>
-                                        <input type="text" x-model="formData.terminated_on" name="terminated_on" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">terminated_on:</label>
+                                        <input type="text" x-model="formData.terminated_on" name="terminated_on" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                     </div>
                                   </div> <!-- ✅ Correctly closed grid div -->
                               </div>
 
                               <!-- Flutterwave Settings -->
                               <div>
-                                  <!-- <h6 class="text-md font-medium mb-3 dark:text-white">Flutterwave Settings</h6> -->
+                                  <!-- <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">Flutterwave Settings</h6> -->
                                   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                       <div>
-                                          <label class="block mb-2 dark:text-white">Years of Experience:</label>
-                                          <input type="text" x-model="formData.years_of_experience" name="years_of_experience" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Years of Experience:</label>
+                                          <input type="text" x-model="formData.years_of_experience" name="years_of_experience" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                       </div>
                                       <div>
-                                          <label class="block mb-2 dark:text-white">tags:</label>
-                                          <input type="text" x-model="formData.tags" name="tags" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">tags:</label>
+                                          <input type="text" x-model="formData.tags" name="tags" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                       </div>
                                       <div>
-                                        <label class="block mb-2 dark:text-white">Endorsements:</label>
-                                        <input type="text" x-model="formData.endorsements" name="endorsements" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Endorsements:</label>
+                                        <input type="text" x-model="formData.endorsements" name="endorsements" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                     </div>
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Rating:</label>
-                                        <input type="text" x-model="formData.rating" name="rating" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Rating:</label>
+                                        <input type="text" x-model="formData.rating" name="rating" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                     </div>
                                   </div>
                               </div>
 
                                <!-- Razor Settings -->
                               <div>
-                                <!-- <h6 class="text-md font-medium mb-3 dark:text-white">RazorPay Settings</h6> -->
+                                <!-- <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">RazorPay Settings</h6> -->
                                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Note About choices Made:</label>
-                                        <input type="text" x-model="formData.notes_about_the_choices_made" name="notes_about_the_choices_made" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Note About choices Made:</label>
+                                        <input type="text" x-model="formData.notes_about_the_choices_made" name="notes_about_the_choices_made" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                     </div>
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Pay Via:</label>
-                                        <input type="text" x-model="formData.pay_via" name="pay_via" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Pay Via:</label>
+                                        <input type="text" x-model="formData.pay_via" name="pay_via" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                     </div>
                                     <script>
                                       $(document).ready(function () {
@@ -1041,49 +1040,49 @@
                                       }) 
                                   </script>
                                     <div>
-                                      <label class="block mb-2 dark:text-white">Company name paid to:</label>
-                                      <input type="text" x-model="formData.company_name_paid_to" name="company_name_paid_to" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                      <label class="block mb-2 text-gray-700 dark:text-gray-300">Company name paid to:</label>
+                                      <input type="text" x-model="formData.company_name_paid_to" name="company_name_paid_to" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                   </div>
                                   <div>
-                                      <label class="block mb-2 dark:text-white">Employer ID #</label>:</label>
-                                      <input type="text" x-model="formData.employer_identification_number" name="employer_identification_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                                      <label class="block mb-2 text-gray-700 dark:text-gray-300">Employer ID #</label>:</label>
+                                      <input type="text" x-model="formData.employer_identification_number" name="employer_identification_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 numberOnly" placeholder="">
                                   </div>
                                   </div>
                               </div>
 
                               <div>
-                                <!-- <h6 class="text-md font-medium mb-3 dark:text-white">RazorPay Settings</h6> -->
+                                <!-- <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">RazorPay Settings</h6> -->
                                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Settlement Email:</label>
-                                        <input type="text" x-model="formData.send_settlements_mail" name="send_settlements_mail" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Settlement Email:</label>
+                                        <input type="text" x-model="formData.send_settlements_mail" name="send_settlements_mail" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                     </div>
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Print settlement under this company:</label>
-                                        <input type="text" x-model="formData.print_settlements_under_this_company" name="print_settlements_under_this_company" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Print settlement under this company:</label>
+                                        <input type="text" x-model="formData.print_settlements_under_this_company" name="print_settlements_under_this_company" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                     </div>
                                     <div>
-                                      <label class="block mb-2 dark:text-white">Flash notes to dispatch:</label>
-                                      <input type="text" x-model="formData.flash_notes_to_dispatch" name="flash_notes_to_dispatch" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                      <label class="block mb-2 text-gray-700 dark:text-gray-300">Flash notes to dispatch:</label>
+                                      <input type="text" x-model="formData.flash_notes_to_dispatch" name="flash_notes_to_dispatch" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                   </div>
                                   <div>
-                                      <label class="block mb-2 dark:text-white">Flash notes to payroll:</label>
-                                      <input type="text" x-model="formData.flash_notes_to_payroll" name="flash_notes_to_payroll" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                                      <label class="block mb-2 text-gray-700 dark:text-gray-300">Flash notes to payroll:</label>
+                                      <input type="text" x-model="formData.flash_notes_to_payroll" name="flash_notes_to_payroll" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 numberOnly" placeholder="">
                                   </div>
                                   </div>
                               </div>
 
                               
                               <div>
-                                <!-- <h6 class="text-md font-medium mb-3 dark:text-white">RazorPay Settings</h6> -->
+                                <!-- <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">RazorPay Settings</h6> -->
                                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                     <div>
-                                        <label class="block mb-2 dark:text-white">internal_notes:</label>
-                                        <input type="text" x-model="formData.internal_notes" name="internal_notes" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">internal_notes:</label>
+                                        <input type="text" x-model="formData.internal_notes" name="internal_notes" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                     </div>
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Driver Status:</label>
-                                        <select type="text" x-model="formData.driver_status" name="driver_status" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Driver Status:</label>
+                                        <select type="text" x-model="formData.driver_status" name="driver_status" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                           <option value="active">Active</option>
                                           <option value="Inactive">Inactive</option>
                                         </select>
@@ -1093,15 +1092,15 @@
                               
                                <!-- Stripe Settings -->
                                <!-- <div>
-                                <h6 class="text-md font-medium mb-3 dark:text-white">Stripe Settings</h6>
+                                <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">Stripe Settings</h6>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Public Key:</label>
-                                        <input type="text" x-model="formData.stripe_pubKey" name="stripe_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXX">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Public Key:</label>
+                                        <input type="text" x-model="formData.stripe_pubKey" name="stripe_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXX">
                                     </div>
                                     <div>
-                                        <label class="block mb-2 dark:text-white">Secret Key:</label>
-                                        <input type="text" x-model="formData.stripe_secKey" name="stripe_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="XXXXXXXXXXXXX">
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Secret Key:</label>
+                                        <input type="text" x-model="formData.stripe_secKey" name="stripe_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXXXX">
                                     </div>
                                   </div>
                                 </div> -->
@@ -1141,7 +1140,7 @@
                                   <label class="inline-flex items-center mb-5 cursor-pointer">
                                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 mr-40">Show payment in mobile App?</span>
                                     <input type="checkbox" x-model="formData.mobile_settings" name="mobile_settings" value="0" class="sr-only peer" @change="formData.mobile_settings = $event.target.checked ? 1 : 0">
-                                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[3px] after:bg-gray-800 after:border-gray-300 after:border after:rounded-full after:w-4 after:h-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
                                   </label>
                                   
                                 </div>

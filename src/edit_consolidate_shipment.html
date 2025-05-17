@@ -305,11 +305,40 @@
                                     <!-- Charge Type -->
                                     <div>
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Charge Type</label>
-                                        <select x-model="charge.charge_type" 
+                                        <select x-model="charge.charge_type" name="charge_type[]"
                                                 class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
-                                            <option value="" class="dark:bg-gray-700">Select Type</option>
-                                            <option value="pickup" class="dark:bg-gray-700">Pickup</option>
-                                            <option value="delivery" class="dark:bg-gray-700">Delivery</option>
+                                            <option value="" selected disabled></option>
+                                            <option value="drayage">Drayage</option>
+                                            <option value="fuel_surcharge">Fuel Surcharge</option>
+                                            <option value="admin_fee">Admin Fee</option>
+                                            <option value="attempted_pickup">Attempted Pickup</option>
+                                            <option value="bonded_cargo_pickup">Bonded Cargo Pickup</option>
+                                            <option value="bonded_cargo_charge">Bonded Cargo Charge</option>
+                                            <option value="chasis_rental">Chasis Rental</option>
+                                            <option value="chasis_rental">Chasis Rental</option>
+                                            <option value="chasis_split">Chasis Split</option>
+                                            <option value="chasis_stack">Chasis Stack</option>
+                                            <option value="demurage">Demurage</option>
+                                            <option value="driver_assistance">Driver Assistance</option>
+                                            <option value="drop_charge">Drop Charge</option>
+                                            <option value="dry_run">Dry Run</option>
+                                            <option value="freight">Freight</option>
+                                            <option value="hauling_refrigerated_cargo">Hauling Refrigerated Cargo</option>
+                                            <option value="harzadous_material">Harzardous Material</option>
+                                            <option value="maintainance_repair">Maintainance & Repair</option>
+                                            <option value="other">Other</option>
+                                            <option value="Overweight">Overweight</option>
+                                            <option value="per_diem">Per Diem</option>
+                                            <option value="permits">Permits</option>
+                                            <option value="prepull">Prepull</option>
+                                            <option value="deliver">Delivery Charge</option>
+                                            <option value="shipping">SHIPPING</option>
+                                            <option value="scale load">Scale Load</option>
+                                            <option value="spot_empty">Spot Empty</option>
+                                            <option value="stop_off">Stop Off</option>
+                                            <option value="storage">Storage</option>
+                                            <option value="toll">Toll</option>
+                                            <option value="triaxle">Triaxle</option>
                                             <!-- Add other options -->
                                         </select>
                                     </div>
@@ -317,14 +346,14 @@
                                     <!-- Comment -->
                                     <div>
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Comment</label>
-                                        <input type="text" x-model="charge.comment" 
+                                        <input type="text" x-model="charge.comment" name="comment[]"
                                             class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
                                     </div>
 
                                     <!-- Units -->
                                     <div>
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Units</label>
-                                        <input type="number" x-model="charge.units" 
+                                        <input type="number" x-model="charge.units" name="units[]"
                                             @change="calculateChargeAmount(index)"
                                             class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
                                     </div>
@@ -333,7 +362,7 @@
                                     <!-- <span x-text="JSON.stringify(charge)"></span> -->
                                     <div>
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Rate</label>
-                                        <input type="text" name="rate" x-model="charge.rate" 
+                                        <input type="text" name="rate" x-model="charge.rate" name="rate[]"
                                             @change="calculateChargeAmount(index)"
                                             class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 numberOnly">
                                     </div>
@@ -343,14 +372,14 @@
                                     <!-- Amount -->
                                     <div>
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Amount</label>
-                                        <input type="text" name="amount" x-model="charge.amount" readonly 
+                                        <input type="text" name="amount[]" x-model="charge.amount" readonly 
                                             class="w-full rounded bg-gray-100 dark:bg-gray-600 dark:text-gray-200 border-gray-300 dark:border-gray-500 ">
                                     </div>
 
                                     <!-- Discount -->
                                     <div>
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Discount</label>
-                                        <input type="text" x-model="charge.discount" 
+                                        <input type="text" x-model="charge.discount" name="discount[]"
                                             @change="calculateTotals()"
                                             class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 numberOnly">
                                     </div>
@@ -358,18 +387,27 @@
                                     <!-- Internal Notes -->
                                     <div>
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Internal Notes</label>
-                                        <input type="text" x-model="charge.internal_notes" 
+                                        <input type="text" x-model="charge.internal_notes" name="internal_notes[]"
                                             class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
                                     </div>
 
                                     <!-- Billed -->
-                                    <div class="flex items-end">
+                                     <div class="flex items-center">
+                                            <input type="hidden" :name="`billed[${index}]`" :value="charge.billed ? '1' : '0'">
+                                            <label class="flex items-center text-gray-700 dark:text-gray-300">
+                                                <input type="checkbox" x-model="charge.billed" 
+                                                    @change="charge.billed = $event.target.checked"
+                                                    class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-blue-600 focus:ring-blue-500">
+                                                <span class="ml-2 text-sm">Billed?</span>
+                                            </label>
+                                        </div>
+                                    <!-- <div class="flex items-end">
                                         <label class="flex items-center text-gray-700 dark:text-gray-300">
                                             <input type="checkbox" x-model="charge.billed" 
                                                 class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-blue-600 focus:ring-blue-500">
                                             <span class="ml-2 text-sm">Billed</span>
                                         </label>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </template>
@@ -618,41 +656,43 @@
                 this.calculateTotals();
             },
 
-            calculateChargeAmount(index) {
-                const charge = this.formData.consolidate_shipment_charges[index];
-                charge.amount = parseFloat(charge.units) || 0 * parseFloat(charge.rate) || 0;
-                this.calculateTotals();
-            },
+           
+                calculateChargeAmount(index) {
+                    const charge = this.formData.consolidate_shipment_charges[index];
+                    const units = parseFloat(charge.units) || 0;
+                    const rate = parseFloat(charge.rate) || 0;
+                    charge.amount = (units * rate).toFixed(2);
+                    this.calculateTotals();
+                },
 
-            calculateTotals() {
-                this.formData.total = this.formData.consolidate_shipment_charges.reduce(
-                    (sum, charge) => sum + (parseFloat(charge.amount) || 0), 0
-                ).toFixed(2);
-                
-                this.formData.total_discount = this.formData.consolidate_shipment_charges.reduce(
-                    (sum, charge) => sum + (parseFloat(charge.discount) || 0), 0
-                ).toFixed(2);
-                
-                this.formData.net_total = (
-                    parseFloat(this.formData.total) - 
-                    parseFloat(this.formData.total_discount)
-                ).toFixed(2);
-            },
+                calculateTotals() {
+                    // Calculate totals from all charges (both existing and new)
+                    const totals = this.formData.consolidate_shipment_charges.reduce((acc, charge) => {
+                        acc.total += parseFloat(charge.amount) || 0;
+                        acc.discount += parseFloat(charge.discount) || 0;
+                        return acc;
+                    }, { total: 0, discount: 0 });
+
+                    this.formData.total = totals.total.toFixed(2);
+                    this.formData.total_discount = totals.discount.toFixed(2);
+                    this.formData.net_total = (totals.total - totals.discount).toFixed(2);
+                },
+
                 saveAndSubmit(e) {
                     e.preventDefault();
                     
                     let form = document.getElementById("consolidateShipmentForm");
                     let formData = new FormData(form);
-                    this.formData.consolidate_shipment_charges.forEach((charge, index) => {
-                        formData.append(`consolidate_shipment_charges[${index}][charge_type]`, charge.charge_type);
-                        formData.append(`consolidate_shipment_charges[${index}][comment]`, charge.comment);
-                        formData.append(`consolidate_shipment_charges[${index}][units]`, charge.units);
-                        formData.append(`consolidate_shipment_charges[${index}][rate]`, charge.rate);
-                        formData.append(`consolidate_shipment_charges[${index}][amount]`, charge.amount);
-                        formData.append(`consolidate_shipment_charges[${index}][discount]`, charge.discount);
-                        formData.append(`consolidate_shipment_charges[${index}][internal_notes]`, charge.internal_notes);
-                        formData.append(`consolidate_shipment_charges[${index}][billed]`, charge.billed ? 1 : 0);  // Convert checkbox boolean to 1/0
-                    });
+                    // this.formData.consolidate_shipment_charges.forEach((charge, index) => {
+                    //     formData.append(`consolidate_shipment_charges[${index}][charge_type]`, charge.charge_type);
+                    //     formData.append(`consolidate_shipment_charges[${index}][comment]`, charge.comment);
+                    //     formData.append(`consolidate_shipment_charges[${index}][units]`, charge.units);
+                    //     formData.append(`consolidate_shipment_charges[${index}][rate]`, charge.rate);
+                    //     formData.append(`consolidate_shipment_charges[${index}][amount]`, charge.amount);
+                    //     formData.append(`consolidate_shipment_charges[${index}][discount]`, charge.discount);
+                    //     formData.append(`consolidate_shipment_charges[${index}][internal_notes]`, charge.internal_notes);
+                    //     formData.append(`consolidate_shipment_charges[${index}][billed]`, charge.billed ? 1 : 0);  // Convert checkbox boolean to 1/0
+                    // });
 
                     formData.append("_method", "PUT");
                                     for (let pair of formData.entries()) {

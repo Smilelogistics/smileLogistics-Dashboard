@@ -649,10 +649,24 @@
                                               </div>
                                             </div>
                                             
+                                              
+                                              <div x-show="expense.billed">
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">Is Billed?</p>
+                                                <span class="px-2 py-1 text-xs rounded-full"
+                                                    :class="{
+                                                      'bg-green-100 text-green-800': expense.billed,
+                                                      'bg-yellow-100 text-yellow-800': !expense.billed
+                                                    }"
+                                                    x-text="expense.billed ? 'Yes Billed' : 'No Unbilled'">
+                                              </span>
+                                              </div>
+                                            
                                             <div x-show="expense.expense_disputed">
-                                              <p class="text-xs text-gray-500 dark:text-gray-400">Dispute Note</p>
-                                              <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="expense.disputed_note || 'No details provided'"></p>
+                                              <p class="text-xs text-gray-500 dark:text-gray-400">Internal Note</p>
+                                              <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="expense.internal_notes || 'No details provided'"></p>
+
                                             </div>
+
                                             
                                             <template x-if="expense.vendor_invoice_number || expense.payment_reference_note">
                                               <div class="pt-2 border-t">
@@ -1018,7 +1032,8 @@
                   vendor_invoice_number: expense.vendor_invoice_number || '',
                   payment_reference_note: expense.payment_reference_note || '',
                   disputed_note: expense.disputed_note || '',
-                  expense_disputed: expense.expense_disputed || false,
+                  internal_notes: expense.internal_notes || '',
+                  billed: expense.billed || false,
                   paid: expense.paid || false
                 })) || [],
 

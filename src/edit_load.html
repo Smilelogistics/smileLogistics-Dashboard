@@ -1366,21 +1366,25 @@
                                     </div>
 
                                     <!-- Disputed Checkbox -->
-                                    <div class="flex items-center">
-                                        <label class="flex items-center text-gray-700 dark:text-gray-300">
-                                            <input type="checkbox" x-model="expense.expense_disputed" name="expense_disputed[]"
-                                                class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-blue-600 focus:ring-blue-500">
-                                            <span class="ml-2 text-sm">Disputed?</span>
-                                        </label>
-                                    </div>
+                                        <div class="flex items-center">
+                                            <input type="hidden" :name="`expense_disputed[${index}]`" :value="expense.expense_disputed ? '1' : '0'">
+                                            <label class="flex items-center text-gray-700 dark:text-gray-300">
+                                                <input type="checkbox" x-model="expense.expense_disputed" 
+                                                    @change="expense.expense_disputed = $event.target.checked"
+                                                    class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-blue-600 focus:ring-blue-500">
+                                                <span class="ml-2 text-sm">Disputed?</span>
+                                            </label>
+                                        </div>
 
-                                    <!-- Paid Checkbox -->
-                                    <div class="flex items-center">
-                                        <label class="flex items-center text-gray-700 dark:text-gray-300">
-                                            <input type="checkbox" x-model="expense.paid" name="paid[]"
-                                                class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-blue-600 focus:ring-blue-500">
-                                            <span class="ml-2 text-sm">Paid?</span>
-                                        </label>
+                                        <!-- Paid Checkbox -->
+                                        <div class="flex items-center">
+                                            <input type="hidden" :name="`paid[${index}]`" :value="expense.paid ? '1' : '0'">
+                                            <label class="flex items-center text-gray-700 dark:text-gray-300">
+                                                <input type="checkbox" x-model="expense.paid" 
+                                                    @change="expense.paid = $event.target.checked"
+                                                    class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-blue-600 focus:ring-blue-500">
+                                                <span class="ml-2 text-sm">Paid?</span>
+                                            </label>
                                     </div>
                                 </div>
                             </div>
@@ -1727,7 +1731,7 @@ document.addEventListener('alpine:init', () => {
                                 vendor_invoice_number: expense.vendor_invoice_number || '',
                                 payment_reference_note: expense.payment_reference_note || '',
                                 disputed_note: expense.disputed_note || '',
-                                expense_disputed: expense.expense_disputed || false,
+                                expense_disputed: expense.billed || false,
                                 vendor_invoice_name: expense.vendor_invoice_name || '',
                                 paid: expense.paid || false
                             })) || [],

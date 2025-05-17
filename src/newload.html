@@ -502,8 +502,14 @@
                                             </label>
 
                                             <!-- Checkbox Option -->
+                                            <input type="hidden" name="brokered" x-model="formData.brokered" value="0">
                                             <label class="flex items-center space-x-2">
-                                                <input type="checkbox" x-model="formData.isBroker" name="isBroker" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                                <input 
+                                                    type="checkbox" 
+                                                    x-model="formData.brokered" 
+                                                    @change="formData.brokered = $event.target.checked ? 1 : 0"
+                                                    class="text-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                                                >
                                                 <span class="text-gray-700 dark:text-gray-300">Broker</span>
                                             </label>
                                         </div>
@@ -1326,48 +1332,29 @@
                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     </div>
                                 </div>
-                    
-                                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Vendor Invoice #</label>
-                                        <input type="text" x-model="expense.vendor_invoice_number" name="vendor_invoice_number[]" 
-                                               class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Payment Reference Note</label>
-                                        <textarea x-model="expense.payment_reference_note" name="payment_reference_note[]" 
-                                                  class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Disputed Note</label>
-                                        <textarea x-model="expense.disputed_note" name="disputed_note[]" 
-                                                  class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
-                                    </div>
-                                    <div class="flex items-center space-x-4">
-                                        <!-- Disputed Section -->
-                                        <label class="flex items-center space-x-2">
-                                          <input type="checkbox" 
-                                                 x-model="expense.expense_disputed"
-                                                 class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                                          <span class="text-gray-700 dark:text-gray-300">Disputed?</span>
-                                          <!-- Hidden Input for Form Submission -->
-                                          <input type="hidden" 
-                                                 x-bind:name="`expenses[${index}][expense_disputed]`" 
-                                                 x-bind:value="expense.expense_disputed ? '1' : '0'">
-                                        </label>
-                                      
-                                        <!-- Paid Section -->
-                                        <label class="flex items-center space-x-2">
-                                          <input type="checkbox" 
-                                                 x-model="expense.paid"
-                                                 class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                                          <span class="text-gray-700 dark:text-gray-300">Paid?</span>
-                                          <!-- Hidden Input for Form Submission -->
-                                          <input type="hidden" 
-                                                 x-bind:name="`expenses[${index}][paid]`" 
-                                                 x-bind:value="expense.paid ? '1' : '0'">
-                                        </label>
-                                      </div>
+                                <div class="flex items-center space-x-4">
+                                    <input type="hidden" name="expense_disputed[]" :value="expense.expense_disputed ? '1' : '0'">
+                                    <label class="flex items-center space-x-2">
+                                        <input 
+                                            type="checkbox" 
+                                            x-model="expense.expense_disputed" 
+                                            @change="expense.expense_disputed = $event.target.checked"
+                                            class="text-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                                        >
+                                        <span class="text-gray-700 dark:text-gray-300">Disputed?</span>
+                                    </label>
+                                    
+                                    <input type="hidden" name="paid[]" :value="expense.paid ? '1' : '0'">
+                                    <label class="flex items-center space-x-2">
+                                        <input 
+                                            type="checkbox" 
+                                            x-model="expense.paid" 
+                                            @change="expense.paid = $event.target.checked"
+                                            class="text-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                                        >
+                                        <span class="text-gray-700 dark:text-gray-300">Paid?</span>
+                                    </label>
+                                </div>
                                     <!-- <div class="flex items-center space-x-4">
                                         <label class="flex items-center space-x-2">
                                             <input type="checkbox" x-model="expense.expense_disputed" name="expense_disputed[]" 
@@ -1656,7 +1643,7 @@ var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                   load_type: '',
                   load_type_note: '',
                   load_type_note_r: '',
-                  isBroker: '',
+                  brokered: 0,
                   shipment_type: '',
                   bill_to: '',
                   quick_note: '',

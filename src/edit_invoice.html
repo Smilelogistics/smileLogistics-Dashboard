@@ -114,16 +114,21 @@
                                 <label class="block text-gray-700 dark:text-gray-300">Invoice Date</label>
                                 <input type="text" x-model="formData.invoice_date" id="invoice_datepicker" name="invoice_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white invoice_datepicker">
                         </div>
-                        <div>
-                            <label class="block text-gray-700 dark:text-gray-300">Is Factored?</label>
-                            <label for="invoice_number" class="flex">
-                                <input type="checkbox" x-model="formData.isFactored" 
-                                       name="isFactored"
-                                       class="w-2 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                       :value="true">
-                                <span class="flex text-gray-700 dark:text-gray-300">Yes, is Factored</span>
-                            </label>
-                        </div>
+                      <div>
+    <label class="block text-gray-700 dark:text-gray-300">Is Factored?</label>
+    <label for="isFactored" class="flex items-center">
+        <input
+            type="checkbox"
+            name="isFactored"
+            x-model="formData.isFactored"
+            x-effect="formData.isFactored = formData.isFactored === 1 ? 1 : 0" 
+            x-bind:checked="formData.isFactored === 1"
+            x-on:change="formData.isFactored = $event.target.checked ? 1 : 0"
+            class="w-4 h-4 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+        >
+        <span class="ml-2 text-gray-700 dark:text-gray-300">Yes, is Factored</span>
+    </label>
+</div>
                         
                     </div>
                 
@@ -608,7 +613,7 @@ document.addEventListener('alpine:init', () => {
                         this.formData = {
                             invoice_type: data.invoice.invoice_type || '',
                             invoice_date: data.invoice.invoice_date || '',
-                            isFactored: data.invoice.isFactored || '',
+                            isFactored: data.invoice.isFactored === 1 ? 1 : 0,
                             override_default_company: data.invoice.override_default_company || '',
                             customer_id: data.invoice.customer_id || '',
                             invoice_due_date: data.invoice.invoice_due_date || '',

@@ -114,16 +114,21 @@
                                 <label class="block text-gray-700 dark:text-gray-300">Invoice Date</label>
                                 <input type="text" x-model="formData.invoice_date" id="invoice_datepicker" name="invoice_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         </div>
-                        <div>
+                       <div x-data="{ formData: { isFactored: 0 } }">
                             <label class="block text-gray-700 dark:text-gray-300">Is Factored?</label>
-                            <label for="invoice_number" class="flex">
-                                <input type="checkbox" x-model="formData.isFactored" 
-                                       name="isFactored"
-                                       class="w-2 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                       :value="true">
-                                <span class="flex text-gray-700 dark:text-gray-300">Yes, is Factored</span>
+                            <label for="invoice_number" class="flex items-center space-x-2">
+                                <input type="checkbox"
+                                    name="isFactored"
+                                    class="w-4 h-4 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                    x-model="formData.isFactored"
+                                    @change="formData.isFactored = $event.target.checked ? 1 : 0">
+                                <span class="text-gray-700 dark:text-gray-300">Yes, is Factored</span>
                             </label>
+
+                            <!-- Hidden input for form submission -->
+                            <input type="hidden" name="isFactored" :value="formData.isFactored">
                         </div>
+
                         
                     </div>
                 

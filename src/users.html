@@ -177,6 +177,7 @@
                           </div>
                           
                           <!-- Search Input -->
+                            <span class="text-sm text-gray-600 dark:text-gray-400 ml-auto font-bold">Total Users: <span x-text="filteredItems.length"></span></span>
                           <div class="w-full sm:w-auto">
                             <input
                               type="text"
@@ -189,86 +190,110 @@
                         </div>
                         
                         <!-- Table -->
-                        <div class="overflow-x-auto">
-                          <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
-                            <!-- Table Header -->
-                            <thead class="bg-gray-50 dark:bg-gray-900">
+                     <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
+                          <!-- Table Header -->
+                          <thead class="bg-gray-50 dark:bg-gray-900">
+                            <tr>
+                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ACTION</th>
+                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Code</th>
+                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Full Name</th>
+                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Role</th>
+                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Address</th>
+                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">About us</th>
+                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Email</th>
+                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date Created</th>
+                              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+                            </tr>
+                          </thead>
+                          <!-- Table Body -->
+                          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                            <template x-for="(item, index) in displayedItems" :key="index">
                               <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ACTION</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Code</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Full Name</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Role</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Address</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">About us</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Email</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date Created</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
-                              </tr>
-                            </thead>
-                            <!-- Table Body -->
-                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                              <template x-for="(item, index) in displayedItems" :key="index">
-                                <tr>
-                                  <td class="px-5 py-4 sm:px-6">
-                                    <div x-data="{ open: false }" class="relative">
-                                      <button @click="open = !open" class="inline-flex items-center p-2 text-sm font-medium text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-                                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
-                                          <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
-                                        </svg>
-                                      </button>
-                                   
-                                      <div x-show="open" @click.away="open = false" class="absolute left-0 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">
-                                        <div class="py-2">
-                                          <a href="#" x-on:click="deleteItem(item.id)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
-                                        </div>
+                                <td class="px-5 py-4 sm:px-6">
+                                  <div x-data="{ open: false }" class="relative">
+                                    <button @click="open = !open" class="inline-flex items-center p-2 text-sm font-medium text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+                                      <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
+                                        <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
+                                      </svg>
+                                    </button>
+                                
+                                    <div x-show="open" @click.away="open = false" class="absolute left-0 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">
+                                      <div class="py-2">
+                                        <a href="#" x-on:click="deleteItem(item.id)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
                                       </div>
                                     </div>
-                                  </td>
-                                 
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                      x-text="item.branch_code ? item.branch_code : ' '">
-                                  </td>
-                                 
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                      x-text="item.user ? item.user.fname + ' ' + item.user.lname : 'N/A'">
-                                  </td>
-                    
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                      x-text="item.user?.user_type ? item.user.user_type : ' '">
-                                  </td>
-                                  
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                      x-text="item.address ? item.address : ' '">
-                                  </td>
-                                  
-                                  
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                      x-text="item.about_us ? (item.about_us.length > 10 ? item.about_us.substring(0, 10) + '...' : item.about_us) : ' '">
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                      x-text="item.user?.email ? item.user.email : ' '">
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400"
-                                      x-text="item.created_at ? new Date(item.created_at).toLocaleDateString('en-GB').replace(/\//g, '-') : ' '">
-                                  </td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full" 
-                                          :class="item.customer_status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" 
-                                          x-text="item.customer_status ? item.customer_status.charAt(0).toUpperCase() + item.customer_status.slice(1) : 'N/A'">
-                                    </span>
-                                  </td>
-                                </tr>
-                              </template>
+                                  </div>
+                                </td>
                               
-                              <!-- Empty state -->
-                              <tr x-show="displayedItems.length === 0">
-                                <td colspan="9" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                                  No users found
+                                <!-- Code - Show branch code for both, driver number for drivers if available -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
+                                    x-text="item.userType === 'customer' ? 
+                                          (item.branch?.branch_code ? item.branch.branch_code : 'N/A') : 
+                                          (item.driver_number ? item.driver_number : 'N/A')">
+                                </td>
+                              
+                                <!-- Full Name -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
+                                    x-text="item.user ? 
+                                          (item.user.fname + ' ' + (item.user.lname || '')) : 
+                                          'N/A'">
+                                </td>
+                                
+                                <!-- Role - Show user type or driver-specific info -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
+                                    x-text="item.userType === 'customer' ? 
+                                          (item.user?.user_type ? item.user.user_type : 'Customer') : 
+                                          'Driver'">
+                                </td>
+                                
+                                <!-- Address - Show different addresses based on type -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
+                                    x-text="item.userType === 'customer' ? 
+                                          (item.customer_primary_address ? item.customer_primary_address : 
+                                          (item.branch?.address ? item.branch.address : 'N/A')) : 
+                                          (item.driver_primary_address ? item.driver_primary_address : 'N/A')">
+                                </td>
+                                
+                                <!-- About us - Show branch about for customers, tags for drivers -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
+                                    x-text="item.userType === 'customer' ? 
+                                          (item.branch?.about_us ? (item.branch.about_us.length > 10 ? item.branch.about_us.substring(0, 10) + '...' : item.branch.about_us) : 'N/A') : 
+                                          (item.tags ? (Array.isArray(item.tags) ? item.tags.join(', ') : item.tags) : 'N/A')">
+                                </td>
+                                
+                                <!-- Email -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
+                                    x-text="item.user?.email ? item.user.email : 'N/A'">
+                                </td>
+                                
+                                <!-- Date Created -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400"
+                                    x-text="item.created_at ? new Date(item.created_at).toLocaleDateString('en-GB').replace(/\//g, '-') : 'N/A'">
+                                </td>
+                                
+                                <!-- Status - Handle both customer_status and driver_status -->
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                  <span class="px-2 py-1 text-xs font-medium rounded-full" 
+                                        :class="(item.userType === 'customer' ? item.customer_status : item.driver_status) === 'active' ? 
+                                                'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" 
+                                        x-text="item.userType === 'customer' ? 
+                                              (item.customer_status ? item.customer_status.charAt(0).toUpperCase() + item.customer_status.slice(1) : 'N/A') : 
+                                              (item.driver_status ? item.driver_status.charAt(0).toUpperCase() + item.driver_status.slice(1) : 'N/A')">
+                                  </span>
                                 </td>
                               </tr>
-                            </tbody>
-                          </table>
-                        </div>
+                            </template>
+                            
+                            <!-- Empty state -->
+                            <tr x-show="displayedItems.length === 0">
+                              <td colspan="9" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                                No users found
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                         
                         <!-- Pagination -->
                         <div class="flex flex-col sm:flex-row items-center justify-between mt-4 space-y-4 sm:space-y-0">
@@ -420,7 +445,7 @@
       }
       return pages;
     },
-    
+
     async fetchData() {
       this.isLoading = true;
       try {
@@ -431,15 +456,30 @@
           }
         });
         const data = await response.json();
+        console.log(data);
+        
+        // Combine customers and drivers into a single array
+        const combinedItems = [];
         
         if (data.customers && Array.isArray(data.customers)) {
-          this.items = data.customers;
-          this.updateDisplayedItems();
+          // Add customer type to each customer
+          data.customers.forEach(customer => {
+            customer.userType = 'customer';
+            combinedItems.push(customer);
+          });
         }
 
         if (data.drivers && Array.isArray(data.drivers)) {
-          this.drivers = data.drivers;
+          // Add driver type to each driver
+          data.drivers.forEach(driver => {
+            driver.userType = 'driver';
+            combinedItems.push(driver);
+          });
         }
+        
+        this.items = combinedItems;
+        this.updateDisplayedItems();
+        
       } catch (error) {
         console.error('Error:', error);
         if (error.status === 401) {
@@ -451,6 +491,38 @@
         this.isLoading = false;
       }
     },
+        
+    // async fetchData() {
+    //   this.isLoading = true;
+    //   try {
+    //     const response = await fetch(requestGetURL + '/users/members', {
+    //       headers: {
+    //         'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+    //         'Accept': 'application/json'
+    //       }
+    //     });
+    //     const data = await response.json();
+    //     console.log(data);
+        
+    //     if (data.customers && Array.isArray(data.customers)) {
+    //       this.items = data.customers;
+    //       this.updateDisplayedItems();
+    //     }
+
+    //     if (data.drivers && Array.isArray(data.drivers)) {
+    //       this.drivers = data.drivers;
+    //     }
+    //   } catch (error) {
+    //     console.error('Error:', error);
+    //     if (error.status === 401) {
+    //       alert("Session expired. Please log in again.");
+    //       localStorage.removeItem('auth_token');
+    //       window.location.href = "/signin.html";
+    //     }
+    //   } finally {
+    //     this.isLoading = false;
+    //   }
+    // },
     
     async CreateUser() {
       this.isLoading = true;

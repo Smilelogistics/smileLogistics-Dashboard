@@ -10,32 +10,33 @@
     <title>Edit Bike | </title>
     <include src="./partials/mainhead.html"> </include>
     <script src="./assets/js/main.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCM6UYyHtRcZBA-2edj7r7vYg3yYWrnaiE&loading=async&libraries=places"></script>
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCM6UYyHtRcZBA-2edj7r7vYg3yYWrnaiE&libraries=places"></script> -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCM6UYyHtRcZBA-2edj7r7vYg3yYWrnaiE&loading=async&libraries=places,geometry&callback=initMap"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
          
-        // const openModalButton = document.getElementById("openModal");
-        // const closeModalButton = document.getElementById("closeModal");
-        // const modal = document.getElementById("modal");
+        const openModalButton = document.getElementById("openModal");
+        const closeModalButton = document.getElementById("closeModal");
+        const modal = document.getElementById("modal");
 
-        // // Open Modal
-        // openModalButton.addEventListener("click", () => {
-        // modal.style.display = "flex"; // Show the modal
-        // const modalContent = modal.querySelector(".modal-content");
-        // modalContent.style.animation = "blowUp 0.3s ease-out forwards"; // Blow up animation
-        // });
+        // Open Modal
+        openModalButton.addEventListener("click", () => {
+        modal.style.display = "flex"; // Show the modal
+        const modalContent = modal.querySelector(".modal-content");
+        modalContent.style.animation = "blowUp 0.3s ease-out forwards"; // Blow up animation
+        });
 
-        // // Close Modal
-        // closeModalButton.addEventListener("click", () => {
-        // const modalContent = modal.querySelector(".modal-content");
-        // modalContent.style.animation = "goBack 0.3s ease-out forwards"; // Go back animation
+        // Close Modal
+        closeModalButton.addEventListener("click", () => {
+        const modalContent = modal.querySelector(".modal-content");
+        modalContent.style.animation = "goBack 0.3s ease-out forwards"; // Go back animation
 
-        // // Hide the modal after the animation completes
-        // setTimeout(() => {
-        //     modal.style.display = "none";
-        // }, 300); // Match the duration of the animation
-        // });
+        // Hide the modal after the animation completes
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 300); // Match the duration of the animation
+        });
 
            
         });
@@ -47,7 +48,7 @@
                 navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { latitude, longitude } = position.coords;
-                   // status.textContent = `Latitude: ${latitude}, Longitude: ${longitude}`;
+                    //status.textContent = `Latitude: ${latitude}, Longitude: ${longitude}`;
                 },
                 (error) => {
                     switch(error.code) {
@@ -444,160 +445,211 @@
     </script>
 
 <script>
-    // Global variables
-    let fromPlace, toPlace, map, directionsService, directionsRenderer;
-    const service = new google.maps.DistanceMatrixService();
-    directionsService = new google.maps.DirectionsService();
-    directionsRenderer = new google.maps.DirectionsRenderer();
+  // Initialize autocomplete
+async function initAutocomplete() {
+    // Request needed libraries
+    const { PlaceAutocompleteElement } = await google.maps.importLibrary("places");
     
-    // Initialize the map
-    function initMap() {
-        map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 7,
-            center: { lat: 9.0820, lng: 8.6753 }, // Center of Nigeria
-        });
-        directionsRenderer.setMap(map);
-    }
-    
-    // Initialize autocomplete fields
-    async function initAutocomplete() {
-        // Load the Places library
-        const { PlaceAutocompleteElement } = await google.maps.importLibrary("places");
-        
-        // Initialize from address autocomplete
-        const fromAutocomplete = new PlaceAutocompleteElement({
-            inputElement: document.getElementById('from-address'),
-            types: ['geocode']
-        });
-        
-        // Initialize to address autocomplete
-        const toAutocomplete = new PlaceAutocompleteElement({
-            inputElement: document.getElementById('to-address'),
-            types: ['geocode']
-        });
-        
-        // Show relevant price tier
-        document.getElementById('service-type').addEventListener('change', function() {
-            document.querySelectorAll('.price-tier').forEach(el => el.classList.remove('visible'));
-            document.getElementById(`${this.value}-rates`).classList.add('visible');
-        });
-        // Show initial tier
-        document.getElementById('standard-rates').classList.add('visible');
-    }
+    // Initialize address form autocomplete
+    const autocompleteEl = document.getElementById('autocomplete');
+    const autocomplete = new PlaceAutocompleteElement({
+        inputElement: autocompleteEl,
+        types: ['geocode'] // Limit to geographic locations
+    });
 
-    async function calculateDistance() {
-        const fromAddress = document.getElementById('from-address').value;
-        const toAddress = document.getElementById('to-address').value;
-        const weight = parseFloat(document.getElementById('package-weight').value) || 1;
-        const serviceType = document.getElementById('service-type').value;
-        
-        if (!fromAddress || !toAddress) {
-            alert("Please select both pickup and delivery locations");
+    // When user selects an address from dropdown
+    autocomplete.addEventListener('place_changed', () => {
+        const place = autocomplete.value;
+        if (!place.address_components) {
+            alert("No details available for this address");
             return;
         }
-        
-        try {
-            // Show loading indicator
-            document.getElementById('results').style.display = 'none';
-            document.getElementById('loading-indicator').style.display = 'block';
-            
-            // 1. Fetch pricing data from backend
-            const pricingResponse = await fetch(`${requestURL}/settings/rates`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('auth_token')
-                }
-            });
-            
-            if (!pricingResponse.ok) {
-                throw new Error(`Failed to fetch pricing data: ${pricingResponse.status}`);
+
+        // Get address components
+        const addressComponents = {
+            street_number: '',
+            route: '',
+            locality: '',
+            administrative_area_level_1: '',
+            postal_code: '',
+            country: ''
+        };
+
+        // Parse address components
+        for (const component of place.address_components) {
+            const componentType = component.types[0];
+            if (addressComponents[componentType]) {
+                addressComponents[componentType] = component.long_name;
             }
-            
-            const pricingData = await pricingResponse.json();
-            
-            // Validate pricing data
-            if (!pricingData || typeof pricingData.base_rate === 'undefined' || typeof pricingData.base_fee === 'undefined') {
-                throw new Error('Invalid pricing data received from server');
-            }
-            
-            const baseFee = parseFloat(pricingData.base_fee);
-            const ratePerKm = parseFloat(pricingData.base_rate);
-            
-            // 2. Calculate distance with Google Maps
-            const distanceResponse = await new Promise((resolve, reject) => {
-                service.getDistanceMatrix({
-                    origins: [fromAddress],
-                    destinations: [toAddress],
-                    travelMode: 'DRIVING',
-                    unitSystem: google.maps.UnitSystem.METRIC
-                }, (response, status) => {
-                    if (status !== 'OK') {
-                        reject(new Error('Error calculating distance: ' + status));
-                        return;
-                    }
-                    resolve(response);
-                });
-            });
-            
-            const element = distanceResponse.rows[0].elements[0];
-            
-            // Check if distance calculation was successful
-            if (element.status !== 'OK') {
-                throw new Error('Could not calculate route between locations');
-            }
-            
-            const distance = element.distance;
-            const duration = element.duration;
-            const distanceKm = distance.value / 1000;
-            
-            // Calculate cost with weight multiplier
-            const weightMultiplier = weight > 5 ? 1 + (Math.ceil((weight - 5)/5) * 0.1) : 1;
-            const cost = (distanceKm * ratePerKm * weightMultiplier) + baseFee;
-            
-            // Display results
-            document.getElementById('distance-text').textContent = 
-                `${distance.text} (${distanceKm.toFixed(2)} km)`;
-            document.getElementById('duration-text').textContent = duration.text;
-            document.getElementById('weight-text').textContent = weight;
-            document.getElementById('service-text').textContent = 
-                document.getElementById('service-type').options[document.getElementById('service-type').selectedIndex].text;
-            document.getElementById('cost-text').textContent = `₦${cost.toFixed(2)}`;
-            
-            // Show results and hide loading
-            document.getElementById('results').style.display = 'block';
-            document.getElementById('loading-indicator').style.display = 'none';
-            
-            // Show route on map
-            showRoute(fromAddress, toAddress);
-            
-        } catch (error) {
-            console.error('Error:', error);
-            document.getElementById('loading-indicator').style.display = 'none';
-            alert('Error calculating shipment cost: ' + error.message);
         }
+
+        // Fill form fields
+        document.getElementById('street_number').value = addressComponents.street_number;
+        document.getElementById('route').value = addressComponents.route;
+        document.getElementById('locality').value = addressComponents.locality;
+        document.getElementById('administrative_area_level_1').value = addressComponents.administrative_area_level_1;
+        document.getElementById('postal_code').value = addressComponents.postal_code;
+        document.getElementById('country').value = addressComponents.country;
+    });
+}
+
+// Global variables
+let fromPlace, toPlace, map, directionsService, directionsRenderer;
+const service = new google.maps.DistanceMatrixService();
+directionsService = new google.maps.DirectionsService();
+directionsRenderer = new google.maps.DirectionsRenderer();
+
+// Initialize the map
+function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 7,
+        center: { lat: 9.0820, lng: 8.6753 }, // Center of Nigeria
+    });
+    directionsRenderer.setMap(map);
+}
+
+// Initialize autocomplete fields for distance calculator
+async function initDistanceAutocomplete() {
+    // Request needed libraries
+    const { PlaceAutocompleteElement } = await google.maps.importLibrary("places");
+    
+    // Initialize from address autocomplete
+    const fromAutocomplete = new PlaceAutocompleteElement({
+        inputElement: document.getElementById('from-address'),
+        types: ['geocode']
+    });
+    
+    // Initialize to address autocomplete
+    const toAutocomplete = new PlaceAutocompleteElement({
+        inputElement: document.getElementById('to-address'),
+        types: ['geocode']
+    });
+    
+    // Show relevant price tier
+    document.getElementById('service-type').addEventListener('change', function() {
+        document.querySelectorAll('.price-tier').forEach(el => el.classList.remove('visible'));
+        document.getElementById(`${this.value}-rates`).classList.add('visible');
+    });
+    // Show initial tier
+    document.getElementById('standard-rates').classList.add('visible');
+}
+
+async function calculateDistance() {
+    const fromAddress = document.getElementById('from-address').value;
+    const toAddress = document.getElementById('to-address').value;
+    const weight = parseFloat(document.getElementById('package-weight').value) || 1;
+    const serviceType = document.getElementById('service-type').value;
+    
+    if (!fromAddress || !toAddress) {
+        alert("Please select both pickup and delivery locations");
+        return;
     }
     
-    // Display route on map
-    function showRoute(start, end) {
-        directionsService.route({
-            origin: start,
-            destination: end,
-            travelMode: 'DRIVING'
-        }, function(response, status) {
-            if (status === 'OK') {
-                directionsRenderer.setDirections(response);
-            } else {
-                console.error('Directions request failed: ' + status);
+    try {
+        // Show loading indicator
+        document.getElementById('results').style.display = 'none';
+        document.getElementById('loading-indicator').style.display = 'block';
+        
+        // 1. Fetch pricing data from backend
+        const pricingResponse = await fetch(`${requestURL}/settings/rates`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('auth_token')
             }
         });
+        
+        if (!pricingResponse.ok) {
+            throw new Error(`Failed to fetch pricing data: ${pricingResponse.status}`);
+        }
+        
+        const pricingData = await pricingResponse.json();
+        
+        // Validate pricing data
+        if (!pricingData || typeof pricingData.base_rate === 'undefined' || typeof pricingData.base_fee === 'undefined') {
+            throw new Error('Invalid pricing data received from server');
+        }
+        
+        const baseFee = parseFloat(pricingData.base_fee);
+        const ratePerKm = parseFloat(pricingData.base_rate);
+        
+        // 2. Calculate distance with Google Maps
+        const distanceResponse = await new Promise((resolve, reject) => {
+            service.getDistanceMatrix({
+                origins: [fromAddress],
+                destinations: [toAddress],
+                travelMode: 'DRIVING',
+                unitSystem: google.maps.UnitSystem.METRIC
+            }, (response, status) => {
+                if (status !== 'OK') {
+                    reject(new Error('Error calculating distance: ' + status));
+                    return;
+                }
+                resolve(response);
+            });
+        });
+        
+        const element = distanceResponse.rows[0].elements[0];
+        
+        // Check if distance calculation was successful
+        if (element.status !== 'OK') {
+            throw new Error('Could not calculate route between locations');
+        }
+        
+        const distance = element.distance;
+        const duration = element.duration;
+        const distanceKm = distance.value / 1000;
+        
+        // Calculate cost with weight multiplier
+        const weightMultiplier = weight > 5 ? 1 + (Math.ceil((weight - 5)/5) * 0.1) : 1;
+        const cost = (distanceKm * ratePerKm * weightMultiplier) + baseFee;
+        
+        // Display results
+        document.getElementById('distance-text').textContent = 
+            `${distance.text} (${distanceKm.toFixed(2)} km)`;
+        document.getElementById('duration-text').textContent = duration.text;
+        document.getElementById('weight-text').textContent = weight;
+        document.getElementById('service-text').textContent = 
+            document.getElementById('service-type').options[document.getElementById('service-type').selectedIndex].text;
+        document.getElementById('cost-text').textContent = `₦${cost.toFixed(2)}`;
+        
+        // Show results and hide loading
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('loading-indicator').style.display = 'none';
+        
+        // Show route on map
+        showRoute(fromAddress, toAddress);
+        
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('loading-indicator').style.display = 'none';
+        alert('Error calculating shipment cost: ' + error.message);
     }
-    
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', async function() {
-        await initMap();
-        await initAutocomplete();
+}
+
+// Display route on map
+function showRoute(start, end) {
+    directionsService.route({
+        origin: start,
+        destination: end,
+        travelMode: 'DRIVING'
+    }, function(response, status) {
+        if (status === 'OK') {
+            directionsRenderer.setDirections(response);
+        } else {
+            console.error('Directions request failed: ' + status);
+        }
     });
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', async function() {
+    await initMap();
+    await Promise.all([
+        initAutocomplete(),
+        initDistanceAutocomplete()
+    ]);
+});
 </script>
       
       <script src="./assets/js/newload.js"></script>

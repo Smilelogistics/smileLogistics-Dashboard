@@ -277,7 +277,7 @@
               
               <template x-for="notification in unreadNotifications" :key="notification.id">
                 <li class="mb-2 bg-blue-50 dark:bg-blue-900/20">
-                  <a href="#" @click="markAsRead(notification.id)" class="flex items-center rounded-lg p-3 transition-colors hover:bg-blue-100 dark:hover:bg-blue-900/30">
+                  <a :href="notification.data.link" @click="markAsRead(notification.id)" class="flex items-center rounded-lg p-3 transition-colors hover:bg-blue-100 dark:hover:bg-blue-900/30">
                     <div class="ml-3 flex-1 overflow-hidden">
                       <p class=" text-sm font-semibold text-gray-800 dark:text-white">
                         <span x-text="notification.data.message"></span>
@@ -299,7 +299,7 @@
               
               <template x-for="notification in readNotifications" :key="notification.id">
                 <li class="mb-2">
-                  <a href="#" class="flex items-center rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
+                  <a :href="notification.data.link" class="flex items-center rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
                   
                     <div class="ml-3 flex-1 overflow-hidden">
                       <p class=" text-sm font-medium text-gray-600 dark:text-gray-300">
@@ -755,7 +755,7 @@ function logout() {
 </div>
 
 <script>
-  var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
+  var requestURL = "https://smile-logistics-production.up.railway.app/api/v1";
  // Replace the jQuery AJAX call with Alpine.js data and fetch
 function notificationData() {
     return {

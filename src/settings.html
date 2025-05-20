@@ -545,7 +545,7 @@
                             <li class="me-2">
                                 <a href="#" @click.prevent="activeTab = 'basic'"
                                     :class="activeTab === 'basic' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
-                                    class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300">Basic Setup</a>
+                                    class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300">Account Setup</a>
                             </li>
                             <li class="me-2">
                                 <a href="#" @click.prevent="activeTab = 'other'"
@@ -637,7 +637,7 @@
                                 </select>
                               </div>
                               
-                              <div>
+                              <!-- <div>
                                   <label class="block mb-2 text-gray-700 dark:text-gray-300">Copyright:</label>
                                   <input x-model="formData.copyright" name="copyright" type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="Alright Reserved SML">
                               </div>
@@ -645,7 +645,7 @@
                               <div>
                                 <label class="block mb-2 text-gray-700 dark:text-gray-300">Logo</label>
                                 <input x-model="formData.logo1" name="logo1" type="file" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
-                              </div>
+                              </div> -->
                             
                               
                             </div>
@@ -701,10 +701,40 @@
                                           <label class="block mb-2 text-gray-700 dark:text-gray-300">Internal Note:</label>
                                           <input type="text" x-model="formData.internal_note" name="internal_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                       </div>
-                                      <div>
+                                      
+                                      <!-- <div>
+                                          <label class="block text-gray-700 dark:text-gray-300">Tags</label>
+                                          <input 
+                                            type="text" 
+                                            x-model="formData.tagsInput" 
+                                            @keydown.space.prevent="addTag()"
+                                            @keydown.enter.prevent="addTag()"
+                                            @keydown.backspace="removeLastTag()"
+                                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                                            placeholder="Type tags separated by space"
+                                            id="tags"
+                                          >
+                                          
+                                          <div class="flex flex-wrap gap-2 mt-2">
+                                            <template x-for="(tag, index) in formData.tags" :key="index">
+                                              <div class="flex items-center bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full">
+                                                <span x-text="tag" class="text-sm"></span>
+                                                <button 
+                                                  @click="removeTag(index)" 
+                                                  class="ml-2 text-gray-500 hover:text-red-500"
+                                                  type="button"
+                                                >
+                                                  &times;
+                                                </button>
+                                              </div>
+                                            </template>
+                                          </div>
+                                        </div> -->
+
+                                      <!-- <div>
                                         <label class="block mb-2 text-gray-700 dark:text-gray-300">tag:</label>
                                         <input type="text" x-model="formData.tag" name="tag" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
-                                    </div>
+                                    </div> -->
                                     <div>
                                         <label class="block mb-2 text-gray-700 dark:text-gray-300">Flash Note for Drivers:</label>
                                         <input type="text" x-model="formData.flash_note_for_drivers" name="flash_note_for_drivers" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
@@ -735,13 +765,23 @@
                                   </script>
                                     <div>
                                       <label class="block mb-2 text-gray-700 dark:text-gray-300">Start Date:</label>
-                                      <input type="text" x-model="formData.start_date" name="start_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                      <input type="text" x-model="formData.start_date" name="start_date" id="start_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                   </div>
                                   <div>
                                       <label class="block mb-2 text-gray-700 dark:text-gray-300">Credit Limit:</label>
                                       <input type="text" x-model="formData.credit_limit" name="credit_limit" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 numberOnly" placeholder="">
                                   </div>
+                                  
                                   </div>
+                              </div>
+                              <div>
+                                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+
+                                  <div>
+                                      <label class="block text-gray-700 dark:text-gray-300">Alert at percentage</label>
+                                      <input type="number" x-model="formData.alert_percentage" name="alert_percentage" id="alert_percentage" @input="alertPercentage" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                  </div>
+                                 </div>
                               </div>
                                <!-- Stripe Settings -->
                                <!-- <div>
@@ -1003,10 +1043,39 @@
                                           <label class="block mb-2 text-gray-700 dark:text-gray-300">Years of Experience:</label>
                                           <input type="text" x-model="formData.years_of_experience" name="years_of_experience" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                       </div>
-                                      <div>
+                                      <!-- <div>
                                           <label class="block mb-2 text-gray-700 dark:text-gray-300">tags:</label>
                                           <input type="text" x-model="formData.tags" name="tags" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                      </div> -->
+
+                                         <!-- <div>
+                                      <label class="block text-gray-700 dark:text-gray-300">Tags</label>
+                                      <input 
+                                        type="text" 
+                                        x-model="formData.tagsInput" 
+                                        @keydown.space.prevent="addTag()"
+                                        @keydown.enter.prevent="addTag()"
+                                        @keydown.backspace="removeLastTag()"
+                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                                        placeholder="Type tags separated by space"
+                                        id="tags"
+                                      >
+
+                                      <div class="flex flex-wrap gap-2 mt-2">
+                                        <template x-for="(tag, index) in formData.tags" :key="index">
+                                          <div class="flex items-center bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-full">
+                                            <span x-text="tag" class="text-sm"></span>
+                                            <button 
+                                              @click="removeTag(index)" 
+                                              class="ml-2 text-gray-500 hover:text-red-500"
+                                              type="button"
+                                            >
+                                              &times;
+                                            </button>
+                                          </div>
+                                        </template>
                                       </div>
+                                    </div> -->
                                       <div>
                                         <label class="block mb-2 text-gray-700 dark:text-gray-300">Endorsements:</label>
                                         <input type="text" x-model="formData.endorsements" name="endorsements" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
@@ -1254,7 +1323,9 @@
       hired_on: '',
       terminated_on: '',
       years_of_experience: '',
-      tags: '',
+      //tags: '',
+      // tags: [],
+      // tagsInput: '',
       endorsements: '',
       rating: '',
       notes_about_the_choices_made: '',
@@ -1278,6 +1349,53 @@
       this.fetchSettings();
       //this.submitCustomerForm();
     },
+
+    alertPercentage() {
+                const creditLimit = parseFloat(this.formData.alert_percentage);
+                const creditInput = document.querySelector('#alert_percentage');
+
+            if (creditLimit > 100) {
+                if (creditInput) {
+                    creditInput.style.border = '2px solid red';
+                }
+                createToast('error', 'Alert Percentage cannot be greater than 100%');
+            } else {
+                if (creditInput) {
+                    creditInput.style.border = '';
+                }
+            }
+        },
+
+      // addTag() {
+      //   if (this.formData.tagsInput.trim()) {
+      //       // Split by spaces and filter out empty strings
+      //       const newTags = this.formData.tagsInput.split(' ')
+      //       .map(tag => tag.trim())
+      //       .filter(tag => tag.length > 0);
+            
+      //       // Add new tags to the array, avoiding duplicates
+      //       newTags.forEach(tag => {
+      //       if (!this.formData.tags.includes(tag)) {
+      //           this.formData.tags.push(tag);
+      //       }
+      //       });
+            
+      //       this.formData.tagsInput = '';
+      //       //this.saveProgress();
+      //   }
+      //   },
+        
+      //   removeTag(index) {
+      //   this.formData.tags.splice(index, 1);
+      //   //this.saveProgress();
+      //   },
+        
+      //   removeLastTag() {
+      //   if (this.formData.tagsInput === '' && this.formData.tags.length > 0) {
+      //       this.formData.tags.pop();
+      //       //this.saveProgress();
+      //   }
+      //   },
     
     async fetchUserData() {
       try {
@@ -1363,6 +1481,8 @@
         }
               console.log(localStorage.getItem('auth_token'))
          //return
+         
+        //formData.append('tags', this.formData.tags.join(','));
       try {
         const response = await fetch(`${requestURL}/settings/${tabName}`, {
           method: 'POST',

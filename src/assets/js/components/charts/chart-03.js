@@ -44,8 +44,8 @@ const fetchChartData = async () => {
 const renderError = (container, message, retryCallback) => {
   container.innerHTML = `
     <div class="chart-error">
-      <p>${message}</p>
-      <button class="retry-btn">Retry</button>
+      <p class="text-sm dark:text-gray-400 text:white">${message}</p>
+      <button class="retry-btn" class="text-sm dark:text-gray-400 text:white">Retry</button>
     </div>
   `;
   container.querySelector('.retry-btn').addEventListener('click', retryCallback);

@@ -73,7 +73,7 @@
 
             fetchData() {
                 this.isLoading = true;
-                fetch(requestGetURL + '/dashboard/dashboardstats', {
+                fetch(requestURL + '/dashboard/dashboardstats', {
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
                         'Accept': 'application/json'
@@ -237,7 +237,7 @@
                     if (error.message === 'Unauthorized') {
                         alert("Session expired. Please log in again.");
                         localStorage.removeItem('auth_token');
-                        window.location.href = "/login";
+                        window.location.href = "/signin.html";
                     }
                 })
                 .finally(() => {

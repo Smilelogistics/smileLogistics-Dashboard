@@ -4,7 +4,7 @@ import ApexCharts from "apexcharts";
 
 const fetchChartData = async () => {
   try {
-    const response = await fetch(`${requestGetURL}/dashboard/monthly-income`, {
+    const response = await fetch(`${requestURL}/dashboard/monthly-income`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
         'Accept': 'application/json'

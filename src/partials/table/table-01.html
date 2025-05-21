@@ -250,7 +250,7 @@
 
     fetchTransactions() {
       this.isLoading = true;
-      fetch(requestGetURL + '/dashboard/dashboardstats', {
+      fetch(requestURL + '/dashboard/dashboardstats', {
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
           'Accept': 'application/json'

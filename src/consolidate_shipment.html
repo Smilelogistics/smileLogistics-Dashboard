@@ -542,7 +542,7 @@
  populateCarrierSelect() 
 function populateCarrierSelect() {
       $.ajax({
-          url: requestGetURL + '/carriers/carriers',
+          url: requestURL + '/carriers/carriers',
           type: 'GET',
           headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),

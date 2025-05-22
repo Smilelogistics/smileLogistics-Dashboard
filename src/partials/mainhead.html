@@ -228,12 +228,12 @@ button {
 
   <script>
     
-    var requestGetURL = "https://laravel-production-077b.up.railway.app/api/v1";
+    //var requestGetURL = "https://laravel-production-077b.up.railway.app/api/v1";
 
     
     function populateDriverSelect() {
       $.ajax({
-          url: requestGetURL + '/drivers/truckdrivers',
+          url: requestURL + '/drivers/truckdrivers',
           type: 'GET',
           headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('auth_token'), // Add space after 'Bearer'
@@ -286,7 +286,7 @@ button {
 
   function populateBikeDriverSelect() {
       $.ajax({
-          url: requestGetURL + '/drivers/bikedrivers',
+          url: requestURL + '/drivers/bikedrivers',
           type: 'GET',
           headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('auth_token'), // Add space after 'Bearer'
@@ -339,7 +339,7 @@ button {
 
   function populateCustomerSelect() {
       $.ajax({
-          url: requestGetURL + '/invoices/customer',
+          url: requestURL + '/invoices/customer',
           type: 'GET',
           headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
@@ -394,7 +394,7 @@ button {
 
   function populateCarrierSelect() {
       $.ajax({
-          url: requestGetURL + '/invoices/customer',
+          url: requestURL + '/invoices/customer',
           type: 'GET',
           headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
@@ -451,7 +451,7 @@ button {
 
   function populateTruckSelect() {
     $.ajax({
-        url: requestGetURL + '/trucks/trucks',
+        url: requestURL + '/trucks/trucks',
         type: 'GET',
         headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),

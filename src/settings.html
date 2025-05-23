@@ -138,7 +138,7 @@
                               }
                             </style>
 
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                               <div id="chosen-select">
                                 <label class="block mb-2 text-gray-700 dark:text-gray-300">Currency:</label>
                                 <select x-model="formData.currency" name="currency" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 chosen-select">
@@ -321,6 +321,11 @@
                               <div>
                                   <label class="block mb-2 text-gray-700 dark:text-gray-300">Copyright:</label>
                                   <input x-model="formData.copyright" name="copyright" type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="Alright Reserved SML">
+                              </div>
+
+                                <div>
+                                <label class="block mb-2 text-gray-700 dark:text-gray-300">Invoice Logo</label>
+                                <input x-model="formData.invoice_logo" name="invoice_logo" type="file" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                               </div>
 
                               <div>
@@ -1271,6 +1276,7 @@
       enable_email_otp: 0, // Default to 0 (unchecked)
       enable_2fa: 0,   
       logo1: '',
+      invoice_logo: '',
       mpg: '',
       base_rate: '',
       base_fee: '',

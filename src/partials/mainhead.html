@@ -228,12 +228,12 @@ button {
 
   <script>
     
-    var requestGetURL = "https://laravel-production-077b.up.railway.app/api/v1";
+   // var requestGetURL = "https://laravel-production-077b.up.railway.app/api/v1";
 
     
     function populateDriverSelect() {
       $.ajax({
-          url: requestGetURL + '/drivers/truckdrivers',
+          url: requestURL + '/drivers/truckdrivers',
           type: 'GET',
           headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('auth_token'), // Add space after 'Bearer'
@@ -286,7 +286,7 @@ button {
 
   function populateBikeDriverSelect() {
       $.ajax({
-          url: requestGetURL + '/drivers/bikedrivers',
+          url: requestURL + '/drivers/bikedrivers',
           type: 'GET',
           headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('auth_token'), // Add space after 'Bearer'
@@ -295,7 +295,7 @@ button {
           success: (response) => {
               console.log('Truck Driver data:', response);
               if(response.length == 0){
-                  createToast('error', 'No drivers found.');
+                  ///createToast('error', 'No drivers found.');
                   return
               }
               if (Array.isArray(response)) {
@@ -313,6 +313,12 @@ button {
                       driverSelect.appendChild(option);
                   });
               } else {
+                  var driverSelect = document.getElementById('driver_id');
+                  driverSelect.innerHTML = 'No driver found';
+                  var defaultOption = document.createElement('option');
+                  defaultOption.value = '';
+                  defaultOption.text = 'No driver found';
+                  driverSelect.appendChild(defaultOption);
                   console.error('Invalid response format:', response);
                   createToast('error', 'Invalid driver data received.');
               }
@@ -339,7 +345,7 @@ button {
 
   function populateCustomerSelect() {
       $.ajax({
-          url: requestGetURL + '/invoices/customer',
+          url: requestURL + '/invoices/customer',
           type: 'GET',
           headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
@@ -394,7 +400,7 @@ button {
 
   function populateCarrierSelect() {
       $.ajax({
-          url: requestGetURL + '/invoices/customer',
+          url: requestURL + '/invoices/customer',
           type: 'GET',
           headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
@@ -451,7 +457,7 @@ button {
 
   function populateTruckSelect() {
     $.ajax({
-        url: requestGetURL + '/trucks/trucks',
+        url: requestURL + '/trucks/trucks',
         type: 'GET',
         headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),

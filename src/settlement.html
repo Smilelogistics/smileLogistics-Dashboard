@@ -5,7 +5,7 @@
         <script src="./assets/js/main.js"></script>
   </head>
   <body
-    x-data="{ page: 'driver', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-data="{ page: 'Settlement', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
     x-init="
          darkMode = JSON.parse(localStorage.getItem('darkMode'));
          $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
@@ -37,7 +37,7 @@
         <main>
           <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
             <!-- Breadcrumb Start -->
-            <div x-data="{ pageName: `Driver`}">
+            <div x-data="{ pageName: `Settlement`}">
               <include src="./partials/breadcrumb.html" />
             </div>
             <!-- Breadcrumb End -->
@@ -87,7 +87,7 @@
                 </ol>
                 
             
-                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newdriverForm">
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newSettlementForm">
                     <!-- Step 1: Basic Info -->
                     <div x-show="step === 1" >
                         <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -113,11 +113,11 @@
                         <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                            
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Driver Type</label>
-                                <select x-model="formData.driver_type" name="driver_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <label class="block text-gray-700 dark:text-gray-300">Settlement Type</label>
+                                <select x-model="formData.settlement_type" name="settlement_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select Type</option>
                                 <option value="1">Owner Operator (Single Truck)</option>
-                                <option value="2">Company Driver</option>
+                                <option value="2">Company Settlement</option>
                                 <option value="3">river for fleet Owner Or Fleet Owner Himself</option>
                                 <option value="4">Temp</option>
                             </select>
@@ -151,11 +151,11 @@
                         <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Phone</label>
-                                <input type="text" x-model="formData.driver_phone" name="driver_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                                <input type="text" x-model="formData.settlement_phone" name="settlement_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Phone Carrier</label>
-                                <select x-model="formData.driver_phone_carrier" name="driver_phone_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <select x-model="formData.settlement_phone_carrier" name="settlement_phone_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select Type</option>
                                 <option value="Verizon">Verizon</option>
                                 <option value="TMobile">T-Mobile</option>
@@ -166,26 +166,26 @@
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Primary Address</label>
-                                <input type="text" x-model="formData.driver_primary_address" name="driver_primary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <input type="text" x-model="formData.settlement_primary_address" name="settlement_primary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Secondary Address</label>
-                                <input type="text" x-model="formData.driver_secondary_address" name="driver_secondary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <input type="text" x-model="formData.settlement_secondary_address" name="settlement_secondary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                         </div>
 
                         <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">City</label>
-                                <input type="text" x-model="formData.driver_city" name="driver_city" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <input type="text" x-model="formData.settlement_city" name="settlement_city" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">State</label>
-                                <input type="text" x-model="formData.driver_state" name="driver_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                                <input type="text" x-model="formData.settlement_state" name="settlement_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
                             </div> 
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Zip</label>
-                                <input type="text" x-model="formData.driver_zip" name="driver_zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                                <input type="text" x-model="formData.settlement_zip" name="settlement_zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Emergency Contact Info</label>
@@ -214,7 +214,7 @@
                             </select>
                             </div>
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Driver vendors / options</label>
+                                <label class="block text-gray-700 dark:text-gray-300">Settlement vendors / options</label>
                                 <select x-model="formData.endorsements" name="endorsements" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Select Type</option>
                                     <option value="local">Local</option>
@@ -867,24 +867,24 @@
     <script>
       function stepperForm() {
           return {
-              step: localStorage.getItem('Driver_step') ? parseInt(localStorage.getItem('Driver_step')) : 1,
+              step: localStorage.getItem('Settlement_step') ? parseInt(localStorage.getItem('Settlement_step')) : 1,
               formData: JSON.parse(localStorage.getItem('formData')) || {
                 fname: '',
                 lname: '',
                 mname: '',
                 email: '',
-                driver_type: '',
+                settlement_type: '',
                 transport_type: '',
                 truck_id: '',
                 quick_note: '',
                 dispatcher_note: '',
-                driver_phone: '',
-                driver_phone_carrier: '',
-                driver_primary_address: '',
-                driver_secondary_address: '',
-                driver_city: '',
-                driver_state: '',
-                driver_zip: '',
+                settlement_phone: '',
+                settlement_phone_carrier: '',
+                settlement_primary_address: '',
+                settlement_secondary_address: '',
+                settlement_city: '',
+                settlement_state: '',
+                settlement_zip: '',
                 fnameemergency_contact_info: '',
                 hired_on: '',
                 years_of_experience: '',
@@ -975,15 +975,15 @@
     
               nextStep() {
                   this.step++;
-                  localStorage.setItem('Driver_step', this.step);
+                  localStorage.setItem('Settlement_step', this.step);
               },
               prevStep() {
                   this.step--;
-                  localStorage.setItem('Driver_step', this.step);
+                  localStorage.setItem('Settlement_step', this.step);
               },
               saveProgress() {
                   localStorage.setItem('formData', JSON.stringify(this.formData));
-                  localStorage.setItem('Driver_step', this.step);
+                  localStorage.setItem('Settlement_step', this.step);
                   alert("Progress saved successfully!");
               },
               addTag() {
@@ -1017,7 +1017,7 @@
                 }
                 },
               saveAndSubmit() {
-                    let form = document.getElementById("newdriverForm");
+                    let form = document.getElementById("newsettlementForm");
                     let formData = new FormData(form);
                     formData.append('tags', this.formData.tags.join(','));
                     for (let pair of formData.entries()) {
@@ -1027,7 +1027,7 @@
                      //return
 
                     $.ajax({
-                        url: requestURL+'/drivers/driver',
+                        url: requestURL+'/settlements/settlement',
                         type: 'POST',
                         data: formData,
                         processData: false,

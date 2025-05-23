@@ -58,7 +58,7 @@
                             :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 2, 'border-gray-500 dark:border-gray-400': step !== 2 }">
                             2
                         </span>
-                        <span class="ml-2 hidden sm:inline">Form w-9</span>
+                        <span class="ml-2 hidden sm:inline">Payments</span>
                     </li>
                     
                     <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 3, 'text-gray-500 dark:text-gray-400': step !== 3 }">
@@ -66,7 +66,7 @@
                             :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 3, 'border-gray-500 dark:border-gray-400': step !== 3 }">
                             3
                         </span>
-                        <span class="ml-2 hidden sm:inline">License and Insurance</span>
+                        <span class="ml-2 hidden sm:inline">Deductions</span>
                     </li>
 
                     <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 4, 'text-gray-500 dark:text-gray-400': step !== 4 }">
@@ -92,157 +92,112 @@
                     <div x-show="step === 1" >
                         <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">First Name</label>
-                                <input type="text" x-model="formData.fname" name="fname" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <label class="block text-gray-700 dark:text-gray-300">Office</label>
+                                <select x-model="formData.office" name="office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="" selected disabled>Select Office</option>
+                                <option value="IN">IN</option>
+                                </select>
                             </div>
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Last Name</label>
-                                <input type="text" x-model="formData.lname" name="lname" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <label class="block text-gray-700 dark:text-gray-300">Settlement #</label>
+                                <input type="text" x-model="formData.settlement_no" name="settlement_no" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="will be auto generated if blank" />
                             </div>
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Other Name</label>
-                                <input type="text" x-model="formData.mname" name="mname" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <label class="block text-gray-700 dark:text-gray-300">Settlement date</label>
+                                <input type="text" x-model="formData.settlement_date" name="settlement_date" id="settlement_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Email</label>
-                                <input type="email" x-model="formData.email" name="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                          
-                        </div>
-
-                        <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-                           
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Settlement Type</label>
                                 <select x-model="formData.settlement_type" name="settlement_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select Type</option>
-                                <option value="1">Owner Operator (Single Truck)</option>
-                                <option value="2">Company Settlement</option>
-                                <option value="3">river for fleet Owner Or Fleet Owner Himself</option>
-                                <option value="4">Temp</option>
+                                <option value="truck_settlement">Truck Settlement</option>
+                                <option value="driver_settlement">Driver Settlement</option>
+                                <option value="carrier_settlement">Carrier Settlement</option>
+                                <option value="escrow_held_under_truck">Escrow (held under truck)</option>
+                                <option value="escrow_held_under_driver">Escrow (held under driver)</option>
+                                <option value="sales_commission">Sales Commission</option>
+                                <option value="agency_commision">Agency Commission</option>
                             </select>
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Trucks</label>
-                                <select x-model="formData.truck_id" name="truck_id" id="truck_id" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                <option value="" selected disabled>Select Type</option>
-                            </select>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Transport Type</label>
-                                <select x-model="formData.transport_type" name="transport_type" id="transport_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                <option value="" selected disabled>Select Type</option>
-                                <option value="1">Truck</option>
-                                <option value="2">Bike</option>
-                            </select>
-                            </div>
-
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Quick Note</label>
-                                <input type="text" x-model="formData.quick_note" name="quick_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Note to Dispatcher</label>
-                                <input type="email" x-model="formData.dispatcher_note" name="dispatcher_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                           
                         </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                           
+                           <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Weeks</label>
+                                <select x-model="formData.weeks" name="weeks" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select week</option>
+                                    <template x-for="(week, index) in weeks" :key="index">
+                                        <option 
+                                            :value="week.value" 
+                                            :selected="week.isCurrent" 
+                                            :class="{ 'font-semibold bg-blue-100 dark:bg-blue-900': week.isCurrent }"
+                                            x-text="week.label"
+                                        ></option>
+                                    </template>
+                                </select>
+                            </div>
+                            <!-- <span class="block text-gray-700 dark:text-gray-300">OR</span> -->
+                           <div>
+                                <label class="block text-gray-700 dark:text-gray-300">From</label>
+                                <input type="text" x-model="formData.week_from" name="week_from" id="week_from" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">To</label>
+                                <input type="text" x-model="formData.week_to" name="week_to" id="week_to" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+
+                        </div>
                         <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Phone</label>
-                                <input type="text" x-model="formData.settlement_phone" name="settlement_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                                <label class="block text-gray-700 dark:text-gray-300">Payee (Payable to)</label>
+                                <input type="text" x-model="formData.payee" name="payee" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
                             </div>
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Phone Carrier</label>
-                                <select x-model="formData.settlement_phone_carrier" name="settlement_phone_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                <option value="" selected disabled>Select Type</option>
-                                <option value="Verizon">Verizon</option>
-                                <option value="TMobile">T-Mobile</option>
-                                <option value="AT&T">AT&T</option>
-                                <option value="Sprint">Sprint</option>
-                                <option value="Other">Other</option>
-                            </select>
+                                <label class="block text-gray-700 dark:text-gray-300">Note to Payee</label>
+                                <textarea x-model="formData.payee_note" cols="1" rows="1" name="payee_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </textarea>
                             </div>
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Primary Address</label>
-                                <input type="text" x-model="formData.settlement_primary_address" name="settlement_primary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <label class="block text-gray-700 dark:text-gray-300">Pay Via</label>
+                                <select type="text" x-model="formData.payment_method" name="payment_method" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    <option value="" selected disabled>Select Payment Method</option>
+                                    <option value="check">Check</option>
+                                    <option value="direct_deposit">Direct Deposit</option>
+                                    <option value="credit_card">Credit Card</option>
+                                    <option value="ach">ACH</option>
+                                    <option value="cash">Cash</option>
+                                    <option value="via_factoring">Via Factoring</option>
+                                    <option value="wex">WEX Fleet One</option>
+                                    <option value="zelle">Zelle</option>
+                                    <option value="other">Other</option>
+                                    <!-- <option value="wire">Wire</option> -->
+                                </select>
                             </div>
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Secondary Address</label>
-                                <input type="text" x-model="formData.settlement_secondary_address" name="settlement_secondary_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <label class="block text-gray-700 dark:text-gray-300">Check payment ref #</label>
+                                <input type="text" x-model="formData.check_payment_reference" name="check_payment_reference" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                         </div>
 
                         <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">City</label>
-                                <input type="text" x-model="formData.settlement_city" name="settlement_city" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <label class="block text-gray-700 dark:text-gray-300">Payment Date</label>
+                                <input type="text" x-model="formData.payment_date" name="payment_date" id="payment_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">State</label>
-                                <input type="text" x-model="formData.settlement_state" name="settlement_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                                <label class="block text-gray-700 dark:text-gray-300">Payment Note</label>
+                                <textarea type="text" x-model="formData.payment_note" name="payment_note" cols="1" rows="1"  class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" >
+                                    </textarea>
                             </div> 
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Zip</label>
-                                <input type="text" x-model="formData.settlement_zip" name="settlement_zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                                <label class="block text-gray-700 dark:text-gray-300">Inter Notes</label>
+                                <textarea type="text" x-model="formData.internal_notes" name="internal_notes" cols="1" rows="1" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                                    </textarea>
                             </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Emergency Contact Info</label>
-                                <input type="text" x-model="formData.emergency_contact_info" name="emergency_contact_info" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                        </div>
-
-                        <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Hired On</label>
-                                <input type="text" x-model="formData.hired_on" id="hired_on" name="hired_on" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                        
-                            <script>
-                                $(document).ready(function () {
-                                    $(function () {
-                                        $("#hired_on").
-                                        datepicker();
-                                    });
-                                }) 
-                            </script>
-
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Years of Experience</label>
-                                <input type="text" x-model="formData.years_of_experience" id="years_of_experience" name="years_of_experience" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </select>
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Settlement vendors / options</label>
-                                <select x-model="formData.endorsements" name="endorsements" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                    <option value="" selected disabled>Select Type</option>
-                                    <option value="local">Local</option>
-                                    <option value="class_a_cdl">Class A CDL</option>
-                                    <option value="class_b_cdl">Class B CDL</option>
-                                    <option value="bonded">Bonded</option>
-                                    <option value="hazmat">Hazmat</option>
-                                    <option value="tanker">Tanker</option>
-                                    <option value="twic">TWIC</option>
-                                    <option value="doubles">Doubles</option>
-                                    <option value="triples">Tripples</option>
-                                    <option value="sealink">Sealink</option>
-                                    <option value="nait">NAIT</option>  
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">( rating )/categories</label>
-                                <select x-model="formData.rating" name="rating" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                    <option value="" selected disabled>Select Type</option>
-                                </select>
-                            </div>
-                            <!-- <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Tags</label>
-                                <select x-model="formData.tags" name="tags" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                    <option value="" selected disabled>Select Type</option>
-                                </select>
-                            </div> -->
-                            <div>
+                              <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Tags</label>
                                 <input 
                                   type="text" 
@@ -272,117 +227,86 @@
                               </div>
                         </div>
 
-                        <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">notes_about_the_choices_made</label>
-                                <textarea type="text" x-model="formData.notes_about_the_choices_made" name="notes_about_the_choices_made" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
-                            </div>
-                            <div>
-                                <div class="flex items-center space-x-4">
-                                    <!-- <label class="flex items-center space-x-2">
-                                        <input type="radio" x-model="formData.isAccessToMobileApp" name="isAccessToMobileApp" value="Left" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                                        <span class="text-gray-700 dark:text-gray-300">Activate Access</span>
-                                    </label>
+                        
+                            <script>
+                                $(document).ready(function () {
+                                    $(function () {
+                                        $("#week_from").
+                                        datepicker();
 
-                                    <label class="flex items-center space-x-2">
-                                        <input type="radio" x-model="formData.isAccessToMobileApp" name="isAccessToMobileApp" value="Right" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                                        <span class="text-gray-700 dark:text-gray-300">Block Access</span>
-                                    </label>
-
-                                    <label class="flex items-center space-x-2">
-                                        <input type="radio" x-model="formData.isAccessToMobileApp" name="isAccessToMobileApp" value="Right" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                                        <span class="text-gray-700 dark:text-gray-300">Reset Pin</span>
-                                    </label> -->
-
-                                    <label class="flex items-center space-x-2 mt-3">
-                                        <input type="hidden" x-model="formData.mobile_settingsl" name="mobile_settings" value="0" id="mobile_settings">
-                                        <input type="checkbox" id="mobile_settings_control" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                                        <span class="text-gray-700 dark:text-gray-300">Show Payment on App</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <script>
-                            $(document).ready(function () {
-                                document.getElementById('mobile_settings_control').addEventListener('change', function() {
-                              var hiddenInput = document.getElementById('mobile_settings');
-                              hiddenInput.value = this.checked ? '1' : '0';
-                            });
-                            })
-                           
-                          </script>
-
-                        <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Paid via</label>
-                                <input type="text" x-model="formData.pay_via" name="pay_via" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Company name / Pay-to</label>
-                                <input type="text" x-model="formData.company_name_paid_to" name="company_name_paid_to" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </select>
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Employer ID number</label>
-                                <input type="text" x-model="formData.employer_identification_number" name="employer_identification_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Settlement email, if Different from main</label>
-                                <input type="email" x-model="formData.send_settlements_mail" name="send_settlements_mail" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">settlement company </label>
-                                <input type="text" x-model="formData.print_settlements_under_this_company" name="print_settlements_under_this_company" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                        </div>
-
-                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300"> Flash note to dispatchers (note will show up during order entry)
-                                </label>
-                                <textarea type="text" x-model="formData.flash_notes_to_dispatch" name="flash_notes_to_dispatch" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""></textarea>
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300"> Flash note to payroll (shows up while creating settlements)</label>
-                                <textarea type="text" x-model="formData.flash_notes_to_payroll" name="flash_notes_to_payroll" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""></textarea>
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Internal Notes</label>
-                                <textarea type="text" x-model="formData.internal_notes" name="internal_notes" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
-                            </div>
-                        </div>
+                                        $("#week_to").
+                                        datepicker();
+                                        $("#payment_date").datepicker();
+                                    });
+                                }) 
+                            </script>
+                       
                     </div>
 
                     <!-- Step 2: Form w-9 -->
                     <div x-show="step === 2">
                    
                         <div id="" class="grid grid-cols-4 md:grid-cols-4 gap-4 mb-6">
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Name (as in tax return)</label>
-                                <input type="text" x-model="formData.name_tax_return" name="name_tax_return" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                          <div class="space-y-4">
+                              <template x-for="(provider, index) in formData.providers" :key="index">
+                                <div class="p-4 border rounded-lg dark:border-gray-600 relative">
+                                  <!-- Remove button (shown for all providers including first one) -->
+                                  <button 
+                                    x-show="formData.providers.length > 1" 
+                                    @click="removeProvider(index)"
+                                    class="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                                    type="button"
+                                    title="Remove provider"
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                      <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                    </svg>
+                                  </button>
+                                  
+                                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                      <label class="block text-gray-700 dark:text-gray-300">Payment Type</label>
+                                      <select x-model="provider.app_provider" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <option value="" selected disabled>Select</option>
+                                        <option value="trip_pay">Trip Pay</option>
+                                        <option value="fuel_surcharge">Fuel Surcharge</option>
+                                        <option value="trip_pay_local">Trip Pay (Local)</option>
+                                        <option value="accesorial">Accesorial</option>
+                                        <option value="additional_dray">Additional Dray</option>
+                                        <option value=""></option>
+                                        <option value=""></option>
+                                        <option value=""></option>
+                                        <option value=""></option>
+                                        <option value=""></option>
+                                        <option value=""></option>
+                                        <option value=""></option>
+                                        <option value=""></option>
+                                      </select>
+                                    </div>
+                                    <div>
+                                      <label class="block text-gray-700 dark:text-gray-300">Card # / Device # / Linking #</label>
+                                      <input type="text" x-model="provider.card_device_linking_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div>
+                                    <div>
+                                      <label class="block text-gray-700 dark:text-gray-300">Quick note</label>
+                                      <textarea cols="1" rows="1" x-model="provider.quick_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""></textarea>
+                                    </div>
+                                  </div>
+                                </div>
+                              </template>
                             </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Business Name (if different from above)</label>
-                                <input type="text" x-model="formData.different_bussiness_name" name="different_bussiness_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </select>
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Type</label>
-                                <select type="text" x-model="formData.wtype" name="wtype" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> 
-                                    <option value="" selected disabled>Select Type</option>
-                                    <option value="individual_sole_proprietorship">Individual / Sole Proprietorship or Single Member LLC</option>
-                                    <option value="c_corporiation">C Corporation</option>
-                                    <option value="s_corporation">S Corporation</option>
-                                    <option value="partnership">Partnership</option>
-                                    <option value="trust_estate">Trust/Estate</option>
-                                    <option value="liability">Liability</option>
-                                    <option value="other">Other</option>
-                                    </select>
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">If 'Other' , explain here</label>
-                                <input type="text" x-model="formData.other_type" name="other_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
+                        
+                            <!-- Add Provider Button (always visible) -->
+                            <button
+                              @click="addProvider()"
+                              type="button"
+                              class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                              </svg>
+                              Add Another Provider
+                            </button>
                         </div>
 
                         <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -951,6 +875,7 @@
                 quick_note: ''
                 }]
               },
+               weeks: [],
              
     
                 // Add a new provider
@@ -965,6 +890,101 @@
                 });
                 //this.saveProgress();
                 },
+                init() {
+                    this.generateWeeks();
+                },
+
+                   generateWeeks() {
+            const weeks = [];
+            const now = new Date();
+            const currentWeekInfo = this.getWeekRange(now);
+            
+            // 1. First add 4 future weeks
+            for (let i = 1; i <= 4; i++) {
+                const futureDate = new Date(now);
+                futureDate.setDate(now.getDate() + (i * 7));
+                const weekInfo = this.getWeekRange(futureDate);
+                weeks.push({
+                    label: `(WK-${weekInfo.weekNumber}) ${weekInfo.startDate} - ${weekInfo.endDate}`,
+                    value: `${weekInfo.year}-${weekInfo.weekNumber}`,
+                    isCurrent: false,
+                    date: futureDate
+                });
+            }
+            
+            // 2. Add CURRENT WEEK (highlighted)
+            weeks.push({
+                label: `(WK-${currentWeekInfo.weekNumber}) ${currentWeekInfo.startDate} - ${currentWeekInfo.endDate} (Current Week)`,
+                value: `${currentWeekInfo.year}-${currentWeekInfo.weekNumber}`,
+                isCurrent: true,
+                date: now
+            });
+            
+            // 3. Add past weeks (from 2024 to current week)
+            const startYear = 2024;
+            let date = new Date(startYear, 0, 1);
+            
+            // Find first Sunday of 2024
+            while (date.getDay() !== 0) {
+                date.setDate(date.getDate() + 1);
+            }
+            
+            // Generate all weeks from 2024 to now
+            while (date < now) {
+                const weekInfo = this.getWeekRange(date);
+                weeks.push({
+                    label: `(WK-${weekInfo.weekNumber}) ${weekInfo.startDate} - ${weekInfo.endDate}`,
+                    value: `${weekInfo.year}-${weekInfo.weekNumber}`,
+                    isCurrent: false,
+                    date: new Date(date)
+                });
+                date.setDate(date.getDate() + 7);
+            }
+            
+            // Sort by date (newest first)
+            this.weeks = weeks.sort((a, b) => b.date - a.date);
+        },
+        
+        getWeekRange(date) {
+            const d = new Date(date);
+            
+            // Find Sunday (start of week)
+            while (d.getDay() !== 0) {
+                d.setDate(d.getDate() - 1);
+            }
+            const startDate = new Date(d);
+            
+            // Find Saturday (end of week)
+            const endDate = new Date(d);
+            endDate.setDate(d.getDate() + 6);
+            
+            // Format dates as MM/DD/YYYY
+            const formatDate = (dateObj) => {
+                const month = dateObj.getMonth() + 1;
+                const day = dateObj.getDate();
+                const year = dateObj.getFullYear();
+                return `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}/${year}`;
+            };
+            
+            // Get week number
+            const weekNumber = this.getWeekNumber(date);
+            
+            return {
+                startDate: formatDate(startDate),
+                endDate: formatDate(endDate),
+                weekNumber: weekNumber,
+                year: date.getFullYear()
+            };
+        },
+        
+        getWeekNumber(date) {
+            const d = new Date(date);
+            d.setHours(0, 0, 0, 0);
+            d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
+            const week1 = new Date(d.getFullYear(), 0, 4);
+            return 1 + Math.round(((d - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+        },
+    
 
                 removeProvider(index) {
                 if (this.formData.providers && index > 0 && this.formData.providers.length > 1) {
@@ -1072,7 +1092,7 @@
           }
       }
 
-      populateTruckSelect();
+    //populateTruckSelect();
 
       function handleLoadTypeChange(value) {
     if (value === 'import') {

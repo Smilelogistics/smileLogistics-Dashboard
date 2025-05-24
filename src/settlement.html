@@ -69,46 +69,43 @@
                         <span class="ml-2 hidden sm:inline">Deductions</span>
                     </li>
 
+                
                     <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 4, 'text-gray-500 dark:text-gray-400': step !== 4 }">
                         <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
                             :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 4, 'border-gray-500 dark:border-gray-400': step !== 4 }">
                             4
-                        </span>
-                        <span class="ml-2 hidden sm:inline">App Integration</span>
-                    </li>
-                
-                    <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 5, 'text-gray-500 dark:text-gray-400': step !== 5 }">
-                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
-                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 5, 'border-gray-500 dark:border-gray-400': step !== 5 }">
-                            5
                         </span>
                         <span class="ml-2 hidden sm:inline">Backup Docs</span>
                     </li>
                 </ol>
                 
             
-                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newSettlementForm">
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newSettlement">
                     <!-- Step 1: Basic Info -->
                     <div x-show="step === 1" >
-                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Office</label>
-                                <select x-model="formData.office" name="office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                        <!-- Your existing fields -->
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Office</label>
+                            <select x-model="formData.office" name="office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select Office</option>
                                 <option value="IN">IN</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Settlement #</label>
-                                <input type="text" x-model="formData.settlement_no" name="settlement_no" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="will be auto generated if blank" />
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Settlement date</label>
-                                <input type="text" x-model="formData.settlement_date" name="settlement_date" id="settlement_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Settlement Type</label>
-                                <select x-model="formData.settlement_type" name="settlement_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Settlement #</label>
+                            <input type="text" x-model="formData.settlement_no" name="settlement_no" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="will be auto generated if blank" />
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Settlement date</label>
+                            <input type="text" x-model="formData.settlement_date" name="settlement_date" id="settlement_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">Settlement Type</label>
+                            <select x-model="formData.settlement_type" 
+                                    @change="handleSettlementTypeChange()"
+                                    name="settlement_type" 
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select Type</option>
                                 <option value="truck_settlement">Truck Settlement</option>
                                 <option value="driver_settlement">Driver Settlement</option>
@@ -118,15 +115,38 @@
                                 <option value="sales_commission">Sales Commission</option>
                                 <option value="agency_commision">Agency Commission</option>
                             </select>
-                            </div>
-                          
                         </div>
+                        
+                        <!-- Conditional fields -->
+                        <div x-show="shouldShowDriverField()">
+                            <label class="block text-gray-700 dark:text-gray-300">Driver</label>
+                            <select type="text" x-model="formData.driver_id" id="driver_id" name="driver_id" 
+                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" >
+                                <option value="" selected disabled>Select</option>
+                            
+                            </select>
+                        </div>
+                        
+                        <div x-show="shouldShowTruckField()">
+                            <label class="block text-gray-700 dark:text-gray-300">Truck</label>
+                            <select type="text" x-model="formData.truck_id" id="truck_id" name="truck_id" 
+                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" >
+                                </select>
+                        </div>
+                        
+                        <div x-show="shouldShowCarrierField()">
+                            <label class="block text-gray-700 dark:text-gray-300">Carrier</label>
+                            <select type="text" x-model="formData.carrier_id" id="carrier_id" name="carrier_id" 
+                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" >
+                                </select>
+                        </div>
+                    </div>
 
                         <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                            
                            <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Weeks</label>
-                                <select x-model="formData.weeks" name="weeks" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <select x-model="formData.settlement_week" name="settlement_week" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Select week</option>
                                     <template x-for="(week, index) in weeks" :key="index">
                                         <option 
@@ -153,7 +173,7 @@
                         <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Payee (Payable to)</label>
-                                <input type="text" x-model="formData.payee" name="payee" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                                <input type="text" x-model="formData.payee" name="payee" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Note to Payee</label>
@@ -194,7 +214,7 @@
                             </div> 
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Inter Notes</label>
-                                <textarea type="text" x-model="formData.internal_notes" name="internal_notes" cols="1" rows="1" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                                <textarea type="text" x-model="formData.internal_notes" name="internal_notes" cols="1" rows="1" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                     </textarea>
                             </div>
                               <div>
@@ -229,524 +249,365 @@
 
                         
                             <script>
-                                $(document).ready(function () {
-                                    $(function () {
-                                        $("#week_from").
-                                        datepicker();
+                               $(document).ready(function () {
+                                $("#week_from").datepicker({
+                                    dateFormat: "yy-mm-dd"
+                                });
 
-                                        $("#week_to").
-                                        datepicker();
-                                        $("#payment_date").datepicker();
-                                    });
-                                }) 
+                                $("#week_to").datepicker({
+                                    dateFormat: "yy-mm-dd"
+                                });
+
+                                $("#payment_date").datepicker({
+                                    dateFormat: "yy-mm-dd"
+                                });
+
+                                $("#settlement_date").datepicker({
+                                    dateFormat: "yy-mm-dd"
+                                });
+                            });
+
                             </script>
                        
                     </div>
 
                     <!-- Step 2: Form w-9 -->
                     <div x-show="step === 2">
-                   
-                        <div id="" class="grid grid-cols-4 md:grid-cols-4 gap-4 mb-6">
-                          <div class="space-y-4">
-                              <template x-for="(provider, index) in formData.providers" :key="index">
-                                <div class="p-4 border rounded-lg dark:border-gray-600 relative">
-                                  <!-- Remove button (shown for all providers including first one) -->
-                                  <button 
-                                    x-show="formData.providers.length > 1" 
-                                    @click="removeProvider(index)"
-                                    class="absolute top-2 right-2 text-red-500 hover:text-red-700"
-                                    type="button"
-                                    title="Remove provider"
-                                  >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                      <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                    </svg>
-                                  </button>
-                                  
-                                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div>
-                                      <label class="block text-gray-700 dark:text-gray-300">Payment Type</label>
-                                      <select x-model="provider.app_provider" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        <div>
+                            <h4 class="mb-1 text-sm font-medium text-gray-800 dark:text-white/90">Payments</h4>
+                            <template x-for="(payment, index) in formData.payments" :key="index">
+                                <div class="mb-6">
+                                    <div class="flex justify-end mb-2">
+                                        <span @click="addPayment()" 
+                                              class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                            +
+                                        </span>
+                                        <span @click="removePayment(index)" 
+                                              class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
+                                            x
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 paymentcalc">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Payment Type</label>
+                                      <select x-model="payment.payment_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                         <option value="" selected disabled>Select</option>
                                         <option value="trip_pay">Trip Pay</option>
                                         <option value="fuel_surcharge">Fuel Surcharge</option>
                                         <option value="trip_pay_local">Trip Pay (Local)</option>
                                         <option value="accesorial">Accesorial</option>
                                         <option value="additional_dray">Additional Dray</option>
-                                        <option value=""></option>
-                                        <option value=""></option>
-                                        <option value=""></option>
-                                        <option value=""></option>
-                                        <option value=""></option>
-                                        <option value=""></option>
-                                        <option value=""></option>
+                                        <option value="bobtail">Bobtail</option>
+                                        <option value="cash_reimbursement">Cash Reimbursement</option>
+                                        <option value="chasis_reposition">Chasis Reposition</option>
+                                        <option value="chasis_split">Chasis Split</option>
+                                        <option value="clean_inspection">Clean Inspection</option>
+                                        <option value="detention">Detention</option>
+                                        <option value="extra_miles">Extra Miles</option>
+                                        <option value="funds_release">Funds Release</option>
+                                        <option value="hauling_refrigerated_cargo">Hauling Refrigerated Cargo</option>
+                                        <option value="harzadous_material">Harzadous Material</option>
+                                        <option value="layover">Layover</option>
+                                        <option value="lumber">Lumber</option>
+                                        <option value="miscelleanous">Miscelleanous</option>
+                                        <option value="out_of_route">Out of Route</option>
+                                        <option value="over_weight">Over Weight</option>
+                                        <option value="prepull">Pre Pull</option>
+                                        <option value="redlivery">Redelivery</option>
+                                        <option value="sign_on_bonus">Sign on Bonud</option>
+                                        <option value="referral_bonus">Referral Bonus</option>
+                                        <option value="scale">Scale</option>
+                                        <option value="stop_off">Stop off</option>
+                                        <option value="sweep_out">Sweep Out</option>
+                                        <option value="toll">Toll</option>
+                                        <option value="triaxle">Triaxle</option>
+                                        <option value="waiting_time">Waiting Time</option>
                                         <option value=""></option>
                                       </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Comment</label>
+                                            <input type="text" x-model="payment.comment" name="comment[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Units</label>
+                                            <input type="number" x-model="payment.units" 
+                                                   @input="calculateAmount(payment)" name="units[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Rate</label>
+                                            <input type="number" x-model="payment.rate" 
+                                                   @input="calculateAmount(payment)" name="rate[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
                                     </div>
-                                    <div>
-                                      <label class="block text-gray-700 dark:text-gray-300">Card # / Device # / Linking #</label>
-                                      <input type="text" x-model="provider.card_device_linking_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                    
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Amount</label>
+                                            <input type="number" x-model="payment.amount" name="amount[]" 
+                                                   readonly class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Internal Note</label>
+                                            <input type="text" x-model="payment.payment_internal_notes" name="payment_internal_notes[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
                                     </div>
-                                    <div>
-                                      <label class="block text-gray-700 dark:text-gray-300">Quick note</label>
-                                      <textarea cols="1" rows="1" x-model="provider.quick_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""></textarea>
-                                    </div>
-                                  </div>
                                 </div>
-                              </template>
-                            </div>
-                        
-                            <!-- Add Provider Button (always visible) -->
-                            <button
-                              @click="addProvider()"
-                              type="button"
-                              class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                              </svg>
-                              Add Another Provider
-                            </button>
-                        </div>
-
-                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Address</label>
-                                <input type="text" x-model="formData.waddress" name="waddress" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">State </label>
-                                <input type="text" x-model="formData.wstate" name="wstate" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">City</label>
-                                <input type="text" x-model="formData.wcity" name="wcity" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Zip</label>
-                                <input type="text" x-model="formData.wzip" name="wzip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </template>
+                    
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Total</label>
+                                    <input type="number" x-model="formData.total" name="total" 
+                                           readonly class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Total Discount</label>
+                                    <input type="number" x-model="formData.total_discount" name="total_discount" 
+                                           readonly class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Net Total</label>
+                                    <input type="number" x-model="formData.net_total" name="net_total" 
+                                           readonly class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 items-start">
-                            <!-- Label -->
-                            <div>
-                                <span class="block text-gray-700 dark:text-gray-300">
-                                    Which one is used as TIN (Tax ID)?
-                                </span>
-                            </div>
-                        
-                            <!-- Radio Inputs -->
-                            <div class="space-y-2 flex">
-                                <label class="flex items-center space-x-2">
-                                    <input type="radio" x-model="formData.wtaxid" name="wtaxid" value="wssn" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                                    <span class="text-gray-700 dark:text-gray-300">Social Security #</span>
-                                </label>
-                                <label class="flex items-center space-x-2">
-                                    <input type="radio" x-model="formData.wtaxid" name="wtaxid" value="wein" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
-                                    <span class="text-gray-700 dark:text-gray-300">Employer ID # (EIN)</span>
-                                </label>
+
+
+                        <div>
+                            <hr class="mb-10">
+                            <h4 class="mb-1 text-sm font-medium text-gray-800 dark:text-white/90">Escrow Release</h4>
+                            <template x-for="(escrow, index) in formData.escrows" :key="index">
+                                <div class="mb-6">
+                                    <div class="flex justify-end mb-2">
+                                        <span @click="addEscrowRelease()" 
+                                              class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                            +
+                                        </span>
+                                        <span @click="removeEscrowRelease(index)" 
+                                              class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
+                                            x
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 paymentcalc">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Account</label>
+                                            <input type="text" x-model="escrow.escrow_release_account" name="escrow_release_account[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Realease this amount</label>
+                                            <input type="number" x-model="escrow.escrow_release_amount" 
+                                            @input="calculateTotalRelease()"
+                                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Comment</label>
+                                            <textarea type="text" cols="1" rows="1" x-model="escrow.escrow_release_comment" name="escrow_release_comment[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> </textarea>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </template>
+                    
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Total</label>
+                                    <input type="number" x-model="formData.totalRelease" name="totalRelease" 
+                                           readonly class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
                             </div>
                         </div>
 
-                        <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">SSN</label>
-                                <input type="text" x-model="formData.wwssn" name="wwssn" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">EIN </label>
-                                <input type="text" x-model="formData.wwein" name="wwein" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Paid via</label>
-                                <select type="text" x-model="formData.wpaid_via" name="wpaid_via" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> 
-                                    <option value="" selected disabled> Select</option>
-                                    <option value="check">Check</option>
-                                    <option value="credit_card">Credit Card</option>
-                                    <option value="ach">ACH</option>
-                                    <option value="cash">Cash</option>
-                                    <option value="via_factoring">Via Factoring</option>
-                                    <option value="wex_fleet_one">Wex Fleet one</option>
-                                    <option value="zelle">Zelle</option>
-                                    <option value="direct_deposit">Direct Deposit</option>
-                                    <option value="other">Other</option>
-                                    </select>
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Account #</label>
-                                <input type="text" x-model="formData.waccountNumber" name="waccountNumber" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Routing #</label>
-                                <input type="text" x-model="formData.wroutingNumber" name="wroutingNumber" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                        </div>
-
-                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Internal Notes</label>
-                                <textarea type="text" x-model="formData.winternal_notes" name="winternal_notes" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
-                            </div>
-                        </div>
                         
                       </div>
 
-                      <!-- Step 3: License Info -->
+                      <!-- Step 3: Deductions -->
                     <div x-show="step === 3">
+
+                         <!-- <div>
+                            <h4 class="mb-1 text-sm font-medium text-gray-800 dark:text-white/90">Payments</h4>
+                            <template x-for="(payment, index) in formData.payments" :key="index">
+                                <div class="mb-6">
+                                    <div class="flex justify-end mb-2">
+                                        <span @click="addPayment()" 
+                                              class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                            +
+                                        </span>
+                                        <span @click="removePayment(index)" 
+                                              class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
+                                            x
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 paymentcalc">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Payment Type</label>
+                                      <select x-model="payment.payment_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <option value="" selected disabled>Select</option>
+                                        <option value="trip_pay">Trip Pay</option>
+                                        <option value="fuel_surcharge">Fuel Surcharge</option>
+                                        <option value="trip_pay_local">Trip Pay (Local)</option>
+                                        <option value="accesorial">Accesorial</option>
+                                        <option value="additional_dray">Additional Dray</option>
+                                        <option value="bobtail">Bobtail</option>
+                                        <option value="cash_reimbursement">Cash Reimbursement</option>
+                                        <option value="chasis_reposition">Chasis Reposition</option>
+                                        <option value="chasis_split">Chasis Split</option>
+                                        <option value="clean_inspection">Clean Inspection</option>
+                                        <option value="detention">Detention</option>
+                                        <option value="extra_miles">Extra Miles</option>
+                                        <option value="funds_release">Funds Release</option>
+                                        <option value="hauling_refrigerated_cargo">Hauling Refrigerated Cargo</option>
+                                        <option value="harzadous_material">Harzadous Material</option>
+                                        <option value="layover">Layover</option>
+                                        <option value="lumber">Lumber</option>
+                                        <option value="miscelleanous">Miscelleanous</option>
+                                        <option value="out_of_route">Out of Route</option>
+                                        <option value="over_weight">Over Weight</option>
+                                        <option value="prepull">Pre Pull</option>
+                                        <option value="redlivery">Redelivery</option>
+                                        <option value="sign_on_bonus">Sign on Bonud</option>
+                                        <option value="referral_bonus">Referral Bonus</option>
+                                        <option value="scale">Scale</option>
+                                        <option value="stop_off">Stop off</option>
+                                        <option value="sweep_out">Sweep Out</option>
+                                        <option value="toll">Toll</option>
+                                        <option value="triaxle">Triaxle</option>
+                                        <option value="waiting_time">Waiting Time</option>
+                                        <option value=""></option>
+                                      </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Comment</label>
+                                            <input type="text" x-model="payment.comment" name="comment[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Units</label>
+                                            <input type="number" x-model="payment.units" 
+                                                   @input="calculateAmount(payment)" name="units[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Rate</label>
+                                            <input type="number" x-model="payment.rate" 
+                                                   @input="calculateAmount(payment)" name="rate[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                    </div>
+                    
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Amount</label>
+                                            <input type="number" x-model="payment.amount" name="amount[]" 
+                                                   readonly class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Internal Note</label>
+                                            <input type="text" x-model="payment.payment_internal_notes" name="payment_internal_notes[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                    
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Total</label>
+                                    <input type="number" x-model="formData.total" name="total" 
+                                           readonly class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Total Discount</label>
+                                    <input type="number" x-model="formData.total_discount" name="total_discount" 
+                                           readonly class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Net Total</label>
+                                    <input type="number" x-model="formData.net_total" name="net_total" 
+                                           readonly class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
+                            </div>
+                        </div> -->
+
+
+
+                        <div>
+                            <!-- <hr class="mb-10"> -->
+                            <h4 class="mb-1 text-sm font-medium text-gray-800 dark:text-white/90">Additional Deductions</h4>
+                            <template x-for="(deduction, index) in formData.deductions" :key="index">
+                                <div class="mb-6">
+                                    <div class="flex justify-end mb-2">
+                                        <span @click="addDeduction()" 
+                                              class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                            +
+                                        </span>
+                                        <span @click="removeDeduction(index)" 
+                                              class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
+                                            x
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 paymentcalc">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Deduction Type</label>
+                                            <select type="text" x-model="deduction.deduction_type" name="deduction_type[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                   <option value="Escrow">Escrow</option>
+                                                   <option value="Other">Other</option>
+                                                   </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Amount</label>
+                                            <input type="number" x-model="deduction.deduction_amount" 
+                                            @input="calculateTotalDeduction()"
+                                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Comment</label>
+                                            <textarea type="text" cols="1" rows="1" x-model="deduction.deduction_comment" name="deduction_comment[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> </textarea>
+                                        </div>
+                                        
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Internal Notes</label>
+                                            <textarea type="text" cols="1" rows="1" x-model="deduction.deduction_note" name="deduction_note[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> </textarea>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </template>
+                    
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Total</label>
+                                    <input type="number" x-model="formData.totalDeduction" name="totalDeduction" 
+                                           readonly class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
+                            </div>
+                        </div>
                    
-                        <div id="" class="grid grid-cols-4 md:grid-cols-4 gap-4 mb-6">
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Social Security numbe</label>
-                                <input type="text" x-model="formData.licensessn" name="licensessn" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-
-                            <script>
-                                $(document).ready(function() {
-                                var today = new Date();
-                                var eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
-
-                                $("#dob").datepicker({
-                                    dateFormat: "yy-mm-dd",
-                                    changeMonth: true,
-                                    changeYear: true,
-                                    yearRange: "1900:" + (today.getFullYear() - 18),
-                                    maxDate: eighteenYearsAgo
-                                });
-                            });
-
-                            $(document).ready(function() {
-                                var today = new Date();
-
-                                const options = {
-                                    dateFormat: "yy-mm-dd",
-                                    changeMonth: true,
-                                    changeYear: true,
-                                    yearRange: "1900:2100",
-                                    minDate: today // disallow past dates
-                                };
-
-                                $("#cdl_expires, #medical_expires, #twic_expires, #sealink_expires,#liability_insurance_expires").datepicker(options);
-                            });
-
-
-                                
-                                // $(document).ready(function() {
-                                //     $("#cdl_expires").datepicker({
-                                //         dateFormat: "yy-mm-dd",
-                                //         changeMonth: true,
-                                //         changeYear: true,
-                                //         yearRange: "1900:2100"
-                                //     });
-                                // });
-                                
-                                
-                                // $(document).ready(function() {
-                                //     $("#medical_expires").datepicker({
-                                //         dateFormat: "yy-mm-dd",
-                                //         changeMonth: true,
-                                //         changeYear: true,
-                                //         yearRange: "1900:2100"
-                                //     });
-                                // });
-                                
-                                // $(document).ready(function() {
-                                //     $("#twic_expires").datepicker({
-                                //         dateFormat: "yy-mm-dd",
-                                //         changeMonth: true,
-                                //         changeYear: true,
-                                //         yearRange: "1900:2100"
-                                //     });
-                                // });
-                                // $(document).ready(function() {
-                                //     $("#sealink_expires").datepicker({
-                                //         dateFormat: "yy-mm-dd",
-                                //         changeMonth: true,
-                                //         changeYear: true,
-                                //         yearRange: "1900:2100"
-                                //     });
-                                // });
-                            </script>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Date of Birth</label>
-                                <input type="text" x-model="formData.dob" name="dob" id="dob" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </select>
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">CDL(Commercial driving license)#</label>
-                                <input type="text" x-model="formData.cdlnumber" name="cdlnumber" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">License state </label>
-                                <input type="text" x-model="formData.license_state" name="licenses_tate" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-
-                        </div>
-
-                        <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">CDL Expires </label>
-                                <input type="text" x-model="formData.cdl_expires" id="cdl_expires" name="cdl_expires" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Medical #</label>
-                                <input type="text" x-model="formData.medical_number" name="medical_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Medical Expires </label>
-                                <input type="text" x-model="formData.medical_expires" name="medical_expires" id="medical_expires" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">TWIC #</label>
-                                <input type="text" x-model="formData.twic_number" name="twic_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">TWIC Expires</label>
-                                <input type="text" x-model="formData.twic_expires" name="twic_expires" id="twic_expires" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Sealink #</label>
-                                <input type="text" x-model="formData.sealink_number" name="sealink_number" id="sealink_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                        </div>
-
-                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Sealink expires</label>
-                                <input type="text" x-model="formData.sealink_expires" name="sealink_expires" id="sealink_expires" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Annual MVR </label>
-                                <input type="text" x-model="formData.annual_mvr" name="annual_mvr" id="annual_mvr" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Clearinghouse Annual </label>
-                                <input type="text" x-model="formData.clearing_annual" name="clearing_annual" id="clearing_annual" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                        </div>
-
-                        <script>
-                            $(document).ready(function(){
-                               
-                                $(document).ready(function() {
-                                    $("#clearing_annual").datepicker({
-                                        dateFormat: "yy-mm-dd",
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        yearRange: "1900:2100"
-                                    });
-                                });
-
-                                
-                                $(document).ready(function() {
-                                    $("#annual_mvr").datepicker({
-                                        dateFormat: "yy-mm-dd",
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        yearRange: "1900:2100"
-                                    });
-                                });
-
-                                
-                                // $(document).ready(function() {
-                                //     $("#liability_insurance_expires").datepicker({
-                                //         dateFormat: "yy-mm-dd",
-                                //         changeMonth: true,
-                                //         changeYear: true,
-                                //         yearRange: "1900:2100"
-                                //     });
-                                // });
-
-                                $("#date_1").datepicker({
-                                        dateFormat: "yy-mm-dd",
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        yearRange: "1900:2100"
-                                    });
-                                    
-                                $("#date_2").datepicker({
-                                        dateFormat: "yy-mm-dd",
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        yearRange: "1900:2100"
-                                    });
-                                    
-                                $("#date_3").datepicker({
-                                        dateFormat: "yy-mm-dd",
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        yearRange: "1900:2100"
-                                    });
-                                    
-                                $("#date_4").datepicker({
-                                        dateFormat: "yy-mm-dd",
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        yearRange: "1900:2100"
-                                    });
-                                    
-                                $("#date_5").datepicker({
-                                        dateFormat: "yy-mm-dd",
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        yearRange: "1900:2100"
-                                    });
-                                    
-                                $("#date_6").datepicker({
-                                        dateFormat: "yy-mm-dd",
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        yearRange: "1900:2100"
-                                    });
-                            })
-                        </script>
-
-                        
-                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Liability insurance expires</label>
-                                <input type="text" x-model="formData.liability_insurance_expires" name="liability_insurance_expires" id="liability_insurance_expires" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">
-                                    Insurance provider
-                                </label>
-                                <select type="text" x-model="formData.insurance_provider" name="insurance_provider" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> 
-                                    <option value="" selected disabled> Select</option>
-                                    <option value="NAIT">NAIT</option>
-                                    <option value="progressive">Progressive</option>
-                                    <option value="allstate">Allstate</option>
-                                    <option value="nation_wide">Nation wide</option>
-                                    <option value="hiscox_insuramce">Hiscox Insurance</option>
-                                    <option value="farmers_isurance">Farmers Insurance</option>
-                                    <option value="state_farm">State Farm</option>
-                                    <option value="titan_insurance">Titan Insurance</option>
-                                    <option value="other">Other</option>
-                                    </select>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">
-                                    Insurance Coverage
-                                </label>
-                                <select type="text" x-model="formData.insurance_coverage" name="insurance_coverage" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> 
-                                    <option value="" selected disabled> Select</option>
-                                    <option value="occupational_accident">Occupational Accident</option>
-                                    <option value="non_occupational_accident">Non Occupational Accident</option>
-                                    <option value="workers_compensation">Workers compesation</option>
-
-                                    </select>
-                            </div>
-                        </div>
-
-                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                            <!-- <span>Addistional Dates </span> -->
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Date 1</label>
-                                <input type="text" x-model="formData.date_1" name="date_1" id="date_1" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Date 2</label>
-                                <input type="text" x-model="formData.date_2" name="date_2" id="date_2" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Date 3</label>
-                                <input type="text" x-model="formData.date_3" name="date_3" id="date_3" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                        </div>
-                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                            <!-- <span>Addistional Dates </span> -->
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Date 4</label>
-                                <input type="text" x-model="formData.date_4" name="date_4" id="date_4" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Date 2</label>
-                                <input type="text" x-model="formData.date_5" name="date_5" id="date_5" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Date 6</label>
-                                <input type="text" x-model="formData.date_6" name="date_6" id="date_6" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                            </div>
-                        </div>
-
-                        <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                            <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Internal Notes</label>
-                                <textarea type="text" x-model="formData.license_internal_notes" name="license_internal_notes" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
-                            </div>
-                        </div>
-                        
-                      </div>
+                    </div>
 
 
 
                         <!-- Step 4 - Original Section -->
-                        <div x-show="step === 4">
-                            <div class="space-y-4">
-                              <template x-for="(provider, index) in formData.providers" :key="index">
-                                <div class="p-4 border rounded-lg dark:border-gray-600 relative">
-                                  <!-- Remove button (shown for all providers including first one) -->
-                                  <button 
-                                    x-show="formData.providers.length > 1" 
-                                    @click="removeProvider(index)"
-                                    class="absolute top-2 right-2 text-red-500 hover:text-red-700"
-                                    type="button"
-                                    title="Remove provider"
-                                  >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                      <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                    </svg>
-                                  </button>
-                                  
-                                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div>
-                                      <label class="block text-gray-700 dark:text-gray-300">Provider</label>
-                                      <select x-model="provider.app_provider" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                        <option value="" selected disabled>Select</option>
-                                        <option value="comidata">Comidata</option>
-                                        <option value="comidata_advance">Comidata Advance</option>
-                                        <option value="efs">EFS</option>
-                                      </select>
-                                    </div>
-                                    <div>
-                                      <label class="block text-gray-700 dark:text-gray-300">Card # / Device # / Linking #</label>
-                                      <input type="text" x-model="provider.card_device_linking_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                    </div>
-                                    <div>
-                                      <label class="block text-gray-700 dark:text-gray-300">Quick note</label>
-                                      <textarea cols="1" rows="1" x-model="provider.quick_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""></textarea>
-                                    </div>
-                                  </div>
-                                </div>
-                              </template>
-                            </div>
                         
-                            <!-- Add Provider Button (always visible) -->
-                            <button
-                              @click="addProvider()"
-                              type="button"
-                              class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                              </svg>
-                              Add Another Provider
-                            </button>
-                          </div>
-                        
-                        
-                    
-                    <!-- Step 5: Backup Docs -->
-                    <div x-show="step === 5" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div x-show="step === 4" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
                           <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
-                          <input type="file" x-model="formData.file_path" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount">
+                          <input type="file" x-model="formData.file_path" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter payment amount">
                       </div>
                     </div>
                     <!-- Navigation Buttons -->
@@ -759,7 +620,7 @@
 
                         <!-- Next Button (Only shows when on step 1) -->
                         <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
-                            x-show="step < 5" @click="step = step + 1">
+                            x-show="step < 4" @click="step = step + 1">
                             Next
                         </button>
 
@@ -771,7 +632,7 @@
 
                         <!-- Submit Button (Only shows on step 2) -->
                         <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
-                            x-show="step === 5">
+                            x-show="step === 4">
                             Submit
                         </button>
                     </div>
@@ -793,205 +654,278 @@
           return {
               step: localStorage.getItem('Settlement_step') ? parseInt(localStorage.getItem('Settlement_step')) : 1,
               formData: JSON.parse(localStorage.getItem('formData')) || {
-                fname: '',
-                lname: '',
-                mname: '',
-                email: '',
-                settlement_type: '',
-                transport_type: '',
+                office: '',
+                // settlement_no: '',
+                settlement_date: '',
+                driver_id: '',
                 truck_id: '',
-                quick_note: '',
-                dispatcher_note: '',
-                settlement_phone: '',
-                settlement_phone_carrier: '',
-                settlement_primary_address: '',
-                settlement_secondary_address: '',
-                settlement_city: '',
-                settlement_state: '',
-                settlement_zip: '',
-                fnameemergency_contact_info: '',
-                hired_on: '',
-                years_of_experience: '',
-                endorsements: '',
-                rating: '',
-                  tags: [],
-                  tagsInput: '',
-                notes_about_the_choices_made: '',
-                isAccessToMobileApp: '',
-                mobile_settings: '',
-                pay_via: '',
-                company_name_paid_to: '',
-                employer_identification_number: '',
-                send_settlements_mail: '',
-                print_settlements_under_this_company: '',
-                flash_notes_to_dispatch: '',
-                flash_notes_to_payroll: '',
+                carrier_id: '',
+                settlement_type: '',
+                week_from: '',
+                week_to: '',
+                payee: '',
+                payee_note: '',
+                payment_method: '',
+                check_payment_reference: '',
+                payment_date: '',
+                payment_note: '',
                 internal_notes: '',
-                file_path: '',
 
-                //Form w-9
-                name_tax_return: '',
-                different_bussiness_name: '',
-                wtype: '',
-                other_type: '',
-                waddress: '',
-                wstate: '',
-                wcity: '',
-                wzip: '',
-                wtaxid: '',
-                wwssn: '',
-                wwein: '',
-                wpaid_via: '',
-                waccountNumber: '',
-                wroutingNumber: '',
-                winternal_notes: '',
-                licensessn: '',
-                dob: '',
-                cdlnumber: '',
-                license_state: '',
-                cdl_expires: '',
-                medical_number: '',
-                medical_expires: '',
-                twic_number: '',
-                twic_expires: '',
-                sealink_number: '',
-                sealink_expires: '',
-                annual_mvr: '',
-                clearing_annual: '',
-                liability_insurance_expires: '',
-                insurance_provider: '',
-                insurance_coverage: '',
-                date_1: '',
-                date_2: '',
-                date_3: '',
-                date_4: '',
-                date_5: '',
-                date_6: '',
-                license_internal_notes:'',
-
-                providers: [{  // Initialize with one empty provider
-                app_provider: '',
-                card_device_linking_number: '',
-                quick_note: ''
-                }]
-              },
-               weeks: [],
+                escrows: [],
+                deductions: [],
+                totalDeduction: 0,
+                totalEscrow: 0,
+                totalAmount: 0,
+                file_path: [],
+                  tags: [],
+                  tagsInput:'',
              
+              },
+               settlement_week: [],
+                 handleSettlementTypeChange() {
+                    this.formData.driver_id = '';
+                    this.formData.truck_id = '';
+                    this.formData.carrier_id = '';
+                },
+                
+                
+                shouldShowDriverField() {
+                    return [
+                        'driver_settlement', 
+                        'escrow_held_under_driver'
+                    ].includes(this.formData.settlement_type);
+                },
+                
+                shouldShowTruckField() {
+                    return [
+                        'truck_settlement', 
+                        'escrow_held_under_truck'
+                    ].includes(this.formData.settlement_type);
+                },
+                
+                shouldShowCarrierField() {
+                    return this.formData.settlement_type === 'carrier_settlement';
+                },
+             addEscrowRelease() {
+                this.formData.escrows.push({
+                    escrow_release_account: '',
+                    escrow_release_amount: '',
+                    escrow_release_comment: '',
+                    escrow_release_note: '',
+
+                });
+                 
+             },
+             removeEscrowRelease(index) {
+                if (this.formData.escrows.length > 1) {
+                    this.formData.escrows.splice(index, 1);
+                }
+             }, 
+             
+             addDeduction() {
+                this.formData.deductions.push({
+                    deduction_type: '',
+                    deduction_amount: '',
+                    deduction_comment: '',
+                    deduction_note: '',
+                });
+             },
+             removeDeduction(index) {
+                if (this.formData.deductions.length > 1) {
+                    this.formData.deductions.splice(index, 1);
+                }
+             },
     
                 // Add a new provider
-                addProvider() {
-                if (!this.formData.providers) {
-                    this.formData.providers = [];
-                }
-                this.formData.providers.push({
-                    app_provider: '',
-                    card_device_linking_number: '',
-                    quick_note: ''
-                });
-                //this.saveProgress();
+               // payment calculation methods
+                addPayment() {
+                    this.formData.payments.push({
+                        payment_type: '',
+                        comment: '',
+                        units: '',
+                        rate: '',
+                        amount: '',
+                        payment_internal_notes: ''
+                    });
+                    //this.saveProgress();
                 },
+                
+                removePayment(index) {
+                    if (this.formData.payments.length > 1) {
+                        this.formData.payments.splice(index, 1);
+                        this.calculateTotals();
+                        //this.saveProgress();
+                    }
+                },
+                
+                calculateAmount(payment) {
+                    const units = parseFloat(payment.units) || 0;
+                    const rate = parseFloat(payment.rate) || 0;
+                    payment.amount = (units * rate).toFixed(2);
+                    this.calculateTotals();
+                    //this.saveProgress();
+                },
+                
+                calculateTotals() {
+                    let total = 0;
+                    let totalDiscount = 0;
+                    
+                    this.formData.payments.forEach(payment => {
+                        const amount = parseFloat(payment.amount) || 0;
+                        const discount = parseFloat(payment.discount) || 0;
+                        
+                        total += amount;
+                        totalDiscount += discount;
+                    });
+                    
+                    this.formData.total = total.toFixed(2);
+                    this.formData.total_discount = totalDiscount.toFixed(2);
+                    this.formData.net_total = (total - totalDiscount).toFixed(2);
+                },
+               calculateTotalRelease() {
+                    this.formData.totalRelease = this.formData.escrows.reduce((total, escrow) => {
+                        const amount = parseFloat(escrow.escrow_release_amount) || 0;
+                        return total + amount;
+                    }, 0).toFixed(2); // Format to 2 decimal places like your payment totals
+                },
+                calculateTotalDeduction() {
+                    this.formData.totalDeduction = this.formData.deductions.reduce((total, deduction) => {
+                        const amount = parseFloat(deduction.deduction_amount) || 0;
+                        return total + amount;
+                    }, 0).toFixed(2); // Format to 2 decimal places like your payment totals
+                },  
                 init() {
+                    //this.calculateTotalRelease();
                     this.generateWeeks();
-                },
+                     // Initialize payments calculations
+                    if (!this.formData.payments || this.formData.payments.length === 0) {
+                        this.formData.payments = [{
+                            payment_type: '',
+                            comment: '',
+                            units: '',
+                            rate: '',
+                            amount: '',
+                        }];
+                    }
+                    if (!this.formData.escrow || this.formData.escrow.length === 0) {
+                        this.formData.escrows = [{
+                            escrow_release_account: '',
+                            escrow_release_amount: '',
+                            escrow_release_comment: '',
+                            escrow_release_note: ''
+                        }];
+                    }
+
+                    if (!this.formData.deduction || this.formData.deduction.length === 0) {
+                        this.formData.deductions = [{
+                            deduction_type: '',
+                            deduction_amount: '',
+                            deduction_comment: '',
+                            deduction_note: ''
+                        }];
+                    }
+                    this.calculateTotals();
+                    this.$watch('formData.payments', () => this.calculateTotals(), { deep: true });
+                    
+                    this.calculateTotalDeduction();
+                    this.calculateTotalRelease();
+                    this.$watch('formData.escrows', () => this.calculateTotalRelease(), { deep: true });
+                    this.$watch('formData.deductions', () => this.calculateTotalDeduction(), { deep: true });
+                        },
 
                    generateWeeks() {
-            const weeks = [];
-            const now = new Date();
-            const currentWeekInfo = this.getWeekRange(now);
-            
-            // 1. First add 4 future weeks
-            for (let i = 1; i <= 4; i++) {
-                const futureDate = new Date(now);
-                futureDate.setDate(now.getDate() + (i * 7));
-                const weekInfo = this.getWeekRange(futureDate);
-                weeks.push({
-                    label: `(WK-${weekInfo.weekNumber}) ${weekInfo.startDate} - ${weekInfo.endDate}`,
-                    value: `${weekInfo.year}-${weekInfo.weekNumber}`,
-                    isCurrent: false,
-                    date: futureDate
-                });
-            }
-            
-            // 2. Add CURRENT WEEK (highlighted)
-            weeks.push({
-                label: `(WK-${currentWeekInfo.weekNumber}) ${currentWeekInfo.startDate} - ${currentWeekInfo.endDate} (Current Week)`,
-                value: `${currentWeekInfo.year}-${currentWeekInfo.weekNumber}`,
-                isCurrent: true,
-                date: now
-            });
-            
-            // 3. Add past weeks (from 2024 to current week)
-            const startYear = 2024;
-            let date = new Date(startYear, 0, 1);
-            
-            // Find first Sunday of 2024
-            while (date.getDay() !== 0) {
-                date.setDate(date.getDate() + 1);
-            }
-            
-            // Generate all weeks from 2024 to now
-            while (date < now) {
-                const weekInfo = this.getWeekRange(date);
-                weeks.push({
-                    label: `(WK-${weekInfo.weekNumber}) ${weekInfo.startDate} - ${weekInfo.endDate}`,
-                    value: `${weekInfo.year}-${weekInfo.weekNumber}`,
-                    isCurrent: false,
-                    date: new Date(date)
-                });
-                date.setDate(date.getDate() + 7);
-            }
-            
-            // Sort by date (newest first)
-            this.weeks = weeks.sort((a, b) => b.date - a.date);
-        },
-        
-        getWeekRange(date) {
-            const d = new Date(date);
-            
-            // Find Sunday (start of week)
-            while (d.getDay() !== 0) {
-                d.setDate(d.getDate() - 1);
-            }
-            const startDate = new Date(d);
-            
-            // Find Saturday (end of week)
-            const endDate = new Date(d);
-            endDate.setDate(d.getDate() + 6);
-            
-            // Format dates as MM/DD/YYYY
-            const formatDate = (dateObj) => {
-                const month = dateObj.getMonth() + 1;
-                const day = dateObj.getDate();
-                const year = dateObj.getFullYear();
-                return `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}/${year}`;
-            };
-            
-            // Get week number
-            const weekNumber = this.getWeekNumber(date);
-            
-            return {
-                startDate: formatDate(startDate),
-                endDate: formatDate(endDate),
-                weekNumber: weekNumber,
-                year: date.getFullYear()
-            };
-        },
-        
-        getWeekNumber(date) {
-            const d = new Date(date);
-            d.setHours(0, 0, 0, 0);
-            d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
-            const week1 = new Date(d.getFullYear(), 0, 4);
-            return 1 + Math.round(((d - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
-        },
+                    const weeks = [];
+                    const now = new Date();
+                    const currentWeekInfo = this.getWeekRange(now);
+                    
+                    // 1. First add 4 future weeks
+                    for (let i = 1; i <= 4; i++) {
+                        const futureDate = new Date(now);
+                        futureDate.setDate(now.getDate() + (i * 7));
+                        const weekInfo = this.getWeekRange(futureDate);
+                        weeks.push({
+                            label: `(WK-${weekInfo.weekNumber}) ${weekInfo.startDate} - ${weekInfo.endDate}`,
+                            value: `${weekInfo.year}-${weekInfo.weekNumber}`,
+                            isCurrent: false,
+                            date: futureDate
+                        });
+                    }
+                    
+                    // 2. Add CURRENT WEEK (highlighted)
+                    weeks.push({
+                        label: `(WK-${currentWeekInfo.weekNumber}) ${currentWeekInfo.startDate} - ${currentWeekInfo.endDate} (Current Week)`,
+                        value: `${currentWeekInfo.year}-${currentWeekInfo.weekNumber}`,
+                        isCurrent: true,
+                        date: now
+                    });
+                    
+                    // 3. Add past weeks (from 2024 to current week)
+                    const startYear = 2024;
+                    let date = new Date(startYear, 0, 1);
+                    
+                    // Find first Sunday of 2024
+                    while (date.getDay() !== 0) {
+                        date.setDate(date.getDate() + 1);
+                    }
+                    
+                    // Generate all weeks from 2024 to now
+                    while (date < now) {
+                        const weekInfo = this.getWeekRange(date);
+                        weeks.push({
+                            label: `(WK-${weekInfo.weekNumber}) ${weekInfo.startDate} - ${weekInfo.endDate}`,
+                            value: `${weekInfo.year}-${weekInfo.weekNumber}`,
+                            isCurrent: false,
+                            date: new Date(date)
+                        });
+                        date.setDate(date.getDate() + 7);
+                    }
+                    
+                    // Sort by date (newest first)
+                    this.weeks = weeks.sort((a, b) => b.date - a.date);
+                },
+                
+                getWeekRange(date) {
+                    const d = new Date(date);
+                    
+                    // Find Sunday (start of week)
+                    while (d.getDay() !== 0) {
+                        d.setDate(d.getDate() - 1);
+                    }
+                    const startDate = new Date(d);
+                    
+                    // Find Saturday (end of week)
+                    const endDate = new Date(d);
+                    endDate.setDate(d.getDate() + 6);
+                    
+                    // Format dates as MM/DD/YYYY
+                    const formatDate = (dateObj) => {
+                        const month = dateObj.getMonth() + 1;
+                        const day = dateObj.getDate();
+                        const year = dateObj.getFullYear();
+                        return `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}/${year}`;
+                    };
+                    
+                    // Get week number
+                    const weekNumber = this.getWeekNumber(date);
+                    
+                    return {
+                        startDate: formatDate(startDate),
+                        endDate: formatDate(endDate),
+                        weekNumber: weekNumber,
+                        year: date.getFullYear()
+                    };
+                },
+                
+                getWeekNumber(date) {
+                    const d = new Date(date);
+                    d.setHours(0, 0, 0, 0);
+                    d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
+                    const week1 = new Date(d.getFullYear(), 0, 4);
+                    return 1 + Math.round(((d - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+                },
     
 
-                removeProvider(index) {
-                if (this.formData.providers && index > 0 && this.formData.providers.length > 1) {
-                    this.formData.providers.splice(index, 1);
-                    //this.saveProgress();
-                }
-                },
+             
     
               nextStep() {
                   this.step++;
@@ -1004,47 +938,53 @@
               saveProgress() {
                   localStorage.setItem('formData', JSON.stringify(this.formData));
                   localStorage.setItem('Settlement_step', this.step);
-                  alert("Progress saved successfully!");
+                  createToast('success', 'Progress saved successfully');
               },
               addTag() {
                 if (this.formData.tagsInput.trim()) {
+                    // Ensure tags array exists
+                    this.formData.tags = this.formData.tags || [];
+                    
                     // Split by spaces and filter out empty strings
                     const newTags = this.formData.tagsInput.split(' ')
-                    .map(tag => tag.trim())
-                    .filter(tag => tag.length > 0);
+                        .map(tag => tag.trim())
+                        .filter(tag => tag.length > 0);
                     
                     // Add new tags to the array, avoiding duplicates
                     newTags.forEach(tag => {
-                    if (!this.formData.tags.includes(tag)) {
-                        this.formData.tags.push(tag);
-                    }
+                        if (!this.formData.tags.includes(tag)) {
+                            this.formData.tags.push(tag);
+                        }
                     });
                     
                     this.formData.tagsInput = '';
-                    //this.saveProgress();
                 }
-                },
+            },
                 
-                removeTag(index) {
-                this.formData.tags.splice(index, 1);
-                //this.saveProgress();
+               removeTag(index) {
+                    this.formData.tags = this.formData.tags || [];
+                    this.formData.tags.splice(index, 1);
                 },
-                
+
                 removeLastTag() {
-                if (this.formData.tagsInput === '' && this.formData.tags.length > 0) {
-                    this.formData.tags.pop();
-                    //this.saveProgress();
-                }
+                    this.formData.tags = this.formData.tags || [];
+                    if (this.formData.tagsInput === '' && this.formData.tags.length > 0) {
+                        this.formData.tags.pop();
+                    }
                 },
               saveAndSubmit() {
-                    let form = document.getElementById("newsettlementForm");
+                    let form = document.getElementById("newSettlement");
                     let formData = new FormData(form);
-                    formData.append('tags', this.formData.tags.join(','));
+
+                     const tags = this.formData.tags || []; // Fallback to empty array if undefined
+                    if (tags.length > 0) {
+                        formData.append('tags', tags.join(','));
+                    }
                     for (let pair of formData.entries()) {
                         console.log(pair[0] + ": " + pair[1]);
                     }
                           console.log(localStorage.getItem('auth_token'))
-                     //return
+                     return
 
                     $.ajax({
                         url: requestURL+'/settlements/settlement',
@@ -1092,94 +1032,11 @@
           }
       }
 
-    //populateTruckSelect();
+    populateTruckSelect();
+    populateCarrierSelect();
+    populateDriverSelect();
 
-      function handleLoadTypeChange(value) {
-    if (value === 'import') {
-        console.log(`Load type changed to ${value}`);
-        // You can add specific logic for import/export here
-        // For example, show/hide specific form sections
-        document.getElementById('container').style.display = '';
-        // Example: Show a message or change UI elements
-        //alert(`Selected load type: ${value}`);
-        
-        // You could show/hide specific form sections
-        // document.getElementById('importSection').style.display = value === 'import' ? 'block' : 'none';
-        // document.getElementById('exportSection').style.display = value === 'export' ? 'block' : 'none';
-    }
-    
-    // Trigger auto-save when selection changes
-    //handleInputChange();
-}
-      </script>
-      <script>
-        function duplicateContainer() {
-            var container = document.getElementById("container");
-            var containerList = document.getElementById("containerList");
-    
-            // Clone container and remove display:none
-            var newContainer = container.cloneNode(true);
-            newContainer.style.display = "block";
-    
-            // Append new container
-            containerList.appendChild(newContainer);
-        }
-
-        function removeContainer(element) {
-            element.parentElement.parentElement.remove();
-        }
-
-        function duplicateBillto()
-        {
-            var billto = document.getElementById("billto");
-            var billtoList = document.getElementById("billtoList");
-            var newBillto = billto.cloneNode(true);
-            billtoList.appendChild(newBillto);
-        }
-
-        function removeBillto(element)
-        {
-            element.parentElement.parentElement.remove();
-        }
-        //
-
-        function duplicatePickup()
-        {
-            var pickup = document.getElementById("pickUPP");
-            var pickupList = document.getElementById("pickupList");
-            var newPickup = pickup.cloneNode(true);
-            pickupList.appendChild(newPickup);
-        }
-        function removePickup(element)
-        {
-            element.parentElement.parentElement.remove();
-        }
-
-        
-        function duplicateDropAt()
-        {
-            var pickup = document.getElementById("dropAt");
-            var pickupList = document.getElementById("dropAtList");
-            var newPickup = pickup.cloneNode(true);
-            pickupList.appendChild(newPickup);
-        }
-        function removeDropAt(element)
-        {
-            element.parentElement.parentElement.remove();
-        }
-
-        function duplicateCharges()
-        {
-            var pickup = document.getElementById("chargesDuplicate");
-            var pickupList = document.getElementById("chargesList");
-            var newPickup = pickup.cloneNode(true);
-            pickupList.appendChild(newPickup);
-        }
-        function removeCharges(element)
-        {
-            element.parentElement.parentElement.remove();
-        }
-
+     
         
     </script>
       

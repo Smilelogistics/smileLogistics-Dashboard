@@ -1017,6 +1017,61 @@ try {
               <!-- Shipment Bike Ends -->
 
               <!-- Menu item Carrier -->
+
+              <template x-if="userRole === 'businessadministrator'">
+               <li>
+                <a href="#" @click.prevent="selected = (selected === 'Manage Settlement' ? '':'Manage Settlement')" class="menu-item group"
+                  :class=" (selected === 'Manage Settlement') || (page === 'Manage Settlement') ? 'menu-item-active' : 'menu-item-inactive'">
+                  <svg :class="(selected === 'Manage Settlement') || (page === 'settlement') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                width="24" height="24"  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bicycle" viewBox="0 0 16 16">
+                    <path d="M4 4.5a.5.5 0 0 1 .5-.5H6a.5.5 0 0 1 0 1v.5h4.14l.386-1.158A.5.5 0 0 1 11 4h1a.5.5 0 0 1 0 1h-.64l-.311.935.807 1.29a3 3 0 1 1-.848.53l-.508-.812-2.076 3.322A.5.5 0 0 1 8 10.5H5.959a3 3 0 1 1-1.815-3.274L5 5.856V5h-.5a.5.5 0 0 1-.5-.5m1.5 2.443-.508.814c.5.444.85 1.054.967 1.743h1.139zM8 9.057 9.598 6.5H6.402zM4.937 9.5a2 2 0 0 0-.487-.877l-.548.877zM3.603 8.092A2 2 0 1 0 4.937 10.5H3a.5.5 0 0 1-.424-.765zm7.947.53a2 2 0 1 0 .848-.53l1.026 1.643a.5.5 0 1 1-.848.53z"/>
+                  </svg>
+                  <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                  Manage Settlement 
+                  </span>
+                  <svg
+                    class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                    :class="[(selected === 'Manage Settlement') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
+                      stroke=""
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </a>
+    
+                <!-- Dropdown Menu Start -->
+                <div
+                  class="overflow-hidden transform translate"
+                  :class="(selected === 'Manage Settlement') ? 'block' :'hidden'"
+                >
+                  <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                    class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
+                    <li>
+                      <a href="settlement.html" class="menu-dropdown-item group" :class="page === 'Settlement' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Single Settlement</a>
+                    </li>
+                    
+                    <!-- <li>
+                      <a href="all_settlement.html" class="menu-dropdown-item group" :class="page === 'settlement' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Create settlement for All</a>
+                    </li> -->
+                    <li>
+                      <a href="settlement_list.html" class="menu-dropdown-item group" :class="page === 'settlement' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Settlement List</a>
+                    </li>
+                  </ul>
+                </div>
+                <!-- Dropdown Menu End -->
+              </li>
+              </template>
+
+
                
               <template x-if="userRole === 'businessadministrator'">
               <li>
@@ -1073,63 +1128,7 @@ try {
               <!-- Shipment Carriers Ends -->
 
                <!-- Menu item Carrier -->
-               
-              <template x-if="userRole === 'businessadministrator'">
-              <li>
-                <a href="#" @click.prevent="selected = (selected === 'Manage Settlement' ? '':'Manage Settlement')" class="menu-item group"
-                  :class=" (selected === 'Manage Settlement') || (page === 'Manage Settlement') ? 'menu-item-active' : 'menu-item-inactive'">
-                <svg :class="(selected === 'Manage Settlement') || (page === 'Settlement') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
-                width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  fill-rule="evenodd" clip-rule="evenodd" d="M6 2C5.44772 2 5 2.44772 5 3V21C5 21.5523 5.44772 22 6 22H18C18.5523 22 19 21.5523 19 21V8.41421C19 8.149 18.8946 7.89464 18.7071 7.70711L14.2929 3.29289C14.1054 3.10536 13.851 3 13.5858 3H6ZM7 4H13V8H17V20H7V4Z"
-                  fill="currentColor"/>
-                <path
-                  d="M12 16C10.8954 16 10 15.1046 10 14H8C8 16.2091 9.79086 18 12 18V20H14V18.4142C15.1652 18.149 16 17.0609 16 15.8284C16 14.4927 14.6569 13.5 13 13.5H12C11.4477 13.5 11 13.0523 11 12.5C11 11.9477 11.4477 11.5 12 11.5H13C14.1046 11.5 15 12.3954 15 13.5H17C17 11.2909 15.2091 9.5 13 9.5V8H11V9.58579C9.83481 9.85098 9 10.9391 9 12.1716C9 13.5073 10.3431 14.5 12 14.5H13C13.5523 14.5 14 14.9477 14 15.5C14 16.0523 13.5523 16.5 13 16.5H12Z" fill="currentColor"/>
-              </svg>
-                  <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
-                  Manage Settlement
-                  </span>
-                  <svg
-                    class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
-                    :class="[(selected === 'Manage Settlement') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
-                      stroke=""
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </a>
-    
-                <!-- Dropdown Menu Start -->
-                <div
-                  class="overflow-hidden transform translate"
-                  :class="(selected === 'Manage settlement') ? 'block' :'hidden'"
-                >
-                  <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
-                    class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
-                    <li>
-                      <a href="settlement.html" class="menu-dropdown-item group" :class="page === 'settlement' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Single settlement</a>
-                    </li>
-                    <li>
-                      <a href="all_settlement.html" class="menu-dropdown-item group" :class="page === 'settlement' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Create settlement for All</a>
-                    </li>
-                    <li>
-                      <a href="settlement_list.html" class="menu-dropdown-item group" :class="page === 'settlement_list' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Settlement List</a>
-                    </li>
-                  </ul>
-                </div>
-                <!-- Dropdown Menu End -->
-              </li>
-            </template>
-              <!-- Settlements Ends -->
+              
 
 
               <!-- Menu item Carrier -->

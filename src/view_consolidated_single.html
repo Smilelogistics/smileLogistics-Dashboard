@@ -310,7 +310,7 @@
 
           fetchData() {
             this.isLoading = true;
-            fetch(`${requestGetURL}/consolidate/shipment/${this.id}`, {
+            fetch(`${requestURL}/consolidate/shipment/${this.id}`, {
               headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
                 'Accept': 'application/json'

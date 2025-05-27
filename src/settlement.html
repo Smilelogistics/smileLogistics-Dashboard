@@ -291,7 +291,7 @@
                                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 paymentcalc">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Payment Type</label>
-                                      <select x-model="payment.payment_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                      <select x-model="payment.payment_type" name="payment_type[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                         <option value="" selected disabled>Select</option>
                                         <option value="trip_pay">Trip Pay</option>
                                         <option value="fuel_surcharge">Fuel Surcharge</option>
@@ -405,7 +405,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Realease this amount</label>
-                                            <input type="number" x-model="escrow.escrow_release_amount" 
+                                            <input type="number" x-model="escrow.escrow_release_amount" name="escrow_release_amount[]"
                                             @input="calculateTotalRelease()"
                                             class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                         </div>
@@ -569,7 +569,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Amount</label>
-                                            <input type="number" x-model="deduction.deduction_amount" 
+                                            <input type="number" x-model="deduction.deduction_amount" name="deduction_amount[]"
                                             @input="calculateTotalDeduction()"
                                             class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                         </div>
@@ -673,6 +673,7 @@
 
                 escrows: [],
                 deductions: [],
+                payments:[],
                 totalDeduction: 0,
                 totalEscrow: 0,
                 totalAmount: 0,

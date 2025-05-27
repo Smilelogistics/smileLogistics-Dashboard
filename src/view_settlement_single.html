@@ -5,10 +5,10 @@
 
     <include src="./partials/mainhead.html"> </include>
     <script src="./assets/js/main.js"></script>
-    <title>Invoice | </title>
+    <title>Settlement | </title>
   </head>
   <body
-    x-data="{ page: 'view_invoice_single', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-data="{ page: 'view_settlement_single', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
     x-init="
          darkMode = JSON.parse(localStorage.getItem('darkMode'));
          $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
@@ -40,7 +40,7 @@
         <main>
           <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
             <!-- Breadcrumb Start -->
-            <div x-data="{ pageName: `View Invoice`}">
+            <div x-data="{ pageName: `View Settlement`}">
               <include src="./partials/breadcrumb.html" />
             </div>
             <!-- Breadcrumb End -->
@@ -50,7 +50,7 @@
                 <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] p-2">
                   <div class="px-5 py-4 sm:px-6 sm:py-5">
                     <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
-                      Invoice Details
+                      Settlement Details
                     </h3>
                   </div>
           
@@ -64,7 +64,7 @@
                           <template x-if="isLoading">
                             <div class="text-center py-8">
                               <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
-                              <p class="mt-2 text-gray-600">Loading invoice details...</p>
+                              <p class="mt-2 text-gray-600">Loading settlement details...</p>
                             </div>
                           </template>
                         
@@ -73,38 +73,12 @@
                             <!-- Header -->
                             <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-600 flex justify-between items-center">
                               <div>
-                                <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Invoice Details</h2>
+                                <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Settlement Details</h2>
                                 <p class="text-sm text-gray-500 dark:text-gray-300"
-                                  x-text="'Reference #: ' + (formData.invoice_prefix || '') + (formData.id ? formData.id : 'N/A')"></p>
+                                  x-text="'Reference #: ' + (formData.settlement_no || '') + (formData.id ? formData.id : 'N/A')"></p>
 
                               </div>
-                              <div>
-                                <template x-if="formData.invoice_logo !== ''">
-                                  <div class="relative">
-                                    <img 
-                                      :src="formData.invoice_logo" 
-                                      class="w-full h-32 object-contain rounded-md bg-gray-100 dark:bg-gray-700"
-                                      alt="Invoice Logo"
-                                    @error="$el.src = ''" 
-                                    />
-                                      <!-- @error="$el.src = '/path/to/placeholder-image.png'" -->
-                                  </div>
-                                </template>
 
-                                <!-- <template x-if="formData.invoice_logo == ''"> -->
-                                  <!-- <p class="text-gray-500 dark:text-gray-300">Shush</p> -->
-                                <!-- </template> -->
-                              </div>
-
-                              <!-- <span class="px-3 py-1 text-xs font-semibold rounded-full dark:text-white" 
-                
-                                    :class="{
-                                      'bg-green-100 text-green-800': formData.shipment_type === 'delivered',
-                                      'bg-blue-100 text-blue-800': formData.shipment_type === 'in_transit',
-                                      'bg-yellow-100 text-yellow-800': formData.shipment_type === 'pending'
-                                    }"
-                                    x-text="formData.shipment_type ? formData.shipment_type.replace('_', ' ').toUpperCase() : 'STATUS UNKNOWN'">
-                              </span> -->
                             </div>
                             
                             <!-- Content Grid -->
@@ -121,31 +95,30 @@
                                     <!-- Shippint type == land -->
                                       
                                       <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Invoice Type</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.invoice_type || 'N/A'"></p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Settlement Type</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.settlement_type || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400"> Invoice Date</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.invoice_date || 'N/A'"></p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400"> Settlement Date</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.settlement_date || 'N/A'"></p>
+                                      </div>
+
+                                        <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Office</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.office || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Invoice Due Date</p>
-                                      
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.invoice_due_date || 'N/A'"></p>
-                                      </div>
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Booking Number</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Week From</p>
                                         <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                        x-text="formData.booking_number || 'N/A'">
+                                        x-text="formData.week_from || 'N/A'">
                                     </p>
                                       </div>
                                       
                                       <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">BOL #</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.bill_of_landing_number || 'N/A'"></p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Week To</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.week_to || 'N/A'"></p>
                                       </div>
                                       
                                      
@@ -156,23 +129,23 @@
                                       <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">ADDITIONAL INFORMATION</h3>
                                       
                                       <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">BOL #</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.bill_of_landing_number || 'N/A'"></p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Payee</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.payee || 'N/A'"></p>
                                       </div>
                                       
                                       <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">PO #</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.po_number || 'N/A'"></p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Payee Note</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.payee_note || 'N/A'"></p>
                                       </div>
 
                                        
                                       <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Reference #</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.reference_number || 'N/A'"></p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Payment Method</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.payment_method || 'N/A'"></p>
                                       </div>
                                       <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Move Date</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.move_date || 'N/A'"></p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Check Ref</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.check_payment_reference || 'N/A'"></p>
                                       </div>
                                       
                                      
@@ -184,26 +157,22 @@
                                       
                                     
                                       <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Trailer</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.trailer || 'N/A'"></p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Payment Date</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.payment_date || 'N/A'"></p>
                                       </div>
                                       <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Container</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.container || 'N/A'"></p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Payment Note</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.payment_note || 'N/A'"></p>
                                       </div>
                                       <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Chasis</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.chasis || 'N/A'"></p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Internal Note</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.internal_notes || 'N/A'"></p>
                                       </div>
                                       <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Load weight</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.load_weight || 'N/A'"></p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Tags</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.tags || 'N/A'"></p>
                                       </div>
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Commodity</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.commodity || 'N/A'"></p>
-                                      </div>
-                                     
+
                                     </div>
 
                                   </div>
@@ -215,120 +184,116 @@
                         
 
                              <div class="flex-1 space-y-4 min-w-[200px]"> <!-- flex-1 for equal width -->
-                                      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">Charges Information</h3>
-                                      <template x-if="Array.isArray(formData.invoicecharges) && formData.invoicecharges.length">
+                                      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">Payments Information</h3>
+                                      <template x-if="Array.isArray(formData.settlement_payment) && formData.settlement_payment.length">
                                         <div class="space-y-4">
-                                          <template x-for="(charge, index) in formData.invoicecharges" :key="index">
+                                          <template x-for="(payment, index) in formData.settlement_payment" :key="index">
                                             <div class="border rounded-lg p-4 mb-4">
                                               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <div>
-                                                  <p class="text-xs text-gray-500 dark:text-gray-400">Charge Type</p>
+                                                  <p class="text-xs text-gray-500 dark:text-gray-400">Payment Type</p>
                                                   <p class="text-sm truncate font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="charge.charge_type || charge.type || 'N/A'"></p>
+                                                     x-text="payment.payment_type || payment.payment_type || 'N/A'"></p>
                                                 </div>
                                                 
                                                 <div>
                                                   <p class="text-xs text-gray-500 dark:text-gray-400">Comment</p>
                                                   <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="charge.comment || 'N/A'"></p>
+                                                     x-text="payment.comment || 'N/A'"></p>
                                                 </div>
                                                 
                                                 <div>
                                                   <p class="text-xs text-gray-500 dark:text-gray-400">Units</p>
                                                   <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="charge.charge_unit || '0'"></p>
+                                                     x-text="payment.units || '0'"></p>
                                                 </div>
                                                 
                                                 <div>
                                                   <p class="text-xs text-gray-500 dark:text-gray-400">Rate</p>
                                                   <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="charge.charge_rate ? '$' + parseFloat(charge.charge_rate).toFixed(2) : '0.00'"></p>
+                                                     x-text="payment.rate ? '$' + parseFloat(payment.rate).toFixed(2) : '0.00'"></p>
                                                 </div>
                                                 
                                                 <div>
                                                   <p class="text-xs text-gray-500 dark:text-gray-400">Amount</p>
                                                   <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="charge.charge_amount ? '$' + parseFloat(charge.charge_amount).toFixed(2) : '0.00'"></p>
+                                                     x-text="payment.amount ? '$' + parseFloat(payment.amount).toFixed(2) : '0.00'"></p>
                                                 </div>
                                                 
-                                                <div>
+                                                <!-- <div>
                                                   <p class="text-xs text-gray-500 dark:text-gray-400">Discount</p>
                                                   <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
                                                      x-text="charge.discount ? '$' + parseFloat(charge.discount).toFixed(2) : '0.00'"></p>
-                                                </div>
+                                                </div> -->
                                                 
-                                                <div class="md:col-span-2">
+                                                <!-- <div class="md:col-span-2">
                                                   <p class="text-xs text-gray-500 dark:text-gray-400">Internal Notes</p>
                                                   <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
                                                      x-text="charge.internal_notes || charge.internal_note || 'N/A'"></p>
-                                                </div>
+                                                </div> -->
                                               </div>
                                             </div>
                                           </template>
                                         </div>
                                       </template>
                                       
-                                      <template x-if="!Array.isArray(formData.invoicecharges) || !formData.invoicecharges.length">
+                                      <template x-if="!Array.isArray(formData.settlement_payment) || !formData.settlement_payment.length">
                                         <div class="text-center py-4 text-gray-500 dark:text-gray-400">
-                                          No charges found for this shipment
+                                          No settlement found
                                         </div>
                                       </template>
                                       <!-- <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Total</p>
                                         <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_charges ? '$' + parseFloat(formData.total_charges).toFixed(2) : 'N/A'"></p>
                                       </div>                                   -->
-                                      <div>
+                                      <!-- <div>
                                         <p class="text-xl font-bold text-gray-500 dark:text-gray-400">Discount</p>
                                         <p class="text-xl font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_discount ? '$' + parseFloat(formData.total_discount).toFixed(2) : '0.00'"></p>
-                                      </div>
+                                      </div> -->
                                         
                                       <div>
                                         <p class="text-xl font-bold text-gray-500 dark:text-gray-400">Net Total</p>
-                                        <p class="text-xl font-medium text-gray-900 dark:text-gray-100"  x-text="formData.net_total ? '$' + parseFloat(formData.net_total).toFixed(2) : '0.00'"></p>
+                                        <p class="text-xl font-medium text-gray-900 dark:text-gray-100"  x-text="formData.net_total_payments ? '$' + parseFloat(formData.net_total_payments).toFixed(2) : '0.00'"></p>
                                       </div>
                                   
                                     </div>
 
                                      <!-- Column 2 -->
                                   <div class="flex-1 space-y-4 min-w-[200px]">
-                                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">Repayment INFO</h3>
+                                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">Deduction INFO</h3>
                                     
-                                    <template x-if="formData.invoicepayments && formData.invoicepayments.length > 0">
+                                    <template x-if="formData.settlement_deduction && formData.settlement_deduction.length > 0">
                                       <div class="space-y-4">
-                                        <template x-for="(payment, index) in formData.invoicepayments" :key="payment.id || index">
+                                        <template x-for="(deduction, index) in formData.settlement_deduction" :key="deduction.id || index">
                                           <div class="border rounded-lg p-4 space-y-2">
                                             <div class="flex justify-between items-start">
                                               <div>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">Credit Amountt</p>
-                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="payment.credit_amount ? '$' + parseFloat(payment.credit_amount).toFixed(2) : 'N/A'"></p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">Deduction Amount</p>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="deduction.deduction_amount ? '$' + parseFloat(deduction.deduction_amount).toFixed(2) : 'N/A'"></p>
                                               </div>
                                             </div>
                                             
                                             <div class="grid grid-cols-2 gap-4">
                                               <div>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">Credit Date</p>
-                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="payment.credit_date ? payment.credit_date : 'N/A'"></p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">Deduction Type</p>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="deduction.deduction_type ? deduction.deduction_type : 'N/A'"></p>
                                               </div>
                                               <div>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">Amount</p>
-                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="'$' + (payment.amount || '0.00')"></p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">Deduction Note</p>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="deduction.deduction_note ? deduction.deduction_note : 'N/A'"></p>
                                               </div>
                                             </div>
                                             
-                                            <div x-show="payment.credit_note">
-                                              <p class="text-xs text-gray-500 dark:text-gray-400">Credit Note</p>
-                                              <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="payment.credit_note || 'No details provided'"></p>
-                                            </div>
                                             <!-- <div>
                                                   <p class="text-xs text-gray-500 dark:text-gray-400">Comment</p>
                                                   <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
                                                      x-text="charge.comment || 'N/A'"></p> -->
                                                 <!-- </div> -->
                                             
-                                            <!-- <template x-if="expense.vendor_invoice_number || expense.payment_reference_note">
+                                            <!-- <template x-if="expense.vendor_settlement_number || expense.payment_reference_note">
                                               <div class="pt-2 border-t">
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">References</p>
-                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="expense.vendor_invoice_number ? 'Invoice: ' + expense.vendor_invoice_number : ''"></p>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="expense.vendor_settlement_number ? 'Settlement: ' + expense.vendor_settlement_number : ''"></p>
                                                 <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="expense.payment_reference_note ? 'Note: ' + expense.payment_reference_note : ''"></p>
                                               </div>
                                             </template> -->
@@ -337,32 +302,37 @@
                                       </div>
                                     </template>
                                     
-                                    <template x-if="!formData.invoicepayments || formData.invoicepayments.length === 0">
+                                    <template x-if="!formData.settlement_deduction || formData.settlement_deduction.length === 0">
                                       <div class="text-center py-4 text-gray-500 dark:text-gray-400">
-                                        No repayment recorded
+                                        No Deduction recorded
                                       </div>
                                     </template>
+
+                                    <div>
+                                        <p class="text-xl font-bold text-gray-500 dark:text-gray-400">Net Total</p>
+                                        <p class="text-xl font-medium text-gray-900 dark:text-gray-100"  x-text="formData.total_deductions ? '$' + parseFloat(formData.total_deductions).toFixed(2) : '0.00'"></p>
+                                      </div>
                                   </div>
                               
                                   <!-- Column 3 -->
                                   <div class="flex-1 space-y-4 min-w-[200px]"> <!-- flex-1 for equal width -->
                                     <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">Backup Docs</h3>
                                     
-                                   <template x-if="Array.isArray(formData.invoicedocs) && formData.invoicedocs.length > 0">
+                                   <template x-if="Array.isArray(formData.settlement_docs) && formData.settlement_docs.length > 0">
                                     <div class="grid grid-cols-2 gap-4">
-                                      <template x-for="doc in formData.invoicedocs" :key="doc.id">
+                                      <template x-for="doc in formData.settlement_docs" :key="doc.id">
                                         <div class="border rounded-lg p-2">
                                           <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Document</p>
                                           <div class="relative">
                                             <img 
-                                              :src="doc.file" 
+                                              :src="doc.file_path" 
                                               class="w-full h-32 object-contain rounded-md bg-gray-100 dark:bg-gray-700"
                                               alt="Driver document"
-                                              @error="doc.file = '/path/to/placeholder-image.png'"
+                                              @error="doc.file_path = '/path/to/placeholder-image.png'"
                                             />
                                             <div class="absolute top-2 right-2 bg-white/80 dark:bg-gray-800/80 rounded-full p-1">
                                               <a 
-                                                :href="doc.file" 
+                                                :href="doc.file_path" 
                                                 target="_blank" 
                                                 class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
                                                 title="View full size"
@@ -379,7 +349,7 @@
                                     </div>
                                   </template>
 
-                                  <template x-if="!Array.isArray(formData.invoicedocs) || formData.invoicedocs.length === 0">
+                                  <template x-if="!Array.isArray(formData.settlement_docs) || formData.settlement_docs.length === 0">
                                       <p class="text-xs text-gray-500 dark:text-gray-400">No documents available.</p>
                                   </template>
                                     
@@ -450,7 +420,7 @@
 
           fetchData() {
             this.isLoading = true;
-            fetch(`${requestURL}/invoices/invoice/${this.id}`, {
+            fetch(`${requestURL}/settlements/settlement/${this.id}`, {
               headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
                 'Accept': 'application/json'
@@ -463,58 +433,61 @@
               return response.json();
             })
             .then(data => {
-              console.log('Single invoice:', data.invoice);
+              console.log('Single settlement:', data);
               this.formData = {
                 // Basic Information
-                id: data.invoice.id || '',
-                invoice_prefix: data.invoice.branch?.invoice_prefix + '-'|| '',
-                invoice_logo: data.invoice.branch?.invoice_logo || '',
-                invoice_type: data.invoice.invoice_type || '',
-                isFactored: data.invoice.isFactored || '',
-                override_default_company: data.invoice.override_default_company || '',
-                invoice_date: data.invoice.invoice_date || '',
-                invoice_due_date: data.invoice.invoice_due_date || '',
-                attention_invoice_to: data.invoice.attention_invoice_to || '',
-                note_bill_to_party: data.invoice.note_bill_to_party || '',
-                loads_on_invoice: data.invoice.loads_on_invoice || '',
-                booking_number: data.invoice.booking_number || '',
-                bill_of_landing_number: data.invoice.bill_of_landing_number || '',
-                po_number: data.invoice.po_number || '',
-                reference_number: data.invoice.reference_number || '',
-                move_date: data.invoice.move_date || '',
-                trailer: data.invoice.trailer || '',
-                chasis: data.invoice.chasis || '',
-                load_weight: data.invoice.load_weight || '',
-                commodity: data.invoice.commodity || '',
-                no_of_packages:data.invoice.no_of_packages || '',
-                total_discount:data.invoice.total_discount || '',
-                net_total:data.invoice.net_total || '',
-                invoicedocs: data.invoice?.invoicedocs?.map(doc => ({
+                id: data.id || '',
+                settlement_type: data.settlement_type || '',
+                office: data.office || '',
+                settlement_date: data.settlement_date || '',
+                settlement_no: data.settlement_no || '',
+                week_from: data.week_from || '',
+                week_to: data.week_to || '',
+                payee: data.payee || '',
+                payee_note: data.payee_note || '',
+                payment_method: data.payment_method || '',
+                check_payment_reference: data.check_payment_reference || '',
+                payment_date: data.payment_date || '',
+                payment_note: data.payment_note || '',
+                internal_notes: data.internal_notes || '',
+                tags: data.tags || '',
+                total_payments: data.total_payments || '',
+                total_payments_discount: data.total_payments_discount || '',
+                net_total_payments: data.net_total_payments || '',
+                total_escrow_release: data.total_escrow_release || '',
+                total_deductions: data.total_deductions || '',
+                
+                
+                settlement_docs: data?.settlement_docs?.map(doc => ({
                   id: doc.id,
-                  file: doc.file
+                  file: doc.file_path
               })) || [],
 
-              invoicecharges:data.invoice?.invoicecharges?.map(charge => ({
-                id: charge.id,
-                charge_type: charge.charge_type,
-                charge_amount: charge.amount,
-                charge_units: charge.units,
-                internal_notes: charge.internal_notes,
-                discount:charge.discount,
-                charge_rate: charge.unit_rate,
-                total:charge.total
+              settlement_deduction:data?.settlement_deduction?.map(deduction => ({
+                id: deduction.id,
+                deduction_type: deduction.deduction_type,
+                deduction_amount: deduction.deduction_amount,
+                deduction_comment: deduction.deduction_comment,
+                deduction_note: deduction.deduction_note,
               })) || [],
 
-              invoicepayments:data.invoice?.invoicepayments?.map(payment => ({
+              settlement_payment:data?.settlement_payment?.map(payment => ({
                 id: payment.id,
-                credit_amount: payment.credit_amount,
-                payment_date: payment.payment_date,
+                payment_type: payment.payment_type,
+                Comment: payment.Comment,
+                units: payment.units,
+                rate: payment.rate,
                 amount: payment.amount,
-                internal_notes: payment.internal_notes,
-                payment_method: payment.payment_method,
-                credit_memo:payment.credit_memo,
-                credit_note:payment.credit_note,
-                credit_date:payment.credit_date,
+                payment_total:payment.payment_total,
+              })) || [],
+
+              settlement_escrow:data?.settlement_escrow?.map(escrow => ({
+                id: escrow.id,
+                escrow_release_account: escrow.escrow_release_account,
+                escrow_release_amount: escrow.escrow_release_amount,
+                escrow_release_comment: escrow.escrow_release_comment,
+                escrow_release_note: escrow.escrow_release_note,
+                total_escrow_release: escrow.total_escrow_release,
               })) || [],
                 
 
@@ -553,14 +526,14 @@
   
   // Add a title to the PDF
   const title = document.createElement('h1');
-  title.textContent = 'Invoice #' + (document.querySelector('[x-text="\'Reference #: \' + (formData.id || \'N/A\')"]')?.textContent || '');
+  title.textContent = 'Settlement #' + (document.querySelector('[x-text="\'Reference #: \' + (formData.id || \'N/A\')"]')?.textContent || '');
   title.style.textAlign = 'center';
   title.style.marginBottom = '20px';
   clonedElement.insertBefore(title, clonedElement.firstChild);
   
   const opt = {
     margin: 10,
-    filename: 'invoice_' + (new Date().toISOString().split('T')[0]) + '.pdf',
+    filename: 'settlement_' + (new Date().toISOString().split('T')[0]) + '.pdf',
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { 
       scale: 2,

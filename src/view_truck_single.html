@@ -257,7 +257,7 @@
 
           fetchData() {
             this.isLoading = true;
-            fetch(`${requestGetURL}/trucks/truck/${this.id}`, {
+            fetch(`${requestURL}/trucks/truck/${this.id}`, {
               headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
                 'Accept': 'application/json'

@@ -289,7 +289,7 @@
     
     fetchData() {
       this.isLoading = true;
-      fetch(requestGetURL + '/drivers/driver', {
+      fetch(requestURL + '/drivers/driver', {
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
           'Accept': 'application/json'
@@ -393,7 +393,7 @@
     
     deleteItem(id) {
       if (confirm('Are you sure you want to delete this driver?')) {
-        fetch(`${requestGetURL}/drivers/driver/${id}`, {
+        fetch(`${requestURL}/drivers/driver/${id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),

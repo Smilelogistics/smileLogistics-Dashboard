@@ -348,7 +348,7 @@
             <img src="./assets/images/user/owner.jpg" alt="User" />
           </span> -->
 
-          <span class="block mr-1 font-medium text-theme-sm"  x-text="user?.fname && user?.lname ? `${user.fname} ${user.lname}` : 'Guest'"></span>
+          <span class="block mr-1 font-medium text-theme-sm"  x-text="user?.fname || user?.lname ? `${user.fname}` : 'Guest'"></span>
 
           <svg
             :class="dropdownOpen && 'rotate-180'"
@@ -633,7 +633,7 @@ function logout() {
     return;
   }
 
-  fetch('https://laravel-production-077b.up.railway.app/api/v1/logout', {
+  fetch( requestURL + '/logout', {
     method: 'POST',
     headers: {
       'Authorization': 'Bearer ' + token,
@@ -755,7 +755,7 @@ function logout() {
 </div>
 
 <script>
-  var requestURL = "https://smile-logistics-production.up.railway.app/api/v1";
+  //var requestURL = "https://smile-logistics-production.up.railway.app/api/v1";
  // Replace the jQuery AJAX call with Alpine.js data and fetch
 function notificationData() {
     return {

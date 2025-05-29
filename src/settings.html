@@ -97,9 +97,9 @@
                             <h2 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">General Settings</h2>
                             <form id="generalForm" @submit.prevent="submitForm('general')" x-ref="generalForm" enctype="multipart/form-data">
                               <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                <div x-data="{ user: { fame: 'John', lname: 'Doe', mname: 'Smith' } }">
+                                <div>
                                   <label class="block mb-2 text-gray-700 dark:text-gray-300">Name:</label>
-                                  <input type="text" :value="user.fame + ' ' + user.lname + ' ' + user.mname" name="name" 
+                                  <input type="text" :value="user.name" name="name" 
                                          class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" 
                                          placeholder="Enter Name" readonly>
                                 </div>
@@ -323,6 +323,11 @@
                                   <input x-model="formData.copyright" name="copyright" type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="Alright Reserved SML">
                               </div>
 
+                               <div>
+                                  <label class="block text-gray-700 dark:text-gray-300">Invoice Logo</label>
+                                  <input type="file" x-model="formData.invoice_logo" name="invoice_logo" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount">
+                              </div>
+
                                 <!-- <div>
                                 <label class="block mb-2 text-gray-700 dark:text-gray-300">Invoice Logo</label>
                                 <input x-model="formData.invoice_logo" name="invoice_logo" type="file" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
@@ -357,6 +362,17 @@
                               </div>
                             
                             </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                              
+                              <div>
+                                <label class="block text-gray-700 text-gray-700 dark:text-gray-300">Price Per Mile</label>
+                                <input x-model="formData.price_per_mile" name="price_per_mile" type="number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                              </div>
+                            
+                            </div>
+
+                            
                             <button type="submit" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded" :disabled="isLoading">
                               <span x-show="!isLoading">Save Changes</span>
                               <span x-show="isLoading" class="flex items-center justify-center">
@@ -567,15 +583,15 @@
                             <h2 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Address Settings</h2>
                             <form id="basicForm" @submit.prevent="submitCustomerForm('address')" x-ref="addressForm" enctype="multipart/form-data">
                               <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                <div x-data="{ user: { fame: 'John', lname: 'Doe', mname: 'Smith' } }">
+                                <div>
                                   <label class="block mb-2 text-gray-700 dark:text-gray-300">Name:</label>
-                                  <input type="text" :value="user.fame + ' ' + user.lname + ' ' + user.mname" name="name" 
+                                  <input type="text" :value="formData.customer_name" name="name" 
                                          class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" 
                                          placeholder="Enter Name" readonly>
                                 </div>
                                   <div>
                                       <label class="block mb-2 text-gray-700 dark:text-gray-300">Email:</label>
-                                      <input type="email" x-model="user.email" name="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="" readonly>
+                                      <input type="email" x-model="formData.customer_email" name="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="" readonly>
                                   </div>
                                   
                                   <div>
@@ -627,7 +643,7 @@
                             </style>
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                              <div id="chosen-select">
+                              <!-- <div id="chosen-select">
                                 <label class="block mb-2 text-gray-700 dark:text-gray-300">Currency:</label>
                                 <select x-model="formData.currency" name="currency" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 chosen-select">
                                   <option value="" selected disabled>Select a currency</option>
@@ -636,11 +652,8 @@
                                   <option value="ALL">ALL - Albanian Lek</option>
                                   <option value="AMD">AMD - Armenian Dram</option>
                                   <option value="ANG">ANG - Netherlands Antillean Guilder</option>
-                                  
-                                  <!-- <option value="SGD">Singapore Dollar (SGD)</option> -->
-                                  <!-- Add more currencies as needed -->
                                 </select>
-                              </div>
+                              </div> -->
                               
                               <!-- <div>
                                   <label class="block mb-2 text-gray-700 dark:text-gray-300">Copyright:</label>
@@ -770,7 +783,7 @@
                                   </script>
                                     <div>
                                       <label class="block mb-2 text-gray-700 dark:text-gray-300">Start Date:</label>
-                                      <input type="text" x-model="formData.start_date" name="start_date" id="start_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                      <input type="text" x-model="formData.start_date" name="start_date" id="start_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="" readonly>
                                   </div>
                                   <div>
                                       <label class="block mb-2 text-gray-700 dark:text-gray-300">Credit Limit:</label>
@@ -916,9 +929,9 @@
                             <h2 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Address Settings</h2>
                             <form id="DbasicForm" @submit.prevent="submitDriverForm('Daddress')" x-ref="driverAddressForm" enctype="multipart/form-data">
                               <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                                <div x-data="{ user: { fame: 'John', lname: 'Doe', mname: 'Smith' } }">
+                                <div>
                                   <label class="block mb-2 text-gray-700 dark:text-gray-300">Name:</label>
-                                  <input type="text" :value="user.fame + ' ' + user.lname + ' ' + user.mname" name="name" 
+                                  <input type="text" :value="user.name" name="name" 
                                          class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" 
                                          placeholder="Enter Name" readonly>
                                 </div>
@@ -1276,11 +1289,12 @@
       enable_email_otp: 0, // Default to 0 (unchecked)
       enable_2fa: 0,   
       logo1: '',
-      // invoice_logo: '',
+      invoice_logo: '',
       mpg: '',
       base_rate: '',
       base_fee: '',
       handling_fee: '',
+      price_per_mile: '',
 
 
       //customer and Driver variables
@@ -1416,7 +1430,7 @@
           console.log("User data", data);
           //console.log("User Role", userRole);
           this.user = {
-            name: data.name,
+            name: data.fname + ' ' + data.lname,
             email: data.email
           };
         }
@@ -1424,6 +1438,10 @@
         console.error('Error fetching user data:', error);
       }
     },
+      // this.formData = {
+      //       ...this.formData,
+      //       ...data
+      //     };
 
     async fetchSettings() {
       try {
@@ -1437,36 +1455,81 @@
           const datas = await response.json();
           let data = Array.isArray(datas) ? datas[0] : datas;
           console.log("Settings data", data);
-            this.formData = {
-            ...this.formData,
-            ...data
-          };
+          
           console.log('FOMR DATA',data.phone);
         this.formData.phone = data.phone || '';
-        this.formData.address = data.address || '';
-        this.formData.parcel_prefix = data.parcel_prefix || '';
-        this.formData.invoice_prefix = data.invoice_prefix || '';
-        this.formData.currency = data.currency || '';
-        this.formData.copyright = data.copyright || '';
-        this.formData.paystack_publicKey = data.paystack_publicKey || '';
-        this.formData.paystack_secretKey = data.paystack_secretKey || '';
-        this.formData.FLW_pubKey = data.FLW_pubKey || '';
-        this.formData.FLW_secKey = data.FLW_secKey || '';
-        this.formData.Razor_pubKey = data.Razor_pubKey || '';
-        this.formData.Razor_secKey = data.Razor_secKey || '';
-        this.formData.stripe_pubKey = data.stripe_pubKey || '';
-        this.formData.stripe_secKey = data.stripe_secKey || '';
-        this.formData.mail_driver = data.mail_driver || '';
-        this.formData.mail_host = data.mail_host || '';
-        this.formData.mail_port = data.mail_port || '';
-        this.formData.mail_encryption = data.mail_encryption || '';
-        this.formData.mail_username = data.mail_username || '';
-        this.formData.mail_password = data.mail_password || '';
-        this.formData.mail_from = data.mail_from || '';
-        this.formData.mail_from_name = data.mail_from_name || '';
-        this.formData.enable_email_otp = data.enable_email_otp === 1 ? 1 : 0;
-        this.formData.enable_2fa = data.enable_2fa === 1 ? 1 : 0;
+      this.formData.address = data.address || '';
+      this.formData.about_us = data.about_us || '';
+      this.formData.parcel_prefix = data.parcel_tracking_prefix || '';
+      this.formData.invoice_prefix = data.invoice_prefix || '';
+      this.formData.currency = data.currency || '';
+      this.formData.copyright = data.copyright || '';
+      
+      // this.formData.logo1 = data.logo1 || '';
+      // this.formData.logo2 = data.logo2 || '';
+      // this.formData.logo3 = data.logo3 || '';
 
+      this.formData.paystack_publicKey = data.paystack_publicKey || '';
+      this.formData.paystack_secretKey = data.paystack_secretKey || '';
+
+      this.formData.FLW_pubKey = data.FLW_pubKey || '';
+      this.formData.FLW_secKey = data.FLW_secKey || '';
+
+      this.formData.Razor_pubKey = data.Razor_pubKey || '';
+      this.formData.Razor_secKey = data.Razor_secKey || '';
+
+      this.formData.stripe_pubKey = data.stripe_pubKey || '';
+      this.formData.stripe_secKey = data.stripe_secKey || '';
+
+      this.formData.mail_driver = data.mail_driver || '';
+      this.formData.mail_host = data.mail_host || '';
+      this.formData.mail_port = data.mail_port || '';
+      this.formData.mail_encryption = data.mail_encryption || '';
+      this.formData.mail_username = data.mail_username || '';
+      this.formData.mail_password = data.mail_password || '';
+      this.formData.mail_from = data.mail_from_address || '';
+      this.formData.mail_from_name = data.mail_from_name || '';
+
+      this.formData.enable_email_otp = data.enable_email_otp === 1 ? 1 : 0;
+      this.formData.enable_2fa = data.enable_2fa === 1 ? 1 : 0;
+
+      this.formData.base_fee = data.base_fee || '';
+      this.formData.base_rate = data.base_rate || '';
+      this.formData.handling_fee = data.handling_fee || '';
+      this.formData.price_per_mile = data.price_per_mile || '';
+      this.formData.mpg = data.mpg || '';
+      this.formData.discount = data.discount || '';
+      this.formData.subscription_type = data.subscription_type || '';
+      this.formData.subscription_count = data.subscription_count || '';
+      this.formData.subscription_date = data.subscription_date || '';
+      this.formData.subscription_end_date = data.subscription_end_date || '';
+
+
+      //customer information
+      this.formData.customer_name = data.user?.fname || '';
+      this.formData.customer_email = data.user?.email || '';
+      this.formData.customer_phone = data.customer_phone || '';
+      this.formData.customer_primary_address = data.customer_primary_address || '';
+      this.formData.customer_secondary_address = data.customer_secondary_address || '';
+      this.formData.customer_state = data.customer_state || '';
+      this.formData.customer_zip = data.customer_zip || '';
+      this.formData.customer_country = data.customer_country || '';
+      this.formData.invoice_footer_note = data.invoice_footer_note || '';
+      this.formData.customer_sales_rep = data.customer_sales_rep || '';
+
+      this.formData.toll_free = data.toll_free || '';
+      this.formData.note = data.note || '';
+      this.formData.internal_note = data.internal_note || '';
+      this.formData.flash_note_for_drivers = data.flash_note_for_drivers || '';
+      this.formData.flash_note_for_accounting = data.flash_note_for_accounting || '';
+
+      this.formData.fax_no = data.fax_no || '';
+      this.formData.other_notes = data.other_notes || '';
+      this.formData.credit_limit = data.credit_limit || '';
+      this.formData.alert_percentage = data.alert_percentage || '';
+
+
+      //this.formData.
         
         // tenable_email_otp: data.enable_email_otp === 1 ? 1 : 0,
         //                 enable_2fa: data.enable_2fa === 1 ? 1 : 0

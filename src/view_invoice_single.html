@@ -93,10 +93,10 @@
                 <div class="p-6">
                   <!-- Company Header -->
                   <div class="text-center mb-6">
-                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white" x-text="formData.override_default_company || 'SMILES LOGISTICS'"></h1>
-                    <p class="text-sm text-gray-600 dark:text-gray-300" x-text="data.invoice.branch?.address || '2646 Highway Ave, Highland, IN 46322'"></p>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white" x-text="formData.override_default_company || "></h1>
+                    <p class="text-sm text-gray-600 dark:text-gray-300" x-text="formData.invoice.branch?.address || ''"></p>
                     <p class="text-sm text-gray-600 dark:text-gray-300" 
-                       x-text="'Ph: ' + (data.invoice.branch?.phone || '(219) 801-5255') + ' | E: ' + (data.invoice.branch?.email || 'accounting@smileslogistics.com')"></p>
+                       x-text="'Ph: ' + (formData.invoice.branch?.phone || ) + ' | E: ' + (formData.invoice.branch?.email || 'accounting@smileslogistics.com')"></p>
                   </div>
 
                   <!-- Invoice Title -->

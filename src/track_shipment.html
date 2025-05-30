@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+
+    <include src="./partials/mainhead.html"> </include>
+    <script src="./assets/js/main.js"></script>
+    <title>Track | </title>
+  </head>
+  <body
+    x-data="{ page: 'track_shipment', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader tart ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
+            <!-- Breadcrumb Start -->
+            <div x-data="{ pageName: `Track Shipment`}">
+              <include src="./partials/breadcrumb.html" />
+            </div>
+            <!-- Breadcrumb End -->
+             
+            <div class="w-full">
+              <div class="space-y-12">
+                <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] p-2">
+                  <div class="px-5 py-4 sm:px-6 sm:py-5">
+                    <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
+                      Shipment Details
+                    </h3>
+                  </div>
+          
+                  <!-- Inputs Container -->
+                  <div class="border-t border-gray-100 p-5 dark:border-gray-800 sm:p-6">
+                    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
+                    >
+                      <div class="max-w-full overflow-x-auto">
+                        <div class="max-w-6xl mx-auto" x-data="singleItem">
+                          <!-- Loading State -->
+                          <template x-if="isLoading">
+                            <div class="text-center py-8">
+                              <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+                              <p class="mt-2 text-gray-600">Loading driver details...</p>
+                            </div>
+                          </template>
+                        
+                          <!-- Main Card -->
+                          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700" x-show="!isLoading">
+                            <!-- Header -->
+                            <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-600 flex justify-between items-center">
+                              <div>
+                                
+    <!-- <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl"></h2> -->
+
+                                <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Track the delivery of order #957684673</h2>
+                                <p class="text-sm text-gray-500 dark:text-gray-300" x-text="'Reference #: ' + (formData.id || 'N/A')"></p>
+                              </div>
+                        
+                            </div>
+                            
+                            <!-- Content Grid -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+                              <!-- Basic Information -->
+                            
+                              <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
+                                <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+                                  <div class="mt-6 sm:mt-8 lg:flex lg:gap-8">
+                                    
+                                    
+
+                                    <div class="mt-6 grow sm:mt-8 lg:mt-0">
+                                      <div class="space-y-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Order history</h3>
+
+                                        <ol class="relative ms-3 border-s border-gray-200 dark:border-gray-700">
+                                          <li class="mb-10 ms-6">
+                                            <span class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 ring-8 ring-white dark:bg-gray-700 dark:ring-gray-800">
+                                              <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"/>
+                                              </svg>
+                                            </span>
+                                            <h4 class="mb-0.5 text-base font-semibold text-gray-900 dark:text-white">Estimated delivery in 24 Nov 2023</h4>
+                                            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Products delivered</p>
+                                          </li>
+
+                                          <li class="mb-10 ms-6">
+                                            <span class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 ring-8 ring-white dark:bg-gray-700 dark:ring-gray-800">
+                                              <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h6l2 4m-8-4v8m0-8V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v9h2m8 0H9m4 0h2m4 0h2v-4m0 0h-5m3.5 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-10 0a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/>
+                                              </svg>
+                                            </span>
+                                            <h4 class="mb-0.5 text-base font-semibold text-gray-900 dark:text-white">Today</h4>
+                                            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Products being delivered</p>
+                                          </li>
+
+                                          <li class="mb-10 ms-6 text-primary-700 dark:text-primary-500">
+                                            <span class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary-100 ring-8 ring-white dark:bg-primary-900 dark:ring-gray-800">
+                                              <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5" />
+                                              </svg>
+                                            </span>
+                                            <h4 class="mb-0.5 font-semibold text-sm font-normal text-gray-500 dark:text-gray-400">23 Nov 2023, 15:15</h4>
+                                            <p class="text-sm text-sm font-normal text-gray-500 dark:text-gray-400">Products in the courier's warehouse</p>
+                                          </li>
+
+                                          <li class="mb-10 ms-6 text-primary-700 dark:text-primary-500">
+                                            <span class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary-100 ring-8 ring-white dark:bg-primary-900 dark:ring-gray-800">
+                                              <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5" />
+                                              </svg>
+                                            </span>
+                                            <h4 class="mb-0.5 text-base font-semibold text-sm font-normal text-gray-500 dark:text-gray-400">22 Nov 2023, 12:27</h4>
+                                            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Products delivered to the courier - DHL Express</p>
+                                          </li>
+
+                                          <li class="mb-10 ms-6 text-white dark:text-primary-500">
+                                            <span class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary-100 ring-8 ring-white dark:bg-primary-900 dark:ring-gray-800">
+                                              <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5" />
+                                              </svg>
+                                            </span>
+                                            <h4 class="mb-0.5 font-semibold text-sm font-normal text-white dark:text-gray-400">19 Nov 2023, 10:47</h4>
+                                            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Payment accepted - VISA Credit Card</p>
+                                          </li>
+
+                                          <li class="ms-6 text-white dark:text-primary-500">
+                                            <span class="absolute -start-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary-100 ring-8 ring-white dark:bg-primary-900 dark:ring-gray-800">
+                                              <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5" />
+                                              </svg>
+                                            </span>
+                                            <div>
+                                              <h4 class="mb-0.5 font-semibold">19 Nov 2023, 10:45</h4>
+                                              <a href="#" class="text-sm font-medium hover:underline">Order placed - Receipt #647563</a>
+                                            </div>
+                                          </li>
+                                        </ol>
+
+                                        <div class="gap-4 sm:flex sm:items-center">
+                                          <button type="button" class="w-full rounded-lg  border border-gray-200 bg-white px-5  py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">Cancel the order</button>
+
+                                          <a href="#" class="mt-4 flex w-full items-center justify-center rounded-lg bg-primary-700  px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300  dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 sm:mt-0">Order details</a>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </section>
+                         
+                            </div>
+
+                            
+                             
+                              </div>
+
+                              
+                            </div>
+                            
+                            <!-- Footer -->
+                            <div class="bg-gray-50 dark:bg-gray-700 px-6 py-3 border-t border-gray-200 dark:border-gray-600 flex justify-between">
+                              <div class="text-sm text-gray-500 dark:text-gray-400" x-text="'Last updated: ' + (new Date().toLocaleString())"></div>
+                              <div>
+                                <!-- <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition mr-2">
+                                  Edit Shipment
+                                </button> -->
+                                <button x-on:click="printInvoice()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition">
+                                  Print
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script> -->
+    <script>
+      
+
+      document.addEventListener('alpine:init', () => {
+        Alpine.data('singleItem', () => ({
+          id: null,
+          formData: '',
+          isLoading: false,
+          
+          init() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedId = urlParams.get('id');
+            if (encodedId) {
+              this.id = atob(encodedId);
+              this.fetchData();
+            } else {
+              console.error('No ID found in the URL');
+            }
+          },
+
+          fetchData() {
+            this.isLoading = true;
+            fetch(`${requestURL}/track_shipments/track_shipment/${this.id}`, {
+              headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                'Accept': 'application/json'
+              }
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(data => {
+              console.log('Single track_shipment:', data.track_shipment);
+              this.formData = {
+                // Basic Information
+                id: data.track_shipment.id || '',
+                track_shipment_type: data.track_shipment.track_shipment_type || '',
+                track_shipment_office: data.track_shipment.track_shipment_office || '',
+                driver_fname: data.track_shipment?.driver?.user?.fname || '',
+                driver_lname: data.track_shipment?.driver?.user?.lname || '',
+                driver_mname: data.track_shipment?.driver?.user?.mname || '',
+                make_model: data.track_shipment.make_model || '',
+                license_plate_number: data.track_shipment.license_plate_number || '',
+                vehicle_number: data.track_shipment.vehicle_number || '',
+                track_shipment_docs: data.track_shipment?.track_shipment_docs?.map(doc => ({
+                  id: doc.id,
+                  file: doc.file
+              })) || []
+                
+
+                
+                //shipment_expenses: data.shipment_expenses || [],
+              };
+            })
+            .catch(error => {
+              console.error('Error fetching data:', error);
+            })
+            .finally(() => {
+              this.isLoading = false;
+            });
+          },
+
+          printInvoice() {
+            window.print();
+          }
+        }));
+      });
+   
+      </script>
+  </body>
+</html>

@@ -502,7 +502,7 @@ document.addEventListener('alpine:init', () => {
       this.isUpdating = true;
       
       try {
-        const response = await fetch(`${requestURL}/invoices/updatestatus/${this.currentInvoiceId}`, {
+        const response = await fetch(`${requestURL}/invoices/updateShipment/${this.currentInvoiceId}`, {
           method: 'PUT',
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),

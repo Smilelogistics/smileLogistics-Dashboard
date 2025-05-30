@@ -111,11 +111,11 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Booking #</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Carges Total</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Fuel cost</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Return</th>
+                                <!-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Return</th> -->
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Broker Name</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">COmmodity</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Weight</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Pickup #</th>
+                                <!-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Pickup #</th> -->
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">BOL #</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">PO #</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">LFD</th>
@@ -138,6 +138,9 @@
                                           <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                                             <li><a href="#" x-on:click="editItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a></li>
                                             <li><a href="#" x-on:click="viewItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View</a></li>
+                                             <li>
+                                            <a href="#" @click.prevent="$store.statusModal.openModal(item.id, item.shipment_status, item.shipment_tracking_number); open = false" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update Status</a>
+                                          </li>
                                           </ul>
                                           <div class="py-2">
                                             <a href="#" x-on:click="deleteItem(item.id)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
@@ -156,6 +159,10 @@
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
                                     x-text="'$' + ((Number(item?.shipment_charges?.net_total) || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}))">
                                   </td>
+
+                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
+                                    x-text="'$' + ((Number(item?.shipment_charges?.net_total) || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}))">
+                                  </td>
                     
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.broker_name"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.commodity"></td>
@@ -163,8 +170,8 @@
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.bill_of_laden_number"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.po_number"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.lfd"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full" :class="item.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" x-text="item.status"></span>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full" :class="item.shipment_status === 'rejected' ? 'bg-red-100 text-red-800' : ''" x-text="item.shipment_status"></span>
                                   </td>
                                 </tr>
                               </template>
@@ -242,6 +249,76 @@
                         </div>
                       </div>
                     </div>
+
+                     <!-- Status Update Modal -->
+                    <div x-data="{ show: false }" x-show="$store.statusModal.showStatusModal" class="fixed inset-0 z-50 overflow-y-auto">
+                      <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <!-- Background overlay -->
+                        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                        </div>
+                    
+                        <!-- Modal -->
+                        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full dark:bg-gray-800"
+                             x-show="$store.statusModal.showStatusModal"
+                             x-transition:enter="ease-out duration-300"
+                             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                             x-transition:leave="ease-in duration-200"
+                             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 dark:bg-gray-800">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4">Update Shipment Status</h3>
+                            
+                            <div class="mb-4">
+                              <label class="block text-sm font-medium text-gray-700 dark:text-white mb-2">Tracking ID</label>
+                              <div class="px-3 py-2 rounded border bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                                <span class="text-sm font-medium text-gray-700 dark:text-white mb-2" x-text="$store.statusModal.trackingId ? $store.statusModal.trackingId.charAt(0).toUpperCase() + $store.statusModal.trackingId.slice(1) : 'N/A'"></span>
+                              </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Status</label>
+                              <div class="px-3 py-2 rounded border bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                                <span x-text="$store.statusModal.currentStatus ? $store.statusModal.currentStatus.charAt(0).toUpperCase() + $store.statusModal.currentStatus.slice(1) : 'N/A'"></span>
+                              </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">New Status</label>
+                              <select x-model="$store.statusModal.currentStatus" 
+                                      class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="On Transit">On Transit</option>
+                                <option value="Awaiting Payment">Awaiting Payment</option>
+                                <option value="Custom Clearance">Custome Clearance</option>
+                              </select>
+                            </div>
+                          </div>
+                          
+                          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse dark:bg-gray-800">
+                            <button type="button" 
+                                    @click="$store.statusModal.updateStatus()"
+                                    :disabled="$store.statusModal.isUpdating"
+                                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50">
+                              <span x-show="!$store.statusModal.isUpdating">Update</span>
+                              <span x-show="$store.statusModal.isUpdating" class="flex items-center">
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Updating...
+                              </span>
+                            </button>
+                            <button type="button" 
+                                    @click="$store.statusModal.showStatusModal = false"
+                                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:bg-gray-600">
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     </div>
 
                   </div>
@@ -286,6 +363,7 @@
             .then(response => response.json())
             .then(data => {
               if (data.shipments && Array.isArray(data.shipments)) {
+                console.log('Shipment data:', data.shipments);
                 this.items = data.shipments;
                 this.updateDisplayedItems();
               } else {
@@ -325,7 +403,7 @@
                 (item.bill_of_laden_number && item.bill_of_laden_number.toLowerCase().includes(query)) ||
                 (item.po_number && item.po_number.toLowerCase().includes(query)) ||
                 (item.lfd && item.lfd.toLowerCase().includes(query)) ||
-                (item.status && item.status.toLowerCase().includes(query))
+                (item.shipment_status && item.shipment_status.toLowerCase().includes(query))
               );
             });
           },
@@ -393,6 +471,59 @@
             }
           }
         }));
+
+          // Status Modal Store
+        Alpine.store('statusModal', {
+          showStatusModal: false,
+          currentShipmentId: null,
+          currentStatus: '',
+          shipment_tracking_number: '',
+          isUpdating: false,
+
+          openModal(id, shipment_status, shipment_tracking_number) {
+            this.currentShipmentId = id;
+            this.currentStatus = shipment_status;
+            this.trackingId = shipment_tracking_number;
+            this.showStatusModal = true;
+          },
+          
+          async updateStatus() {
+            this.isUpdating = true;
+            
+            try {
+              const response = await fetch(`${requestURL}/updateShipmentStatus/${this.currentShipmentId}`, {
+                method: 'PUT',
+                headers: {
+                  'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                  shipment_status: this.currentStatus,
+                  shipment_tracking_number: this.trackingId
+                })
+              });
+              
+              if (!response.ok) {
+                throw new Error('Failed to update status');
+              }
+              
+              const data = await response.json();
+              createToast('success', data.message || 'Status updated successfully');
+              
+              // Refresh the table data
+              // const datatable = document.querySelector('[x-data="datatable"]').__x.$data;
+              // datatable.fetchData();
+              
+              this.showStatusModal = false;
+            } catch (error) {
+              console.error('Error updating status:', error);
+              //createToast('error', 'Failed to update status');
+            } finally {
+              this.isUpdating = false;
+            }
+          }
+        });
       });
       
       </script>

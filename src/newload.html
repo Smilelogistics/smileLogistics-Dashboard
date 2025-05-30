@@ -1009,6 +1009,10 @@
                                         <label class="block text-gray-700 dark:text-gray-300">Fuel cost</label>
                                         <input type="text" x-model="formData.total_fuel_cost" name="total_fuel_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_fuel_cost" readonly />
                                     </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Total shipping cost</label>
+                                        <input type="text" x-model="formData.total_shipping_cost" name="total_shipping_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_fuel_cost" readonly />
+                                    </div>
                                     
                                     <!-- <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Seal #</label>
@@ -1596,6 +1600,7 @@ function populateCarrierSelect() {
         //})
 
         var mpgGoten = '';
+        var pricePerMile = '';
 
 function fetchSettings() {
     return fetch(requestURL + '/settings/data', {
@@ -1613,10 +1618,11 @@ function fetchSettings() {
     .then(datas => {
         let data = Array.isArray(datas) ? datas[0] : datas;
         
-        console.log('FORM DATA', data.mpg);
+        console.log('FORM DATA', data);
         mpgValue = document.getElementById('mpg');
         mpgValue.value = data.mpg || 1;
         mpgGoten = data.mpg || 1;
+        pricePerMile = data.price_per_mile || 1;
         
         //console.log('mpgGoten inside fetch', mpgGoten);
     
@@ -1628,7 +1634,7 @@ function fetchSettings() {
 }
 
 fetchSettings().then(result => {
-    console.log('mpgGoten outside fetch', mpgGoten);
+    console.log('mpgGoten outside fetch', pricePerMile);
 });
 
 //console.log('mpgGoten immediately after fetch call (will be empty):', mpgGoten);
@@ -1862,8 +1868,10 @@ fetchSettings().then(result => {
 
                     const fuelPerGallon = parseFloat(this.formData.fuel_rate_per_gallon) || 0;
                     const mpg = parseFloat(mpgGoten) || 1;
+                    const pricePerm = parseFloat(pricePerMile) || 1;
                     // Updated to include round-trip
                     this.formData.total_fuel_cost = ((totalMiles * 2) * fuelPerGallon / mpg).toFixed(2);
+                    this.formData.total_shipping_cost = ((totalMiles * 2) * pricePerMile).toFixed(2);
                 },
 
               // Charge calculation methods

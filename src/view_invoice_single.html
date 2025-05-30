@@ -80,7 +80,7 @@
                       <div class="relative">
                         <img 
                           :src="formData.invoice_logo" 
-                          class="w-full h-32 object-contain rounded-md bg-gray-100 dark:bg-gray-700"
+                          class="w-full h-24 object-contain rounded-md bg-gray-100 dark:bg-gray-700"
                           alt="Invoice Logo"
                           @error="$el.src = ''" 
                         />
@@ -93,11 +93,13 @@
                 <div class="p-6">
                   <!-- Company Header -->
                   <div class="text-center mb-6">
-                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white" x-text="formData.override_default_company || "></h1>
-                    <p class="text-sm text-gray-600 dark:text-gray-300" x-text="formData.invoice.branch?.address || ''"></p>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white" x-text="formData.override_default_company || '' "></h1>
+                    <p class="text-sm text-gray-600 dark:text-gray-300" x-text="formData.branch_address || ''"></p>
                     <p class="text-sm text-gray-600 dark:text-gray-300" 
-                       x-text="'Ph: ' + (formData.invoice.branch?.phone || ) + ' | E: ' + (formData.invoice.branch?.email || 'accounting@smileslogistics.com')"></p>
+                       x-text="'Ph: ' + (formData.branch_phone || 'N/A') + ' | E: ' + (formData.branch_email || 'N/A')
+"></p>
                   </div>
+                  
 
                   <!-- Invoice Title -->
                   <h2 class="text-xl font-bold text-center border-b-2 border-black dark:border-gray-600 pb-2 mb-4 text-gray-900 dark:text-white">INVOICE</h2>
@@ -114,10 +116,10 @@
                   <!-- Bill To Section -->
                   <div class="mb-6 text-gray-800 dark:text-gray-200">
                     <h3 class="font-bold border-b border-black dark:border-gray-600">Bill To:</h3>
-                    <p class="font-bold" x-text="formData.attention_invoice_to || 'PRUDENCE SHIPPING AND FORWARDING INC'"></p>
-                    <p x-text="formData.note_bill_to_party || '8525 EDINBROOK CROSSING, NORTH SUITE 202'"></p>
-                    <p x-text="data.invoice.customer?.address || 'BROOKLYN PARK, MN 55443'"></p>
-                    <p class="mt-2"><strong>Terms:</strong> Net 7</p>
+                    <p class="font-bold" x-text="formData.attention_invoice_to || ''"></p>
+                    <p x-text="formData.bill_to_customer || ''"></p>
+                    <p x-text="formData.bill_to_address || ''"></p>
+                    <!-- <p class="mt-2"><strong>Terms:</strong> Net 7</p> -->
                   </div>
 
                   <!-- Shipping Info -->
@@ -133,19 +135,19 @@
                       <tbody>
                         <tr>
                           <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-gray-800 dark:text-gray-200">
-                            <span x-text="data.invoice.origin?.name || 'ILLINIOS TRANSPORT CHICAGO'"></span><br>
-                            <span x-text="data.invoice.origin?.address || '3100 W 77TH STREET'"></span><br>
-                            <span x-text="data.invoice.origin?.city_state_zip || 'CHICAGO, IL 60652'"></span>
+                            <span x-text="formData.from_address || ''"></span><br>
+                            <!-- <span x-text="formData.to_address || ''"></span><br>
+                            <span x-text="formData.other_stops || ''"></span> -->
                           </td>
                           <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-gray-800 dark:text-gray-200">
-                            <span x-text="data.invoice.destination?.name || 'ABEL LOADING DOCK'"></span><br>
-                            <span x-text="data.invoice.destination?.address || '4601 85TH AVENUE N BROOKLYN'"></span><br>
-                            <span x-text="data.invoice.destination?.city_state_zip || 'BROOKLYN PARK, MN 55443'"></span>
+                            <span x-text="formData.to_address|| ''"></span><br>
+                            <!-- <span x-text="formData.customer_address || ''"></span><br>
+                            <span x-text="formData.customer_state_data || ''"></span> -->
                           </td>
                           <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-gray-800 dark:text-gray-200">
                             RETURN LOADED:<br>
-                            <span x-text="data.invoice.other_stops || 'CHICAGO(CSX-59TH ST.)'"></span><br>
-                            <span x-text="data.invoice.other_stops_city || 'CHICAGO, IL 99999'"></span>
+                            <span x-text="formData.other_stops || ''"></span><br>
+                            <!-- <span x-text="data.invoice.other_stops_city || 'CHICAGO, IL 99999'"></span> -->
                           </td>
                         </tr>
                       </tbody>
@@ -166,11 +168,11 @@
                     <table class="border-collapse">
                       <tr>
                         <td class="px-4 py-1">Container:</td>
-                        <td class="px-4 py-1" x-text="data.invoice.container_number || 'MRSU6917143'"></td>
+                        <td class="px-4 py-1" x-text="formData.container_number || ''"></td>
                       </tr>
                       <tr>
-                        <td class="px-4 py-1">Size:</td>
-                        <td class="px-4 py-1" x-text="data.invoice.container_size || '40\' HC'"></td>
+                        <td class="px-4 py-1">Load weight:</td>
+                        <td class="px-4 py-1" x-text="formData.load_weight || '40\' HC'"></td>
                       </tr>
                       <tr>
                         <td class="px-4 py-1">Chassis:</td>
@@ -200,7 +202,7 @@
                             <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-gray-800 dark:text-gray-200" x-text="charge.charge_type"></td>
                             <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center text-gray-800 dark:text-gray-200" x-text="charge.charge_units"></td>
                             <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center text-gray-800 dark:text-gray-200" x-text="'$' + parseFloat(charge.charge_rate).toFixed(2)"></td>
-                            <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-right text-gray-800 dark:text-gray-200" x-text="'$' + parseFloat(charge.total).toFixed(2)"></td>
+                            <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-right text-gray-800 dark:text-gray-200" x-text="'$' + parseFloat(charge.charge_amount).toFixed(2)"></td>
                           </tr>
                         </template>
                         <tr class="bg-gray-50 dark:bg-gray-800/50">
@@ -213,16 +215,22 @@
                             <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-right text-red-600 dark:text-red-400" x-text="'-$' + parseFloat(formData.total_discount).toFixed(2)"></td>
                           </tr>
                         </template>
-                        <template x-for="(payment, index) in formData.invoicepayments" :key="index">
+                        <!-- <template x-for="(payment, index) in formData.invoicepayments" :key="index">
                           <tr class="bg-gray-50 dark:bg-gray-800/50">
                             <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 font-bold text-gray-800 dark:text-gray-200" colspan="3">Payment Received (<span x-text="payment.payment_method"></span>):</td>
-                            <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-right text-green-600 dark:text-green-400" x-text="'-$' + parseFloat(payment.amount).toFixed(2)"></td>
+                            <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-right text-green-600 dark:text-green-400" x-text="'-$' + parseFloat(payment.amount).toFixed(2) || 0"></td>
                           </tr>
-                        </template>
+                        </template> -->
                         <tr class="bg-gray-100 dark:bg-gray-700">
                           <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 font-bold text-gray-800 dark:text-white" colspan="3">Balance Due:</td>
                           <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-right font-bold text-gray-800 dark:text-white" 
-                              x-text="'$' + (parseFloat(formData.net_total) - parseFloat(formData.total_discount || 0) - formData.invoicepayments.reduce((sum, payment) => sum + parseFloat(payment.amount || 0), 0)).toFixed(2)"></td>
+                             x-text="'$' + (
+                              parseFloat(formData.net_total || 0) -
+                              parseFloat(formData.total_discount || 0) -
+                              (Array.isArray(formData.invoicepayments) 
+                                ? formData.invoicepayments.reduce((sum, payment) => sum + parseFloat(payment.credit_amount || 0), 0)
+                                : 0)
+                            ).toFixed(2)"></td>
                         </tr>
                       </tbody>
                     </table>
@@ -328,16 +336,27 @@
             })
             .then(data => {
               console.log('Single invoice:', data.invoice);
+              console.log('Bill to:', data.invoice?.customer?.user?.fname);
               this.formData = {
                 // Basic Information
-                id: data.invoice.id || '',
-                invoice_prefix: data.invoice.branch?.invoice_prefix + '-' || '',
+               id: data.invoice.id ? String(data.invoice.id).padStart(3, '0') : '',
+                invoice_prefix: (data.invoice.branch?.invoice_prefix || '') + '-' || '',
                 invoice_logo: data.invoice.branch?.invoice_logo || '',
                 invoice_type: data.invoice.invoice_type || '',
                 isFactored: data.invoice.isFactored || '',
                 override_default_company: data.invoice.override_default_company || '',
                 invoice_date: data.invoice.invoice_date || '',
                 invoice_due_date: data.invoice.invoice_due_date || '',
+                branch_name: data.invoice.branch?.user?.fname || '', 
+                branch_address: data.invoice.branch?.address || '',
+                bill_to_address: data.invoice.customer?.address || '',
+                branch_phone: data.invoice.branch?.phone || '',
+                branch_email: data.invoice.branch.user?.email || '',
+                bill_to_customer: data.invoice.customer?.user?.fname || '',
+                customer_email: data.invoice.customer?.user?.email || '',
+                customer_phone: data.invoice.customer?.customer_phone || '',
+                customer_address: data.invoice.customer?.customer_primary_address || data.invoice.customer?.customer_secondary_address || '',
+                customer_state_data: (data.invoice.customer?.customer_state || '') + ' - ' + (data.invoice.customer?.customer_country || '') + ' - ' + (data.invoice.customer?.customer_zip || '') || '',
                 attention_invoice_to: data.invoice.attention_invoice_to || '', 
                 note_bill_to_party: data.invoice.note_bill_to_party || '',
                 loads_on_invoice: data.invoice.loads_on_invoice || '',
@@ -347,10 +366,14 @@
                 reference_number: data.invoice.reference_number || '',
                 move_date: data.invoice.move_date || '',
                 trailer: data.invoice.trailer || '',
+                container_number: data.invoice.container || '',
                 chasis: data.invoice.chasis || '',
                 load_weight: data.invoice.load_weight || '',
                 commodity: data.invoice.commodity || '',
                 no_of_packages:data.invoice.no_of_packages || '',
+                other_stops: data.invoice.other_stops || '',
+                to_address: data.invoice.to_address || '',
+                from_address: data.invoice.from_address || '',
                 total_discount:data.invoice.total_discount || '',
                 net_total:data.invoice.net_total || '',
                 invoicedocs: data.invoice?.invoicedocs?.map(doc => ({
@@ -373,7 +396,7 @@
                 id: payment.id,
                 credit_amount: payment.credit_amount,
                 payment_date: payment.payment_date,
-                amount: payment.amount,
+                amount: payment.credit_amount,
                 internal_notes: payment.internal_notes,
                 payment_method: payment.payment_method,
                 credit_memo:payment.credit_memo,

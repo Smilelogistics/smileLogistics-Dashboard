@@ -1,7 +1,7 @@
 <div x-data="userData()" x-init="fetchUserData()">
   <header
   x-data="{menuToggle: false}"
-  class="sticky top-0 flex w-full bg-white border-gray-200 z-99999 dark:border-gray-800 dark:bg-gray-900 lg:border-b"
+  class="sticky top-0 flex w-full bg-white border-gray-200 z-9 dark:border-gray-800 dark:bg-gray-900 lg:border-b"
 >
 
   <div
@@ -787,34 +787,79 @@ function notificationData() {
             return Math.floor(seconds) + ' second' + (seconds === 1 ? '' : 's') + ' ago';
         },
         fetchNotifications() {
-            fetch(requestURL + '/notification/notifications', {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(response => {
-                console.log("Full API response:", response);
+          fetch(requestURL + '/notification/notifications', {
+              method: 'GET',
+              headers: {
+                  'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                  'Accept': 'application/json'
+              }
+          })
+          .then(async response => {
+              if (response.status === 401) {
+                  // Token is invalid or expired
+                  localStorage.removeItem('auth_token');
+                  window.location.href = '/signin.html';
+                  return;
+              }
+
+              const responseData = await response.json();
+
+              if (responseData.message === 'Unauthenticated.') {
+                  // Token is present but rejected (still unauthenticated)
+                  localStorage.removeItem('auth_token');
+                  window.location.href = '/signin'; // replace with your login page
+                  return;
+              }
+
+              console.log("Full API response:", responseData);
+
+              if (responseData.data) {
+                  this.unreadNotifications = responseData.data.unread || [];
+                  this.readNotifications = responseData.data.read || [];
+                  this.notifying = this.unreadNotifications.length > 0;
+              } else {
+                  this.unreadNotifications = [];
+                  this.readNotifications = [];
+                  this.notifying = false;
+              }
+          })
+          .catch(error => {
+              console.error('Fetch error:', error);
+              this.unreadNotifications = [];
+              this.readNotifications = [];
+              this.notifying = false;
+          });
+      },
+
+        // fetchNotifications() {
+        //     fetch(requestURL + '/notification/notifications', {
+        //         method: 'GET',
+        //         headers: {
+        //             'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+        //             'Accept': 'application/json'
+        //         }
+        //     })
+        //     .then(response => response.json())
+        //     .then(response => {
+        //         console.log("Full API response:", response);
                 
-                if (response.data) {
-                    this.unreadNotifications = response.data.unread || [];
-                    this.readNotifications = response.data.read || [];
-                    this.notifying = this.unreadNotifications.length > 0;
-                } else {
-                    this.unreadNotifications = [];
-                    this.readNotifications = [];
-                    this.notifying = false;
-                }
-            })
-            .catch(error => {
-                console.error('Fetch error:', error);
-                this.unreadNotifications = [];
-                this.readNotifications = [];
-                this.notifying = false;
-            });
-        },
+        //         if (response.data) {
+        //             this.unreadNotifications = response.data.unread || [];
+        //             this.readNotifications = response.data.read || [];
+        //             this.notifying = this.unreadNotifications.length > 0;
+        //         } else {
+        //             this.unreadNotifications = [];
+        //             this.readNotifications = [];
+        //             this.notifying = false;
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error('Fetch error:', error);
+        //         this.unreadNotifications = [];
+        //         this.readNotifications = [];
+        //         this.notifying = false;
+        //     });
+        // },
         markAsRead(notificationId) {
             // Add API call to mark notification as read
             fetch(`${requestURL}/notification/notifications/read/${notificationId}`, {

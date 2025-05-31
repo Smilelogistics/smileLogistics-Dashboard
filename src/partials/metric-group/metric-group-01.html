@@ -96,16 +96,10 @@
                         if (this.userRole === 'superadministrator') {
                             this.items.push(
                                 {
-                                    title: 'Total Income',
-                                    value: data.data.totalincome || 0,
-                                    icon: 'money',
-                                    bgColor: 'bg-yellow-800'
-                                },
-                                {
-                                    title: 'Users',
-                                    value: data.data.userCount || 0,
-                                    icon: 'users',
-                                    bgColor: 'bg-red-500'
+                                    title: 'Branches',
+                                    value: data.data.branches || 0,
+                                    icon: 'building',
+                                    bgColor: 'bg-blue-500'
                                 },
                                 {
                                     title: 'Plans',
@@ -114,10 +108,16 @@
                                     bgColor: 'bg-orange-400'
                                 },
                                 {
-                                    title: 'Branches',
-                                    value: data.data.branches || 0,
+                                    title: 'Total Subscribers',
+                                    value: data.data.Totalsubsribers || 0,
                                     icon: 'building',
                                     bgColor: 'bg-blue-500'
+                                },
+                                {
+                                    title: 'Total Income',
+                                    value: data.data.totalincome || 0,
+                                    icon: 'money',
+                                    bgColor: 'bg-yellow-800'
                                 }
                             );
                         }

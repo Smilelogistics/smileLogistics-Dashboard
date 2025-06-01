@@ -409,7 +409,7 @@
                                 </div>
                                 <script>
                                     $(document).ready(function() {
-                                        $("#insurance_expire").datepicker({
+                                        $(".insurance_expire").datepicker({
                                         dateFormat: "yy-mm-dd",
                                         changeMonth: true,
                                         changeYear: true,
@@ -419,7 +419,7 @@
                                 </script>
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Insurance Expires</label>
-                                    <input type="text" x-model="formData.insurance_expire" name="insurance_expire" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="insurance_expire">
+                                    <input type="text" x-model="formData.insurance_expire" name="insurance_expire" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white insurance_expire" placeholder="" id="insurance_expire">
                                 </div>
                                 </div>
                                 <div>
@@ -462,16 +462,18 @@
                                                 <input type="text" x-model="insurance.policy_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                               </div>
                                               <script>
-                                                $(".iexpires").datepicker({
+                                                $(document).ready(function() {
+                                                    $(".iexpires").datepicker({
                                                     dateFormat: "yy-mm-dd",
                                                     changeMonth: true,
                                                     changeYear: true,
                                                     yearRange: "1900:2100"
-                                                });
+                                                    });
+                                                })
                                               </script>
                                               <div>
                                                 <label class="block text-gray-700 dark:text-gray-300">Expires</label>
-                                                <input type="text" x-model="insurance.expires" id="iexpires" class="iexpires w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                                <input type="text" x-model="insurance.expires" id="iexpires" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white iexpires" placeholder="">
                                               </div>
                                             </div>
                                           </div>
@@ -556,7 +558,7 @@
                                     </div>
 
                                     <div>
-                                        <label class="block text-gray-700 dark:text-gray-300"> Payment contact (if different from the main contact)</label>
+                                        <label class="block text-gray-700 dark:text-gray-300 text-sm"> Payment contact (if different from the main contact)</label>
                                         <textarea cols="1" rows="1" type="text" x-model="formData.payment_contact" name="payment_contact" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="payment_contact"> </textarea>
                                     </div>
 
@@ -596,7 +598,7 @@
                     </div> -->
                 
                     <!-- Navigation Buttons -->
-                    <div class="flex justify-between mt-6">
+                    <div class="flex justify-between mt-16">
                         <!-- Previous Button -->
                         <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white"
                             x-show="step > 1" @click="prevStep">

@@ -139,7 +139,7 @@
                                             <li><a href="#" x-on:click="editItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a></li>
                                             <li><a href="#" x-on:click="viewItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View</a></li>
                                              <li>
-                                            <a href="#" @click.prevent="$store.statusModal.openModal(item.id, item.shipment_status, item.shipment_tracking_number); open = false" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update Status</a>
+                                            <a href="#" @click.prevent="$store.statusModal.openModal(item.id, item.shipment_status, item.shipment_tracking_number, item.shipment_type); open = false" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update Status</a>
                                           </li>
                                           </ul>
                                           <div class="py-2">
@@ -280,7 +280,7 @@
                             <div class="mb-4">
                               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Status</label>
                               <div class="px-3 py-2 rounded border bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                                <span x-text="$store.statusModal.currentStatus ? $store.statusModal.currentStatus.charAt(0).toUpperCase() + $store.statusModal.currentStatus.slice(1) : 'N/A'"></span>
+                                <span class="text-sm font-medium text-gray-700 dark:text-white mb-2" x-text="$store.statusModal.currentStatus ? $store.statusModal.currentStatus.charAt(0).toUpperCase() + $store.statusModal.currentStatus.slice(1) : 'N/A'"></span>
                               </div>
                             </div>
                             
@@ -288,9 +288,49 @@
                               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">New Status</label>
                               <select x-model="$store.statusModal.currentStatus" 
                                       class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                <option value="On Transit">On Transit</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'land'" value="Pickup from the origin is scheduled">Pickup Scheduled</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'land'" value="Goods collected from the shipper’s location">Picked Up</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'land'" value="Shipment is moving toward the destination">In Transit</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'land'" value="Shipment has arrived at a distribution center">At Hub / Terminal </option>
+                                <option  x-show="$store.statusModal.shipment_type === 'land'" value="On the final leg for delivery to the consignee">Out for Delivery</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'land'" value="Unsuccessful delivery">Delivery Attempted</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'land'" value="Pending customs clearance">Held at Customs</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'land'" value="Shipment successfully delivered">Delivered</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'land'" value="Unexpected delay">Delay in Transit</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'land'" value="Shipment sent back to origin">Returned to Shipper</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Vessel space reserved">Booking Confirmed</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Shipper has taken the container">Empty Container Picked Up</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Cargo is on the ship">Loaded onto Vessel</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Goods delivered to the origin port">Cargo Received at Port</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Ship has left the origin port">Vessel Departed</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value=" On the sea journey">In Transit</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Intermediate stop before final destination">Port of Call (Transshipment)</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Reached the discharge port">Arrived at Destination Port</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Undergoing clearance checks">Customs Inspection</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Released for pickup">Customs Cleared</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Unloaded from the ship">Discharged from Vessel</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Ready for consignee or trucking">Available for Pickup</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Moving to the final destination">Out for Delivery</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Cargo received by the consignee">Delivered to Consignee</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Empty container sent back to the depot">Container Returned</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Flight booking secured with the airline">Booking Confirmed</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Ready for pickup from the shipper">Awaiting Pickup</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Cargo collected and en route to the airport">Picked Up</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Reached departure airport">Arrived at Origin Airport</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Cleared for loading onto the aircraft">Security Cleared</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Flight has taken off">Departed Origin</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="En route to the destination airport">In Transit</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Landed at the destination">Arrived at Destination Airport</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Pending customs inspection">Customs Hold</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Released for further movement">Customs Cleared</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="On the way to the receiver">Out for Delivery</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Successfully handed over">Delivered</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Disrupted due to operational issues">Flight Delay / Cancellation</option>
+                                <!-- <option  x-show="$store.statusModal.shipment_type === 'air'" value=""></option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value=""></option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="">Nothing</option>
                                 <option value="Awaiting Payment">Awaiting Payment</option>
-                                <option value="Custom Clearance">Custome Clearance</option>
+                                <option value="Custom Clearance">Custome Clearance</option> -->
                               </select>
                             </div>
                           </div>
@@ -477,12 +517,14 @@
           showStatusModal: false,
           currentShipmentId: null,
           currentStatus: '',
+          shipment_type: '',
           shipment_tracking_number: '',
           isUpdating: false,
 
-          openModal(id, shipment_status, shipment_tracking_number) {
+          openModal(id, shipment_status, shipment_tracking_number, shipment_type) {
             this.currentShipmentId = id;
             this.currentStatus = shipment_status;
+            this.shipment_type = shipment_type;
             this.trackingId = shipment_tracking_number;
             this.showStatusModal = true;
           },

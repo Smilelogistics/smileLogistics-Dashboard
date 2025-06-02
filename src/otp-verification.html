@@ -454,7 +454,10 @@
                 headers: {
                   'Content-Type': 'application/json',
                   'Authorization': `Bearer ${this.token}`
-                }
+                },
+                body: JSON.stringify({
+                  email: localStorage.getItem('temp_email')
+                })
               });
 
               const data = await response.json();

@@ -62,6 +62,266 @@
                     console.log('Updated userRole:', userRole);
                 });
             ">
+            <!-- Superadmin settings begins -->
+             <template x-if="userRole === 'superadministrator' ">
+                <div x-data="{ activeTab: 'general' }" class="w-full mx-auto bg-white p-6 shadow-lg rounded-md dark:bg-white/[0.03]">
+                    <!-- Tabs -->
+                    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200">
+                        <ul class="flex flex-wrap -mb-px">
+                            <li class="me-2">
+                                <a href="#" @click.prevent="activeTab = 'general'"
+                                    :class="activeTab === 'general' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
+                                    class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300" id="profile-tab">General Setiings</a>
+                            </li>
+                            <li class="me-2">
+                                <a href="#" @click.prevent="activeTab = 'payment'"
+                                    :class="activeTab === 'payment' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
+                                    class="inline-block p-4 text-gray-300 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300">Payment Gateway Setup</a>
+                            </li>
+                            <li class="me-2">
+                                <a href="#" @click.prevent="activeTab = 'sms'"
+                                    :class="activeTab === 'sms' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
+                                    class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300">SMS Settings</a>
+                            </li>
+                            <li class="me-2">
+                                <a href="#" @click.prevent="activeTab = 'security'"
+                                    :class="activeTab === 'security' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
+                                    class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300">Security</a>
+                            </li>
+                        </ul>
+                    </div>
+            
+                    <!-- Tab Content -->
+                    <div class="mt-4">
+                        <!-- General Settings Form -->
+                        <div x-show="activeTab === 'general'">
+                            <h2 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">General Settings</h2>
+                            <form id="generalForm" @submit.prevent="submitForm('general')" x-ref="generalForm" enctype="multipart/form-data">
+                              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <div>
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Name:</label>
+                                  <input type="text" :value="user.name" name="name" 
+                                         class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" 
+                                         placeholder="Enter Name" readonly>
+                                </div>
+                                  <div>
+                                      <label class="block mb-2 text-gray-700 dark:text-gray-300">Email:</label>
+                                      <input type="email" x-model="user.email" name="email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="" readonly>
+                                  </div>
+                                  
+                                  <div>
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Phone:</label>
+                                    <input type="text" x-model="formData.phone" name="phone" class="numberOnly w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="Enter Phone number">
+                                </div>
+                              </div>
+
+                              <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <div>
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Address:</label>
+                                    <input type="text" x-model="formData.address" name="address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="No 123, Street">
+                                </div>
+                                <div>
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Parcel Prefix:</label>
+                                    <input type="text" x-model="formData.parcel_prefix" name="parcel_prefix" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="SML">
+                                </div>
+                                
+                                <div>
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Invoice Prefix:</label>
+                                  <input type="text" x-model="formData.invoice_prefix" name="invoice_prefix" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="SMLINV">
+                              </div>
+                            </div> -->
+                            <style>
+                            .chosen-container-single .chosen-single {
+                                height: 40px !important;
+                                background: none !important;
+                                border: none !important;
+                                vertical-align: middle !important;
+                              }
+                            </style>
+
+
+                            
+                            <button type="submit" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded" :disabled="isLoading">
+                              <span x-show="!isLoading">Save Changes</span>
+                              <span x-show="isLoading" class="flex items-center justify-center">
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Saving...
+                              </span>
+                            </button>
+                            </form>
+                        </div>
+            
+                       <!-- Payment Gateway Form -->
+                        <div x-show="activeTab === 'payment'">
+                          <h2 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Payment Gateway Setup</h2>
+                          <form  @submit.prevent="submitForm('payment')" x-ref="paymentForm">
+                              <!-- Paystack Settings -->
+                              <div>
+                                  <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">Paystack Settings</h6>
+                                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                      <div>
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Public Key:</label>
+                                          <input type="text" x-model="formData.paystack_publicKey" name="paystack_publicKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXX">
+                                      </div>
+                                      <div>
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Secret Key:</label>
+                                          <input type="text" x-model="formData.paystack_secretKey" name="paystack_secretKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXXXX">
+                                      </div>
+                                  </div> <!-- ✅ Correctly closed grid div -->
+                              </div>
+
+                              <!-- Flutterwave Settings -->
+                              <div>
+                                  <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">Flutterwave Settings</h6>
+                                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                      <div>
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Public Key:</label>
+                                          <input type="text" x-model="formData.FLW_pubKey" name="FLW_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXX">
+                                      </div>
+                                      <div>
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Secret Key:</label>
+                                          <input type="text" x-model="formData.FLW_secKey" name="FLW_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXXXX">
+                                      </div>
+                                  </div>
+                              </div>
+
+                               <!-- Razor Settings -->
+                              <div>
+                                <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">RazorPay Settings</h6>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <div>
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Public Key:</label>
+                                        <input type="text" x-model="formData.Razor_pubKey" name="Razor_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXX">
+                                    </div>
+                                    <div>
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Secret Key:</label>
+                                        <input type="text" x-model="formData.Razor_secKey" name="Razor_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXXXX">
+                                    </div>
+                                  </div>
+                              </div>
+                               <!-- Stripe Settings -->
+                               <div>
+                                <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">Stripe Settings</h6>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <div>
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Public Key:</label>
+                                        <input type="text" x-model="formData.stripe_pubKey" name="stripe_pubKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXX">
+                                    </div>
+                                    <div>
+                                        <label class="block mb-2 text-gray-700 dark:text-gray-300">Secret Key:</label>
+                                        <input type="text" x-model="formData.stripe_secKey" name="stripe_secKey" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXXXX">
+                                    </div>
+                                  </div>
+                                </div>
+                              <!-- <button class="mt-3 bg-blue-600 text-white px-4 py-2 rounded">Save Changes</button> -->
+                              <button type="submit" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded" :disabled="isLoading">
+                                <span x-show="!isLoading">Save Changes</span>
+                                <span x-show="isLoading" class="flex items-center justify-center">
+                                  <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                  </svg>
+                                  Saving...
+                                </span>
+                              </button>
+                          </form>
+                        </div>
+
+            
+                        <!-- Mail Settings Form -->
+                        <div x-show="activeTab === 'sms'">
+                            <h2 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Mail Settings</h2>
+                            <form @submit.prevent="submitForm('sms')" x-ref="smsForm">
+                              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <div>
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Mail Driver:</label>
+                                    <input type="text" x-model="formData.mail_driver" name="mail_driver" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="smtp">
+                                </div>
+                                <div>
+                                    <label class="block mb-2 text-gray-700 dark:text-gray-300">Mail Host:</label>
+                                    <input type="text" x-model="formData.mail_host" name="mail_host" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="smtp.mailtrap.io">
+                                </div>
+                                
+                                <div>
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Mail Port:</label>
+                                  <input type="text" x-model="formData.mail_port" name="mail_port" class="numberOnly w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="465">
+                              </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                              <div>
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Mail Encryption:</label>
+                                  <input type="text" x-model="formData.mail_encryption" name="mail_encryption" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="SSL TLS">
+                              </div>
+                              <div>
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Mail Username:</label>
+                                  <input type="text" x-model="formData.mail_username" name="mail_username" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="example@mail.com">
+                              </div>
+                              
+                              <div>
+                                <label class="block mb-2 text-gray-700 dark:text-gray-300">Mail Password:</label>
+                                <input type="password" x-model="formData.mail_password" name="mail_password" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="XXXXXXXXXXXXX">
+                              </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                              <div>
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Mail From:</label>
+                                  <input type="text" x-model="formData.mail_from" name="mail_from" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="example.com">
+                              </div>
+                              <div>
+                                  <label class="block mb-2 text-gray-700 dark:text-gray-300">Mail Fron Name:</label>
+                                  <input type="text" x-model="formData.mail_from_name" name="mail_from_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="SMILE LOGISTICS">
+                              </div>
+                              
+                            </div>
+                              <button class="mt-3 bg-blue-600 text-white px-4 py-2 rounded">Save Changes</button>
+                            </form>
+                        </div>
+            
+                        <!-- Contacts Form -->
+                        <div x-show="activeTab === 'security'">
+                            <h2 class="text-lg font-semibold mb-3">Security Settings</h2>
+                            <form id="securityForm" @submit.prevent="submitForm('security')" x-ref="securityForm">
+                              <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+                                  <div>
+                                      <label class="inline-flex items-center mb-5 cursor-pointer">
+                                          <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 mr-40">Enable Email OTP</span>
+                                          <input type="checkbox" 
+                                                 x-model="formData.enable_email_otp" 
+                                                 name="enable_email_otp" 
+                                                 @change="formData.enable_email_otp = $event.target.checked ? 1 : 0"
+                                                 :checked="formData.enable_email_otp == 1"
+                                                 class="sr-only peer">
+                                          <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-4 after:h-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                                      </label>
+                                  </div>
+                                  <div>
+                                      <label class="inline-flex items-center mb-5 cursor-pointer">
+                                          <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 mr-40">Enable 2FA</span>
+                                          <input type="checkbox" 
+                                                 x-model="formData.enable_2fa" 
+                                                 name="enable_2fa" 
+                                                 @change="formData.enable_2fa = $event.target.checked ? 1 : 0"
+                                                 :checked="formData.enable_2fa == 1"
+                                                 class="sr-only peer">
+                                          <div class="relative w-11 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-4 after:h-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+                                      </label>
+                                  </div>
+                              </div>
+                              <button class="mt-3 bg-blue-600 text-white px-4 py-2 rounded">Save Changes</button>
+                          </form>
+                        </div>
+                    </div>
+                </div>
+              </template>
+              <!-- Super Admin settings end -->
+
+              
+              <!-- branch settings Starts -->
               <template x-if="userRole === 'businessadministrator' ">
                 <div x-data="{ activeTab: 'general' }" class="w-full mx-auto bg-white p-6 shadow-lg rounded-md dark:bg-white/[0.03]">
                     <!-- Tabs -->

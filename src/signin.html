@@ -624,13 +624,16 @@
                 })
                 .then(data => {
                     console.log('Login successful:', data);
-                    
+                    //return;
                     if (data.status === 'otp_required') {
+                      console.log('data', data);
+                      //return;
                         window.location.href = '/otp-verification.html'; 
                         localStorage.setItem('temp_token', data.token);
+                        localStorage.setItem('temp_email', data.user.email);
                     } else {
                         localStorage.setItem('auth_token', data.token);
-                        //localStorage.setItem('userLoggedIn', JSON.stringify(data.user));
+                        localStorage.setItem('userLoggedIn', JSON.stringify(data.user));
                         window.location.href = '/index.html';
                     }
                     //window.location.href = '/index.html'; // Redirect to dashboard after successful login

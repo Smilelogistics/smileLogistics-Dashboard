@@ -425,13 +425,14 @@
               this.successMessage = 'OTP verified successfully!';
               
               // Store the auth token and redirect
-              localStorage.setItem('auth_token', data.token);
-              localStorage.removeItem('temp_token');
+              localStorage.setItem('auth_token', localStorage.getItem('temp_token'));
+              localStorage.setItem('userLoggedIn', JSON.stringify(data.user));
               console.log(data);
               return;
               // Redirect after short delay
               setTimeout(() => {
                 window.location.href = '/index.html';
+                localStorage.removeItem('temp_token');
               }, 1000);
 
             } catch (error) {

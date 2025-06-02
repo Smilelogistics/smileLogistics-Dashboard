@@ -427,7 +427,8 @@
               // Store the auth token and redirect
               localStorage.setItem('auth_token', data.token);
               localStorage.removeItem('temp_token');
-              
+              console.log(data);
+              return;
               // Redirect after short delay
               setTimeout(() => {
                 window.location.href = '/index.html';

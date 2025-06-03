@@ -431,8 +431,8 @@
               //return;
               // Redirect after short delay
               setTimeout(() => {
-                window.location.href = '/index.html';
                 localStorage.removeItem('temp_token');
+                window.location.href = '/index.html';
               }, 1000);
 
             } catch (error) {

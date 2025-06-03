@@ -360,17 +360,17 @@
                                 </div>
                             </template>
                     
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Total</label>
                                     <input type="number" x-model="formData.total" name="total" 
                                            readonly class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 </div>
-                                <div>
+                                <!-- <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Total Discount</label>
                                     <input type="number" x-model="formData.total_discount" name="total_discount" 
                                            readonly class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                </div>
+                                </div> -->
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Net Total</label>
                                     <input type="number" x-model="formData.net_total" name="net_total" 
@@ -780,7 +780,7 @@
                     });
                     
                     this.formData.total = total.toFixed(2);
-                    this.formData.total_discount = totalDiscount.toFixed(2);
+                    //this.formData.total_discount = totalDiscount.toFixed(2);
                     this.formData.net_total = (total - totalDiscount).toFixed(2);
                 },
                calculateTotalRelease() {

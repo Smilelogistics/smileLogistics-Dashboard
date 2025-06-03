@@ -354,7 +354,7 @@ button {
           success: (response) => {
               console.log('Customer data:', response.customers);
               if(response.customers.length == 0){
-                  createToast('error', 'No customer found.');
+                  //createToast('error', 'No customer found.');
                   return
               }
               if (Array.isArray(response.customers)) {
@@ -374,8 +374,8 @@ button {
                       customerSelect.appendChild(option);
                   });
               } else {
-                  console.error('Invalid response format:', response);
-                  createToast('error', 'Invalid customer data received.');
+                  // console.error('Invalid response format:', response);
+                  // createToast('error', 'Invalid customer data received.');
               }
           },
           error: (xhr, status, error) => {
@@ -400,15 +400,15 @@ button {
 
   function populateCarrierSelect() {
       $.ajax({
-          url: requestURL + '/invoices/customer',
+          url: requestURL + '/carriers/carriers',
           type: 'GET',
           headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
               'Accept': 'application/json'
           },
           success: (response) => {
-              console.log('Customer data:', response.customers);
-              if(response.customers.length == 0){
+              console.log('carrier data:', response.carriers);
+              if(response.carriers.length == 0){
                   //createToast('error', 'No carrier found.');
                   return
               }
@@ -422,10 +422,10 @@ button {
                   defaultOption.hidden = true;
                   carrierselect.appendChild(defaultOption);
   
-                  response.customers.forEach(carrier => {
+                  response.carriers.forEach(carrier => {
                       var option = document.createElement('option');
                       option.value = carrier.id;
-                      option.text = customer.fname + ' ' + carrier.lname;
+                      option.text = carrier.name;
                       carrierselect.appendChild(option);
                   });
               } else {

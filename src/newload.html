@@ -2059,7 +2059,11 @@ fetchSettings().then(result => {
 
                     let form = document.getElementById("newloadForm");
                     let formData = new FormData(form);
-                    formData.append('tags', this.formData.tags.join(','));
+                    if (Array.isArray(this.formData.tags) && this.formData.tags.length > 0) {
+                        formData.append('tags', this.formData.tags.join(','));
+                    }
+
+                    //formData.append('tags', this.formData.tags.join(','));
                     //formData.append('tags', JSON.stringify(this.formData.tags));
                     //Log FormData contents
                     // console.log("FormData Contents:");

@@ -458,10 +458,10 @@
                                 <label class="block text-gray-700 dark:text-gray-300">Assign Carrier</label>
                                 <select x-model="formData.carrier_id" name="carrier_id" id="carrier_id"
                                     class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="carrier_driver">
-                                    <option value="" selected disabled>Choose Carrier</option>
+                                    <!-- <option value="" selected disabled>Choose Carrier</option>
                                     <option value="1">John Doe</option>
                                     <option value="2">Billy John</option>
-                                    <option value="3">Jane Doe</option>
+                                    <option value="3">Jane Doe</option> -->
                                 </select>
                             </div>
 
@@ -624,6 +624,7 @@ function populateCarrierSelect() {
                     payment_method: '',
                     internal_notes: '',
                     driver_id: '',
+                    carrier_id: '',
                     proof_of_delivery_path: '',
                     files: [],
                     charges: [{

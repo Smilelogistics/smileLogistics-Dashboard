@@ -90,109 +90,104 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
                               <!-- Basic Information -->
                                <!-- Row1 -->
-                                <div class="md:col-span-2 lg:col-span-3">
-                                  <div class="flex flex-wrap gap-4">
-                                    
-                                    <!-- Basic Information (Column 1) -->
-                                    <div class="flex-1 space-y-4 min-w-[200px]"> <!-- flex-1 for equal width -->
-                                      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">BASIC INFORMATION</h3>
-                                      
-                                    <!-- Shippint type == land -->
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Consolidate For</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.consolidate_for || 'N/A'"></p>
-                                      </div>
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400"> Consolidate Type</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.consolidate_type || 'N/A'"></p>
-                                      </div>
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Customer Name</p>
-                                      
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.customer_name || 'N/A'"></p>
-                                      </div>
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Customer email</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                        x-text="formData.customer_email || 'N/A'">
-                                    </p>
-                                      </div>
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Customer Phone</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.customer_phone || 'N/A'"></p>
-                                      </div>
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Reciever Email</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.receiver_email || 'N/A'"></p>
-                                      </div>
+                               <div class="md:col-span-2 lg:col-span-3 font-sans border border-gray-300 dark:border-gray-600 p-4 rounded-lg">
+  <h1 class="text-center border-b-2 border-gray-300 dark:border-gray-600 pb-3 mb-4 text-lg font-bold text-gray-800 dark:text-gray-100">
+    CONSOLIDATED SHIPMENT DETAILS
+  </h1>
 
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Reciever Phone</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.receiver_phone || 'N/A'"></p>
-                                      </div>
-                                     
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Reciever Address</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.receiver_address || 'N/A'"></p>
-                                      </div>
-                                     
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Origin Warehouse</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.origin_warehouse || 'N/A'"></p>
-                                      </div>
-                                     
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Destination Warehouse</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.destination_warehouse || 'N/A'"></p>
-                                      </div>
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Reciever Email</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.receiver_email || 'N/A'"></p>
-                                      </div>
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Departure Date</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.expected_departure_date || 'N/A'"></p>
-                                      </div>
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Arrival Date</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.expected_arrival_date || 'N/A'"></p>
-                                      </div>
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Total Weight</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_weight || 'N/A'"></p>
-                                      </div>
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Total Cost</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_shipping_cost || 'N/A'"></p>
-                                      </div>
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Handling Fee</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.handling_fee || 'N/A'"></p>
-                                      </div>
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Payment Method</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.payment_method || 'N/A'"></p>
-                                      </div>
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Payment Status</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.payment_status || 'N/A'"></p>
-                                      </div>
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Internal Notes</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.internal_notes || 'N/A'"></p>
-                                      </div>
-                                     
-                                     
-                                      
-                                    </div>
-                                  </div>
-                                </div>
+  <!-- Basic Information Section -->
+  <table class="w-full border-collapse mb-6">
+    <tr>
+      <td colspan="3" class="border border-gray-300 dark:border-gray-600 p-3 bg-gray-100 dark:bg-gray-800">
+        <strong class="text-sm text-gray-700 dark:text-gray-300">BASIC INFORMATION</strong>
+      </td>
+    </tr>
+    <tr>
+      <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Consolidate For</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.consolidate_for || 'N/A'"></p>
+      </td>
+      <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Consolidate Type</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.consolidate_type || 'N/A'"></p>
+      </td>
+      <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Customer Name</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.customer_name || 'N/A'"></p>
+      </td>
+    </tr>
+    <tr>
+      <td class="border border-gray-300 dark:border-gray-600 p-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Customer Email</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.customer_email || 'N/A'"></p>
+      </td>
+      <td class="border border-gray-300 dark:border-gray-600 p-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Customer Phone</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.customer_phone || 'N/A'"></p>
+      </td>
+      <td class="border border-gray-300 dark:border-gray-600 p-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Receiver Email</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.receiver_email || 'N/A'"></p>
+      </td>
+    </tr>
+    <tr>
+      <td class="border border-gray-300 dark:border-gray-600 p-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Receiver Phone</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.receiver_phone || 'N/A'"></p>
+      </td>
+      <td class="border border-gray-300 dark:border-gray-600 p-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Receiver Address</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.receiver_address || 'N/A'"></p>
+      </td>
+      <td class="border border-gray-300 dark:border-gray-600 p-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Origin Warehouse</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.origin_warehouse || 'N/A'"></p>
+      </td>
+    </tr>
+    <tr>
+      <td class="border border-gray-300 dark:border-gray-600 p-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Destination Warehouse</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.destination_warehouse || 'N/A'"></p>
+      </td>
+      <td class="border border-gray-300 dark:border-gray-600 p-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Departure Date</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.expected_departure_date || 'N/A'"></p>
+      </td>
+      <td class="border border-gray-300 dark:border-gray-600 p-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Arrival Date</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.expected_arrival_date || 'N/A'"></p>
+      </td>
+    </tr>
+    <tr>
+      <td class="border border-gray-300 dark:border-gray-600 p-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Total Weight</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_weight || 'N/A'"></p>
+      </td>
+      <td class="border border-gray-300 dark:border-gray-600 p-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Total Cost</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_shipping_cost || 'N/A'"></p>
+      </td>
+      <td class="border border-gray-300 dark:border-gray-600 p-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Handling Fee</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.handling_fee || 'N/A'"></p>
+      </td>
+    </tr>
+    <tr>
+      <td class="border border-gray-300 dark:border-gray-600 p-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Payment Method</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.payment_method || 'N/A'"></p>
+      </td>
+      <td class="border border-gray-300 dark:border-gray-600 p-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Payment Status</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.payment_status || 'N/A'"></p>
+      </td>
+      <td class="border border-gray-300 dark:border-gray-600 p-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Internal Notes</p>
+        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.internal_notes || 'N/A'"></p>
+      </td>
+    </tr>
+  </table>
+</div>
 
                             <!-- Backup Docs -->
                             <div class="space-y-4">

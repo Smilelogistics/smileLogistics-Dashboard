@@ -5,6 +5,7 @@
     <include src="./partials/mainhead.html"> </include>
     <script src="./assets/js/main.js"></script>
     <title>Loads | </title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   </head>
   <body
     x-data="{ page: 'view_loads', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -666,9 +667,9 @@
                                   <div class="bg-gray-50 dark:bg-gray-700 px-6 py-3 border-t border-gray-200 dark:border-gray-600 flex justify-between">
                                     <div class="text-sm text-gray-500 dark:text-gray-400" x-text="'Last updated: ' + (new Date().toLocaleString())"></div>
                                     <div>
-                                      <!-- <button onclick="downloadAsPDF()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition mr-2 no-print">
+                                      <button @click="downloadAsPDF('printableArea')" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition mr-2 no-print">
                                         Download PDF
-                                      </button> -->
+                                      </button>
                                       <button onclick="printDiv('printableArea')" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition no-print">
                                         Print
                                       </button>
@@ -763,7 +764,6 @@
                   carrier_id: '',
                   
                 
-                  shipment_type: '',
                     shipper_name: '',
                     ocean_shipper_address: '',
                     ocean_shipper_reference_number: '',
@@ -827,6 +827,86 @@
               this.isLoading = false;
             }
           },
+
+             downloadAsPDF() {
+  // Store button state at the start (in case of early errors)
+  let button = null;
+  let originalButtonText = '';
+  
+  if (event && event.target) {
+    button = event.target;
+    originalButtonText = button.innerHTML;
+    button.innerHTML = 'Generating PDF...';
+    button.disabled = true;
+  }
+
+  try {
+    const element = document.getElementById('printableArea');
+    if (!element) {
+      throw new Error('Printable area not found');
+    }
+
+    // Clone the element to avoid modifying the original
+    const clonedElement = element.cloneNode(true);
+    
+    // Remove elements with no-print class
+    const noPrintElements = clonedElement.querySelectorAll('.no-print');
+    noPrintElements.forEach(el => el.remove());
+    
+    // Add title to the PDF
+    const title = document.createElement('h1');
+    const referenceText = document.querySelector('[x-text="\'Reference #: \' + (formData.id || \'N/A\')"]')?.textContent || '';
+    title.textContent = `Load ${referenceText.replace('Reference #: ', '')}`;
+    title.style.textAlign = 'center';
+    title.style.marginBottom = '20px';
+    title.style.fontSize = '24px';
+    clonedElement.insertBefore(title, clonedElement.firstChild);
+
+    // PDF options
+    const opt = {
+      margin: 10,
+      filename: `Load_${referenceText.replace('Reference #: ', '') || new Date().toISOString().split('T')[0]}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { 
+        scale: 2,
+        logging: true,
+        useCORS: true,
+        letterRendering: true,
+        allowTaint: true
+      },
+      jsPDF: { 
+        unit: 'mm', 
+        format: 'a4', 
+        orientation: 'portrait',
+        hotfixes: ["px_scaling"] 
+      }
+    };
+
+    // Return the promise so callers can await it if needed
+    return html2pdf()
+      .set(opt)
+      .from(clonedElement)
+      .save()
+      .then(() => {
+        console.log('PDF generated successfully');
+      })
+      .catch((pdfError) => {
+        console.error('PDF generation failed:', pdfError);
+        throw new Error('Failed to generate PDF');
+      });
+    
+  } catch (error) {
+    console.error('PDF generation failed:', error);
+    alert('Failed to generate PDF. Please try again.');
+    throw error; // Re-throw to allow error handling by caller
+  } finally {
+    // Restore button state if we modified it
+    if (button) {
+      button.innerHTML = originalButtonText;
+      button.disabled = false;
+    }
+  }
+},
 
           fetchData() {
             this.isLoading = true;
@@ -1009,6 +1089,100 @@
         document.body.innerHTML = originalContents;
         location.reload();
       }
+
+      async function downloadAsPDF12() {
+  try {
+    const element = document.getElementById('printableArea');
+    if (!element) {
+      throw new Error('Printable area not found');
+    }
+
+    // Clone the element to avoid modifying the original
+    const clonedElement = element.cloneNode(true);
+    
+    // Remove elements with no-print class
+    const noPrintElements = clonedElement.querySelectorAll('.no-print');
+    noPrintElements.forEach(el => el.remove());
+    
+    // Add title to the PDF
+    const title = document.createElement('h1');
+    const referenceText = document.querySelector('[x-text="\'Reference #: \' + (formData.id || \'N/A\')"]')?.textContent || '';
+    title.textContent = `Load ${referenceText.replace('Reference #: ', '')}`;
+    title.style.textAlign = 'center';
+    title.style.marginBottom = '20px';
+    title.style.fontSize = '24px';
+    clonedElement.insertBefore(title, clonedElement.firstChild);
+
+    // PDF options
+    const opt = {
+      margin: 10,
+      filename: `Load_${referenceText.replace('Reference #: ', '') || new Date().toISOString().split('T')[0]}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { 
+        scale: 2,
+        logging: true,
+        useCORS: true,
+        letterRendering: true,
+        allowTaint: true
+      },
+      jsPDF: { 
+        unit: 'mm', 
+        format: 'a4', 
+        orientation: 'portrait',
+        hotfixes: ["px_scaling"] 
+      }
+    };
+
+    // Show loading indicator
+    const originalButtonText = event.target.innerHTML;
+    event.target.innerHTML = 'Generating PDF...';
+    event.target.disabled = true;
+
+    // Generate and save PDF
+    await html2pdf().set(opt).from(clonedElement).save();
+    
+  } catch (error) {
+    console.error('PDF generation failed:', error);
+    alert('Failed to generate PDF. Please try again.');
+  } finally {
+    // Restore button state
+    if (event.target) {
+      event.target.innerHTML = originalButtonText;
+      event.target.disabled = false;
+    }
+  }
+}
+
+
+      function downloadAsPDFER() {
+  const element = document.getElementById('printableArea');
+  const clonedElement = element.cloneNode(true);
+  
+  // Remove buttons and other elements you don't want in the PDF
+  const buttons = clonedElement.querySelectorAll('.no-print');
+  buttons.forEach(button => button.remove());
+  
+  // Add a title to the PDF
+  const title = document.createElement('h1');
+  title.textContent = 'Loads #' + (document.querySelector('[x-text="\'Reference #: \' + (formData.id || \'N/A\')"]')?.textContent || '');
+  title.style.textAlign = 'cnter';
+  title.style.marginBottom = '20px';
+  clonedElement.insertBefore(title, clonedElement.firstChild);
+  
+  const opt = {
+    margin: 10,
+    filename: 'Loads_' + (new Date().toISOString().split('T')[0]) + '.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { 
+      scale: 2,
+      logging: true,
+      useCORS: true
+    },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  html2pdf().set(opt).from(clonedElement).save();
+}
     </script>
   </body>
 </html>

@@ -82,283 +82,197 @@
                             </div>
                             
                             <!-- Content Grid -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-                              <!-- Basic Information -->
-                               <!-- Row1 -->
-                                <div class="md:col-span-2 lg:col-span-3">
-                                  <div class="flex flex-wrap gap-4">
-                                    
-                                    <!-- Basic Information (Column 1) -->
-                                    <div class="flex-1 space-y-4 min-w-[200px]"> <!-- flex-1 for equal width -->
-                                      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">BASIC INFORMATION</h3>
-                                      
-                                    <!-- Shippint type == land -->
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Settlement Type</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.settlement_type || 'N/A'"></p>
-                                      </div>
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400"> Settlement Date</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.settlement_date || 'N/A'"></p>
-                                      </div>
+                       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+  <!-- Row 1: Basic Information -->
+  <div class="md:col-span-2 lg:col-span-3">
+    <div class="flex flex-wrap gap-6">
+      <!-- Basic Information Table -->
+      <div class="flex-1 min-w-[300px]">
+        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 mb-4">BASIC INFORMATION</h3>
+        <table class="w-full border border-gray-200 dark:border-gray-700">
+          <tbody>
+            <tr>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Settlement Type</td>
+              <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="formData.settlement_type || 'N/A'"></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Settlement Date</td>
+              <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="formData.settlement_date || 'N/A'"></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Office</td>
+              <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="formData.office || 'N/A'"></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Week From</td>
+              <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="formData.week_from || 'N/A'"></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Week To</td>
+              <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="formData.week_to || 'N/A'"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-                                        <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Office</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.office || 'N/A'"></p>
-                                      </div>
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Week From</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                        x-text="formData.week_from || 'N/A'">
-                                    </p>
-                                      </div>
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Week To</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.week_to || 'N/A'"></p>
-                                      </div>
-                                      
-                                     
-                                    </div>
+      <!-- Additional Information Table 1 -->
+      <div class="flex-1 min-w-[300px]">
+        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 mb-4">ADDITIONAL INFORMATION</h3>
+        <table class="w-full border border-gray-200 dark:border-gray-700">
+          <tbody>
+            <tr>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Payee</td>
+              <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="formData.payee || 'N/A'"></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Payee Note</td>
+              <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="formData.payee_note || 'N/A'"></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Payment Method</td>
+              <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="formData.payment_method || 'N/A'"></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Check Ref</td>
+              <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="formData.check_payment_reference || 'N/A'"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-                                    <!-- Basic Information (Column 2) -->
-                                    <div class="flex-1 space-y-4 min-w-[200px]"> <!-- flex-1 for equal width -->
-                                      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">ADDITIONAL INFORMATION</h3>
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Payee</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.payee || 'N/A'"></p>
-                                      </div>
-                                      
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Payee Note</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.payee_note || 'N/A'"></p>
-                                      </div>
+      <!-- Additional Information Table 2 -->
+      <div class="flex-1 min-w-[300px]">
+        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 mb-4">ADDITIONAL INFORMATION</h3>
+        <table class="w-full border border-gray-200 dark:border-gray-700">
+          <tbody>
+            <tr>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Payment Date</td>
+              <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="formData.payment_date || 'N/A'"></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Payment Note</td>
+              <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="formData.payment_note || 'N/A'"></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Internal Note</td>
+              <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="formData.internal_notes || 'N/A'"></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Tags</td>
+              <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="formData.tags || 'N/A'"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-                                       
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Payment Method</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.payment_method || 'N/A'"></p>
-                                      </div>
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Check Ref</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.check_payment_reference || 'N/A'"></p>
-                                      </div>
-                                      
-                                     
-                                    </div>
-                                    
-                                    <!-- Basic Information (Column 1) -->
-                                    <div class="flex-1 space-y-4 min-w-[200px]"> <!-- flex-1 for equal width -->
-                                      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">ADDITIONAL INFORMATION</h3>
-                                      
-                                    
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Payment Date</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.payment_date || 'N/A'"></p>
-                                      </div>
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Payment Note</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.payment_note || 'N/A'"></p>
-                                      </div>
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Internal Note</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.internal_notes || 'N/A'"></p>
-                                      </div>
-                                      <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Tags</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.tags || 'N/A'"></p>
-                                      </div>
+  <!-- Row 2: Payments, Deductions, Docs -->
+  <div class="md:col-span-2 lg:col-span-3">
+    <div class="flex flex-wrap gap-6">
+      <!-- Payments Table -->
+      <div class="flex-1 min-w-[300px]">
+        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 mb-4">PAYMENTS INFORMATION</h3>
+        <template x-if="Array.isArray(formData.settlement_payment) && formData.settlement_payment.length">
+          <table class="w-full border border-gray-200 dark:border-gray-700">
+            <thead class="bg-gray-50 dark:bg-gray-800">
+              <tr>
+                <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Type</th>
+                <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Units</th>
+                <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Rate</th>
+                <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template x-for="(payment, index) in formData.settlement_payment" :key="index">
+                <tr>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="payment.payment_type || 'N/A'"></td>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="payment.units || '0'"></td>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="payment.rate ? '$' + parseFloat(payment.rate).toFixed(2) : '0.00'"></td>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="payment.amount ? '$' + parseFloat(payment.amount).toFixed(2) : '0.00'"></td>
+                </tr>
+              </template>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3" class="px-4 py-2 text-sm font-bold text-right border border-gray-200 dark:border-gray-700">Net Total:</td>
+                <td class="px-4 py-2 text-sm font-bold text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="formData.net_total_payments ? '$' + parseFloat(formData.net_total_payments).toFixed(2) : '0.00'"></td>
+              </tr>
+            </tfoot>
+          </table>
+        </template>
+        <template x-if="!Array.isArray(formData.settlement_payment) || !formData.settlement_payment.length">
+          <div class="text-center py-4 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 rounded-lg">
+            No payments found
+          </div>
+        </template>
+      </div>
 
-                                    </div>
+      <!-- Deductions Table -->
+      <div class="flex-1 min-w-[300px]">
+        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 mb-4">DEDUCTION INFO</h3>
+        <template x-if="formData.settlement_deduction && formData.settlement_deduction.length > 0">
+          <table class="w-full border border-gray-200 dark:border-gray-700">
+            <thead class="bg-gray-50 dark:bg-gray-800">
+              <tr>
+                <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Type</th>
+                <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Amount</th>
+                <th class="px-4 py-2 text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template x-for="(deduction, index) in formData.settlement_deduction" :key="index">
+                <tr>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="deduction.deduction_type || 'N/A'"></td>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="deduction.deduction_amount ? '$' + parseFloat(deduction.deduction_amount).toFixed(2) : 'N/A'"></td>
+                  <td class="px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="deduction.deduction_note || 'N/A'"></td>
+                </tr>
+              </template>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="2" class="px-4 py-2 text-sm font-bold text-right border border-gray-200 dark:border-gray-700">Total:</td>
+                <td class="px-4 py-2 text-sm font-bold text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" x-text="formData.total_deductions ? '$' + parseFloat(formData.total_deductions).toFixed(2) : '0.00'"></td>
+              </tr>
+            </tfoot>
+          </table>
+        </template>
+        <template x-if="!formData.settlement_deduction || formData.settlement_deduction.length === 0">
+          <div class="text-center py-4 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 rounded-lg">
+            No deductions recorded
+          </div>
+        </template>
+      </div>
 
-                                  </div>
-                                </div>
-                                
-                              <!-- Row2 -->
-                        <div class="md:col-span-2 lg:col-span-3">
-                          <div class="flex flex-wrap gap-4">
-                        
-
-                             <div class="flex-1 space-y-4 min-w-[200px]"> <!-- flex-1 for equal width -->
-                                      <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">Payments Information</h3>
-                                      <template x-if="Array.isArray(formData.settlement_payment) && formData.settlement_payment.length">
-                                        <div class="space-y-4">
-                                          <template x-for="(payment, index) in formData.settlement_payment" :key="index">
-                                            <div class="border rounded-lg p-4 mb-4">
-                                              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <div>
-                                                  <p class="text-xs text-gray-500 dark:text-gray-400">Payment Type</p>
-                                                  <p class="text-sm truncate font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="payment.payment_type || payment.payment_type || 'N/A'"></p>
-                                                </div>
-                                                
-                                                <div>
-                                                  <p class="text-xs text-gray-500 dark:text-gray-400">Comment</p>
-                                                  <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="payment.comment || 'N/A'"></p>
-                                                </div>
-                                                
-                                                <div>
-                                                  <p class="text-xs text-gray-500 dark:text-gray-400">Units</p>
-                                                  <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="payment.units || '0'"></p>
-                                                </div>
-                                                
-                                                <div>
-                                                  <p class="text-xs text-gray-500 dark:text-gray-400">Rate</p>
-                                                  <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="payment.rate ? '$' + parseFloat(payment.rate).toFixed(2) : '0.00'"></p>
-                                                </div>
-                                                
-                                                <div>
-                                                  <p class="text-xs text-gray-500 dark:text-gray-400">Amount</p>
-                                                  <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="payment.amount ? '$' + parseFloat(payment.amount).toFixed(2) : '0.00'"></p>
-                                                </div>
-                                                
-                                                <!-- <div>
-                                                  <p class="text-xs text-gray-500 dark:text-gray-400">Discount</p>
-                                                  <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="charge.discount ? '$' + parseFloat(charge.discount).toFixed(2) : '0.00'"></p>
-                                                </div> -->
-                                                
-                                                <!-- <div class="md:col-span-2">
-                                                  <p class="text-xs text-gray-500 dark:text-gray-400">Internal Notes</p>
-                                                  <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="charge.internal_notes || charge.internal_note || 'N/A'"></p>
-                                                </div> -->
-                                              </div>
-                                            </div>
-                                          </template>
-                                        </div>
-                                      </template>
-                                      
-                                      <template x-if="!Array.isArray(formData.settlement_payment) || !formData.settlement_payment.length">
-                                        <div class="text-center py-4 text-gray-500 dark:text-gray-400">
-                                          No settlement found
-                                        </div>
-                                      </template>
-                                      <!-- <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Total</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_charges ? '$' + parseFloat(formData.total_charges).toFixed(2) : 'N/A'"></p>
-                                      </div>                                   -->
-                                      <!-- <div>
-                                        <p class="text-xl font-bold text-gray-500 dark:text-gray-400">Discount</p>
-                                        <p class="text-xl font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_discount ? '$' + parseFloat(formData.total_discount).toFixed(2) : '0.00'"></p>
-                                      </div> -->
-                                        
-                                      <div>
-                                        <p class="text-xl font-bold text-gray-500 dark:text-gray-400">Net Total</p>
-                                        <p class="text-xl font-medium text-gray-900 dark:text-gray-100"  x-text="formData.net_total_payments ? '$' + parseFloat(formData.net_total_payments).toFixed(2) : '0.00'"></p>
-                                      </div>
-                                  
-                                    </div>
-
-                                     <!-- Column 2 -->
-                                  <div class="flex-1 space-y-4 min-w-[200px]">
-                                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">Deduction INFO</h3>
-                                    
-                                    <template x-if="formData.settlement_deduction && formData.settlement_deduction.length > 0">
-                                      <div class="space-y-4">
-                                        <template x-for="(deduction, index) in formData.settlement_deduction" :key="deduction.id || index">
-                                          <div class="border rounded-lg p-4 space-y-2">
-                                            <div class="flex justify-between items-start">
-                                              <div>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">Deduction Amount</p>
-                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="deduction.deduction_amount ? '$' + parseFloat(deduction.deduction_amount).toFixed(2) : 'N/A'"></p>
-                                              </div>
-                                            </div>
-                                            
-                                            <div class="grid grid-cols-2 gap-4">
-                                              <div>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">Deduction Type</p>
-                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="deduction.deduction_type ? deduction.deduction_type : 'N/A'"></p>
-                                              </div>
-                                              <div>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">Deduction Note</p>
-                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="deduction.deduction_note ? deduction.deduction_note : 'N/A'"></p>
-                                              </div>
-                                            </div>
-                                            
-                                            <!-- <div>
-                                                  <p class="text-xs text-gray-500 dark:text-gray-400">Comment</p>
-                                                  <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="charge.comment || 'N/A'"></p> -->
-                                                <!-- </div> -->
-                                            
-                                            <!-- <template x-if="expense.vendor_settlement_number || expense.payment_reference_note">
-                                              <div class="pt-2 border-t">
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">References</p>
-                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="expense.vendor_settlement_number ? 'Settlement: ' + expense.vendor_settlement_number : ''"></p>
-                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="expense.payment_reference_note ? 'Note: ' + expense.payment_reference_note : ''"></p>
-                                              </div>
-                                            </template> -->
-                                          </div>
-                                        </template>
-                                      </div>
-                                    </template>
-                                    
-                                    <template x-if="!formData.settlement_deduction || formData.settlement_deduction.length === 0">
-                                      <div class="text-center py-4 text-gray-500 dark:text-gray-400">
-                                        No Deduction recorded
-                                      </div>
-                                    </template>
-
-                                    <div>
-                                        <p class="text-xl font-bold text-gray-500 dark:text-gray-400">Net Total</p>
-                                        <p class="text-xl font-medium text-gray-900 dark:text-gray-100"  x-text="formData.total_deductions ? '$' + parseFloat(formData.total_deductions).toFixed(2) : '0.00'"></p>
-                                      </div>
-                                  </div>
-                              
-                                  <!-- Column 3 -->
-                                  <div class="flex-1 space-y-4 min-w-[200px]"> <!-- flex-1 for equal width -->
-                                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2">Backup Docs</h3>
-                                    
-                                   <template x-if="Array.isArray(formData.settlement_docs) && formData.settlement_docs.length > 0">
-                                    <div class="grid grid-cols-2 gap-4">
-                                      <template x-for="doc in formData.settlement_docs" :key="doc.id">
-                                        <div class="border rounded-lg p-2">
-                                          <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Document</p>
-                                          <div class="relative">
-                                            <img 
-                                              :src="doc.file_path" 
-                                              class="w-full h-32 object-contain rounded-md bg-gray-100 dark:bg-gray-700"
-                                              alt="Driver document"
-                                              @error="doc.file_path = '/path/to/placeholder-image.png'"
-                                            />
-                                            <div class="absolute top-2 right-2 bg-white/80 dark:bg-gray-800/80 rounded-full p-1">
-                                              <a 
-                                                :href="doc.file_path" 
-                                                target="_blank" 
-                                                class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
-                                                title="View full size"
-                                              >
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
-                                                </svg>
-                                              </a>
-                                            </div>
-                                          </div>
-                                          <p x-text="doc.file_title || 'Untitled document'" class="text-xs mt-1 truncate"></p>
-                                        </div>
-                                      </template>
-                                    </div>
-                                  </template>
-
-                                  <template x-if="!Array.isArray(formData.settlement_docs) || formData.settlement_docs.length === 0">
-                                      <p class="text-xs text-gray-500 dark:text-gray-400">No documents available.</p>
-                                  </template>
-                                    
-  
-                                    </div>
-
-                              </div>
-                            </div>
-                          </div>
+      <!-- Documents Grid -->
+      <div class="flex-1 min-w-[300px]">
+        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 mb-4">BACKUP DOCS</h3>
+        <template x-if="Array.isArray(formData.settlement_docs) && formData.settlement_docs.length > 0">
+          <div class="grid grid-cols-2 gap-4">
+            <template x-for="doc in formData.settlement_docs" :key="doc.id">
+              <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-2">
+                <div class="relative h-32 bg-gray-100 dark:bg-gray-700 rounded-md flex items-center justify-center">
+                  <img :src="doc.file_path" class="max-h-full max-w-full object-contain" @error="doc.file_path = '/path/to/placeholder-image.png'">
+                  <a :href="doc.file_path" target="_blank" class="absolute top-2 right-2 text-blue-600 hover:text-blue-800 dark:text-blue-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                    </svg>
+                  </a>
+                </div>
+                <p x-text="doc.file_title || 'Untitled'" class="text-xs mt-1 text-center truncate"></p>
+              </div>
+            </template>
+          </div>
+        </template>
+        <template x-if="!Array.isArray(formData.settlement_docs) || formData.settlement_docs.length === 0">
+          <div class="text-center py-4 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 rounded-lg">
+            No documents available
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+</div>
                             
                             <!-- Footer -->
                             <div class="bg-gray-50 dark:bg-gray-700 px-6 py-3 border-t border-gray-200 dark:border-gray-600 flex justify-between">

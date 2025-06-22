@@ -58,7 +58,7 @@
                   <div class="border-t border-gray-100 p-5 dark:border-gray-800 sm:p-6">
                     <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
                     >
-                    html
+                    
                     <div class="max-w-full overflow-x-auto">
                       <div x-data="datatable" class="p-4">
                         <!-- Loader -->
@@ -128,6 +128,10 @@
                                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                                           <li><a href="#" x-on:click="editItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a></li>
                                           <li><a href="#" x-on:click="viewItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View</a></li>
+
+                                           <li>
+                                            <a href="#" @click.prevent="$store.statusModal.openModal(item.id, item.status, item.consolidate_tracking_number); open = false" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update Status</a>
+                                          </li>
                                         </ul>
                                         <div class="py-2">
                                           <a href="#" x-on:click="deleteItem(item.id)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
@@ -224,6 +228,119 @@
                         </div>
                       </div>
                     </div>
+
+
+                      <!-- Status Update Modal -->
+                    <div x-data="{ show: false }" x-show="$store.statusModal.showStatusModal" class="fixed inset-0 z-50 overflow-y-auto">
+                      <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <!-- Background overlay -->
+                        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                        </div>
+                    
+                        <!-- Modal -->
+                        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full dark:bg-gray-800"
+                             x-show="$store.statusModal.showStatusModal"
+                             x-transition:enter="ease-out duration-300"
+                             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                             x-transition:leave="ease-in duration-200"
+                             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 dark:bg-gray-800">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4">Update Shipment Status</h3>
+                            
+                            <div class="mb-4">
+                              <label class="block text-sm font-medium text-gray-700 dark:text-white mb-2">Tracking ID</label>
+                              <div class="px-3 py-2 rounded border bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                                <span class="text-sm font-medium text-gray-700 dark:text-white mb-2" x-text="$store.statusModal.trackingId ? $store.statusModal.trackingId.charAt(0).toUpperCase() + $store.statusModal.trackingId.slice(1) : 'N/A'"></span>
+                              </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Status</label>
+                              <div class="px-3 py-2 rounded border bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                                <span class="text-sm font-medium text-gray-700 dark:text-white mb-2" x-text="$store.statusModal.currentStatus ? $store.statusModal.currentStatus.charAt(0).toUpperCase() + $store.statusModal.currentStatus.slice(1) : 'N/A'"></span>
+                              </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">New Status</label>
+                              <select x-model="$store.statusModal.currentStatus" 
+                                      class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <option value="Pickup from the origin is scheduled">Pickup Scheduled</option>
+                                <option value="Goods collected from the shipper’s location">Picked Up</option>
+                                <option value="Shipment is moving toward the destination">In Transit</option>
+                                <option value="Shipment has arrived at a distribution center">At Hub / Terminal </option>
+                                <option value="On the final leg for delivery to the consignee">Out for Delivery</option>
+                                <option value="Unsuccessful delivery">Delivery Attempted</option>
+                                <option value="Pending customs clearance">Held at Customs</option>
+                                <option value="Shipment successfully delivered">Delivered</option>
+                                <option value="Unexpected delay">Delay in Transit</option>
+                                <option value="Shipment sent back to origin">Returned to Shipper</option>
+
+
+                                <!-- <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Vessel space reserved">Booking Confirmed</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Shipper has taken the container">Empty Container Picked Up</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Cargo is on the ship">Loaded onto Vessel</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Goods delivered to the origin port">Cargo Received at Port</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Ship has left the origin port">Vessel Departed</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value=" On the sea journey">In Transit</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Intermediate stop before final destination">Port of Call (Transshipment)</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Reached the discharge port">Arrived at Destination Port</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Undergoing clearance checks">Customs Inspection</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Released for pickup">Customs Cleared</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Unloaded from the ship">Discharged from Vessel</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Ready for consignee or trucking">Available for Pickup</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Moving to the final destination">Out for Delivery</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Cargo received by the consignee">Delivered to Consignee</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Empty container sent back to the depot">Container Returned</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Flight booking secured with the airline">Booking Confirmed</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Ready for pickup from the shipper">Awaiting Pickup</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Cargo collected and en route to the airport">Picked Up</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Reached departure airport">Arrived at Origin Airport</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Cleared for loading onto the aircraft">Security Cleared</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Flight has taken off">Departed Origin</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="En route to the destination airport">In Transit</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Landed at the destination">Arrived at Destination Airport</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Pending customs inspection">Customs Hold</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Released for further movement">Customs Cleared</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="On the way to the receiver">Out for Delivery</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Successfully handed over">Delivered</option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Disrupted due to operational issues">Flight Delay / Cancellation</option> -->
+                                <!-- <option  x-show="$store.statusModal.shipment_type === 'air'" value=""></option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value=""></option>
+                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="">Nothing</option>
+                                <option value="Awaiting Payment">Awaiting Payment</option>
+                                <option value="Custom Clearance">Custome Clearance</option> -->
+                              </select>
+                            </div>
+                          </div>
+                          
+                          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse dark:bg-gray-800">
+                            <button type="button" 
+                                    @click="$store.statusModal.updateStatus()"
+                                    :disabled="$store.statusModal.isUpdating"
+                                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50">
+                              <span x-show="!$store.statusModal.isUpdating">Update</span>
+                              <span x-show="$store.statusModal.isUpdating" class="flex items-center">
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Updating...
+                              </span>
+                            </button>
+                            <button type="button" 
+                                    @click="$store.statusModal.showStatusModal = false"
+                                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:bg-gray-600">
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     </div>
 
                   </div>
@@ -371,6 +488,62 @@
       }
     }
   }));
+
+
+  // Status Modal Store
+        Alpine.store('statusModal', {
+          showStatusModal: false,
+          currentShipmentId: null,
+          currentStatus: '',
+          shipment_type: '',
+          consolidate_tracking_number: '',
+          isUpdating: false,
+
+          openModal(id, status, consolidate_tracking_number) {
+            this.currentShipmentId = id;
+            this.currentStatus = status;
+            this.trackingId = consolidate_tracking_number;
+            this.showStatusModal = true;
+          },
+          
+          
+          async updateStatus() {
+            this.isUpdating = true;
+            
+            try {
+              const response = await fetch(`${requestURL}/consolidate/updateShipmentStatus/${this.currentShipmentId}`, {
+                method: 'PUT',
+                headers: {
+                  'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                  status: this.currentStatus,
+                  consolidate_tracking_number: this.trackingId
+                })
+              });
+              
+              if (!response.ok) {
+                throw new Error('Failed to update status', { cause: response });
+              }
+              
+              const data = await response.json();
+              createToast('success', data.message || 'Status updated successfully');
+              
+              // Refresh the table data
+              // const datatable = document.querySelector('[x-data="datatable"]').__x.$data;
+              // datatable.fetchData();
+              
+              this.showStatusModal = false;
+            } catch (error) {
+              console.error('Error updating status:', error);
+              //createToast('error', 'Failed to update status');
+            } finally {
+              this.isUpdating = false;
+            }
+          }
+        });
 });
   
       </script>

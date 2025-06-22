@@ -347,6 +347,11 @@
                                     class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300" id="profile-tab">General Setiings</a>
                             </li>
                             <li class="me-2">
+                                <a href="#" @click.prevent="activeTab = 'account'"
+                                    :class="activeTab === 'account' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
+                                    class="inline-block p-4 text-gray-300 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300">Payment Account Setup</a>
+                            </li>
+                            <li class="me-2">
                                 <a href="#" @click.prevent="activeTab = 'payment'"
                                     :class="activeTab === 'payment' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
                                     class="inline-block p-4 text-gray-300 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300">Payment Gateway Setup</a>
@@ -660,6 +665,101 @@
                               </span>
                             </button>
                             </form>
+                        </div>
+
+                        <!-- Payment Account Form -->
+                        <div x-show="activeTab === 'account'">
+                          <h2 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Payment Account Setup</h2>
+                          <form  @submit.prevent="submitForm('account')" x-ref="accountForm">
+                              <!-- Trucking Settings -->
+                              <div>
+                                  <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">Trucking Services</h6>
+                                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                      <div>
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Bank Name:</label>
+                                          <input type="text" x-model="formData.trucking_bank_name" name="trucking_bank_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                      </div>
+                                      <div>
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Account Name:</label>
+                                          <input type="text" x-model="formData.trucking_account_name" name="trucking_account_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                      </div>
+                                      <div>
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Account Number:</label>
+                                          <input type="number" x-model="formData.trucking_account_number" name="trucking_account_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                      </div>
+                                  </div> <!-- ✅ Correctly closed grid div -->
+                              </div>
+
+                              
+                              <div>
+                                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                      
+                                      <div>
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Routing:</label>
+                                          <input type="number" x-model="formData.trucking_routing" name="trucking_routing" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                      </div>
+                                      <div>
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Zelle:</label>
+                                          <input type="text" x-model="formData.trucking_zelle" name="trucking_zelle" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                      </div>
+                                      <div>
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Pay Cargo:</label>
+                                          <input type="text" x-model="formData.trucking_pay_cargo" name="trucking_pay_cargo" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                      </div>
+                                  </div> <!-- ✅ Correctly closed grid div -->
+                              </div>
+
+                              
+                              <div>
+                                  <h6 class="text-md font-medium mb-3 text-gray-700 dark:text-gray-300">Ocean Transportation Services Settings</h6>
+                                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                      <div>
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Bank Name:</label>
+                                          <input type="text" x-model="formData.ocean_bank_name" name="ocean_bank_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                      </div>
+                                      <div>
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Account Name:</label>
+                                          <input type="text" x-model="formData.ocean_account_name" name="ocean_account_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                      </div>
+                                      <div>
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Account Number:</label>
+                                          <input type="number" x-model="formData.ocean_account_number" name="ocean_account_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                      </div>
+                                  </div> <!-- ✅ Correctly closed grid div -->
+                              </div>
+
+                              
+                              <div>
+                                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                      
+                                      <div>
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Routing:</label>
+                                          <input type="number" x-model="formData.ocean_routing" name="ocean_routing" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                      </div>
+                                      <div>
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Zelle:</label>
+                                          <input type="text" x-model="formData.ocean_zelle" name="ocean_zelle" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                      </div>
+                                      <!-- <div>
+                                          <label class="block mb-2 text-gray-700 dark:text-gray-300">Pay Cargo:</label>
+                                          <input type="text" x-model="formData.ocean_bank_name" name="ocean_bank_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                      </div> -->
+                                  </div> <!-- ✅ Correctly closed grid div -->
+                              </div>
+
+                              
+                              <!-- <button class="mt-3 bg-blue-600 text-white px-4 py-2 rounded">Save Changes</button> -->
+                              <button type="submit" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded" :disabled="isLoading">
+                                <span x-show="!isLoading">Save Changes</span>
+                                <span x-show="isLoading" class="flex items-center justify-center">
+                                  <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                  </svg>
+                                  Saving...
+                                </span>
+                              </button>
+                          </form>
                         </div>
             
                        <!-- Payment Gateway Form -->
@@ -1599,6 +1699,19 @@
       handling_fee: '',
       price_per_mile: '',
 
+      //Payment Account
+      trucking_bank_name: '',
+      trucking_account_name: '',
+      trucking_account_number: '',
+      trucking_routing: '',
+      trucking_zelle: '',
+      trucking_pay_cargo: '',
+      ocean_bank_name: '',
+      ocean_account_name: '',
+      ocean_account_number: '',
+      ocean_routing: '',
+      ocean_zelle: '',
+
 
       //customer and Driver variables
       customer_phone: '',
@@ -1831,6 +1944,17 @@
       this.formData.credit_limit = data.credit_limit || '';
       this.formData.alert_percentage = data.alert_percentage || '';
 
+      this.formData.trucking_account_name = data.trucking_account_name || '';
+      this.formData.trucking_account_number = data.trucking_account_number || '';
+      this.formData.trucking_routing = data.trucking_routing || '';
+      this.formData.trucking_bank_name = data.trucking_bank_name || '';
+      this.formData.trucking_zelle = data.trucking_zelle || '';
+      this.formData.trucking_pay_cargo = data.trucking_pay_cargo || '';
+      this.formData.ocean_bank_name = data.ocean_bank_name || '';
+      this.formData.ocean_account_name = data.ocean_account_name || '';
+      this.formData.ocean_account_number = data.ocean_account_number || '';
+      this.formData.ocean_routing = data.ocean_routing || '';
+      this.formData.ocean_zelle = data.ocean_zelle || '';
 
       //this.formData.
         

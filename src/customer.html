@@ -45,7 +45,7 @@
             <!-- Breadcrumb End -->
 
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-              <div x-data="stepperForm()" class="w-full mx-auto px-4">
+              <div x-data="stepperForm()" class="w-full mt-10 mx-auto px-4">
                 <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xs dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 rtl:space-x-reverse">
                     <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 1, 'text-gray-500 dark:text-gray-400': step !== 1 }">
                         <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
@@ -128,8 +128,8 @@
                                 <input type="text" x-model="formData.contact_name" name="contact_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                             </div>
                             <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Email</label>
-                                <input type="email" x-model="formData.customer_email" name="customer_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <label class="block text-gray-700 dark:text-gray-300">Email <span class="text-red-700 text-2xl">*</span></label>
+                                <input type="email" x-model="formData.customer_email" name="customer_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" required>
                             </div>
                         </div>
                         <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
@@ -403,7 +403,7 @@
                       </div>
                     </div>
                     <!-- Navigation Buttons -->
-                    <div class="flex justify-between mt-6">
+                    <div class="flex flex-wrap gap-2 mt-6 mb-10">
                         <!-- Previous Button -->
                         <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded"
                             x-show="step > 1" @click="prevStep">

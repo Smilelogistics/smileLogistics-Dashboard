@@ -50,7 +50,7 @@
             </div>
             <!-- Breadcrumb End -->
 
-            <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+            <div class="rounded-2xl border border-gray-200 bg-white mt-10 dark:border-gray-800 dark:bg-white/[0.03]">
               <div x-data="stepperForm()" class="w-full mx-auto px-4">
                 <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xs dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 rtl:space-x-reverse">
                     <!-- Step 1 -->
@@ -541,7 +541,7 @@
                             <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Note About the Coverage</label>
-                                    <input type="email" x-model="formData.note_about_coverage" name="note_about_coverage" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="note_about_coverage" />
+                                    <input type="text" x-model="formData.note_about_coverage" name="note_about_coverage" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="note_about_coverage" />
                                 </div>
                             </div>
                                 <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -598,7 +598,7 @@
                     </div> -->
                 
                     <!-- Navigation Buttons -->
-                    <div class="flex justify-between mt-16">
+                    <div class="flex flex-wrap gap-2 mt-16 mb-10">
                         <!-- Previous Button -->
                         <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white"
                             x-show="step > 1" @click="prevStep">

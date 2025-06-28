@@ -2,8 +2,8 @@
   <!-- Dynamic rendering of metric cards -->
   <template x-for="(item, index) in items" :key="index">
     <div :class="`rounded-2xl border border-gray-200 ${item.bgColor} p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6`">
-      <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-800">
-        <!-- Dynamic icon rendering -->
+      <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100 ">
+        <!-- Dynamic icon rendering dark:bg-gray-800 -->
         <template x-if="item.icon === 'Transactions'">
             <i class="fa fa-money"></i>
           <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">

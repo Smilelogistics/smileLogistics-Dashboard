@@ -449,11 +449,13 @@
                     <!-- Navigation Buttons -->
                     <div class="flex flex-wrap gap-2 mt-6 mb-10">
                         <!-- Previous Button -->
-                        <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white"
-                            x-show="step > 1" @click="prevStep">
+                        <button
+                            type="button"
+                            class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white hover:bg-gray-300 hover:text-gray-700 dark:hover:bg-gray-600 dark:hover:text-white"
+                            x-show="step > 1"
+                            @click="prevStep">
                             Previous
                         </button>
-                
                         <!-- Next Button -->
                         <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
                             x-show="step < 3" @click="nextStep">

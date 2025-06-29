@@ -56,7 +56,7 @@
                 <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
                   <div class="mx-auto max-w-screen-md text-center mb-8 lg:mb-12">
                     <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Our Affordable Pricing</h2>
-                    <p class="mb-5 font-light text-gray-500 sm:text-xl dark:text-gray-400">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque, ipsum. Reiciendis omnis quo corrupti quod velit deleniti ipsum neque sequi?</p>
+                    <!-- <p class="mb-5 font-light text-gray-500 sm:text-xl dark:text-gray-400">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque, ipsum. Reiciendis omnis quo corrupti quod velit deleniti ipsum neque sequi?</p> -->
                   </div>
                   <div class="space-y-8 lg:grid lg:grid-cols-3 sm:gap-6 xl:gap-10 lg:space-y-0">
                     <!-- Loop through each plan -->
@@ -103,6 +103,7 @@
                         <form x-on:submit.prevent="initializePayment(plan)">
                           <input type="hidden" name="plan" x-bind:value="plan.name">
                           <input type="hidden" name="price" x-bind:value="plan.price">
+                          <!-- <input type="hidden" name="id" x-bind:value="plan.id"> -->
                           <input type="hidden" name="currency" x-bind:value="plan.currency">
                           <input type="hidden" name="interval" x-bind:value="plan.interval">
                           <input type="hidden" name="interval_count" x-bind:value="plan.interval_count">

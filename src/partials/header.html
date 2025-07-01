@@ -537,8 +537,9 @@
     
     getUserRole() {
       // Implement how you get the user's role
-      // Example: return localStorage.getItem('userRole') || 'customer';
-      return 'businessadministrator'; // Default for demo
+      // Example: return 
+      localStorage.getItem('userRole') || 'customer';
+      //return 'businessadministrator'; // Default for demo
     },
     
     getFilteredSites() {
@@ -663,7 +664,6 @@ function logout() {
     createToast('error', `Logout failed: ${error.message}`);
   });
 }
-
 
 </script>
 

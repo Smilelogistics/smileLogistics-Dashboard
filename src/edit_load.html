@@ -1528,7 +1528,7 @@ function populateCarrierSelect() {
   }
 
         
-var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
+//var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
 document.addEventListener('alpine:init', () => {
     Alpine.data('stepperForm', () => ({
     step: localStorage.getItem('edit_load') ? parseInt(localStorage.getItem('edit_load')) : 1,
@@ -1954,7 +1954,6 @@ document.addEventListener('alpine:init', () => {
             console.log('Form Data:', this.formData);
                // console.log("ID is",this.id)
                 // return;
-                var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                   localStorage.removeItem('formData');
                   localStorage.removeItem('step');
                   e.preventDefault();

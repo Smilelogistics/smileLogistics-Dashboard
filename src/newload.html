@@ -1614,6 +1614,8 @@ function populateCarrierSelect() {
 
         var mpgGoten = '';
         var pricePerMile = '';
+        var userRole = localStorage.getItem('user_role')
+ 
 
 function fetchSettings() {
     return fetch(requestURL + '/settings/data', {
@@ -1633,10 +1635,17 @@ function fetchSettings() {
         
         console.log('FORM DATA', data);
         mpgValue = document.getElementById('mpg');
-        mpgValue.value = data.mpg || 1;
-        mpgGoten = data.mpg || 1;
-        pricePerMile = data.price_per_mile || 1;
+        if(userRole == 'businessadministrator') {
+             mpgValue.value = data.mpg || 1;
+            mpgGoten = data.mpg || 1;
+            pricePerMile = data.price_per_mile || 1;
+        }else{
+             mpgValue.value = data.branch?.mpg || 1;
+            mpgGoten = data.branch?.mpg || 1;
+            pricePerMile = data.branch?.price_per_mile || 1;
         
+        }
+       
         //console.log('mpgGoten inside fetch', mpgGoten);
     
         //return mpgGoten;

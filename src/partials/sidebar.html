@@ -475,7 +475,7 @@ try {
                     Manage Users
                   </a>
                 </li>
-                <li>
+                <!-- <li>
                   <a
                     href="pricing.html"
                     class="menu-dropdown-item group"
@@ -483,7 +483,7 @@ try {
                   >
                     Pricing
                   </a>
-                </li>
+                </li> -->
               </ul>
             </div>
             <!-- Dropdown Menu End -->
@@ -838,6 +838,18 @@ try {
                     <li>
                       <a href="view_loads.html" class="menu-dropdown-item group" :class="page === 'view load' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">View Load</a>
                     </li>
+                    
+                 <template x-if="userRole === 'driver'"> 
+                  <li>
+                    <a
+                      href="driver_shipment_delivery_list.html"
+                      class="menu-dropdown-item group"
+                      :class="page === 'Driver Delivery List' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    >
+                      Delivery List
+                    </a>
+                  </li>
+                </template>
                   </ul>
                 </div>
                 <!-- Dropdown Menu End -->
@@ -1358,11 +1370,39 @@ try {
                   </li>
                   <a href="consolidate_payments_list.html" class="menu-dropdown-item group" :class="page === 'Consolidate Shipment' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">List of Payments</a>
                 </li>
+                
+                 <template x-if="userRole === 'driver'"> 
+                  <li>
+                    <a
+                      href="driver_delivery_list.html"
+                      class="menu-dropdown-item group"
+                      :class="page === 'Driver Delivery List' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                    >
+                      Delivery List
+                    </a>
+                  </li>
+                </template>
                   </ul>
                 </div>
                 <!-- Dropdown Menu End -->
               </li>
               </template>
+              
+               <template x-if="userRole === 'businessadministrator'"> 
+                <li>
+                  <a
+                    href="pricing.html"
+                    class="menu-dropdown-item group"
+                    :class="page === 'Users' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                  >
+                    Pricing
+                  </a>
+                </li>
+                </template>
+
+                
+              
+              
     
               <!-- Shipment Ends -->
 

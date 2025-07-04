@@ -40,7 +40,7 @@
         <main>
           <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
             <!-- Breadcrumb Start -->
-            <div x-data="{ pageName: `Consolidate List`}">
+            <div x-data="{ pageName: `Shipment List`}">
               <include src="./partials/breadcrumb.html" />
             </div>
             <!-- Breadcrumb End -->
@@ -50,7 +50,7 @@
                 <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] p-2">
                   <div class="px-5 py-4 sm:px-6 sm:py-5">
                     <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
-                      All Consolidated Shipments
+                      All Shipmentd Shipments
                     </h3>
                   </div>
           
@@ -103,12 +103,11 @@
                             <thead class="bg-gray-50 dark:bg-gray-900">
                               <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ACTION</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Consolidated for</th>
-                                <!-- <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Customer Name</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Customer Email</th> -->
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Customer Phone</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Receiver Name</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Receiver Email</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Accetped Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Notify Party Phone</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Notify Party Email</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Second Notify Party</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Second Notify Party Email</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
                               </tr>
                             </thead>
@@ -130,7 +129,7 @@
                                           <li><a href="#" x-on:click="viewItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View</a></li>
 
                                            <li>
-                                            <a href="#" @click.prevent="$store.statusModal.openModal(item.id, item.accepted_status, item.consolidate_tracking_number); open = false" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update Status</a>
+                                            <a href="#" @click.prevent="$store.statusModal.openModal(item.id, item.accepted_status, item.Shipment_tracking_number); open = false" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update Status</a>
                                           </li>
                                         </ul>
                                         <div class="py-2">
@@ -139,14 +138,22 @@
                                       </div>
                                     </div>
                                   </td>
-                                  
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.consolidated_for ? item.consolidated_for : ' '"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
+                                      x-text="item.delivery_accepted_status == 1 ? 'Accepted' : 'Pending'">
+                                  </td>
+
 
                                   <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.customer_name ? item.customer_name : ' '"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.customer_email ? item.customer_email : 'N/A'"></td> -->
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.receiver_phone ? item.receiver_phone : ' '"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.first_notify_party_phone ? item.first_notify_party_phone : ' '"></td>
                                   <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.vehicle_number ? item.vehicle_number : ' '"></td> -->
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.receiver_email ? item.receiver_email : ' '"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.first_notify_party_email ? item.first_notify_party_email : ' '"></td>
+                                  
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.second_notify_party_email ? item.second_notify_party_email : ' '"></td>
+                                  
+                                  
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.second_notify_party_email ? item.second_notify_party_email : ' '"></td>
+                                  
                                   
                                 <td class="py-3">
                                   <span 
@@ -167,7 +174,7 @@
                               <!-- Empty state -->
                               <tr x-show="displayedItems.length === 0">
                                 <td colspan="8" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                                  No consolidated shipments found
+                                  No shipments found
                                 </td>
                               </tr>
                             </tbody>
@@ -278,42 +285,8 @@
                               <select x-model="$store.statusModal.currentStatus" 
                                       class="w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Choose Action</option>
-                                <option value="Accepted">Accept</option>
-                                <option value="Pending">Reject</option>
-
-                                <!-- <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Vessel space reserved">Booking Confirmed</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Shipper has taken the container">Empty Container Picked Up</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Cargo is on the ship">Loaded onto Vessel</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Goods delivered to the origin port">Cargo Received at Port</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Ship has left the origin port">Vessel Departed</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value=" On the sea journey">In Transit</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Intermediate stop before final destination">Port of Call (Transshipment)</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Reached the discharge port">Arrived at Destination Port</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Undergoing clearance checks">Customs Inspection</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Released for pickup">Customs Cleared</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Unloaded from the ship">Discharged from Vessel</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Ready for consignee or trucking">Available for Pickup</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Moving to the final destination">Out for Delivery</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Cargo received by the consignee">Delivered to Consignee</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'ocean'" value="Empty container sent back to the depot">Container Returned</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Flight booking secured with the airline">Booking Confirmed</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Ready for pickup from the shipper">Awaiting Pickup</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Cargo collected and en route to the airport">Picked Up</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Reached departure airport">Arrived at Origin Airport</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Cleared for loading onto the aircraft">Security Cleared</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Flight has taken off">Departed Origin</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="En route to the destination airport">In Transit</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Landed at the destination">Arrived at Destination Airport</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Pending customs inspection">Customs Hold</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Released for further movement">Customs Cleared</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="On the way to the receiver">Out for Delivery</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Successfully handed over">Delivered</option>
-                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="Disrupted due to operational issues">Flight Delay / Cancellation</option> -->
-                                <!-- <option  x-show="$store.statusModal.shipment_type === 'air'" value=""></option>
-                                <option  x-show="$store.statusModal.shipment_type === 'air'" value=""></option>
-                                <option  x-show="$store.statusModal.shipment_type === 'air'" value="">Nothing</option>
-                                <option value="Awaiting Payment">Awaiting Payment</option>
-                                <option value="Custom Clearance">Custome Clearance</option> -->
+                                <option value="1">Accept</option>
+                                <option value="0">Reject</option>
                               </select>
                             </div>
                           </div>
@@ -378,7 +351,7 @@
     
     fetchData() {
       this.isLoading = true;
-      fetch(requestGetURL + '/consolidate/get-pending', {
+      fetch(requestGetURL + '/shipments/delivery', {
         headers: {
           'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
           'Accept': 'application/json'
@@ -389,15 +362,15 @@
         return response.json();
       })
       .then(data => {
-        console.log(data);
-        //this.items = Array.isArray(data.data) ? data.data : [];
-        if (Array.isArray(data.data)) {
-          this.items = data.data;
-        } else if (data.data && typeof data.data === 'object') {
-          this.items = [data.data];
-        } else {
-          this.items = [];
-        }
+        console.log('Delivery list', data.shipments);
+        this.items = Array.isArray(data.data) ? data.data : [];
+        // if (Array.isArray(data.data)) {
+        //   this.items = data.data;
+        // } else if (data.data && typeof data.data === 'object') {
+        //   this.items = [data.data];
+        // } else {
+        //   this.items = [];
+        // }
         this.updateDisplayedItems();
       })
       .catch(error => {
@@ -529,7 +502,7 @@
             this.isUpdating = true;
             
             try {
-              const response = await fetch(`${requestURL}/consolidate/accept/${this.currentShipmentId}`, {
+              const response = await fetch(`${requestURL}/consolidate/acceptDelivery/${this.currentShipmentId}`, {
                 method: 'PUT',
                 headers: {
                   'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),

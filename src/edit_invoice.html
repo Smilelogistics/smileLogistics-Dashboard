@@ -9,8 +9,40 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Invoice | smileslogistics</title>
 
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <include src="./partials/mainhead.html"> </include>
     <script src="./assets/js/main.js"></script>
+     <style>
+    .slide-down {
+      animation: slideDown 0.5s ease-out forwards;
+    }
+    
+    .slide-up {
+      animation: slideUp 0.5s ease-out forwards;
+    }
+    
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    @keyframes slideUp {
+      from {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+    }
+  </style>
   </head>
   <body
     x-data="{ page: 'invoice', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -43,15 +75,53 @@
 
         <!-- ===== Main Content Start ===== -->
         <main>
-          <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
-            <!-- Breadcrumb Start -->
-            <div x-data="{ pageName: `Invoice`}">
-              <include src="./partials/breadcrumb.html" />
-            </div>
-            <!-- Breadcrumb End -->
+    <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
+        <!-- Breadcrumb Start -->
+        <div x-data="{ pageName: `Invoice`}">
+            <include src="./partials/breadcrumb.html" />
+        </div>
+        <!-- Breadcrumb End -->
 
-            <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-              <div x-data="stepperForm()" class="w-full mt-10 mx-auto px-4">
+        <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+            <!-- Demo buttons -->
+            <!-- <div class="space-y-4">
+                <button onclick="showNotification('paid')" class="px-6 py-3 bg-green-500 text-white rounded-lg shadow-lg hover:bg-green-600 transition">
+                Show Paid Notification
+                </button>
+                <button onclick="showNotification('partially_paid')" class="px-6 py-3 bg-yellow-500 text-white rounded-lg shadow-lg hover:bg-yellow-600 transition">
+                Show Partially Paid Notification
+                </button>
+                <button onclick="showNotification('unpaid')" class="px-6 py-3 bg-red-500 text-white rounded-lg shadow-lg hover:bg-red-600 transition">
+                Show Unpaid Notification
+                </button>
+            </div> -->
+
+            <!-- Notification Modal -->
+            <div id="notificationModal" class="fixed top-0 left-0 right-0 z-50 hidden">
+                <div class="max-w-md mx-auto mt-4">
+                <div id="notificationContent" class="p-4 rounded-lg shadow-xl border dark:border-gray-700">
+                    <div class="flex items-start">
+                    <div id="statusIcon" class="flex-shrink-0 pt-0.5">
+                        <!-- Icon will be inserted here -->
+                    </div>
+                    <div class="ml-3 w-0 flex-1">
+                        <p id="notificationTitle" class="text-sm font-medium dark:text-white"></p>
+                        <p id="notificationMessage" class="mt-1 text-sm dark:text-gray-300"></p>
+                    </div>
+                    <div class="ml-4 flex-shrink-0 flex">
+                        <button onclick="hideNotification()" class="bg-white dark:bg-gray-800 rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none">
+                        <span class="sr-only">Close</span>
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                        </button>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div x-data="stepperForm()" class="w-full mt-10 mx-auto px-4">
                 <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xs dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 rtl:space-x-reverse">
                     <!-- Step 1 -->
                     <li class="flex-1 flex items-center justify-center"
@@ -70,9 +140,9 @@
                             :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 2, 'border-gray-500 dark:border-gray-400': step !== 2 }">
                             2
                         </span>
-                        <span class="ml-2 hidden sm:inline">Recieve Payments</span>
+                        <span class="ml-2 hidden sm:inline">Charges</span>
                     </li>
-                
+
                     <!-- Step 3 -->
                     <li class="flex-1 flex items-center justify-center"
                         :class="{ 'text-blue-600 dark:text-blue-500': step === 3, 'text-gray-500 dark:text-gray-400': step !== 3 }">
@@ -80,16 +150,35 @@
                             :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 3, 'border-gray-500 dark:border-gray-400': step !== 3 }">
                             3
                         </span>
+                        <span class="ml-2 hidden sm:inline">Credit Memo</span>
+                    </li>
+
+                    <!-- Step 4 -->
+                    <li class="flex-1 flex items-center justify-center"
+                        :class="{ 'text-blue-600 dark:text-blue-500': step === 4, 'text-gray-500 dark:text-gray-400': step !== 4 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 4, 'border-gray-500 dark:border-gray-400': step !== 4 }">
+                            4
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Repayment</span>
+                    </li>
+                
+                    <!-- Step 5 -->
+                    <li class="flex-1 flex items-center justify-center"
+                        :class="{ 'text-blue-600 dark:text-blue-500': step === 5, 'text-gray-500 dark:text-gray-400': step !== 5 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 5, 'border-gray-500 dark:border-gray-400': step !== 5 }">
+                            5
+                        </span>
                         <span class="ml-2 hidden sm:inline">Backup Docs</span>
                     </li>
                 </ol>
                 
-                
-            
-                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="editInvoiceForm">
-                    <!-- Step 1: Basic Info -->
+                <!-- Step 1: Basic Info -->
+                <form @submit.prevent="submitStep('basic')" x-ref="basicForm">
                     <div x-show="step === 1">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                        <!-- Basic form fields for step 1 -->
+                         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Invoice Type</label>
                                 <select x-model="formData.invoice_type" name="invoice_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
@@ -99,36 +188,25 @@
                                     <option value="credit memo">Credit Memo</option>
                                 </select>
                             </div>
-                            <!-- <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Truck Office</label>
-                                <select x-model="formData.truck_office" name="truck_office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                    <option value="" selected disabled>Select Office</option>
-                                    <option value="IN">IN</option>
-                                </select>
-                            </div> -->
-                            <!-- <div>
-                                <label class="block text-gray-700 dark:text-gray-300">Invoice Number</label>
-                                <input type="text" x-model="formData.invoice_number" name="invoice_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                            </div> -->
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Invoice Date</label>
                                 <input type="text" x-model="formData.invoice_date" id="invoice_datepicker" name="invoice_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white invoice_datepicker">
                         </div>
                       <div>
-    <label class="block text-gray-700 dark:text-gray-300">Is Factored?</label>
-    <label for="isFactored" class="flex items-center">
-        <input
-            type="checkbox"
-            name="isFactored"
-            x-model="formData.isFactored"
-            x-effect="formData.isFactored = formData.isFactored === 1 ? 1 : 0" 
-            x-bind:checked="formData.isFactored === 1"
-            x-on:change="formData.isFactored = $event.target.checked ? 1 : 0"
-            class="w-4 h-4 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-        >
-        <span class="ml-2 text-gray-700 dark:text-gray-300">Yes, is Factored</span>
-    </label>
-</div>
+                        <label class="block text-gray-700 dark:text-gray-300">Is Factored?</label>
+                        <label for="isFactored" class="flex items-center">
+                            <input
+                                type="checkbox"
+                                name="isFactored"
+                                x-model="formData.isFactored"
+                                x-effect="formData.isFactored = formData.isFactored === 1 ? 1 : 0" 
+                                x-bind:checked="formData.isFactored === 1"
+                                x-on:change="formData.isFactored = $event.target.checked ? 1 : 0"
+                                class="w-4 h-4 p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            >
+                            <span class="ml-2 text-gray-700 dark:text-gray-300">Yes, is Factored</span>
+                        </label>
+                    </div>
                         
                     </div>
                 
@@ -270,6 +348,31 @@
                         </div>
                     </div>
 
+                 
+                        <!-- ... -->
+                        
+                        <button type="button" 
+                                class="mt-3 bg-blue-600 text-white px-4 py-2 rounded" 
+                                :disabled="isLoading" 
+                                @click="submitStep('basic')">
+                            <span x-show="!isLoading">Save Changes</span>
+                            <span x-show="isLoading" class="flex items-center justify-center">
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Saving...
+                            </span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Step 1: Basic Info -->
+                <form @submit.prevent="submitStep('charges')" x-ref="chargesForm" id="chargesForm">
+                    <div x-show="step === 2">
+                        <!-- Cahrges form fields for step 2 -->
+                         
+
                     <div>
                         <template x-for="(charge, index) in formData.invoicecharges" :key="index">
                             <div class="p-4 border rounded-lg bg-white dark:bg-gray-800 shadow-sm dark:border-gray-700">
@@ -329,7 +432,6 @@
                                         <input type="text" x-model="charge.comment" name="comment[]"
                                             class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
                                     </div>
-
                                     <!-- Units -->
                                     <div>
                                         <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Units</label>
@@ -372,13 +474,17 @@
                                     </div>
 
                                     <!-- Billed -->
-                                    <div class="flex items-end">
+                                    <!-- <div class="flex items-end" x-data="{ charge: { billed: 0 } }">
                                         <label class="flex items-center text-gray-700 dark:text-gray-300">
-                                            <input type="checkbox" x-model="charge.billed" name="billed[]"
+                                            <input type="checkbox"
+                                                :value="1"
+                                                :checked="charge.billed == 1"
+                                                @change="charge.billed = $event.target.checked ? 1 : 0"
+                                                name="billed[]"
                                                 class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-blue-600 focus:ring-blue-500">
                                             <span class="ml-2 text-sm">Billed</span>
                                         </label>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </template>
@@ -405,13 +511,29 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                    
-                    
-                    <!-- Step 2: Repayment -->
-
-                    <div x-show="step === 2" class="space-y-6">
-                        <template x-for="(repay, index) in formData.invoicepayments" :key="index">
+                        <!-- ... -->
+                        
+                        <button type="button" 
+                                class="mt-3 bg-blue-600 text-white px-4 py-2 rounded" 
+                                :disabled="isLoading" 
+                                @click="submitStep('charges')">
+                            <span x-show="!isLoading">Save Changes</span>
+                            <span x-show="isLoading" class="flex items-center justify-center">
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Saving...
+                            </span>
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Step 3: Repayment -->
+                <form @submit.prevent="submitStep('payment')" x-ref="repaymentForm">
+                    <div x-show="step === 3">
+                        <!-- Repayment form fields for step 2 -->
+                         <template x-for="(repay, index) in formData.invoicepayments" :key="index">
                             <div class="p-4 border rounded-lg bg-white dark:bg-gray-800 shadow-sm dark:border-gray-700">
                                 <input type="hidden" name="payment_ids[]" x-model="repay.id">
                                 
@@ -458,9 +580,7 @@
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Date</label>
                                         <input type="text" 
-                                               x-model="repay.credit_date" 
-                                               name="credit_date[]" id="credit_date"
-                                               class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white credit_date_picker">
+                                               x-model="repay.credit_date" name="credit_date[]" class="credit_date w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     </div>
                                 </div>
                     
@@ -493,334 +613,768 @@
                                 class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded dark:bg-blue-700 dark:hover:bg-blue-800">
                             + Add Repayment
                         </button>
+
+                        
+                        <!-- ... -->
+                        
+                        <button type="button" 
+                                class="mt-3 bg-blue-600 text-white px-4 py-2 rounded" 
+                                :disabled="isLoading" 
+                                @click="submitStep('payment')">
+                            <span x-show="!isLoading">Save Changes</span>
+                            <span x-show="isLoading" class="flex items-center justify-center">
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Saving...
+                            </span>
+                        </button>
                     </div>
+                </form>
+
+                <!-- Step 4: Repayment -->
+                <form @submit.prevent="submitStep('record')" x-ref="repaymentRecordForm">
+                    <div x-show="step === 4">
+                        <h4 class="mb-1 text-sm font-medium text-gray-800 dark:text-white/90">Record the payments received</h4>
+                        
+                        <!-- Always show the "Add" button at the top -->
+                        <div class="flex justify-end mb-4">
+                            <button @click="addPayment()" type="button"
+                                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded dark:bg-blue-700 dark:hover:bg-blue-800">
+                                + Add Payment
+                            </button>
+                        </div>
+                        
+                        <template x-for="(paymnt, index) in formData.paymentRecord" :key="index">
+                            <div class="mb-6 border p-4 rounded-lg bg-white dark:bg-gray-800 shadow-sm dark:border-gray-700">
+                                <div class="flex justify-end mb-2">
+                                    <button @click="removePayment(index)" type="button" 
+                                            class="ml-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm">
+                                        Remove
+                                    </button>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Paid Via</label>
+                                        <select x-model="paymnt.paid_via" name="paid_via[]" 
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <option value="" selected disabled></option>
+                                            <option value="check">Check</option>
+                                            <option value="direct_deposit">Direct Deposit</option>
+                                            <option value="credit_card">Credit Card</option>
+                                            <option value="ach">ACH</option>
+                                            <option value="cash">Cash</option>
+                                            <option value="via_factoring">Via Factoring</option>
+                                            <option value="wex_fleet_one">Wex Fleet One</option>
+                                            <option value="zelle">Zelle</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Payment Date</label>
+                                        <input type="text" x-model="paymnt.payment_date" name="payment_date[]"
+                                            class="payment_date w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Check / Payment Ref</label>
+                                        <input type="text" x-model="paymnt.check_number" name="check_number[]" 
+                                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Amount</label>
+                                        <input type="number" x-model="paymnt.payment_amount" 
+                                            @input="calculateTotalPayments()" name="payment_amount[]" 
+                                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Processing fee %</label>
+                                        <input type="number" x-model="paymnt.processing_fee_percent" 
+                                            @input="calculateTotalPayments()" name="processing_fee_percent[]" 
+                                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Processing fee flat</label>
+                                        <input type="number" x-model="paymnt.processing_fee_flat" 
+                                            @input="calculateTotalPayments()" name="processing_fee_flat[]" 
+                                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Note</label>
+                                        <textarea name="payment_notes[]" x-model="paymnt.payment_notes" cols="1" rows="1"
+                                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        
+                        <!-- Payment Totals Section -->
+                       <div class="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block font-medium text-gray-700 dark:text-gray-300">Total Payments</label>
+                            <div class="text-xl text-gray-900 dark:text-gray-100" 
+                                x-text="'$' + (formData.totalPayments ?? 0)"></div>
+                        </div>
+                        <!-- <div>
+                            <label class="block font-medium text-gray-700 dark:text-gray-300">Total Fees</label>
+                            <div class="text-xl text-gray-900 dark:text-gray-100" 
+                                x-text="'$' + (formData.totalProcessingFees ?? 0)"></div>
+                        </div> -->
+                        <div>
+                            <label class="block font-medium text-gray-700 dark:text-gray-300">Net Received</label>
+                            <div class="text-2xl font-bold text-gray-900 dark:text-gray-100" 
+                                x-text="'$' + (formData.netReceived ?? 0)"></div>
+                        </div>
+                    </div>
+
+                        
+                        <button type="button" 
+                                class="mt-6 bg-blue-600 text-white px-4 py-2 rounded" 
+                                :disabled="isLoading" 
+                                @click="submitStep('payment')">
+                            <span x-show="!isLoading">Save Changes</span>
+                            <span x-show="isLoading" class="flex items-center justify-center">
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Saving...
+                            </span>
+                        </button>
+                    </div>
+                </form>
                 
-                    <!-- Step 3: Review & Submit -->
-                    <div x-show="step === 3" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <template x-for="(upload, index) in formData.invoicedocs" :key="index">
+                <!-- Step 5: Docs -->
+                <form @submit.prevent="submitStep('docs')" x-ref="docsForm" enctype="multipart/form-data">
+                    <div x-show="step === 5">
+                        <!-- Back up docs form fields for step 5 -->
+                         <!-- Step 5: Review & Submit -->
+                    <div x-show="step === 5" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- <template x-for="(upload, index) in formData.invoicedocs" :key="index">
                             <h3 class="font-medium text-gray-900 dark:text-gray-100">Document #<span x-text="index + 1"></span></h3>
                             <img :src="`https://laravel-production-077b.up.railway.app/storage/${upload.file_path}`" class="w-32 h-32 object-cover rounded-md" alt="Document Image" />
-                        </template>
+                        </template> -->
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
                             <input type="file" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount" id="file_path">
                         </div>
                     </div>
-                
-                    <!-- Navigation Buttons -->
-                    <div class="flex flex-wrap gap-2 mt-6 mb-10">
-                        <!-- Previous Button -->
-                        <button
-                            type="button"
-                            class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white hover:bg-gray-300 hover:text-gray-700 dark:hover:bg-gray-600 dark:hover:text-white"
-                            x-show="step > 1"
-                            @click="prevStep">
-                            Previous
-                        </button>
-                
-                        <!-- Next Button -->
-                        <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
-                            x-show="step < 3" @click="nextStep">
-                            Next
-                        </button>
-                
-                        <!-- Save & Continue Later -->
-                        <button type="button" class="px-4 py-2 bg-yellow-500 text-white rounded dark:bg-yellow-400"
-                            @click="saveProgress">
-                            Save & Continue Later
-                        </button>
-                
-                        <!-- Submit Button (Only shows on Step 3) -->
-                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
-                            x-show="step === 3">
-                            Submit
+                        <!-- ... -->
+                        
+                        <button type="button" 
+                                class="mt-3 bg-blue-600 text-white px-4 py-2 rounded" 
+                                :disabled="isLoading" 
+                                @click="submitStep('docs')">
+                            <span x-show="!isLoading">Save Changes</span>
+                            <span x-show="isLoading" class="flex items-center justify-center">
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Saving...
+                            </span>
                         </button>
                     </div>
-
                 </form>
+                
+                <!-- Navigation Buttons -->
+                <div class="flex flex-wrap gap-2 mt-6 mb-10">
+                    <!-- Previous Button -->
+                    <button
+                        type="button"
+                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white hover:bg-gray-300 hover:text-gray-700 dark:hover:bg-gray-600 dark:hover:text-white"
+                        x-show="step > 1"
+                        @click="prevStep">
+                        Previous
+                    </button>
+            
+                    <!-- Next Button -->
+                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
+                        x-show="step < 5" @click="nextStep">
+                        Next
+                    </button>
+            
+                    <!-- Save & Continue Later -->
+                    <button type="button" class="px-4 py-2 bg-yellow-500 text-white rounded dark:bg-yellow-400"
+                        @click="saveProgress">
+                        Save & Continue Later
+                    </button>
+                </div>
             </div>
-            </div>
-
-          </div>
-        </main>
+        </div>
+    </div>
+</main>
         <!-- ===== Main Content End ===== -->
       </div>
       <!-- ===== Content Area End ===== -->
     </div>
     <!-- ===== Page Wrapper End ===== -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
+  <script>
+ 
+    function showNotification(status) {
+      const modal = document.getElementById('notificationModal');
+      const content = document.getElementById('notificationContent');
+      const title = document.getElementById('notificationTitle');
+      const message = document.getElementById('notificationMessage');
+      const icon = document.getElementById('statusIcon');
+      
+      // Set content based on status
+      if (status === 'paid') {
+        title.textContent = 'Invoice Updated Successfully';
+        message.textContent = 'Payment status: Paid in full. Thank you for your payment!';
+        content.classList.add('bg-green-100', 'dark:bg-green-900');
+        icon.innerHTML = `
+          <svg class="h-6 w-6 text-green-500 dark:text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        `;
+      } else if (status === 'partially_paid') {
+        title.textContent = 'Invoice Updated Successfully';
+        message.textContent = 'Payment status: Partially paid. Please complete the remaining balance.';
+        content.classList.add('bg-yellow-100', 'dark:bg-yellow-900');
+        icon.innerHTML = `
+          <svg class="h-6 w-6 text-yellow-500 dark:text-yellow-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        `;
+      } else {
+        title.textContent = 'Invoice Updated Successfully';
+        message.textContent = 'Payment status: Unpaid. Please make the payment as soon as possible.';
+        content.classList.add('bg-red-100', 'dark:bg-red-900');
+        icon.innerHTML = `
+          <svg class="h-6 w-6 text-red-500 dark:text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        `;
+      }
+      
+      // Show with animation
+      modal.classList.remove('hidden', 'slide-up');
+      modal.classList.add('slide-down');
+      
+      // Auto-hide after 5 seconds
+      setTimeout(hideNotification, 10000);
+    }
+    
+    function hideNotification() {
+      const modal = document.getElementById('notificationModal');
+      modal.classList.remove('slide-down');
+      modal.classList.add('slide-up');
+      
+      // Reset classes for next notification
+      setTimeout(() => {
+        const content = document.getElementById('notificationContent');
+        modal.classList.add('hidden');
+        content.className = 'p-4 rounded-lg shadow-xl border dark:border-gray-700';
+      }, 500);
+    }
+    
+    // Demo - show paid notification on load
+    // setTimeout(() => showNotification('paid'), 10000);
+  </script>
 
+<script>
+    flatpickr("#payment_date", {
+                enableTime: false,
+                //timeFormat: 'HH:mm',
+            });
+             flatpickr("#credit_date", {
+                enableTime: false,
+                //timeFormat: 'HH:mm',
+            });
+            
+
+</script>
     <script>
-
 document.addEventListener('alpine:init', () => {
-            Alpine.data('stepperForm', () => ({
-                step: localStorage.getItem('edit_invoice') ? parseInt(localStorage.getItem('edit_invoice')) : 1,
-                formData:{
-                    invoice_type: '',
-                    invoice_date: '',
-                    isFactored: '',
-                    override_default_company: '',
-                    customer_id: '',
-                    invoice_due_date: '',
-                    attention_invoice_to: '',
-                    note_bill_to_party: '',	
-                    loads_on_invoice: '',
-                    booking_number: '',
-                    bill_of_landing_number: '',
-                    po_number: '',
-                    reference_number: '',
-                    move_date: '',
-                    trailer: '',
-                    container: '',
-                    chasis: '',
-                    load_weight: '',
-                    commodity: '',
-                    no_of_packages: '',
-                    charge_type: [],
-                    comment: [],
-                    units: [],
-                    rate: [],
-                    amount: [],
-                    discount: [],
-                    internal_notes: [],
-                    total: '',
-                    total_discount: '',
-                    net_total: '',
-                    invoicedocs: [],
-                    invoicepayments: [],
-                    invoicecharges:[],
-                },
-                step: 1,
+    Alpine.data('stepperForm', () => ({
+        step: localStorage.getItem('edit_invoice') ? parseInt(localStorage.getItem('edit_invoice')) : 1,
+        isLoading: false,
+        formData: {
+            invoice_type: '',
+            invoice_date: '',
+            isFactored: '',
+            override_default_company: '',
+            customer_id: '',
+            invoice_due_date: '',
+            attention_invoice_to: '',
+            note_bill_to_party: '',	
+            loads_on_invoice: '',
+            booking_number: '',
+            bill_of_landing_number: '',
+            po_number: '',
+            reference_number: '',
+            move_date: '',
+            trailer: '',
+            container: '',
+            chasis: '',
+            load_weight: '',
+            commodity: '',
+            no_of_packages: '',
+            charge_type: [],
+            comment: [],
+            units: [],
+            rate: [],
+            amount: [],
+            discount: [],
+            internal_notes: [],
+            total: '',
+            total_discount: '',
+            net_total: '',
+            invoicedocs: [],
+            invoicepayments: [],
+            invoicecharges:[],
+            paymentRecord: [{
+            paid_via: '',
+            payment_date: '',
+            check_number: '',
+            payment_amount: 0,
+            processing_fee_percent: 0,
+            processing_fee_flat: 0,
+            payment_notes: ''
+        }],
+        totalPayments: '0.00',
+        totalProcessingFees: '0.00',
+        netReceived: '0.00'
+        },
 
-                init() {
-                    //this.fetchData();
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const encodedId = urlParams.get('id');
-                    if (encodedId) {
-                        this.id = atob(encodedId);
-                        this.fetchData();
-                    } else {
-                        console.error('No ID found in the URL');
-                    }
-                },
+        init() {
+            this.calculateTotals();
+        this.calculateTotalPayments(); 
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedId = urlParams.get('id');
+            if (encodedId) {
+                this.id = atob(encodedId);
+                this.fetchData();
+            } else {
+                console.error('No ID found in the URL');
+            }
+        },
 
-                fetchData() {
-                    fetch(requestURL + '/invoices/invoice/' + this.id, {
-                        headers: {
-                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
-                            'Accept': 'application/json'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('show invoice Data:', data.invoice);
-                        this.formData = {
-                            invoice_type: data.invoice.invoice_type || '',
-                            invoice_date: data.invoice.invoice_date || '',
-                            isFactored: data.invoice.isFactored === 1 ? 1 : 0,
-                            override_default_company: data.invoice.override_default_company || '',
-                            customer_id: data.invoice.customer_id || '',
-                            invoice_due_date: data.invoice.invoice_due_date || '',
-                            attention_invoice_to: data.invoice.attention_invoice_to || '',
-                            note_bill_to_party: data.invoice.note_bill_to_party || '',
-                            loads_on_invoice: data.invoice.loads_on_invoice || '',
-                            booking_number: data.invoice.booking_number || '',
-                            bill_of_landing_number: data.invoice.bill_of_landing_number || '',
-                            po_number: data.invoice.po_number || '',
-                            reference_number: data.invoice.reference_number || '',
-                            move_date: data.invoice.move_date || '',
-                            trailer: data.invoice.trailer || '',
-                            container: data.invoice.container || '',
-                            chasis: data.invoice.chasis || '',
-                            load_weight: data.invoice.load_weight || '',
-                            commodity: data.invoice.commodity || '',
+        fetchData() {
+            fetch(requestURL + '/invoices/invoice/' + this.id, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('show invoice Data:', data.invoice);
+                this.formData = {
+                    invoice_type: data.invoice.invoice_type || '',
+                    invoice_date: data.invoice.invoice_date || '',
+                    isFactored: data.invoice.isFactored === 1 ? 1 : 0,
+                    override_default_company: data.invoice.override_default_company || '',
+                    customer_id: data.invoice.customer_id || '',
+                    invoice_due_date: data.invoice.invoice_due_date || '',
+                    attention_invoice_to: data.invoice.attention_invoice_to || '',
+                    note_bill_to_party: data.invoice.note_bill_to_party || '',
+                    loads_on_invoice: data.invoice.loads_on_invoice || '',
+                    booking_number: data.invoice.booking_number || '',
+                    bill_of_landing_number: data.invoice.bill_of_landing_number || '',
+                    po_number: data.invoice.po_number || '',
+                    reference_number: data.invoice.reference_number || '',
+                    move_date: data.invoice.move_date || '',
+                    trailer: data.invoice.trailer || '',
+                    container: data.invoice.container || '',
+                    chasis: data.invoice.chasis || '',
+                    load_weight: data.invoice.load_weight || '',
+                    commodity: data.invoice.commodity || '',
 
+                    invoicepayments: data.invoice.invoicepayments?.map(repay => ({
+                        id: repay.id || '',
+                        amount: repay.amount || '',
+                        credit_amount: repay.credit_amount || '',
+                        expense_amount: repay.amount || '',
+                        credit_date: repay.credit_date || '',
+                        credit_memo: repay.credit_memo || '',
+                        credit_note: repay.credit_note || '',
+                        notes: repay.notes || '',
+                    })) || [],
+                    
+                    invoicecharges: data.invoice.invoicecharges?.map(charge => ({
+                        id: charge.id || '',
+                        charge_type: charge.charge_type || '',
+                        comment: charge.comment || '',
+                        units: charge.units ? parseFloat(charge.units) : 0,
+                        rate: charge.unit_rate ? parseFloat(charge.unit_rate) : 0,
+                        amount: charge.amount ? parseFloat(charge.amount) : 0,
+                        discount: charge.discount ? parseFloat(charge.discount) : 0,
+                        internal_notes: charge.internal_notes || '',
+                        billed: charge.billed || false
+                    })) || [],
 
-                            invoicepayments: data.invoice.invoicepayments?.map(repay => ({
-                            id: repay.id || '',
-                            amount: repay.amount || '',
-                            check_number: repay.check_number || '',
-                            credit_amount: repay.credit_amount || '',
-                            expense_amount: repay.amount || '',
-                            credit_date: repay.credit_date || '',
-                            credit_memo: repay.credit_memo || '',
-                            credit_note: repay.credit_note || '',
-                            notes: repay.notes || '',
-                            payment_date: repay.payment_date || '',
-                            payment_method: repay.payment_method || '',
-                            processing_fee_flate_rate: repay.processing_fee_flate_rate || '',
-                            processing_fee_percent: repay.processing_fee_percent || '',
-                        })) || [],
-                         invoicecharges: data.invoice.invoicecharges?.map(charge => ({
-                            id: charge.id || '',
-                            charge_type: charge.charge_type || '',
-                            comment: charge.comment || '',
-                            units: charge.units ? parseFloat(charge.units) : 0,
-                            rate: charge.unit_rate ? parseFloat(charge.unit_rate) : 0,
-                            amount: charge.amount ? parseFloat(charge.amount) : 0,
-                            discount: charge.discount ? parseFloat(charge.discount) : 0,
-                            internal_notes: charge.internal_notes || '',
-                            billed: charge.billed || false
-                        })) || [],
+                    paymentRecord: data.invoice.payment_record?.map(paymnt => ({
+                        id: paymnt.id || '',
+                        paid_via: paymnt.paid_via || '',
+                        payment_date: paymnt.payment_date ||'',
+                        check_number: paymnt.check_number || '',
+                        payment_amount: paymnt.payment_amount||'',
+                        processing_fee_per: paymnt.processing_fee_per || '',
+                        processing_fee_flat: paymnt.processing_fee_flat || '',
+                        payment_notes: paymnt.payment_notes || ''
+                    })) || [],
 
-                        invoicedocs: data.invoice.invoicedocs?.map(doc => ({
-                                id: doc.id || '',
-                                file_path: doc.file_path || 'Unknown',
-                            })) || [],
+                    invoicedocs: data.invoice.invoicedocs?.map(doc => ({
+                        id: doc.id || '',
+                        file_path: doc.file_path || 'Unknown',
+                    })) || [],
+                };
+                this.calculateTotals();
+                this.calculateTotalPayments();
+            })
+        },
 
+        nextStep() {
+            this.step++;
+            localStorage.setItem('edit_invoice', this.step);
+        },
+
+        prevStep() {
+            this.step--;
+            localStorage.setItem('edit_invoice', this.step);
+        },
+
+        saveProgress() {
+            localStorage.setItem('formData', JSON.stringify(this.formData));
+        },
+
+        // Charge Management Methods
+        addRepayment() {
+            this.formData.invoicepayments.push({
+                id: null,
+                credit_memo: '',
+                credit_amount: '',
+                credit_note: '',
+                credit_date: '',
+                check_number: '',
+                notes: '',
+                payment_date: '',
+                payment_method: '',
+                processing_fee_flate_rate: '',
+                processing_fee_percent: '',
+            });
+             this.$nextTick(() => {
+                flatpickr('.credit_date', {
+                    dateFormat: 'Y-m-d',
+                    allowInput: true
+                });
+            });
+        },
+
+        removeRepayment(index) {
+            this.formData.invoicepayments.splice(index, 1);
+        },
+
+        addCharge() {
+            this.formData.invoicecharges.push({
+                id: '',
+                charge_type: '',
+                comment: '',
+                units: 0,
+                rate: 0,
+                amount: 0,
+                discount: 0,
+                internal_notes: '',
+                billed: false,
+                invoice_date: '',
+                invoice_number: ''
+            });
+        },
+
+        removeCharge(index) {
+            this.formData.invoicecharges.splice(index, 1);
+            this.calculateTotals();
+        },
+
+        calculateChargeAmount(index) {
+            const charge = this.formData.invoicecharges[index];
+            const units = parseFloat(charge.units) || 0;
+            const rate = parseFloat(charge.rate) || 0;
+            charge.amount = (units * rate).toFixed(2);
+            this.calculateTotals();
+        },
+
+        calculateTotals() {
+            // Calculate totals from all charges (both existing and new)
+            const totals = this.formData.invoicecharges.reduce((acc, charge) => {
+                acc.total += parseFloat(charge.amount) || 0;
+                acc.discount += parseFloat(charge.discount) || 0;
+                return acc;
+            }, { total: 0, discount: 0 });
+
+            this.formData.total = totals.total.toFixed(2);
+            this.formData.total_discount = totals.discount.toFixed(2);
+            this.formData.net_total = (totals.total - totals.discount).toFixed(2);
+        },
+
+        addPayment() {
+            this.formData.paymentRecord.push({
+                paid_via: '',
+                payment_date: '',
+                check_number: '',
+                payment_amount: 0,
+                processing_fee_percent: 0,
+                processing_fee_flat: 0,
+                payment_notes: ''
+            });
+            
+            // Initialize date picker for new field
+            this.$nextTick(() => {
+                flatpickr('.payment_date', {
+                    dateFormat: 'Y-m-d',
+                    allowInput: true
+                });
+            });
+        },
+
+        removePayment(index) {
+            if (this.formData.paymentRecord.length > 1) {
+                this.formData.paymentRecord.splice(index, 1);
+                this.calculateTotalPayments();
+            } else {
+                // Reset the last payment record instead of removing it
+                this.formData.paymentRecord[0] = {
+                    paid_via: '',
+                    payment_date: '',
+                    check_number: '',
+                    payment_amount: 0,
+                    processing_fee_percent: 0,
+                    processing_fee_flat: 0,
+                    payment_notes: ''
+                };
+                this.calculateTotalPayments();
+            }
+        },
+        calculateTotalPayments() {
+        // Calculate total payments amount
+        this.formData.totalPayments = this.formData.paymentRecord.reduce((total, payment) => {
+            return total + (parseFloat(payment.payment_amount) || 0);
+        }, 0).toFixed(2);
+        
+        // Calculate total processing fees
+        this.formData.totalProcessingFees = this.formData.paymentRecord.reduce((total, payment) => {
+            const percentFee = (parseFloat(payment.payment_amount) || 0) * 
+                            (parseFloat(payment.processing_fee_percent) || 0) / 100;
+            const flatFee = parseFloat(payment.processing_fee_flat) || 0;
+            return total + percentFee + flatFee;
+        }, 0).toFixed(2);
+        
+        // Calculate net received
+        this.formData.netReceived = (this.formData.totalPayments - this.formData.totalProcessingFees).toFixed(2);
+    },
+
+        //  calculateTotalPayments() {
+        //     this.totalPayments = this.formData.paymnts.reduce((total, paymnt) => {
+        //         // Convert payment_amount to number (in case it's a string)
+        //         const amount = parseFloat(paymnt.payment_amount) || 0;
+        //         return total + amount;
+        //     }, 0);
+        // },
+
+        async submitStep(formType) {
+            this.isLoading = true;
+            let endpoint, formData;
+            
+            try {
+                // Create FormData object
+                formData = new FormData();
+                
+                // Determine endpoint based on form type
+                switch(formType) {
+                    case 'basic':
+                        endpoint = requestURL + '/invoices/basic/' + this.id;
+                        // Add basic form fields
+                        Object.keys(this.formData).forEach(key => {
+                            if (!['invoicepayments', 'invoicecharges', 'invoicedocs', 'paymentRecord','total', 'total_discount', 'net_total', 'totalPayments', 'totalProcessingFees', 'netReceived'].includes(key)) {
+                                formData.append(key, this.formData[key]);
+                            }
+                        });
+                        break;
+                    case 'charges' :
+                        endpoint = requestURL +'/invoices/charges/'+ this.id;
+                        // Add charges data
+                        this.formData.invoicecharges.forEach((charge, index) => {
+                            formData.append('charge_type[]', charge.charge_type || '');
+                            formData.append('comment[]', charge.comment || '');
+                            formData.append('units[]', charge.units || '');
+                            formData.append('rate[]', charge.rate || '');
+                            formData.append('discount[]', charge.discount || '');
+                            //formData.append('amount[]', charge.amount || '');
                         
-                        };
-                        this.calculateTotals();
-
-                        // Set the selected driver (if available)
-                        // this.selectedDriver = truckDriver || { fname: 'No Driver', lname: '' };
-                        // this.formData.driver_id = this.selectedDriver.id || '';
+                            // Object.keys(charge).forEach(key => {
+                            //     formData.append(`invoicecharges[${index}][${key}]`, charge[key]);
+                            // });
+                        });
+                        break;
                         
-                    })
-                },
-                nextStep() {
-                        this.step++;
-                        localStorage.setItem('edit_invoice', this.step);
-                    },
-                    prevStep() {
-                        this.step--;
-                        localStorage.setItem('edit_invoice', this.step);
-                    },
-                saveProgress() {
-                    localStorage.setItem('formData', JSON.stringify(this.formData));
-                },
-                // Charge Management Methods
-                addRepayment() {
-                    this.formData.invoicepayments.push({
-                        id: null,
-                        credit_memo: '',
-                        credit_amount: '',
-                        credit_note: '',
-                        credit_date: '',
-                        check_number: '',
-                        notes: '',
-                        payment_date: '',
-                        payment_method: '',
-                        processing_fee_flate_rate: '',
-                        processing_fee_percent: '',
+                    case 'credit':
+                        endpoint = requestURL + '/invoices/credit-memo/' + this.id;
+                        // Add payments data
+                        this.formData.invoicepayments.forEach((credit, index) => {
+                            formData.append('credit_amount[]', credit.credit_amount || '');
+                            formData.append('credit_memo[]', credit.credit_memo || '');
+                            formData.append('credit_note[]', credit.credit_note || '');
+                            formData.append('credit_date[]', credit.credit_date || '');
+                            formData.append('notes[]', credit.notes || '');
+                            // Object.keys(payment).forEach(key => {
+                            //     formData.append(`invoicepayments[${index}][${key}]`, payment[key]);
+                            // });
+                        });
+                        break;
 
-                    });
-                },
-
-                removeRepayment(index) {
-                    this.formData.invoicepayments.splice(index, 1);
-                    //this.calculateTotals();
-                },
-                addCharge() {
-                    this.formData.invoicecharges.push({
-                        id: '',
-                        charge_type: '',
-                        comment: '',
-                        units: 0,
-                        rate: 0,
-                        amount: 0,
-                        discount: 0,
-                        internal_notes: '',
-                        billed: false,
-                        invoice_date: '',
-                        invoice_number: ''
-                    });
-                },
-
-                removeCharge(index) {
-                    this.formData.invoicecharges.splice(index, 1);
-                    this.calculateTotals();
-                },
-
-                calculateChargeAmount(index) {
-                    const charge = this.formData.invoicecharges[index];
-                    const units = parseFloat(charge.units) || 0;
-                    const rate = parseFloat(charge.rate) || 0;
-                    charge.amount = (units * rate).toFixed(2);
-                    this.calculateTotals();
-                },
-
-                calculateTotals() {
-                    // Calculate totals from all charges (both existing and new)
-                    const totals = this.formData.invoicecharges.reduce((acc, charge) => {
-                        acc.total += parseFloat(charge.amount) || 0;
-                        acc.discount += parseFloat(charge.discount) || 0;
-                        return acc;
-                    }, { total: 0, discount: 0 });
-
-                    this.formData.total = totals.total.toFixed(2);
-                    this.formData.total_discount = totals.discount.toFixed(2);
-                    this.formData.net_total = (totals.total - totals.discount).toFixed(2);
-                },
-
-
-                saveAndSubmit(e) {
-                    e.preventDefault();
-                    
-                    let form = document.getElementById("editInvoiceForm");
-                    let formData = new FormData(form);
-
-                    formData.append("_method", "PUT");
-
-                    
-                    // this.formData.invoicepayments.forEach((repay, index) => {
-                    //     formData.append(`invoicepayments[${index}][credit_memo]`, repay.credit_memo);
-                    //     formData.append(`invoicepayments[${index}][credit_amount]`, repay.credit_amount);
-                    //     formData.append(`invoicepayments[${index}][credit_note]`, repay.credit_note);
-                    //     formData.append(`invoicepayments[${index}][credit_date]`, repay.credit_date);
-                    //     formData.append(`invoicepayments[${index}][check_number]`, repay.check_number);
-                    //     formData.append(`invoicepayments[${index}][notes]`, repay.notes);
-                    //     formData.append(`invoicepayments[${index}][payment_date]`, repay.payment_date);
-                    //     formData.append(`invoicepayments[${index}][payment_method]`, repay.payment_method); 
-                    //     formData.append(`invoicepayments[${index}][processing_fee_flate_rate]`, repay.processing_fee_flate_rate);      
-                    //     formData.append(`invoicepayments[${index}][processing_fee_percent]`, repay.processing_fee_percent);      
-                    //                     });
-
-
-          
-                    let fileInput = document.getElementById("file_path");
-                    if (fileInput.files.length > 0) {
-                        for (let i = 0; i < fileInput.files.length; i++) {
-                            formData.append(`invoicedocs[${i}]`, fileInput.files[i]);
+                        case 'payment':
+                        endpoint = requestURL + '/invoices/payment/' + this.id;
+                        // Add payments data
+                        this.formData.paymentRecord.forEach((payment, index) => {
+                            formData.append('payment_date[]', payment.payment_date || '');
+                            formData.append('paid_via[]', payment.paid_via || '');
+                            formData.append('payment_amount[]', payment.payment_amount || '');
+                            formData.append('check_number[]', payment.check_number || '');
+                            formData.append('processing_fee_per[]', payment.processing_fee_percent || '');
+                            formData.append('processing_fee_flat[]', payment.processing_fee_flat || '');
+                            formData.append('payment_notes[]', payment.payment_notes || '');
+                        });
+                        // this.formData.invoicepayments.forEach((payment, index) => {
+                        //     Object.keys(payment).forEach(key => {
+                        //         formData.append(`paymentRecord[${index}][${key}]`, payment[key]);
+                        //     });
+                        // });
+                        break;
+                        
+                    case 'docs':
+                        endpoint = requestURL + '/invoices/docs/' + this.id;
+                        // Handle file uploads
+                        const fileInput = document.getElementById('file_path');
+                        if (fileInput.files.length > 0) {
+                            for (let i = 0; i < fileInput.files.length; i++) {
+                                formData.append('file_path[]', fileInput.files[i]);
+                            }
                         }
-                    }
-                    
-                   
-                        console.log(localStorage.getItem('auth_token'))
-                                    
-                    console.log("FormData Debugging:");
+                        break;
+                }
+
+                //formData.append('_method', 'PUT');
+                 console.log("FormData Debugging:");
                     for (let pair of formData.entries()) {
                         console.log(pair[0] + ": " + pair[1]);
                     }
-                    //return;
+                    //return
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                });
 
-                    $.ajax({
-                        url: requestURL + "/invoices/update/" + this.id,
-                        type: "POST",
-                        data: formData,
-                        processData: false, 
-                        contentType: false,
-                        headers: {
-                            "Authorization": "Bearer " + localStorage.getItem("auth_token"),
-                            "Accept": "application/json"
-                        },
-                        beforeSend:function(){
-                            document.getElementById("Ajaxbackdrop").style.display = 'flex'
-                        },
-
-                        success: (response) => {
-                            console.log("Success:", response);
-                            document.getElementById("Ajaxbackdrop").style.display = 'none'
-                            createToast('success', response.message);
-                        },
-                        error: (xhr) => {
-                            console.error("Error:", xhr.responseText);
-                            document.getElementById("Ajaxbackdrop").style.display = 'none'
-                            createToast('error', xhr.responseText);
-                        }
-                    });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-            }));
-        })
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    createToast('success', data.message);
+                    if(data.repayment)
+                    {
+                        //alert(data.repayment.status)
+                        showNotification(data.repayment.status);
+                    }
+                    console.log('Data Dump', data.repayment);
+                    // Move to next step if not on last step
+                    if (this.step < 4) {
+                        this.nextStep();
+                    }
+                } else {
+                    createToast('error', data.message || 'An error occurred');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                createToast('error', error.message || 'An error occurred');
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        // Legacy method (keep for reference or remove if not needed)
+        saveAndSubmit(e) {
+            e.preventDefault();
+            
+            let form = document.getElementById("editInvoiceForm");
+            let formData = new FormData(form);
+            formData.append("_method", "PUT");
+
+            let fileInput = document.getElementById("file_path");
+            if (fileInput.files.length > 0) {
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    formData.append(`invoicedocs[${i}]`, fileInput.files[i]);
+                }
+            }
+            
+            $.ajax({
+                url: requestURL + "/invoices/update/" + this.id,
+                type: "POST",
+                data: formData,
+                processData: false, 
+                contentType: false,
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("auth_token"),
+                    "Accept": "application/json"
+                },
+                beforeSend:function(){
+                    document.getElementById("Ajaxbackdrop").style.display = 'flex'
+                },
+                success: (response) => {
+                    const backdrop = document.getElementById("Ajaxbackdrop");
+                    if (backdrop) {
+                        backdrop.style.display = 'none';
+                    }
+                    
+                    if (typeof createToast === 'function') {
+                        createToast('success', response.message);
+                    } else {
+                        console.log('Success:', response.message);
+                    }
+                },
+                // Replace your current AJAX error handling with this more robust version
+                error: (xhr) => {
+                    // Safely hide backdrop if the element exists
+                    const backdrop = document.getElementById("Ajaxbackdrop");
+                    if (backdrop) {
+                        backdrop.style.display = 'none';
+                    }
+                    
+                    // Safely show error message
+                    let errorMessage = xhr.responseText || 'An error occurred';
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        errorMessage = response.message || errorMessage;
+                    } catch (e) {
+                        console.log('Could not parse error response', e);
+                    }
+                    
+                    // Use your existing toast function if available
+                    if (typeof createToast === 'function') {
+                        createToast('error', errorMessage);
+                    } else {
+                        console.error(errorMessage);
+                    }
+                }
+            });
+        }
+    }));
+});
         
                         $(function() {
                             $(".move_date_datepicker").datepicker({
@@ -840,12 +1394,7 @@ document.addEventListener('alpine:init', () => {
                             });
                         });
 
-                           $(function() {
-                            $(".credit_date_picker").datepicker({
-                               
-                            });
-                        });
-
+                       
               
               
                     function calculate() {

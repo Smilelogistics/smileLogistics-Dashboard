@@ -11,6 +11,11 @@
 
     <include src="./partials/mainhead.html"> </include>
     <script src="./assets/js/main.js"></script>
+       <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Flatpickr Dark Theme CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+<!-- Flatpickr JS -->
   </head>
   <body
     x-data="{ page: 'invoice', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -386,10 +391,94 @@
                     
                     <!-- Step 2: Backup Docs -->
                     <div x-show="step === 2">
+                        <div>
+                            <h4 class="mb-1 text-sm font-medium text-gray-800 dark:text-white/90">Record the payments received</h4>
+                            <template x-for="(paymnt, index) in formData.paymnts" :key="index">
+                                <div class="mb-6">
+                                    <div class="flex justify-end mb-2">
+                                        <span @click="addPayment()" 
+                                              class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                            +
+                                        </span>
+                                        <span @click="removePayment(index)" 
+                                              class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
+                                            x
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 chargecalc">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Paid Via</label>
+                                            <select x-model="paymnt.paid_via" name="paid_via[]" 
+                                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                <option value="" selected disabled></option>
+                                                <option value="check">Check</option>
+                                                <option value="direct_deposit">Direct Deposit</option>
+                                                <option value="credit_card">Credit Card</option>
+                                                <option value="ach">ACH</option>
+                                                <option value="cash">Cash</option>
+                                                <option value="via_factoring">Via Factoring</option>
+                                                <option value="wex_fleet_one">Wex Fleet One</option>
+                                                <option value="zelle">Zelle</option>
+                                                <option value="other">Other</option>
+                                                <!-- Other options... -->
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Payment Date</label>
+                                            <input type="text" x-model="paymnt.payment_date" name="payment_date[]"
+                                                   class="payment_date w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Check / Payment Ref</label>
+                                            <input type="text" x-model="paymnt.check_number"  name="check_number[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Amount</label>
+                                            <input type="number" x-model="paymnt.payment_amount" 
+                                                   @input="calculateTotalPayments(paymnt)" name="payment_amount[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                    </div>
+                    
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                        
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Processing fee %</label>
+                                            <input type="number" x-model="paymnt.processing_fee_percent" name="processing_fee_percent[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Processing fee flat</label>
+                                            <input type="number" x-model="paymnt.processing_fee_flat" name="processing_fee_flat[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Note</label>
+                                            <textarea name="payment_notes[]" x-model="paymnt.payment_notes" cols="1" rows="1"
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id=""></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                    
+                            <div class="mb-4 p-4 bg-gray-100 dark:bg-gray-800 rounded">
+                                <h4 class="text-lg font-semibold text-gray-800 dark:text-white/90">Payment Totals</h4>
+                                <div class="flex justify-between mt-2">
+                                    <span class="text-gray-700 dark:text-gray-300">Total Payments:</span>
+                                    <span x-text="'$' + totalPayments.toFixed(2)" class="font-bold text-gray-900 dark:text-white"></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+
                        <div>
-                           <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
+                           <label class="block text-gray-700 dark:text-gray-300">Apply credit from credit memos</label>
                            <div id="RecieveRepay">
-                                <span onclick="duplicateRecieve()" 
+                                <span onclick="duplicateCreditMemo()" 
                                     class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
                                     +
                                 </span>
@@ -413,7 +502,7 @@
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Date</label>
-                                        <input type="text" x-model="formData.credit_date" id="credit_date" name="credit_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <input type="text" x-model="formData.credit_date" id="credit_date" name="credit_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white credit_date" placeholder="">
                                     </div>
                                 </div>
                            </div>
@@ -486,8 +575,20 @@
       <!-- ===== Content Area End ===== -->
     </div>
     <!-- ===== Page Wrapper End ===P== -->
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script>
+         flatpickr(".payment_date", {
+                enableTime: false,
+                //timeFormat: 'HH:mm',
+            });
+            flatpickr(".credit_date", {
+                enableTime: false,
+                //timeFormat: 'HH:mm',
+            });
 
 
 function stepperForm() {
@@ -516,6 +617,18 @@ function stepperForm() {
                 load_weight: '',
                 commodity: '',
                 no_of_packages: '',
+
+                //initialize payments reciced array
+                paymnts: [{
+                    paid_via: '',
+                    payment_date: '',
+                    payment_amount: '',
+                    check_number: '',
+                    processing_fee_per: '',
+                    processing_fee_flat: '',
+                    payment_notes: ''
+                }],
+                totalPayments: 0,
                 
                 // Initialize charges array
                 charges: [{
@@ -559,7 +672,9 @@ function stepperForm() {
                 }];
             }
             this.calculateTotals();
+            this.calculateTotalPayments();
             this.$watch('formData.charges', () => this.calculateTotals(), { deep: true });
+            this.$watch('formData.paymnts', () => this.calculateTotalPayments(), { deep: true });
         },
         
         nextStep() {
@@ -582,6 +697,7 @@ function stepperForm() {
         },
         
         // Charge calculation methods
+        
         addCharge() {
             this.formData.charges.push({
                 charge_type: '',
@@ -627,6 +743,35 @@ function stepperForm() {
             this.formData.total_discount = totalDiscount.toFixed(2);
             this.formData.net_total = (total - totalDiscount).toFixed(2);
         },
+
+              addPayment() {
+                this.formData.paymnts.push({
+                    paid_via: '',
+                    payment_date: '',
+                    check_number: '',
+                    payment_amount: '',
+                    processing_fee_per: '',
+                    processing_fee_flat: '',
+                    payment_notes: ''
+                });
+            this.saveProgress();
+        },
+        removePayment(index) {
+            if (this.formData.paymnts.length > 1) {
+                this.formData.paymnts.splice(index, 1);
+                this.calculateTotalPayments();
+                this.saveProgress();
+            }
+        },
+
+         calculateTotalPayments() {
+            this.totalPayments = this.formData.paymnts.reduce((total, paymnt) => {
+                // Convert payment_amount to number (in case it's a string)
+                const amount = parseFloat(paymnt.payment_amount) || 0;
+                return total + amount;
+            }, 0);
+        },
+        
         
         saveAndSubmit() {
             let form = document.getElementById("newInvoice");
@@ -884,7 +1029,7 @@ function stepperForm() {
                         });
 
                         $(function() {
-                            $("#invoice_datepicker, #credit_date").datepicker({
+                            $("#invoice_datepicker").datepicker({
                                 
                             });
                         });
@@ -1001,7 +1146,7 @@ function stepperForm() {
             element.parentElement.parentElement.remove();
         }
 
-        function duplicateRecieve()
+        function duplicateCreditMemo()
         {
             var pickup = document.getElementById("RecieveRepay");
             var pickupList = document.getElementById("RecieveRepayList");

@@ -183,8 +183,10 @@
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.customer_office ? item.customer_office : ' '"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.bill_of_landing_number ? item.bill_of_landing_number : ' '"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                      x-text="item.total ? '$' + parseFloat(item.total).toFixed(2) : '$0.00'">
-                                  </td>
+                                    x-text="parseFloat(item.net_total) !== 0 
+                                        ? '$' + parseFloat(item.net_total).toFixed(2) 
+                                        : '$' + parseFloat(item.total_repayment_amount ?? 0).toFixed(2)">
+                                </td>
                                   <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-3 py-1 text-xs font-semibold rounded-full border"
                                       :class="{
@@ -388,6 +390,7 @@ document.addEventListener('alpine:init', () => {
         this.items = Array.isArray(data.invoices) 
           ? data.invoices 
           : Array.isArray(data) ? data : [];
+          console.log("INV",data.invoices);
         this.updateDisplayedItems();
       })
       .catch(error => {

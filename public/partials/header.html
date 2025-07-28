@@ -1,7 +1,9 @@
-<header
+<div x-data="userData()" x-init="fetchUserData()">
+  <header
   x-data="{menuToggle: false}"
-  class="sticky top-0 flex w-full bg-white border-gray-200 z-99999 dark:border-gray-800 dark:bg-gray-900 lg:border-b"
+  class="sticky top-0 flex w-full bg-white border-gray-200 z-9 dark:border-gray-800 dark:bg-gray-900 lg:border-b"
 >
+
   <div
     class="flex flex-col items-center justify-between flex-grow lg:flex-row lg:px-6"
   >
@@ -68,8 +70,8 @@
       <!-- Hamburger Toggle BTN -->
 
       <a href="index.html" class="lg:hidden">
-        <img class="dark:hidden" src="./assets/images/logo/logo-dark.png" alt="Logo" />
-        <img class="hidden dark:block" src="./assets/images/logo/logo-light.png" alt="Logo"/>
+        <img class="dark:hidden w-20 h-auto xs:w-24 sm:w-32 md:w-32 lg:w-40" src="./assets/images/logo/logo-dark.png" alt="Logo" />
+        <img class="hidden dark:block w-40 h-auto xs:w-24 sm:w-32 md:w-32 lg:w-40" src="./assets/images/logo/logo-light.png" alt="Logo"/>
       </a>
 
       <!-- Application nav menu button -->
@@ -97,40 +99,59 @@
       <!-- Application nav menu button -->
 
       <div class="hidden lg:block">
-        <form action="https://formbold.com/s/unique_form_id" method="POST">
-          <div class="relative">
-            <button class="absolute -translate-y-1/2 left-4 top-1/2">
-              <svg
-                class="fill-gray-500 dark:fill-gray-400"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M3.04175 9.37363C3.04175 5.87693 5.87711 3.04199 9.37508 3.04199C12.8731 3.04199 15.7084 5.87693 15.7084 9.37363C15.7084 12.8703 12.8731 15.7053 9.37508 15.7053C5.87711 15.7053 3.04175 12.8703 3.04175 9.37363ZM9.37508 1.54199C5.04902 1.54199 1.54175 5.04817 1.54175 9.37363C1.54175 13.6991 5.04902 17.2053 9.37508 17.2053C11.2674 17.2053 13.003 16.5344 14.357 15.4176L17.177 18.238C17.4699 18.5309 17.9448 18.5309 18.2377 18.238C18.5306 17.9451 18.5306 17.4703 18.2377 17.1774L15.418 14.3573C16.5365 13.0033 17.2084 11.2669 17.2084 9.37363C17.2084 5.04817 13.7011 1.54199 9.37508 1.54199Z"
-                  fill=""
-                />
-              </svg>
-            </button>
-            <input
-              type="text"
-              placeholder="Search or type command..."
-              class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[430px]"
-            />
+        <div x-data="searchApp()" class="relative">
+          <form @submit.prevent="goToSelectedUrl">
+            <div class="relative">
+              <span type="" class="absolute -translate-y-1/2 left-4 top-1/2 hover:text-gray-400">
+                <svg class="fill-gray-500 dark:fill-gray-400" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M3.04175 9.37363C3.04175 5.87693 5.87711 3.04199 9.37508 3.04199C12.8731 3.04199 15.7084 5.87693 15.7084 9.37363C15.7084 12.8703 12.8731 15.7053 9.37508 15.7053C5.87711 15.7053 3.04175 12.8703 3.04175 9.37363ZM9.37508 1.54199C5.04902 1.54199 1.54175 5.04817 1.54175 9.37363C1.54175 13.6991 5.04902 17.2053 9.37508 17.2053C11.2674 17.2053 13.003 16.5344 14.357 15.4176L17.177 18.238C17.4699 18.5309 17.9448 18.5309 18.2377 18.238C18.5306 17.9451 18.5306 17.4703 18.2377 17.1774L15.418 14.3573C16.5365 13.0033 17.2084 11.2669 17.2084 9.37363C17.2084 5.04817 13.7011 1.54199 9.37508 1.54199Z" fill=""/>
+                </svg>
+              </span>
+              
+              <input
+                type="text"
+                x-model="searchQuery"
+                @input="filterSites"
+                @keydown.arrow-down="moveSelection(1)"
+                @keydown.arrow-up="moveSelection(-1)"
+                @keydown.enter.prevent="goToSelectedUrl"
+                @keydown.escape="searchQuery = ''"
+                placeholder="Search or type a page name..."
+                class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[430px]"
+                x-ref="searchInput"
+              />
 
-            <button
-              class="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-[7px] py-[4.5px] text-xs -tracking-[0.2px] text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400"
-            >
-              <span> ⌘ </span>
-              <span> K </span>
-            </button>
-          </div>
-        </form>
-      </div>
+              <button type="button" @click="$refs.searchInput.focus()" class="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-[7px] py-[4.5px] text-xs -tracking-[0.2px] text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400">
+                <span> ⌘ </span>
+                <span> K </span>
+              </button>
+            </div>
+            
+            <!-- Results dropdown -->
+            <div x-show="filteredSites.length > 0 && searchQuery.length > 0" 
+                x-transition
+                @click.away="searchQuery = ''"
+                class="absolute z-10 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
+              <ul class="max-h-60 overflow-auto py-1">
+                <template x-for="(site, index) in filteredSites" :key="index">
+                  <li>
+                    <button type="button"
+                            @click="goToUrl(site.url)"
+                            @mouseenter="selectedIndex = index"
+                            :class="{
+                              'bg-gray-100 dark:bg-gray-700': selectedIndex === index,
+                              'bg-white dark:bg-gray-800': selectedIndex !== index
+                            }"
+                            class="flex w-full items-center px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
+                      <span x-text="site.name"></span>
+                      <span class="ml-2 text-xs text-gray-500 dark:text-gray-400" x-text="site.url"></span>
+                    </button>
+                  </li>
+                </template>
+              </ul>
+            </div>
+          </form>
+        </div>
     </div>
 
     <div
@@ -176,10 +197,12 @@
 
         <!-- Notification Menu Area -->
         <div
-          class="relative"
-          x-data="{ dropdownOpen: false, notifying: true }"
-          @click.outside="dropdownOpen = false"
-        >
+        class="relative"
+        x-data="notificationData()"
+        x-init="init()"
+        @click.outside="dropdownOpen = false"
+    >
+      
           <button
             class="relative flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-full hover:text-dark-900 h-11 w-11 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
             @click.prevent="dropdownOpen = ! dropdownOpen; notifying = false"
@@ -244,351 +267,66 @@
                 </svg>
               </button>
             </div>
-
             <ul class="flex flex-col h-auto overflow-y-auto custom-scrollbar">
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative block w-full h-10 rounded-full z-1 max-w-10"
-                  >
-                    <img
-                      src="./assets/images/user/user-02.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Terry Franci</span
-                      >
-                      A Driver is assigned Shipment
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloribus, aspernatur?</span
-                      >
-                    </span>
-
-                    <span
-                      class="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400"
-                    >
-                      <span>Shipment</span>
-                      <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      <span>5 min ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative block w-full h-10 rounded-full z-1 max-w-10"
-                  >
-                    <img
-                      src="./assets/images/user/user-03.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Alena Franci</span
-                      >
-                      New shipment created
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Shipment ID- #SML5655555555</span
-                      >
-                    </span>
-
-                    <span
-                      class="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400"
-                    >
-                      <span>Shipment</span>
-                      <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      <span>8 min ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative block w-full h-10 rounded-full z-1 max-w-10"
-                  >
-                    <img
-                      src="./assets/images/user/user-04.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Jocelyn Kenter</span
-                      >
-                      requests permission to change
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Project - Nganter App</span
-                      >
-                    </span>
-
-                    <span
-                      class="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400"
-                    >
-                      <span>Project</span>
-                      <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      <span>15 min ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative block w-full h-10 rounded-full z-1 max-w-10"
-                  >
-                    <img
-                      src="./assets/images/user/user-05.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-error-500 dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Brandon Philips</span
-                      >
-                      requests permission to change
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Project - Nganter App</span
-                      >
-                    </span>
-
-                    <span
-                      class="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400"
-                    >
-                      <span>Project</span>
-                      <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      <span>1 hr ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative block w-full h-10 rounded-full z-1 max-w-10"
-                  >
-                    <img
-                      src="./assets/images/user/user-02.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Terry Franci</span
-                      >
-                      requests permission to change
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Project - Nganter App</span
-                      >
-                    </span>
-
-                    <span
-                      class="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400"
-                    >
-                      <span>Project</span>
-                      <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      <span>5 min ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative block w-full h-10 rounded-full z-1 max-w-10"
-                  >
-                    <img
-                      src="./assets/images/user/user-03.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Alena Franci</span
-                      >
-                      requests permission to change
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Project - Nganter App</span
-                      >
-                    </span>
-
-                    <span
-                      class="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400"
-                    >
-                      <span>Project</span>
-                      <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      <span>8 min ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative block w-full h-10 rounded-full z-1 max-w-10"
-                  >
-                    <img
-                      src="./assets/images/user/user-04.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Jocelyn Kenter</span
-                      >
-                      requests permission to change
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Project - Nganter App</span
-                      >
-                    </span>
-
-                    <span
-                      class="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400"
-                    >
-                      <span>Project</span>
-                      <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      <span>15 min ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
-
-              <li>
-                <a
-                  class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                  href="#"
-                >
-                  <span
-                    class="relative block w-full h-10 rounded-full z-1 max-w-10"
-                  >
-                    <img
-                      src="./assets/images/user/user-05.jpg"
-                      alt="User"
-                      class="overflow-hidden rounded-full"
-                    />
-                    <span
-                      class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-error-500 dark:border-gray-900"
-                    ></span>
-                  </span>
-
-                  <span class="block">
-                    <span
-                      class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400"
-                    >
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Brandon logistics</span
-                      >
-                      New Shipment Created
-                      <span class="font-medium text-gray-800 dark:text-white/90"
-                        >Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloribus, aspernatur?</span
-                      >
-                    </span>
-
-                    <span
-                      class="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400"
-                    >
-                      <span>Project</span>
-                      <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      <span>1 hr ago</span>
-                    </span>
-                  </span>
-                </a>
-              </li>
+              <!-- Unread Notifications Section -->
+              <template x-if="unreadNotifications.length > 0">
+                <li class="px-3 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400">
+                  UNREAD
+                </li>
+              </template>
+              
+              <template x-for="notification in unreadNotifications" :key="notification.id">
+                <li class="mb-2 bg-blue-50 dark:bg-blue-900/20">
+                  <a :href="notification.data.link" @click="markAsRead(notification.id)" class="flex items-center rounded-lg p-3 transition-colors hover:bg-blue-100 dark:hover:bg-blue-900/30">
+                    <div class="ml-3 flex-1 overflow-hidden">
+                      <p class=" text-sm font-semibold text-gray-800 dark:text-white">
+                        <span x-text="notification.data.message"></span>
+                      </p>
+                      <p class="truncate text-xs text-gray-500 dark:text-gray-400" 
+                         x-text="timeAgo(notification.created_at)">
+                      </p>
+                    </div>
+                  </a>
+                </li>
+              </template>
+            
+              <!-- Read Notifications Section -->
+              <template x-if="readNotifications.length > 0">
+                <li class="px-3 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400">
+                  READ
+                </li>
+              </template>
+              
+              <template x-for="notification in readNotifications" :key="notification.id">
+                <li class="mb-2">
+                  <a :href="notification.data.link" class="flex items-center rounded-lg p-3 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800">
+                  
+                    <div class="ml-3 flex-1 overflow-hidden">
+                      <p class=" text-sm font-medium text-gray-600 dark:text-gray-300">
+                        <span x-text="notification.data.message"></span>
+                      </p>
+                      <p class="truncate text-xs text-gray-400 dark:text-gray-500" 
+                         x-text="timeAgo(notification.created_at)">
+                      </p>
+                    </div>
+                  </a>
+                </li>
+              </template>
+            
+              <!-- Empty State -->
+              <template x-if="unreadNotifications.length === 0 && readNotifications.length === 0">
+                <li class="flex items-center justify-center p-4 text-gray-500 dark:text-gray-400">
+                  No notifications available
+                </li>
+              </template>
             </ul>
 
-            <a
+            <!-- <a
               href="#"
               class="mt-3 flex justify-center rounded-lg border border-gray-300 bg-white p-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
             >
               View All Notification
-            </a>
+            </a> -->
           </div>
           <!-- Dropdown End -->
         </div>
@@ -606,11 +344,11 @@
           href="#"
           @click.prevent="dropdownOpen = ! dropdownOpen"
         >
-          <span class="mr-3 overflow-hidden rounded-full h-11 w-11">
+          <!-- <span class="mr-3 overflow-hidden rounded-full h-11 w-11">
             <img src="./assets/images/user/owner.jpg" alt="User" />
-          </span>
+          </span> -->
 
-          <span class="block mr-1 font-medium text-theme-sm"> Super Admin </span>
+          <span class="block mr-1 font-medium text-theme-sm"  x-text="user?.fname || user?.lname ? `${user.fname}` : 'Guest'"></span>
 
           <svg
             :class="dropdownOpen && 'rotate-180'"
@@ -639,20 +377,19 @@
           <div>
             <span
               class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400"
-            >
-              Super Admin
+              x-text="user?.fname || user?.lname ? `${user.fname} ${user.lname}` : 'Guest'">
             </span>
             <span
               class="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400"
-            >
-              admin@smileslogistics.com
+              x-text="user?.email ? `${user.email}` : 'Guest'">
+              
             </span>
           </div>
 
           <ul
             class="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800"
           >
-            <li>
+            <!-- <li>
               <a
                 href="profile.html"
                 class="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
@@ -674,10 +411,10 @@
                 </svg>
                 Edit profile
               </a>
-            </li>
+            </li> -->
             <li>
               <a
-                href="messages.html"
+                href="settings.html"
                 class="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
               >
                 <svg
@@ -723,7 +460,7 @@
             </li>
           </ul>
           <button
-            class="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+            class="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300" @click="logout()"
           >
             <svg
               class="fill-gray-500 group-hover:fill-gray-700 dark:group-hover:fill-gray-300"
@@ -750,3 +487,400 @@
     </div>
   </div>
 </header>
+</div>
+
+<script>
+  document.addEventListener('alpine:init', () => {
+  Alpine.data('searchApp', () => ({
+    sites: [
+      // Common pages for all roles
+      { name: 'Home', url: '/', roles: ['*'] },
+      { name: 'Dashboard', url: '/index.html', roles: ['*'] },
+      { name: 'Settings', url: '/settings.html', roles: ['*'] },
+      { name: 'Shipments', url: '/shipment.html', roles: ['*'] },
+      { name: 'Shipments List', url: '/shipment_list.html', roles: ['*'] },
+      { name: 'Consolidate Shipments', url: '/consolidate_shipment.html', roles: ['*'] },
+      { name: 'Consolidate Shipments List', url: '/consolidate_list.html', roles: ['*'] },
+      
+      // Business Administrator specific pages
+      { name: 'Customer List', url: '/customer_list.html', roles: ['businessadministrator'] },
+      { name: 'Customer', url: '/customer.html', roles: ['businessadministrator'] },
+      { name: 'Drivers', url: '/driver.html', roles: ['businessadministrator'] },
+      { name: 'Drivers List', url: '/driver_list.html', roles: ['businessadministrator'] },
+      { name: 'Invoice', url: '/invoices.html', roles: ['businessadministrator'] },
+      { name: 'Users', url: '/users.html', roles: ['businessadministrator'] },
+      { name: 'Users List', url: '/user_list.html', roles: ['businessadministrator'] },
+      { name: 'Bikes', url: '/bike.html', roles: ['businessadministrator'] },
+      { name: 'Bikes List', url: '/bike_list.html', roles: ['businessadministrator'] },
+      { name: 'Trucks', url: '/truck.html', roles: ['businessadministrator'] },
+      { name: 'Trucks List', url: '/truck_list.html', roles: ['businessadministrator'] },
+      { name: 'Carriers', url: '/carriers.html', roles: ['businessadministrator'] },
+      { name: 'Carriers List', url: '/carriers_list.html', roles: ['businessadministrator'] },
+      
+      // Customer specific pages
+      { name: 'Invoice List', url: '/invoice_list.html', roles: ['customer'] },
+      
+      // Admin specific pages
+      // { name: 'Reports', url: '/reports', roles: ['admin'] },
+      // { name: 'Admin Panel', url: '/admin', roles: ['admin'] }
+    ],
+    searchQuery: '',
+    filteredSites: [],
+    selectedIndex: 0,
+    userRole: '', // Will be set based on actual user role
+    
+    init() {
+      // Get user role from your authentication system
+      this.userRole = this.getUserRole(); // Implement this method
+      this.filteredSites = this.getFilteredSites();
+    },
+    
+    getUserRole() {
+      // Implement how you get the user's role
+      // Example: return 
+      localStorage.getItem('userRole') || 'customer';
+      //return 'businessadministrator'; // Default for demo
+    },
+    
+    getFilteredSites() {
+      return this.sites.filter(site => 
+        site.roles.includes('*') || 
+        site.roles.includes(this.userRole)
+      );
+    },
+    
+    filterSites() {
+      if (this.searchQuery.length === 0) {
+        this.filteredSites = this.getFilteredSites();
+        return;
+      }
+      
+      const query = this.searchQuery.toLowerCase();
+      this.filteredSites = this.getFilteredSites().filter(site => 
+        site.name.toLowerCase().includes(query) || 
+        site.url.toLowerCase().includes(query)
+      );
+      this.selectedIndex = 0;
+    },
+    
+    moveSelection(change) {
+      const newIndex = this.selectedIndex + change;
+      if (newIndex >= 0 && newIndex < this.filteredSites.length) {
+        this.selectedIndex = newIndex;
+        // Scroll into view if needed
+        this.$nextTick(() => {
+          const selectedElement = this.$el.querySelector(`li:nth-child(${this.selectedIndex + 1}) button`);
+          selectedElement?.scrollIntoView({ block: 'nearest' });
+        });
+      }
+    },
+    
+    goToSelectedUrl() {
+      if (this.filteredSites.length > 0) {
+        const selectedSite = this.filteredSites[this.selectedIndex];
+        this.goToUrl(selectedSite.url);
+      }
+    },
+    
+    goToUrl(url) {
+      window.location.href = url;
+    }
+  }));
+});
+  
+function userData() {
+    return {
+        user: JSON.parse(localStorage.getItem('userLoggedIn')) || null, // Get user data from localStorage
+        fetchUserData() {
+            if (!this.user) { // Fetch user data if not already available
+                fetch(requestURL + '/user', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('auth_token')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                  console.log(data);
+                    if (data) {
+                        localStorage.setItem('userLoggedIn', JSON.stringify(data)); // Store user data in localStorage
+                        console.log("Fetched user data:", data);
+                       
+                        this.user = data; // Update Alpine.js user data
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user data:', error);
+                });
+            }
+        }
+    };
+}
+
+                          const userDat = JSON.parse(localStorage.getItem('userLoggedIn'));
+                          console.log("verified status:", userDat.email_verified_at);
+                          if(userDat.email_verified_at === null) {
+                            window.location.href = '/verify.html';
+                          }
+
+
+function logout() {
+  const token = localStorage.getItem('auth_token');
+  
+  if (!token) {
+    console.error('No token found. User might already be logged out.');
+    createToast('error', 'Session expired. Please log in again.');
+    window.location.href = '/signin.html';
+    return;
+  }
+
+  fetch( requestURL + '/logout', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + token,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+  })
+  .then(async response => {
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      throw new Error(errorData?.message || `HTTP Error ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Logout successful:', data);
+    createToast('success', data.message);
+    
+    // Clear local storage
+    ['auth_token', 'userLoggedIn', 'Driver_step', 'step', 'invoice_step', '_x_selected', 'carrier_step', 'darkMode']
+      .forEach(key => localStorage.removeItem(key));
+
+    window.location.href = '/signin.html';
+  })
+  .catch(error => {
+    console.error('Error logging out:', error);
+    createToast('error', `Logout failed: ${error.message}`);
+  });
+}
+
+</script>
+
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+  /* * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+  } */
+
+  :root {
+      --dark: #34495e;
+      --light: #fff;
+      --success: #0abf30;
+      --error: #f24d4c;
+      --warning: #e9bd0c;
+      --info: #3498db;
+  }
+
+  /* body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: var(--dark);
+  } */
+
+
+  .Ajaxbackdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* z-index: 1000; */
+  }
+</style>
+    <style>
+          .loader {
+            display: inline-grid;
+            width: 130px;
+            aspect-ratio: 2;
+            box-shadow: 0 5px #574951;
+            overflow: hidden;
+            z-index: 30000;
+          }
+          .loader:before {
+            content: "";
+            margin: 0 25%;
+            background: #f3f8f6;
+            clip-path: polygon(97.55% 65.45%,50% 100%,2.45% 65.45%,20.61% 9.55%,79.39% 9.55%);
+            transform-origin: bottom;
+            animation: 
+              l7-0 .5s linear infinite,
+              l7-1  3s steps(6) infinite;
+          }
+          @keyframes l7-0 {
+            0%{rotate: -36deg}
+            to{rotate:  36deg}
+          }
+          @keyframes l7-1 {
+            0%{translate: -174% 0}
+            to{translate:  174% 0}
+          }
+
+          .content 
+          {
+            /* background: white; */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+          }
+        </style>
+
+<div class="Ajaxbackdrop" id="Ajaxbackdrop" style="display: none;">
+  <div class="content">
+    <div class="loader"></div> 
+  </div>
+</div>
+
+<script>
+  //var requestURL = "https://smile-logistics-production.up.railway.app/api/v1";
+ // Replace the jQuery AJAX call with Alpine.js data and fetch
+function notificationData() {
+    return {
+        dropdownOpen: false,
+        notifying: true,
+        unreadNotifications: [],
+        readNotifications: [],
+        //notifications: [],
+        timeAgo(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const seconds = Math.floor((now - date) / 1000);
+            
+            let interval = Math.floor(seconds / 31536000);
+            if (interval >= 1) return interval + ' year' + (interval === 1 ? '' : 's') + ' ago';
+            
+            interval = Math.floor(seconds / 2592000);
+            if (interval >= 1) return interval + ' month' + (interval === 1 ? '' : 's') + ' ago';
+            
+            interval = Math.floor(seconds / 86400);
+            if (interval >= 1) return interval + ' day' + (interval === 1 ? '' : 's') + ' ago';
+            
+            interval = Math.floor(seconds / 3600);
+            if (interval >= 1) return interval + ' hour' + (interval === 1 ? '' : 's') + ' ago';
+            
+            interval = Math.floor(seconds / 60);
+            if (interval >= 1) return interval + ' minute' + (interval === 1 ? '' : 's') + ' ago';
+            
+            return Math.floor(seconds) + ' second' + (seconds === 1 ? '' : 's') + ' ago';
+        },
+        fetchNotifications() {
+          fetch(requestURL + '/notification/notifications', {
+              method: 'GET',
+              headers: {
+                  'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                  'Accept': 'application/json'
+              }
+          })
+          .then(async response => {
+              if (response.status === 401) {
+                  // Token is invalid or expired
+                  localStorage.removeItem('auth_token');
+                  window.location.href = '/signin.html';
+                  return;
+              }
+
+              const responseData = await response.json();
+
+              if (responseData.message === 'Unauthenticated.') {
+                  // Token is present but rejected (still unauthenticated)
+                  localStorage.removeItem('auth_token');
+                  window.location.href = '/signin'; // replace with your login page
+                  return;
+              }
+
+              console.log("Full API response:", responseData);
+
+              if (responseData.data) {
+                  this.unreadNotifications = responseData.data.unread || [];
+                  this.readNotifications = responseData.data.read || [];
+                  this.notifying = this.unreadNotifications.length > 0;
+              } else {
+                  this.unreadNotifications = [];
+                  this.readNotifications = [];
+                  this.notifying = false;
+              }
+          })
+          .catch(error => {
+              console.error('Fetch error:', error);
+              this.unreadNotifications = [];
+              this.readNotifications = [];
+              this.notifying = false;
+          });
+      },
+
+        // fetchNotifications() {
+        //     fetch(requestURL + '/notification/notifications', {
+        //         method: 'GET',
+        //         headers: {
+        //             'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+        //             'Accept': 'application/json'
+        //         }
+        //     })
+        //     .then(response => response.json())
+        //     .then(response => {
+        //         console.log("Full API response:", response);
+                
+        //         if (response.data) {
+        //             this.unreadNotifications = response.data.unread || [];
+        //             this.readNotifications = response.data.read || [];
+        //             this.notifying = this.unreadNotifications.length > 0;
+        //         } else {
+        //             this.unreadNotifications = [];
+        //             this.readNotifications = [];
+        //             this.notifying = false;
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error('Fetch error:', error);
+        //         this.unreadNotifications = [];
+        //         this.readNotifications = [];
+        //         this.notifying = false;
+        //     });
+        // },
+        markAsRead(notificationId) {
+            // Add API call to mark notification as read
+            fetch(`${requestURL}/notification/notifications/read/${notificationId}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                this.fetchNotifications();
+            })
+            .catch(console.error);
+        },
+        init() {
+            this.fetchNotifications();
+            // Fetch notifications every 30 seconds
+            setInterval(() => this.fetchNotifications(), 1000000);
+        }
+    }
+}
+notificationData();
+
+</script>

@@ -1,16 +1,27 @@
-<div
+<div 
   class="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6"
+  x-data="transactionTable"
 >
   <div
     class="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between"
   >
-    <div>
+  <template x-if="userRole === 'businessadministrator' || userRole === 'customer' || userRole === 'driver'">
+   <div>
       <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
         Recent Shipments
       </h3>
     </div>
+  </template>
+  <template x-if="userRole === 'superadministrator'">
+   <div>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+        Recent Transactions
+      </h3>
+    </div>
+  </template>
+ 
 
-    <div class="flex items-center gap-3">
+    <!-- <div class="flex items-center gap-3">
       <button
         class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
       >
@@ -49,7 +60,6 @@
             stroke-width="1.5"
           />
         </svg>
-
         Filter
       </button>
 
@@ -58,284 +68,237 @@
       >
         See all
       </button>
-    </div>
+    </div> -->
   </div>
 
-  <div class="w-full overflow-x-auto">
-    <table class="min-w-full">
-      <!-- table header start -->
+  <!-- Loading State -->
+  <div x-show="isLoading" class="flex justify-center py-8">
+    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white"></div>
+  </div>
+
+  <!-- Transactions Table -->
+  <div class="w-full overflow-x-auto" x-show="!isLoading">
+   
+<template x-if="userRole === 'superadministrator'">
+   <table class="min-w-full">
       <thead>
         <tr class="border-gray-100 border-y dark:border-gray-800">
-          <th class="py-3">
-            <div class="flex items-center">
-              <p
-                class="font-medium text-gray-500 text-theme-xs dark:text-gray-400"
-              >
-                Products
-              </p>
-            </div>
+          <th class="py-3 text-left">
+            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+              Transaction ID
+            </p>
           </th>
-          <th class="py-3">
-            <div class="flex items-center">
-              <p
-                class="font-medium text-gray-500 text-theme-xs dark:text-gray-400"
-              >
-                Category
-              </p>
-            </div>
-          </th class="py-3">
-          <th class="py-3">
-            <div class="flex items-center">
-              <p
-                class="font-medium text-gray-500 text-theme-xs dark:text-gray-400"
-              >
-                Price
-              </p>
-            </div>
+          <th class="py-3 text-left">
+            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+              Date
+            </p>
           </th>
-          <th class="py-3">
-            <div class="flex items-center col-span-2">
-              <p
-                class="font-medium text-gray-500 text-theme-xs dark:text-gray-400"
-              >
-                Status
-              </p>
-            </div>
+          <th class="py-3 text-left">
+            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+              Amount
+            </p>
+          </th>
+          <th class="py-3 text-left">
+            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+              Method
+            </p>
+          </th>
+          <th class="py-3 text-left">
+            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+              Status
+            </p>
           </th>
         </tr>
       </thead>
-      <!-- table header end -->
 
       <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-        <tr>
-          <td class="py-3">
-            <div class="flex items-center">
-              <div class="flex items-center gap-3">
-                <div class="h-[50px] w-[50px] overflow-hidden rounded-md">
-                  <img src="./assets/images/product/product-01.jpg" alt="Product" />
-                </div>
-                <div>
-                  <p
-                    class="font-medium text-gray-800 text-theme-sm dark:text-white/90"
-                  >
-                    Macbook pro 13”
-                  </p>
-                  <span class="text-gray-500 text-theme-xs dark:text-gray-400">
-                    2 Variants
-                  </span>
-                </div>
-              </div>
-            </div>
-          </td>
-          <td class="py-3">
-            <div class="flex items-center">
-              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                Laptop
-              </p>
-            </div>
-          </td>
-          <td class="py-3">
-            <div class="flex items-center">
-              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                $2399.00
-              </p>
-            </div>
-          </td>
-          <td class="py-3">
-            <div class="flex items-center">
-              <p
-                class="rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500"
-              >
-                Delivered
-              </p>
-            </div>
+        <template x-for="transaction in transactions" :key="transaction.id">
+          <tr>
+            <td class="py-3">
+              <p class="text-gray-800 text-theme-sm dark:text-white/90" x-text="'#' + transaction.id"></p>
+            </td>
+            <td class="py-3">
+              <p class="text-gray-500 text-theme-sm dark:text-gray-400" x-text="formatDate(transaction.created_at || transaction.paid_at)"></p>
+            </td>
+            <td class="py-3">
+              <p class="text-gray-800 text-theme-sm dark:text-white/90" x-text="formatCurrency(transaction.amount, transaction.currency)"></p>
+            </td>
+            <td class="py-3">
+              <p class="text-gray-500 text-theme-sm dark:text-gray-400" x-text="transaction.payment_method.charAt(0).toUpperCase() + transaction.payment_method.slice(1)"></p>
+            </td>
+            <td class="py-3">
+              <span 
+                class="rounded-full px-2 py-0.5 text-theme-xs font-medium" 
+                :class="getStatusBadge(transaction.status).class"
+                x-text="getStatusBadge(transaction.status).text"
+              ></span>
+            </td>
+          </tr>
+        </template>
+        
+        <tr x-show="transactions.length === 0 && !isLoading">
+          <td colspan="5" class="py-6 text-center">
+            <p class="text-gray-500 dark:text-gray-400">No transactions found</p>
           </td>
         </tr>
-        <!-- table item -->
-        <tr>
-          <td class="py-3">
-            <div class="flex items-center">
-              <div class="flex items-center gap-3">
-                <div class="h-[50px] w-[50px] overflow-hidden rounded-md">
-                  <img src="./assets/images/product/product-02.jpg" alt="Product" />
-                </div>
-                <div>
-                  <p
-                    class="font-medium text-gray-800 text-theme-sm dark:text-white/90"
-                  >
-                    Apple Watch Ultra
-                  </p>
-                  <span class="text-gray-500 text-theme-xs dark:text-gray-400">
-                    1 Variants
-                  </span>
-                </div>
-              </div>
-            </div>
-          </td>
-          <td class="py-3">
-            <div class="flex items-center">
-              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                Watch
-              </p>
-            </div>
-          </td>
-          <td class="py-3">
-            <div class="flex items-center">
-              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                $879.00
-              </p>
-            </div>
-          </td>
-          <td class="py-3">
-            <div class="flex items-center">
-              <p
-                class="rounded-full bg-warning-50 px-2 py-0.5 text-theme-xs font-medium text-warning-600 dark:bg-warning-500/15 dark:text-orange-400"
-              >
-                Pending
-              </p>
-            </div>
-          </td>
-        </tr>
-
-        <!-- table item -->
-        <tr>
-          <td class="py-3">
-            <div class="flex items-center">
-              <div class="flex items-center gap-3">
-                <div class="h-[50px] w-[50px] overflow-hidden rounded-md">
-                  <img src="./assets/images/product/product-03.jpg" alt="Product" />
-                </div>
-                <div>
-                  <p
-                    class="font-medium text-gray-800 text-theme-sm dark:text-white/90"
-                  >
-                    iPhone 15 Pro Max
-                  </p>
-                  <span class="text-gray-500 text-theme-xs dark:text-gray-400">
-                    2 Variants
-                  </span>
-                </div>
-              </div>
-            </div>
-          </td>
-          <td class="py-3">
-            <div class="flex items-center">
-              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                SmartPhone
-              </p>
-            </div>
-          </td>
-          <td class="py-3">
-            <div class="flex items-center">
-              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                $1869.00
-              </p>
-            </div>
-          </td>
-          <td class="py-3">
-            <div class="flex items-center">
-              <p
-                class="rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500"
-              >
-                Delivered
-              </p>
-            </div>
-          </td>
-        </tr>
-
-        <!-- table item -->
-        <tr>
-          <td class="py-3">
-            <div class="flex items-center">
-              <div class="flex items-center gap-3">
-                <div class="h-[50px] w-[50px] overflow-hidden rounded-md">
-                  <img src="./assets/images/product/product-04.jpg" alt="Product" />
-                </div>
-                <div>
-                  <p
-                    class="font-medium text-gray-800 text-theme-sm dark:text-white/90"
-                  >
-                    iPad Pro 3rd Gen
-                  </p>
-                  <span class="text-gray-500 text-theme-xs dark:text-gray-400">
-                    2 Variants
-                  </span>
-                </div>
-              </div>
-            </div>
-          </td>
-          <td class="py-3">
-            <div class="flex items-center">
-              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                Electronics
-              </p>
-            </div>
-          </td>
-          <td class="py-3">
-            <div class="flex items-center">
-              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                $1699.00
-              </p>
-            </div>
-          </td>
-          <td class="py-3">
-            <div class="flex items-center">
-              <p
-                class="rounded-full bg-error-50 px-2 py-0.5 text-theme-xs font-medium text-error-600 dark:bg-error-500/15 dark:text-error-500"
-              >
-                Canceled
-              </p>
-            </div>
-          </td>
-        </tr>
-
-        <!-- table item -->
-        <tr>
-          <td class="py-3">
-            <div class="flex items-center">
-              <div class="flex items-center gap-3">
-                <div class="h-[50px] w-[50px] overflow-hidden rounded-md">
-                  <img src="./assets/images/product/product-05.jpg" alt="Product" />
-                </div>
-                <div>
-                  <p
-                    class="font-medium text-gray-800 text-theme-sm dark:text-white/90"
-                  >
-                    Airpods Pro 2nd Gen
-                  </p>
-                  <span class="text-gray-500 text-theme-xs dark:text-gray-400">
-                    1 Variants
-                  </span>
-                </div>
-              </div>
-            </div>
-          </td>
-          <td class="py-3">
-            <div class="flex items-center">
-              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                Accessories
-              </p>
-            </div>
-          </td>
-          <td class="py-3">
-            <div class="flex items-center">
-              <p class="text-gray-500 text-theme-sm dark:text-gray-400">
-                $240.00
-              </p>
-            </div>
-          </td>
-          <td class="py-3">
-            <div class="flex items-center">
-              <p
-                class="rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500"
-              >
-                Delivered
-              </p>
-            </div>
-          </td>
-        </tr>
-        <!-- table body end -->
       </tbody>
     </table>
+</template>
+
+<template x-if="userRole === 'businessadministrator' || userRole === 'customer' || userRole === 'driver'">
+   <table class="min-w-full">
+      <thead>
+        <tr class="border-gray-100 border-y dark:border-gray-800">
+          <th class="py-3 text-left">
+            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+              Tracking ID
+            </p>
+          </th>
+          <th class="py-3 text-left">
+            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+              Shipment Type
+            </p>
+          </th>
+          <th class="py-3 text-left">
+            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+              Tota fuel
+            </p>
+          </th>
+          <th class="py-3 text-left">
+            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+              Date
+            </p>
+          </th>
+          <th class="py-3 text-left">
+            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+              Status
+            </p>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+        <template x-for="transaction in transactions" :key="transaction.id">
+          <tr>
+            <td class="py-3">
+              <p class="text-gray-800 text-theme-sm dark:text-white/90" x-text="'#' + transaction.shipment_tracking_number"></p>
+            </td>
+            <td class="py-3">
+              <p class="text-gray-500 text-theme-sm dark:text-gray-400" x-text="transaction.shipment_type"></p>
+            </td>
+            <td class="py-3">
+              <p class="text-gray-800 text-theme-sm dark:text-white/90" x-text="formatCurrency(transaction.total_fuel_cost, transaction.currency)"></p>
+            </td>
+            
+            <td class="py-3">
+              <p class="text-gray-500 text-theme-sm dark:text-gray-400" x-text="formatDate(transaction.created_at)"></p>
+            </td>
+            <td class="py-3">
+              <span 
+                class="rounded-full px-2 py-0.5 text-theme-xs font-medium" 
+                :class="getStatusBadge(transaction.shipment_status).class"
+                x-text="getStatusBadge(transaction.shipment_status).text"
+              ></span>
+            </td>
+          </tr>
+        </template>
+        
+        <tr x-show="transactions.length === 0 && !isLoading">
+          <td colspan="5" class="py-6 text-center">
+            <p class="text-gray-500 dark:text-gray-400">No shipment found</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</template>
   </div>
 </div>
+
+
+<script>
+  document.addEventListener('alpine:init', () => {
+  Alpine.data('transactionTable', () => ({
+    transactions: [],
+    isLoading: false,
+    userRole: '',
+    
+    init() {
+      this.getUserRole();
+      this.fetchTransactions();
+    },
+   getUserRole() {
+      // Try to get from localStorage first
+      const storedRole = localStorage.getItem('user_role');
+      if (storedRole) {
+        this.userRole = storedRole;
+        return;
+      }
+      
+      // Fallback to JWT token decoding
+      const token = localStorage.getItem('auth_token');
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          this.userRole = payload.role || '';
+          localStorage.setItem('user_role', this.userRole); // Cache it
+        } catch (e) {
+          console.error('Error decoding token:', e);
+        }
+      }
+    },
+    
+
+    fetchTransactions() {
+      this.isLoading = true;
+      fetch(requestURL + '/dashboard/dashboardstats', {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+          'Accept': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('dashboard stats', data.data);
+        if (data.data && data.data.recentTransactions) {
+          this.transactions = data.data.recentTransactions;
+        } else {
+          console.error('No transactions data found');
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching transactions:', error);
+        if (error.status === 401) {
+          alert("Session expired. Please log in again.");
+          localStorage.removeItem('auth_token');
+          window.location.href = "/login";
+        }
+      })
+      .finally(() => {
+        this.isLoading = false;
+      });
+    },
+    
+    formatDate(dateString) {
+      const options = { year: 'numeric', month: 'short', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString(undefined, options);
+    },
+    
+    formatCurrency(amount, currency) {
+      return new Intl.NumberFormat(undefined, {
+        style: 'currency',
+        currency: currency || 'USD'
+      }).format(amount);
+    },
+    
+    getStatusBadge(status) {
+      const statusMap = {
+        'success': { class: 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500', text: 'Completed' },
+        'pending': { class: 'bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-orange-400', text: 'Pending' },
+        'failed': { class: 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500', text: 'Failed' }
+      };
+      
+      return statusMap[status] || { class: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300', text: status };
+    }
+  }));
+});
+</script>

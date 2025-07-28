@@ -1,6 +1,4 @@
-
-
-    <meta charset="UTF-8" />
+  <meta charset="UTF-8" />
     <meta
       name="viewport"
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
@@ -8,18 +6,23 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>New Load | smileslogistics</title>
+    <title> | smileslogistics</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2d3748">
+    <link rel="apple-touch-icon" href="./assets/images/icons/icon-192x192.png">
+
+  
+    <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'>
     <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
   <!-- jQuery UI -->
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-
   <!-- Chosen Plugin -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/simple-datatables@9.0.3"></script>
+<!-- <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" /> -->
   <style>
     /* styles.css */
 /* body {
@@ -224,8 +227,342 @@ button {
   .toast.active ~ button {
     pointer-events: none;
   }
-  
 
   </style>
+
+  <script>
+    
+   // var requestGetURL = "https://laravel-production-077b.up.railway.app/api/v1";
+
+    
+    function populateDriverSelect() {
+      $.ajax({
+          url: requestURL + '/drivers/truckdrivers',
+          type: 'GET',
+          headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+              'Accept': 'application/json'
+          },
+          success: (response) => {
+              console.log('Truck Driver data:', response);
+              if(response.length == 0){
+                  //createToast('error', 'No drivers found.');
+                  return
+              }
+              if (Array.isArray(response)) {
+                  var driverSelect = document.getElementById('driver_id');
+                  driverSelect.innerHTML = '';
+                  var defaultOption = document.createElement('option');
+                  defaultOption.value = '';
+                  defaultOption.text = 'Select a driver';
+                  driverSelect.appendChild(defaultOption);
+  
+                  response.forEach(driver => {
+                      var option = document.createElement('option');
+                      option.value = driver.id;
+                      option.text = driver.user.fname + ' ' + driver.user.lname;
+                      driverSelect.appendChild(option);
+                  });
+              } else {
+                  console.error('Invalid response format:', response);
+                  createToast('error', 'Invalid driver data received.');
+              }
+          },
+          error: (xhr, status, error) => {
+              console.error('API request failed:', xhr.responseText);
+  
+              if (xhr.status === 401) {
+                  alert("Session expired. Please log in again.");
+                  localStorage.removeItem('auth_token');
+                  window.location.href = "/signin";
+              } else {
+                  try {
+                      let response = JSON.parse(xhr.responseText);
+                      let message = response.message || "An error occurred. Please try again.";
+                      createToast('error', message);
+                  } catch (e) {
+                      createToast("error", "An unexpected error occurred.");
+                  }
+              }
+          }
+      });
+  }
+
+  function populateBikeDriverSelect() {
+      $.ajax({
+          url: requestURL + '/drivers/bikedrivers',
+          type: 'GET',
+          headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('auth_token'), // Add space after 'Bearer'
+              'Accept': 'application/json'
+          },
+          success: (response) => {
+              console.log('Truck Driver data:', response);
+              if(response.length == 0){
+                  ///createToast('error', 'No drivers found.');
+                  return
+              }
+              if (Array.isArray(response)) {
+                  var driverSelect = document.getElementById('driver_id');
+                  driverSelect.innerHTML = '';
+                  var defaultOption = document.createElement('option');
+                  defaultOption.value = '';
+                  defaultOption.text = 'Select a driver';
+                  driverSelect.appendChild(defaultOption);
+  
+                  response.forEach(driver => {
+                      var option = document.createElement('option');
+                      option.value = driver.id;
+                      option.text = driver.user.fname + ' ' + driver.user.lname;
+                      driverSelect.appendChild(option);
+                  });
+              } else {
+                  var driverSelect = document.getElementById('driver_id');
+                  driverSelect.innerHTML = 'No driver found';
+                  var defaultOption = document.createElement('option');
+                  defaultOption.value = '';
+                  defaultOption.text = 'No driver found';
+                  driverSelect.appendChild(defaultOption);
+                  console.error('Invalid response format:', response);
+                  createToast('error', 'Invalid driver data received.');
+              }
+          },
+          error: (xhr, status, error) => {
+              console.error('API request failed:', xhr.responseText);
+  
+              if (xhr.status === 401) {
+                  alert("Session expired. Please log in again.");
+                  localStorage.removeItem('auth_token');
+                  window.location.href = "/signin";
+              } else {
+                  try {
+                      let response = JSON.parse(xhr.responseText);
+                      let message = response.message || "An error occurred. Please try again.";
+                      createToast('error', message);
+                  window.location.href = "/dashboard";
+                  } catch (e) {
+                      createToast("error", "An unexpected error occurred.");
+                  }
+              }
+          }
+      });
+  }
+
+  function populateCustomerSelect() {
+      $.ajax({
+          url: requestURL + '/invoices/customer',
+          type: 'GET',
+          headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+              'Accept': 'application/json'
+          },
+          success: (response) => {
+              console.log('Customer data:', response.customers);
+              if(response.customers.length == 0){
+                  //createToast('error', 'No customer found.');
+                  return
+              }
+              if (Array.isArray(response.customers)) {
+                  var customerSelect = document.getElementById('customer_id');
+                  customerSelect.innerHTML = '';
+                  var defaultOption = document.createElement('option');
+                  defaultOption.value = '';
+                  defaultOption.text = 'Bill To';
+                  //defaultOption.disabled = true;
+                  defaultOption.hidden = true;
+                  customerSelect.appendChild(defaultOption);
+  
+                  response.customers.forEach(customer => {
+                      var option = document.createElement('option');
+                      option.value = customer.id;
+                      option.text = customer.user.fname + ' ' + customer.user.lname;
+                      customerSelect.appendChild(option);
+                  });
+              } else {
+                  // console.error('Invalid response format:', response);
+                  // createToast('error', 'Invalid customer data received.');
+              }
+          },
+          error: (xhr, status, error) => {
+              console.error('API request failed:', xhr.responseText);
+  
+              if (xhr.status === 401) {
+                  alert("Session expired. Please log in again.");
+                  localStorage.removeItem('auth_token');
+                  window.location.href = "/signin";
+              } else {
+                  try {
+                      let response = JSON.parse(xhr.responseText);
+                      let message = response.message || "An error occurred. Please try again.";
+                      createToast('error', message);
+                    window.location.href = "/dashboard";
+                  } catch (e) {
+                      createToast("error", "An unexpected error occurred.");
+                  }
+              }
+          }
+      });
+  }
+
+  function populateCarrierSelect() {
+      $.ajax({
+          url: requestURL + '/carriers/carriers',
+          type: 'GET',
+          headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+              'Accept': 'application/json'
+          },
+          success: (response) => {
+              console.log('carrier data:', response.carriers);
+              if(response.carriers.length == 0){
+                  //createToast('error', 'No carrier found.');
+                  return
+              }
+              if (Array.isArray(response.carriers)) {
+                  var carrierselect = document.getElementById('carrier_id');
+                  carrierselect.innerHTML = '';
+                  var defaultOption = document.createElement('option');
+                  defaultOption.value = '';
+                  defaultOption.text = 'Carrier';
+                  //defaultOption.disabled = true;
+                  defaultOption.hidden = true;
+                  carrierselect.appendChild(defaultOption);
+  
+                  response.carriers.forEach(carrier => {
+                      var option = document.createElement('option');
+                      option.value = carrier.id;
+                      option.text = carrier.name;
+                      carrierselect.appendChild(option);
+                  });
+              } else {
+                  console.error('Invalid response format:', response);
+                  createToast('error', 'Invalid customer data received.');
+              }
+          },
+          error: (xhr, status, error) => {
+              console.error('API request failed:', xhr.responseText);
+  
+              if (xhr.status === 401) {
+                  alert("Session expired. Please log in again.");
+                  localStorage.removeItem('auth_token');
+                  window.location.href = "/signin";
+              } else {
+                  try {
+                      let response = JSON.parse(xhr.responseText);
+                      let message = response.message || "An error occurred. Please try again.";
+                      createToast('error', message);
+                  window.location.href = "/dashboard";
+                  } catch (e) {
+                      createToast("error", "An unexpected error occurred.");
+                  }
+              }
+          }
+      });
+  }
+
+
+
+  function populateTruckSelect() {
+    $.ajax({
+        url: requestURL + '/trucks/trucks',
+        type: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+            'Accept': 'application/json'
+        },
+        success: (response) => {
+            console.log('Truck data:', response);
+
+            // Check if the response has the expected structure
+            if (response.trucks && Array.isArray(response.trucks)) {
+                var truckSelect = document.getElementById('truck_id');
+                truckSelect.innerHTML = '';
+
+                // Add a default option
+                var defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.text = 'Select a truck';
+                truckSelect.appendChild(defaultOption);
+
+                // Populate the dropdown with truck data
+                response.trucks.forEach(truck => {
+                    var option = document.createElement('option');
+                    option.value = truck.id;
+                    option.text = truck.make_model + ' (' + truck.license_plate_number + ')';
+                    truckSelect.appendChild(option);
+                });
+            } else {
+                console.error('Invalid response format:', response);
+                createToast('error', 'Invalid Truck data received.');
+            }
+        },
+        error: (xhr, status, error) => {
+            console.error('API request failed:', xhr.responseText);
+
+            if (xhr.status === 401) { // Unauthorized
+                alert("Session expired. Please log in again.");
+                localStorage.removeItem('auth_token');
+                window.location.href = "/signin.html";
+            } else {
+                try {
+                    let response = JSON.parse(xhr.responseText);
+                    let message = response.message || "An error occurred. Please try again.";
+                    createToast('error', message);
+                } catch (e) {
+                    createToast("error", "An unexpected error occurred.");
+                }
+            }
+        }
+    });
+}
+
+$(document).ready(function() {
+   var token = localStorage.getItem('auth_token');
+   if (!token) {
+       createToast('error', 'Session expired. Please log in again.');
+       window.location.href = "/signin.html";
+   }
+});
+
+  //auto loggout the nigga when he is not active for some time
+  const INACTIVITY_LIMIT = 30 * 60 * 1000; // 30 minutes in milliseconds
+  //const INACTIVITY_LIMIT = 5 * 1000; // 5 seconds (5,000ms) for te3sting
+
+  const TOKEN_KEY = "auth_token";
+  function updateLastActivity() {
+      localStorage.setItem("last_activity", Date.now());
+  }
+
+  function checkInactivity() {
+      const lastActivity = localStorage.getItem("last_activity");
+      if (lastActivity) {
+          const elapsed = Date.now() - parseInt(lastActivity, 10);
+          if (elapsed > INACTIVITY_LIMIT) {
+              createToast("error", "Sorry we have to this😢 but you've been away for too long, logging out...");
+              localStorage.removeItem(TOKEN_KEY);
+              localStorage.removeItem("last_activity");
+              window.location.href = "/signin.html";
+          }
+      }
+  }
+
+  document.addEventListener("mousemove", updateLastActivity);
+  document.addEventListener("keydown", updateLastActivity);
+  document.addEventListener("click", updateLastActivity);
+
+  updateLastActivity();
+  setInterval(checkInactivity, 60 * 1000);
+
+
+//   if ('serviceWorker' in navigator) {
+//   window.addEventListener('load', function () {
+//     navigator.serviceWorker.register('/service-worker.js')
+//       .then(reg => console.log('SW registered', reg))
+//       .catch(err => console.log('SW registration failed', err));
+//   });
+// }
+
+  </script>
+  
 
 <!-- <include src="./../assets/css/main.css"> </include> -->

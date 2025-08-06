@@ -203,9 +203,14 @@
                                 $(document).ready(function () {
                                     $(function () {
                                         $("#hired_on").
-                                        datepicker();
+                                        datepicker({
+                                            dateFormat: "yy-mm-dd",
+                                            changeMonth: true,
+                                            changeYear: true
+                                        });
                                     });
-                                }) 
+                                })
+                                
                             </script>
 
                             <div>

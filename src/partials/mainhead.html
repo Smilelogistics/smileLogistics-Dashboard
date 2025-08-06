@@ -337,9 +337,9 @@ button {
               } else {
                   try {
                       let response = JSON.parse(xhr.responseText);
-                      let message = response.message || "An error occurred. Please try again.";
+                      let message = response.message + ' '+ 'No registered driver' || "An error occurred. Please try again.";
                       createToast('error', message);
-                  window.location.href = "/dashboard";
+                  //window.location.href = "/dashboard";
                   } catch (e) {
                       createToast("error", "An unexpected error occurred.");
                   }
@@ -393,9 +393,9 @@ button {
               } else {
                   try {
                       let response = JSON.parse(xhr.responseText);
-                      let message = response.message || "An error occurred. Please try again.";
+                      let message = response.message + ' ' +  'No registered customer' || "An error occurred. Please try again.";
                       createToast('error', message);
-                    window.location.href = "/dashboard";
+                    //window.location.href = "/dashboard";
                   } catch (e) {
                       createToast("error", "An unexpected error occurred.");
                   }
@@ -449,9 +449,9 @@ button {
               } else {
                   try {
                       let response = JSON.parse(xhr.responseText);
-                      let message = response.message || "An error occurred. Please try again.";
+                      let message = response.message + ' ' + 'No registered carrier' || "An error occurred. Please try again.";
                       createToast('error', message);
-                  window.location.href = "/dashboard";
+                  //window.location.href = "/dashboard";
                   } catch (e) {
                       createToast("error", "An unexpected error occurred.");
                   }

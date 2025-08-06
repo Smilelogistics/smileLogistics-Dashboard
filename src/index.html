@@ -35,6 +35,34 @@
         <!-- Small Device Overlay End -->
 
         <!-- ===== Header Start ===== -->
+           <div x-data="popupHandler()" x-init="checkSettings()">
+            <!-- Popup Backdrop -->
+            <div x-show="isOpen" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+              <!-- Popup Content -->
+              <div @click.away="closePopup" class="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-md w-full p-6">
+                <div class="flex justify-between items-center mb-4">
+                  <h3 class="text-lg font-semibold text-slate-900 dark:text-white" x-text="title"></h3>
+                  <button @click="closePopup" class="text-slate-400 hover:text-slate-500 dark:hover:text-slate-300">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+                
+                <div class="text-slate-600 dark:text-slate-300 mb-6" x-text="message"></div>
+                
+                <div class="flex justify-end space-x-3">
+                  <button @click="closePopup" class="px-4 py-2 rounded-md border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
+                    Close
+                  </button>
+                  <button x-show="hasAction" @click="actionCallback" class="px-4 py-2 rounded-md bg-primary-600 text-white hover:bg-primary-700">
+                    <span x-text="actionText"></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
         <include src="./partials/header.html" />
         <!-- ===== Header End ===== -->
 
@@ -79,5 +107,78 @@
       <!-- ===== Content Area End ===== -->
     </div>
     <!-- ===== Page Wrapper End ===== -->
+
+     <script>
+      function popupHandler() {
+  return {
+    isOpen: false,
+    title: 'Configuration Required',
+    message: 'Please complete your business settings configuration to enable the system work properly.',
+    hasAction: true,
+    actionText: 'Go to Settings',
+    requiredSetting: null,
+    
+    async checkSettings() {
+      const role = localStorage.getItem('user_role');
+      if (role === 'businessadministrator') {
+        try {
+          const response = await fetch(requestURL + '/settings/data', {
+            headers: {
+              'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+              'Accept': 'application/json'
+            }
+          });
+          
+          if (!response.ok) {
+            throw new Error('Failed to fetch settings');
+          }
+          
+          const datas = await response.json();
+          const data = Array.isArray(datas) ? datas[0] : datas;
+          console.log("Settings data", data);
+          
+          // Check if any required fields are empty
+          const requiredFields = [
+            'base_fee', 
+            'base_rate', 
+            'handling_fee', 
+            'price_per_mile', 
+            'mpg'
+          ];
+          
+          const hasEmptyFields = requiredFields.some(field => {
+            const value = data[field];
+            return value === null || value === undefined || value === '';
+          });
+          
+          if (hasEmptyFields) {
+            this.openPopup();
+          }
+          
+        } catch (error) {
+          console.error('Error checking settings:', error);
+          // Optional: Show error to user
+          this.message = 'Error checking your settings. Please try again.';
+          this.openPopup();
+        }
+      }
+    },
+    
+    openPopup() {
+      this.isOpen = true;
+      document.body.classList.add('overflow-hidden');
+    },
+    
+    closePopup() {
+      this.isOpen = false;
+      document.body.classList.remove('overflow-hidden');
+    },
+    
+    actionCallback() {
+      window.location.href = '/settings.html';
+    }
+  }
+}
+     </script>
   </body>
 </html>

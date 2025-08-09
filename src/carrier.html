@@ -135,10 +135,19 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Offices</label>
-                                <select x-model="formData.offices" name="offices" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <select x-model="formData.offices" name="offices" 
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="offices">
+                                            <option value="" selected disabled hidden>Select Office</option>
+                                            <template x-for="offic in offices" :key="offic.id">
+                                            <option :value="offic.short_name" 
+                                                    x-text="offic.long_name">
+                                            </option>
+                                            </template>
+                                        </select>
+                                <!-- <select x-model="formData.offices" name="offices" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Select </option>
                                     <option value="IN">IN</option>
-                                </select>
+                                </select> -->
                             </div>
                             <!-- <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Carrier #</label>
@@ -697,6 +706,12 @@
                     expires: ''
                     }],
                 },
+                
+                offices: [],
+                
+                init(){
+                    this.fetchOffices();
+                },
                 addInsurance() {
                 if (!this.formData.insurances) {
                     this.formData.insurances = [];
@@ -715,6 +730,28 @@
                     this.formData.insurances.splice(index, 1);
                     //this.saveProgress();
                 }
+                },
+
+                async fetchOffices() {
+                    try {
+                        const response = await fetch(requestURL + '/users/get-offices', {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        }
+                        });
+                        
+                        if (!response.ok) {
+                        throw new Error('Failed to fetch offices');
+                        }
+                        
+                        const data = await response.json();
+                        this.offices = data.offices || [];
+                        console.log("Offices","this.offices");
+                    } catch (error) {
+                        console.error('Error fetching offices:', error);
+                        createToast('error', 'Failed to load office list');
+                    }
                 },
 
                 selectedState: '',

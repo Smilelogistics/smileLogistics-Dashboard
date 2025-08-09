@@ -338,7 +338,7 @@ button {
                   try {
                       let response = JSON.parse(xhr.responseText);
                       let message = response.message + ' '+ 'No registered driver' || "An error occurred. Please try again.";
-                      createToast('error', message);
+                      //createToast('error', message);
                   //window.location.href = "/dashboard";
                   } catch (e) {
                       createToast("error", "An unexpected error occurred.");

@@ -124,6 +124,8 @@
                 </div>
             </div>
 
+            
+
 
             
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
@@ -139,7 +141,31 @@
                         </li>
                     </template>
                 </ol>
-            
+
+                <div x-show="isOpen" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                    <div @click.away="closePopup" class="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-md w-full p-6">
+                        <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white" x-text="popupTitle"></h3>
+                        <button @click="closePopup" class="text-slate-400 hover:text-slate-500 dark:hover:text-slate-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                        </div>
+                        
+                        <div class="text-slate-600 dark:text-slate-300 mb-6" x-text="popupMessage"></div>
+                        
+                        <div class="flex justify-end space-x-3">
+                        <button @click="closePopup" class="px-4 py-2 rounded-md border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
+                            Close
+                        </button>
+                        <button x-show="popupHasAction" @click="popupActionCallback" class="px-4 py-2 rounded-md bg-primary-600 text-white hover:bg-primary-700">
+                            <span x-text="popupActionText"></span>
+                        </button>
+                        </div>
+                    </div>
+                    </div>
+                                
 
                 <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newloadForm">
                     <!-- Step 1: Basic Info -->
@@ -467,7 +493,18 @@
                                 <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Office</label>
-                                        <input type="text" x-model="formData.office" name="office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter your name" id="office">
+
+                                        <select x-model="formData.office" name="office" 
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="office">
+                                            <option value="" selected disabled hidden>Select Office</option>
+                                            <template x-for="offic in offices" :key="offic.id">
+                                            <option :value="offic.short_name" 
+                                                    x-text="offic.long_name">
+                                            </option>
+                                            </template>
+                                        </select>
+
+                                        <!-- <input type="text" x-model="formData.office" name="office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter your name" id="office"> -->
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Load Type</label>
@@ -519,31 +556,67 @@
                             
 
                                 <!-- bill to -->
-                                <div>
-                                    <div id="billto">
-                                        <span onclick="duplicateBillto()" 
+                               <div>
+                                
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                                        <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Bill To</label>
+                                        <select x-model="formData.bill_to" name="bill_to"  @change="fetchCustomerDetails($event.target.value)"
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <option value="" selected disabled>Select Customer</option>
+                                            <template x-for="customer in customers" :key="customer.id">
+                                            <option :value="customer.id" 
+                                                    x-text="customer.user.fname">
+                                            </option>
+                                            </template>
+                                        </select>
+                                        </div>
+                                        <!-- <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Quick Note</label>
+                                        <input type="text" x-model="formData.quick_note" name="quick_note" 
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                placeholder="Enter quick note">
+                                        </div> -->
+                                    </div>
+                                <!-- <template x-for="(item, index) in formData.bill_tos" :key="index">
+                                    <div class="mb-6">
+                                    <div class="flex justify-end mb-2">
+                                        <span @click="addBillto()" 
                                             class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
-                                            +
+                                        +
                                         </span>
-                                        <span onclick="removeBillto(this)" 
-                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
-                                            x
-                                            <!-- 🗑 -->
+                                        <span @click="removeBillto(index)" 
+                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500"
+                                            x-show="formData.bill_tos.length > 1">
+                                        x
                                         </span>
-
-                                        <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Bill to</label>
-                                                <input type="text" x-model="formData.bill_to" name="bill_to[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                            </div>
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Quick Note</label>
-                                                <input type="text" x-model="formData.quick_note" name="quick_note[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Notes">
-                                            </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                                        <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Bill To</label>
+                                        <select x-model="item.bill_to" name="bill_to[]" 
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <option value="" selected disabled hidden>Select Customer</option>
+                                            <template x-for="customer in customers" :key="customer.id">
+                                            <option :value="customer.id" 
+                                                    x-text="customer.user.fname">
+                                            </option>
+                                            </template>
+                                        </select>
+                                        </div>
+                                        <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Quick Note</label>
+                                        <input type="text" x-model="item.quick_note" name="quick_note[]" 
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                placeholder="Enter quick note">
                                         </div>
                                     </div>
-                                <div id="billtoList"></div>
+                                    </div>
+                                </template> -->
                                 </div>
+
+                                
 
                                 <!-- container and chassis -->
                                 <div>
@@ -655,7 +728,7 @@
                                 </div>
                                 
                             <!-- numbers -->
-                            <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6" style="display: none;">
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Reference #</label>
                                     <input type="text" x-model="formData.reference_number" name="reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="reference_number">
@@ -1076,7 +1149,7 @@
                                                 <!-- <option value="" selected disabled>Select Type</option> -->
                                         </div>
                                         
-                                        <div>
+                                        <div style="display: none;">
                                             <label class="block text-gray-700 dark:text-gray-300">EDI/API Shipment #</label>
                                             <input type="text" x-model="formData.edi_number" name="edi_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="edi_number">
                                         </div>
@@ -1407,7 +1480,7 @@
 
             
                     <!-- Navigation Buttons -->
-                    <div class="flex flex-wrap gap-2 mt-6 mb-10">
+                    <!-- <div class="flex flex-wrap gap-2 mt-6 mb-10">
                         <button
                             type="button"
                             class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white hover:bg-gray-300 hover:text-gray-700 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -1427,7 +1500,44 @@
                             x-show="step === 5">
                             Submit
                         </button>
-                    </div>
+                    </div> -->
+                    <div class="flex flex-wrap gap-2 mt-6 mb-10">
+                    <!-- Previous -->
+                    <button
+                        type="button"
+                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white hover:bg-gray-300 hover:text-gray-700 dark:hover:bg-gray-600 dark:hover:text-white"
+                        x-show="step > 1 && userRole !== 'customer'"
+                        @click="prevStep">
+                        Previous
+                    </button>
+
+                    <!-- Next -->
+                    <button
+                        type="button"
+                        class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
+                        x-show="step < 5 && userRole !== 'customer'"
+                        @click="nextStep">
+                        Next
+                    </button>
+
+                    <!-- Save (optional for customers, or hide entirely) -->
+                    <button
+                        type="button"
+                        class="px-4 py-2 bg-yellow-500 text-white rounded dark:bg-yellow-400"
+                        x-show="userRole !== 'customer'"
+                        @click="saveProgress">
+                        Save & Continue Later
+                    </button>
+
+                    <!-- Submit for final step OR directly in step 1 if customer -->
+                    <button
+                        type="submit"
+                        class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
+                        x-show="step === 5 || userRole === 'customer'">
+                        Submit
+                    </button>
+                </div>
+
                 </form>
             </div>
             
@@ -1535,7 +1645,6 @@ function populateCarrierSelect() {
           }
       });
   }
-
     
        // $(document).ready(function(){
             
@@ -1613,6 +1722,7 @@ function populateCarrierSelect() {
         //})
 
         var mpgGoten = '';
+        var pricePerGallon = '';
         var pricePerMile = '';
         var userRole = localStorage.getItem('user_role')
  
@@ -1635,14 +1745,20 @@ function fetchSettings() {
         
         console.log('FORM DATA', data);
         mpgValue = document.getElementById('mpg');
+        pricePerGallonValue = document.getElementById('fuel_rate_per_gallon');
         if(userRole == 'businessadministrator') {
              mpgValue.value = data.mpg || 1;
+             pricePerGallonValue.value = data.price_per_gallon || 1;
             mpgGoten = data.mpg || 1;
             pricePerMile = data.price_per_mile || 1;
+            pricePerGallon = data.price_per_gallon || 1;
+            //console.log('mpgGoten inside fetch', pricePerGallon);
         }else{
              mpgValue.value = data.branch?.mpg || 1;
+             pricePerGallonValue.value = data.branch?.price_per_gallon || 1;
             mpgGoten = data.branch?.mpg || 1;
             pricePerMile = data.branch?.price_per_mile || 1;
+            pricePerGallon = data.branch?.price_per_gallon || 1;
         
         }
        
@@ -1656,7 +1772,7 @@ function fetchSettings() {
 }
 
 fetchSettings().then(result => {
-    console.log('mpgGoten outside fetch', pricePerMile);
+    console.log('mpgGoten outside fetch', pricePerGallon);
 });
 
 //console.log('mpgGoten immediately after fetch call (will be empty):', mpgGoten);
@@ -1673,8 +1789,7 @@ fetchSettings().then(result => {
                   load_type_note_r: '',
                   brokered: 0,
                   shipment_type: '',
-                  bill_to: '',
-                  quick_note: '',
+                  //quick_note: '',
                   container: '',
                   container_size: '',
                   container_type: '',
@@ -1800,6 +1915,11 @@ fetchSettings().then(result => {
                     amount: '',
                     discount: '',
                     internal_notes: '',
+
+                    
+                    bill_to: '',
+                    //quick_note: '',
+
                     }],
 
                 credit_total: 0,
@@ -1807,7 +1927,17 @@ fetchSettings().then(result => {
                 total: 0,
                 total_discount: 0,
                 net_total: 0,
+
+                  
+                //   bill_tos: [{
+                //     bill_to: '',
+                //     quick_note: '',
+
+                //   }],
+
               },
+                customers: [],
+                offices: [],
 
                    
                     expenses: [{
@@ -1822,8 +1952,10 @@ fetchSettings().then(result => {
                     expense_disputed: false,
                     paid: false
                     }],
-                
+                  
+                userRole: localStorage.getItem('user_role') || 'customer',
               nextStep() {
+                if(this.userRole === 'customer') return;
                   this.step++;
                   localStorage.setItem('step', this.step);
               },
@@ -1896,6 +2028,89 @@ fetchSettings().then(result => {
                     this.formData.total_shipping_cost = ((totalMiles * 2) * pricePerMile).toFixed(2);
                 },
 
+                // addBillto() {
+                //     this.formData.bill_tos.push({
+                //         bill_to: '',
+                //         quick_note: ''
+                //     });
+                //     this.saveProgress();
+                // },
+                
+                // removeBillto(index) {
+                //     if (this.formData.bill_tos.length > 1) {
+                //         this.formData.bill_tos.splice(index, 1);
+                //         this.saveProgress();
+                //     }
+                // },
+
+                isOpen: false,
+                popupTitle: 'Flash Message', // Renamed from 'title' to avoid conflicts
+                popupMessage: '', // Renamed from 'message'
+                popupHasAction: false,
+                popupActionText: 'OK',
+                
+                // Modal methods
+                openPopup(title = '', message = '', hasAction = false, actionText = 'OK') {
+                this.popupTitle = title || this.popupTitle;
+                this.popupMessage = message;
+                this.popupHasAction = hasAction;
+                this.popupActionText = actionText;
+                this.isOpen = true;
+                document.body.classList.add('overflow-hidden');
+                },
+                
+                closePopup() {
+                this.isOpen = false;
+                document.body.classList.remove('overflow-hidden');
+                },
+                
+                popupActionCallback() {
+                // Default action - override as needed
+                this.closePopup();
+                },
+
+                 async fetchCustomerDetails(customerId) {
+                    if (!customerId) return;
+                    
+                    try {
+                        const response = await fetch(requestURL + `/customers/get-flash-message-shipment/${customerId}`, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        }
+                        });
+                        
+                        if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                        }
+                        
+                        const { flash } = await response.json();
+                        
+                        // Update the bill_to field in the first charge
+                        if (this.formData.charges.length > 0) {
+                        this.formData.charges[0].bill_to = customerId;
+                        this.saveProgress(); // Auto-save the selection
+                        }
+                        
+                        // Show modal with dynamic flash message if it exists
+                        if (flash) {
+                        this.title = 'Customer Note';
+                        this.message = flash;
+                        this.hasAction = false;
+                        console.log("This is the flash message",flash);
+                        this.openPopup("Flash Note", flash, false);
+                        } else {
+                        createToast('info', 'No special instructions for this customer');
+                        }
+                        
+                    } catch (error) {
+                        console.error('Error fetching customer details:', error);
+                        this.title = 'Error';
+                        this.message = 'Failed to load customer details';
+                        this.hasAction = false;
+                        this.openPopup();
+                    }
+                    },
               // Charge calculation methods
                 addCharge() {
                     this.formData.charges.push({
@@ -1994,6 +2209,12 @@ fetchSettings().then(result => {
                 
                 // Initialize calculations
                 init() {
+                    // if(!this.formData.bill_tos){
+                    //     this.formData.bill_tos = [{
+                    //     bill_to: '',
+                    //     quick_note: ''
+                    //     }];
+                    // }
                     if (!this.formData.charges) {
                     this.formData.charges = [{
                     charge_type: '',
@@ -2038,6 +2259,9 @@ fetchSettings().then(result => {
                 this.$watch('formData.expenses', () => {
                     this.calculateExpenseTotals();
                 }, { deep: true });
+
+                this.fetchCustomers();
+                this.fetchOffices();
                 },
 
                 // Updated calculateTotals with null check
@@ -2058,6 +2282,49 @@ fetchSettings().then(result => {
                 this.formData.total = total.toFixed(2);
                 this.formData.total_discount = totalDiscount.toFixed(2);
                 this.formData.net_total = (total - totalDiscount).toFixed(2);
+                },
+
+                async fetchCustomers() {
+                    try {
+                        const response = await fetch(requestURL + '/invoices/customer', {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        }
+                        });
+                        
+                        if (!response.ok) {
+                        throw new Error('Failed to fetch customers');
+                        }
+                        
+                        const data = await response.json();
+                        this.customers = data.customers || [];
+                    } catch (error) {
+                        console.error('Error fetching customers:', error);
+                        createToast('error', 'Failed to load customer list');
+                    }
+                },
+
+                async fetchOffices() {
+                    try {
+                        const response = await fetch(requestURL + '/users/get-offices', {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        }
+                        });
+                        
+                        if (!response.ok) {
+                        throw new Error('Failed to fetch offices');
+                        }
+                        
+                        const data = await response.json();
+                        this.offices = data.offices || [];
+                        console.log("Offices","this.offices");
+                    } catch (error) {
+                        console.error('Error fetching offices:', error);
+                        createToast('error', 'Failed to load office list');
+                    }
                 },
 
     
@@ -2255,7 +2522,16 @@ function register() {
             var billtoList = document.getElementById("billtoList");
             var newBillto = billto.cloneNode(true);
             billtoList.appendChild(newBillto);
+            
+            populateCustomerSelect();
         }
+
+        function duplicateSelect(button) {
+  const wrapper = button.closest('.select-wrapper');
+  const clone = wrapper.cloneNode(true); // deep clone
+  clone.querySelector('select').value = ""; // reset selected value
+  document.getElementById('select-container').appendChild(clone);
+}
 
         function removeBillto(element)
         {

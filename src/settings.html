@@ -366,6 +366,12 @@
                                     :class="activeTab === 'security' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
                                     class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300">Security</a>
                             </li>
+                            
+                            <li class="me-2">
+                                <a href="#" @click.prevent="activeTab = 'offices'"
+                                    :class="activeTab === 'offices' ? 'text-blue-600 border-blue-600' : 'hover:text-gray-600 border-transparent'"
+                                    class="inline-block p-4 border-b-2 rounded-t-lg text-gray-700 dark:text-gray-300">Offices</a>
+                            </li>
                         </ul>
                     </div>
             
@@ -650,6 +656,11 @@
                                 <label class="block text-gray-700 text-gray-700 dark:text-gray-300">Price Per Mile</label>
                                 <input x-model="formData.price_per_mile" name="price_per_mile" type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 numberOnly" placeholder="">
                               </div>
+
+                              <div>
+                                <label class="block text-gray-700 text-gray-700 dark:text-gray-300">Price Per Gallon</label>
+                                <input x-model="formData.price_per_gallon" name="price_per_gallon" type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 numberOnly" placeholder="">
+                              </div>
                             
                             </div>
 
@@ -918,6 +929,51 @@
                                                  class="sr-only peer">
                                           <div class="relative w-11 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-4 after:h-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
                                       </label>
+                                  </div>
+                              </div>
+                              <button class="mt-3 bg-blue-600 text-white px-4 py-2 rounded">Save Changes</button>
+                          </form>
+                        </div>
+
+                         <!-- Office location Form -->
+                        <div x-show="activeTab === 'offices'">
+                            <h2 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Offices Locations</h2>
+                            <form id="officeForm" @submit.prevent="submitForm('offices')" x-ref="officeForm">
+                              <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+                                  <div>
+                                    <template x-for="(item, index) in formData.offices" :key="index">
+                                    <div class="mb-6">
+                                    <div class="flex justify-end mb-2">
+                                        <span @click="addOffice()" 
+                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                        +
+                                        </span>
+                                        <span @click="removeOffice(index)" 
+                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500"
+                                            x-show="formData.offices.length > 1">
+                                        x
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                                        <div>
+                                          <label class="block text-gray-700 dark:text-gray-300">Short Name</label>
+                                          <input type="text" x-model="item.short_name" 
+                                                :name="'short_name[' + index + ']'"
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                placeholder="">
+                                          <input type="hidden" x-model="item.id" :name="'id[' + index + ']'">
+                                        </div>
+                                        <div>
+                                          <label class="block text-gray-700 dark:text-gray-300">Long Name</label>
+                                          <input type="text" x-model="item.long_name" 
+                                                :name="'long_name[' + index + ']'"
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                placeholder="">
+                                        </div>
+                                    </div>
+                                    </div>
+                                </template>
                                   </div>
                               </div>
                               <button class="mt-3 bg-blue-600 text-white px-4 py-2 rounded">Save Changes</button>
@@ -1660,12 +1716,17 @@
   Alpine.data('settings', () => ({
     activeTab: 'general',
     activeTab: 'address',
+    activeTab: 'offices',
     isLoading: false,
     userRole: window.userRole,
     user: {
       name: '',
       email: ''
     },
+    offices: [{
+        short_name: '',
+        long_name: '',
+      }],
     formData: {
       phone: '',
       address: '',
@@ -1698,6 +1759,7 @@
       base_fee: '',
       handling_fee: '',
       price_per_mile: '',
+      price_per_gallon: '',
 
       //Payment Account
       trucking_bank_name: '',
@@ -1777,6 +1839,13 @@
 
       isAccessToMobileApp: '',
       mobile_settings: '',
+
+      offices: [{
+        short_name: '',
+        long_name: ''
+      }],
+
+      
       
     },
     
@@ -1784,6 +1853,27 @@
       this.fetchUserData();
       this.fetchSettings();
       //this.submitCustomerForm();
+      
+      if(!this.formData.offices){
+          this.formData.offices = [{
+          short_name: '',
+          long_name: ''
+          }];
+      }
+    },
+    addOffice() {
+        this.formData.offices.push({
+            short_name: '',
+            long_name: ''
+        });
+        //this.saveProgress();
+    },
+    
+    removeOffice(index) {
+        if (this.formData.offices.length > 1) {
+            this.formData.offices.splice(index, 1);
+            //this.saveProgress();
+        }
     },
 
     alertPercentage() {
@@ -1913,6 +2003,7 @@
       this.formData.base_rate = data.base_rate || '';
       this.formData.handling_fee = data.handling_fee || '';
       this.formData.price_per_mile = data.price_per_mile || '';
+      this.formData.price_per_gallon = data.price_per_gallon || '';
       this.formData.mpg = data.mpg || '';
       this.formData.discount = data.discount || '';
       this.formData.subscription_type = data.subscription_type || '';
@@ -1955,6 +2046,15 @@
       this.formData.ocean_account_number = data.ocean_account_number || '';
       this.formData.ocean_routing = data.ocean_routing || '';
       this.formData.ocean_zelle = data.ocean_zelle || '';
+
+      this.formData.offices = data.offices && data.offices.length > 0 
+        ? data.offices.map(office => ({
+            id: office.id || '',
+            short_name: office.short_name || '',
+            long_name: office.long_name || '',
+          }))
+        : [{ short_name: '', long_name: '' }];
+      
 
       //this.formData.
         
@@ -2011,11 +2111,11 @@
       const formData = new FormData(form);
       //console.log(tabName);
       // console.log("FormData Contents:");
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ": " + pair[1]);
-        }
-              console.log(localStorage.getItem('auth_token'))
-         //return
+        // for (let pair of formData.entries()) {
+        //     console.log("SubmitForm data ",pair[0] + ": " + pair[1]);
+        // }
+        //       console.log(localStorage.getItem('auth_token'))
+        //  return
       try {
         const response = await fetch(`${requestURL}/settings/${tabName}`, {
           method: 'POST',
@@ -2046,14 +2146,25 @@
       const form = this.$refs[`${tabName}Form`];
       const formData = new FormData(form);
       //console.log(tabName);
+      if (tabName === 'offices') {
+      // Clear any existing office data in formData
+      formData.delete('short_name[]');
+      formData.delete('long_name[]');
+      
+      // Add each office's data from the Alpine state
+      this.formData.offices.forEach(office => {
+        formData.append('short_name[]', office.short_name);
+        formData.append('long_name[]', office.long_name);
+      });
+    }
       formData.set('enable_email_otp', this.formData.enable_email_otp);
       formData.set('enable_2fa', this.formData.enable_2fa);
       // console.log("FormData Contents:");
-        // for (let pair of formData.entries()) {
-        //     console.log(pair[0] + ": " + pair[1]);
-        // }
-        //       console.log(localStorage.getItem('auth_token'))
-        //  return
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ": " + pair[1]);
+        }
+              console.log(localStorage.getItem('auth_token'))
+         //return
       try {
         const response = await fetch(`${requestURL}/settings/${tabName}`, {
           method: 'POST',

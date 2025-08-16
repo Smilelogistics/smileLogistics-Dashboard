@@ -9,6 +9,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <!-- Flatpickr Dark Theme CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkucOouQfm_4BEHGZbCphOp-xe4Mqvmv0&libraries=places"></script>
+
+        <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkucOouQfm_4BEHGZbCphOp-xe4Mqvmv0&libraries=places&v=weekly" async defer></script> -->
+<script type="module" src="https://unpkg.com/@googlemaps/extended-component-library@0.6"></script>
+
+
 <!-- Flatpickr JS -->
         <script>
         // blow Up modal
@@ -852,177 +858,207 @@
                                 </div>
                             </div>
                             <!-- Pick up Deliveries -->
+                               <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6">
+            <h6 class="text-md font-medium mb-3 dark:text-white">Pickup / Deliveries</h6>
+            <div id="pickUPP">
+                <span @click="duplicatePickup()" 
+                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                    +
+                </span>
+                <span @click="removePickup($event)" 
+                    class="ml-2 cursor-pointer text-lg font-bold text-red-600 dark:text-red-500">
+                    ×
+                </span>
+                
+                <template x-for="(pickup, index) in formData.pickups" :key="'pickup-' + index">
+                    <div class="pickup-section mb-6 p-4 border rounded-lg dark:border-gray-600">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                             <div>
-                                <h6 class="text-md font-medium mb-3 dark:text-white">Pickup / Deliveries</h6>
-                                    <div id="pickUPP">
-                                        <span onclick="duplicatePickup()" 
-                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
-                                            +
-                                        </span>
-                                        <span onclick="removePickup(this)" 
-                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
-                                            x
-                                            <!-- 🗑 -->
-                                        </span>
-                                <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Pick up</label>
-                                        <select x-model="formData.pick_up" name="pick_up" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="pick_up">
-                                            <option value="" selected disabled></option>
-                                            <option value="pickup">Pickup</option>
-                                            <option value="pickup loaded">Pickup Loaded</option>
-                                            <option value="pickup empty">Pickup Empty</option>
-                                            <hr class="mt-3 mb-3 text-white">
-                                            <option value="deliver">Deliver</option>
-                                            <option value="load_at">Load at</option>
-                                            <hr>
-                                            <option value="drop_at">Drop at</option>
-                                            <option value="drop_empty">Drop Empty</option>
-                                            <option value="drop_loaded">Drop Loaded</option>
-                                            <option value="stop_off">Stop off</option>
-                                            <option value="scale_stop">Scale Stop</option>
-                                            <option value="Other">Other</option>
-                                        </select>
-                                    </div>
-                                    <!-- <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Quick lookup</label>
-                                        <select x-model="formData.look_up" name="look_up" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="look_up">
-                                            <option value="" selected disabled></option>
-                                        </select>
-                                    </div> -->
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
-                                        <input type="text" x-model="formData.pick_up_location_name" name="pick_up_location_name[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Address</label>
-                                        <input type="text" x-model="formData.pick_up_address" name="pick_up_address[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">City</label>
-                                        <input type="text" x-model="formData.pick_up_city" name="pick_up_city[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                    </div>
-                                    
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Zip</label>
-                                        <input type="text" x-model="formData.zip" name="zip[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                    </div>
-                                </div>
-                                    <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
-                                        <div>
-                                            <label class="block text-gray-700 dark:text-gray-300"> Appt</label>
-                                            <input type="text" x-model="formData.appt_date" name="appt_date[]" id="appt_dates" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                        </div>
-                                        <!-- <div>
-                                            <label class="block text-gray-700 dark:text-gray-300">From</label>
-                                            <select x-model="formData.from" name="from[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                <option value="" selected disabled></option>
-                                            
-                                            </select>
-                                        </div> -->
-                                        <!-- <div>
-                                            <label class="block text-gray-700 dark:text-gray-300">To</label>
-                                            <input type="text" x-model="formData.to" name="to[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                        </div> -->
-                                        <div>
-                                            <label class="block text-gray-700 dark:text-gray-300">No latter than</label>
-                                            <input type="text" x-model="formData.no_latter_than_date" name="no_latter_than_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white no_latter_than_date" placeholder="">
-                                        </div>
-                                        <div>
-                                            <label class="block text-gray-700 dark:text-gray-300">Time</label>
-                                            <input type="text" x-model="formData.no_latter_than_time" id="no_latter_than_time" name="no_latter_than_time[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="pickupList"></div>
+                                <label class="block text-gray-700 dark:text-gray-300">Pick up</label>
+                                <select x-model="pickup.pick_up" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled></option>
+                                    <option value="pickup">Pickup</option>
+                                    <option value="pickup loaded">Pickup Loaded</option>
+                                    <option value="pickup empty">Pickup Empty</option>
+                                    <option value="deliver">Deliver</option>
+                                    <option value="load_at">Load at</option>
+                                    <option value="drop_at">Drop at</option>
+                                    <option value="drop_empty">Drop Empty</option>
+                                    <option value="drop_loaded">Drop Loaded</option>
+                                    <option value="stop_off">Stop off</option>
+                                    <option value="scale_stop">Scale Stop</option>
+                                    <option value="Other">Other</option>
+                                </select>
                             </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
+                                <input type="text" x-model="pickup.location_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Address *</label>
+                                <input 
+                                    type="text" 
+                                    x-model="pickup.address" 
+                                    :id="'pickup-address-' + index"
+                                    @input="setupAutocomplete('pickup', index, $event.target)"
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white address-autocomplete" 
+                                    placeholder="Start typing address...">
+                            </div>
+                        </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">City</label>
+                                <input type="text" x-model="pickup.city" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly placeholder="Auto-filled">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">State</label>
+                                <input type="text" x-model="pickup.state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly placeholder="Auto-filled">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Zip</label>
+                                <input type="text" x-model="pickup.zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly placeholder="Auto-filled">
+                            </div>
+                    </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Appt Date</label>
+                                <input type="date" x-model="pickup.appt_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">No latter than Date</label>
+                                <input type="date" x-model="pickup.no_latter_than_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Time</label>
+                                <input type="time" x-model="pickup.no_latter_than_time" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
 
+        <!-- Drop Location Section -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6">
+            <h6 class="text-md font-medium mb-3 dark:text-white">Drop Location</h6>
+            <div id="dropAt">
+                <span @click="duplicateDropAt()" 
+                    class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                    +
+                </span>
+                <span @click="removeDropAt($event)" 
+                    class="ml-2 cursor-pointer text-lg font-bold text-red-600 dark:text-red-500">
+                    ×
+                </span>
+
+                <template x-for="(dropoff, index) in formData.dropoffs" :key="'dropoff-' + index">
+                    <div class="dropoff-section mb-6 p-4 border rounded-lg dark:border-gray-600">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                             <div>
-                                <h6 class="text-md font-medium mb-3 dark:text-white">Drop Location</h6>
-                                    <div id="dropAt">
-                                        <span onclick="duplicateDropAt()" 
-                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
-                                            +
-                                        </span>
-                                        <span onclick="removeDropAt(this)" 
-                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
-                                            x
-                                            <!-- 🗑 -->
-                                        </span>
-                                        <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Drop At</label>
-                                                <select x-model="formData.drop_at" name="drop_at" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="drop_at">
-                                                    <option value="" selected disabled></option>
-                                                    <option value="pickup">Pickup</option>
-                                                    <option value="pickup loaded">Pickup Loaded</option>
-                                                    <option value="pickup empty">Pickup Empty</option>
-                                                    <hr class="mt-3 mb-3 text-white">
-                                                    <option value="deliver">Deliver</option>
-                                                    <option value="load_at">Load at</option>
-                                                    <hr>
-                                                    <option value="drop_at">Drop at</option>
-                                                    <option value="drop_empty">Drop Empty</option>
-                                                    <option value="drop_loaded">Drop Loaded</option>
-                                                    <option value="stop_off">Stop off</option>
-                                                    <option value="scale_stop">Scale Stop</option>
-                                                    <option value="Other">Other</option>
-                                                </select>
-                                            </div>
-                                            <!-- <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Quick lookup</label>
-                                                <select x-model="formData.drop_at_look_up" name="drop_at_look_up[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                    <option value="" selected disabled></option>
-                                                
-                                                </select>
-                                            </div> -->
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
-                                                <input type="text" x-model="formData.drop_at_location_name" name="drop_at_location_name[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                            </div>
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Address</label>
-                                                <input type="text" x-model="formData.drop_at_address" name="drop_at_address[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                            </div>
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">City</label>
-                                                <input type="text" x-model="formData.drop_at_city" name="drop_at_city[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                            </div>
-                                            
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Zip</label>
-                                                <input type="text" x-model="formData.drop_at_zip" name="drop_at_zip[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                            </div>
-                                        </div>
-                                
-                                        <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300"> Appt</label>
-                                                <input type="text" x-model="formData.drop_at_appt_date" name="drop_at_appt_date[]" id="appt_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white drop_at_appt_date" placeholder="">
-                                            </div>
-                                            <!-- <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">From</label>
-                                                <select x-model="formData.drop_at_from" name="drop_at_from[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                    <option value="" selected disabled></option>
-                                                
-                                                </select>
-                                            </div> -->
-                                            <!-- <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">To</label>
-                                                <input type="text" x-model="formData.drop_at_to" name="drop_at_to[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                            </div> -->
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">No latter than</label>
-                                                <input type="text" x-model="formData.drop_at_no_latter_than_date" name="drop_at_no_latter_than_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white drop_at_no_latter_than_date" placeholder="">
-                                            </div>
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Time</label>
-                                                <input type="text" x-model="formData.drop_at_no_latter_than_time" name="drop_at_no_latter_than_time[]" id="drop_at_no_latter_than_time" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white drop_at_no_latter_than_time" placeholder="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                <div id="dropAtList"></div>
+                                <label class="block text-gray-700 dark:text-gray-300">Drop At</label>
+                                <select x-model="dropoff.drop_at" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled></option>
+                                    <option value="pickup">Pickup</option>
+                                    <option value="pickup loaded">Pickup Loaded</option>
+                                    <option value="pickup empty">Pickup Empty</option>
+                                    <option value="deliver">Deliver</option>
+                                    <option value="load_at">Load at</option>
+                                    <option value="drop_at">Drop at</option>
+                                    <option value="drop_empty">Drop Empty</option>
+                                    <option value="drop_loaded">Drop Loaded</option>
+                                    <option value="stop_off">Stop off</option>
+                                    <option value="scale_stop">Scale Stop</option>
+                                    <option value="Other">Other</option>
+                                </select>
                             </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
+                                <input type="text" x-model="dropoff.location_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Address *</label>
+                                <input 
+                                    type="text" 
+                                    x-model="dropoff.address" 
+                                    :id="'dropoff-address-' + index"
+                                    @input="setupAutocomplete('dropoff', index, $event.target)"
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white address-autocomplete" 
+                                    placeholder="Start typing address...">
+                            </div>
+                        </div>
+
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">City</label>
+                                <input type="text" x-model="dropoff.city" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly placeholder="Auto-filled">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">State</label>
+                                <input type="text" x-model="dropoff.state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly placeholder="Auto-filled">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600">Zip</label>
+                                <input type="text" x-model="dropoff.zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly placeholder="Auto-filled">
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Appt Date</label>
+                                <input type="date" x-model="dropoff.appt_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">No latter than Date</label>
+                                <input type="date" x-model="dropoff.no_latter_than_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Time</label>
+                                <input type="time" x-model="dropoff.no_latter_than_time" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Charge Calculation Display -->
+        <!-- <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6" x-show="totalDistance > 0"> -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6 hidden">
+            <h6 class="text-md font-medium mb-3 dark:text-white">Shipping Charges</h6>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                    <div class="text-sm text-blue-600 dark:text-blue-400">Total Distance</div>
+                    <div class="text-2xl font-bold text-blue-700 dark:text-blue-300" x-text="totalDistance + ' miles'"></div>
+                </div>
+                <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                    <div class="text-sm text-green-600 dark:text-green-400">Base Rate</div>
+                    <div class="text-2xl font-bold text-green-700 dark:text-green-300" x-text="'$' + baseRate.toFixed(2)"></div>
+                </div>
+                <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
+                    <div class="text-sm text-yellow-600 dark:text-yellow-400">Distance Charge</div>
+                    <div class="text-2xl font-bold text-yellow-700 dark:text-yellow-300" x-text="'$' + distanceCharge.toFixed(2)"></div>
+                </div>
+                <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                    <div class="text-sm text-purple-600 dark:text-purple-400">Total Charge</div>
+                    <div class="text-2xl font-bold text-purple-700 dark:text-purple-300" x-text="'$' + totalCharge.toFixed(2)"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debug Information -->
+        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg mt-6" x-show="$store.debug">
+            <h6 class="font-medium mb-2 dark:text-white">Debug Information</h6>
+            <pre class="text-xs dark:text-gray-300" x-text="JSON.stringify({
+                pickups: formData.pickups,
+                dropoffs: formData.dropoffs,
+                totalDistance: totalDistance,
+                totalCharge: totalCharge
+            }, null, 2)"></pre>
+        </div>
                             <script>
                                 $(document).ready(function () {
                         
@@ -1778,7 +1814,6 @@ fetchSettings().then(result => {
 //console.log('mpgGoten immediately after fetch call (will be empty):', mpgGoten);
        
         
-//var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
       function stepperForm() {
           return {
               step: localStorage.getItem('step') ? parseInt(localStorage.getItem('step')) : 1,
@@ -1811,18 +1846,18 @@ fetchSettings().then(result => {
                   tagsInput: '',
                   genset_number: '',
                   seal_number: '',
-                  pick_up: '',
+                  //pick_up: '',
                   //look_up: '',
-                  pick_up_location_name: '',
-                  pick_up_address:'',
-                  pick_up_address: '',
-                  pick_up_city: '',
-                  zip: '',
-                  appt_date: '',
+                //   pick_up_location_name: '',
+                //   pick_up_address:'',
+                //   pick_up_address: '',
+                //   pick_up_city: '',
+                //   zip: '',
+                //   appt_date: '',
                 //   from: '',
                 //   to: '',
-                  no_latter_than_date: '',
-                  drop_at_no_latter_than_time: '',
+                //   no_latter_than_date: '',
+                //   drop_at_no_latter_than_time: '',
                   broker_name: '',
                   broker_email: '',
                   broker_number: '',
@@ -1935,6 +1970,31 @@ fetchSettings().then(result => {
 
                 //   }],
 
+                  pickups: [{
+                        pick_up: '',
+                        location_name: '',
+                        address: '',
+                        city: '',
+                        state: '',
+                        zip: '',
+                        appt_date: '',
+                        no_latter_than_date: '',
+                        no_latter_than_time: '',
+                        coordinates: null
+                    }],
+                    dropoffs: [{
+                        drop_at: '',
+                        location_name: '',
+                        address: '',
+                        city: '',
+                        state: '',
+                        zip: '',
+                        appt_date: '',
+                        no_latter_than_date: '',
+                        no_latter_than_time: '',
+                        coordinates: null
+                    }]
+
               },
                 customers: [],
                 offices: [],
@@ -1952,8 +2012,379 @@ fetchSettings().then(result => {
                     expense_disputed: false,
                     paid: false
                     }],
+                    
+                    baseRate: parseFloat(pricePerGallon) || 1,
+                    pricePerMile: parseFloat(pricePerMile) || 1,
+                    totalDistance: 0,
+                    distanceCharge: 0,
+                    totalCharge: 0,
+                    
+                    // Google Maps services
+                    autocompleteInstances: {},
+                    directionsService: null,
                   
                 userRole: localStorage.getItem('user_role') || 'customer',
+
+                // Initialize calculations
+                init() {
+                    // if(!this.formData.bill_tos){
+                    //     this.formData.bill_tos = [{
+                    //     bill_to: '',
+                    //     quick_note: ''
+                    //     }];
+                    // }
+                      this.clearPickupDropoffData();
+                     if(!this.formData.pickups || this.formData.pickups.length === 0){
+                    this.formData.pickups = [{
+                        pick_up: '',
+                        location_name: '',
+                        address: '',
+                        city: '',
+                        state: '',
+                        zip: '',
+                        appt_date: '',
+                        no_latter_than_date: '',
+                        no_latter_than_time: '',
+                        coordinates: null
+                    }];
+                }
+                
+                if(!this.formData.dropoffs || this.formData.dropoffs.length === 0){
+                    this.formData.dropoffs = [{
+                        drop_at: '',
+                        location_name: '',
+                        address: '',
+                        city: '',
+                        state: '',
+                        zip: '',
+                        appt_date: '',
+                        no_latter_than_date: '',
+                        no_latter_than_time: '',
+                        coordinates: null
+                    }];
+                }
+                    if (!this.formData.charges) {
+                    this.formData.charges = [{
+                    charge_type: '',
+                    comment: '',
+                    units: '',
+                    rate: '',
+                    amount: '',
+                    discount: '',
+                    internal_notes: ''
+                    }];
+
+                }
+
+                // Initialize expenses if undefined (extra safety)
+                if (!this.formData.expenses) {
+                    this.formData.expenses = [{
+                    expense_type: '',
+                    expense_unit: '',
+                    expense_rate: '',
+                    expense_amount: '',
+                    credit_reimbursement_amount: '',
+                    vendor_invoice_number: '',
+                    payment_reference_note: '',
+                    disputed_note: '',
+                    expense_disputed: false,
+                    paid: false
+                    }];
+                }
+
+                
+
+                // Calculate initial totals
+                this.calculateTotals();
+                this.calculateExpenseTotals();
+                
+                // Watch for changes in charges
+                this.$watch('formData.charges', () => {
+                    if (this.formData.charges) { // Added null check
+                    this.calculateTotals();
+                    }
+                }, { deep: true });
+
+                // Watch for changes in expenses
+                this.$watch('formData.expenses', () => {
+                    this.calculateExpenseTotals();
+                }, { deep: true });
+
+                this.fetchCustomers();
+                this.fetchOffices();
+
+                // Initialize Google Maps services
+                    this.directionsService = new google.maps.DirectionsService();
+                    
+                    // Watch for address changes to recalculate charges
+                    this.$watch('formData.pickups', () => this.calculateCharges());
+                    this.$watch('formData.dropoffs', () => this.calculateCharges());
+                    
+                    // Initial calculation
+                    this.$nextTick(() => {
+                        this.calculateCharges();
+                    });
+
+                    this.$watch('totalDistance', (newDistance) => {
+                        if (newDistance > 0) {
+                            this.formData.total_miles = newDistance.toString();
+                            this.calculateFuelCost();
+                        } else {
+                            this.formData.total_miles = '';
+                        }
+                    });
+                },
+                clearPickupDropoffData() {
+                // Reset pickup and dropoff arrays to single empty entries
+                this.formData.pickups = [{
+                    pick_up: '',
+                    location_name: '',
+                    address: '',
+                    city: '',
+                    state: '',
+                    zip: '',
+                    appt_date: '',
+                    no_latter_than_date: '',
+                    no_latter_than_time: '',
+                    coordinates: null
+                }];
+                
+                this.formData.dropoffs = [{
+                    drop_at: '',
+                    location_name: '',
+                    address: '',
+                    city: '',
+                    state: '',
+                    zip: '',
+                    appt_date: '',
+                    no_latter_than_date: '',
+                    no_latter_than_time: '',
+                    coordinates: null
+                }];
+                
+                // Clear distance calculations
+                this.totalDistance = 0;
+                this.distanceCharge = 0;
+                this.totalCharge = this.baseRate;
+                
+                // Clear loaded miles
+                this.formData.loaded_miles = '';
+                
+                // Clear any existing autocomplete instances
+                this.autocompleteInstances = {};
+                
+                console.log('Pickup/Dropoff data cleared on page load');
+            },
+
+                      setupAutocomplete(type, index, inputElement) {
+                    // Clear existing autocomplete if any
+                    const key = `${type}-${index}`;
+                    if (this.autocompleteInstances[key]) {
+                        google.maps.event.clearInstanceListeners(this.autocompleteInstances[key]);
+                    }
+                    
+                    // Create new autocomplete instance
+                    const autocomplete = new google.maps.places.Autocomplete(inputElement, {
+                        types: ['address'],
+                        componentRestrictions: { country: 'NG'} // Restrict to US addresses
+                    });
+                    
+                    this.autocompleteInstances[key] = autocomplete;
+                    
+                    // Listen for place selection
+                    autocomplete.addListener('place_changed', () => {
+                        const place = autocomplete.getPlace();
+                        
+                        if (!place.geometry) {
+                            console.log('No geometry found for place');
+                            return;
+                        }
+                        
+                        // Extract address components
+                        const addressComponents = this.parseAddressComponents(place.address_components);
+
+                        console.log('Address components:', addressComponents);
+                        
+                        // Update the appropriate form data
+                        if (type === 'pickup') {
+                           // console.log('Pickup address:', place.formatted_address);
+                            this.formData.pickups[index] = {
+                                ...this.formData.pickups[index],
+                                address: place.formatted_address,
+                                //address: addressComponents.address,
+                                city: addressComponents.city,
+                                state: addressComponents.state,
+                                zip: addressComponents.zip,
+                                coordinates: {
+                                    lat: place.geometry.location.lat(),
+                                    lng: place.geometry.location.lng()
+                                }
+                            };
+                        } else {
+                            this.formData.dropoffs[index] = {
+                                ...this.formData.dropoffs[index],
+                                address: place.formatted_address,
+                                //address: addressComponents.address,
+                                city: addressComponents.city,
+                                state: addressComponents.state,
+                                zip: addressComponents.zip,
+                                coordinates: {
+                                    lat: place.geometry.location.lat(),
+                                    lng: place.geometry.location.lng()
+                                }
+                            };
+                            
+                                console.log('Dropoff address:', place.formatted_address),
+                                console.log('Dropoff coordinates:', place.geometry.location);
+                        }
+                        
+                        // Save to localStorage
+                        //this.saveProgress();
+                        
+                        // Recalculate charges
+                        this.calculateCharges();
+                    });
+                },
+                
+                parseAddressComponents(components) {
+                    const result = {
+                        city: '',
+                        state: '',
+                        zip: ''
+                    };
+                    
+                    components.forEach(component => {
+                        const types = component.types;
+                        
+                        if (types.includes('locality')) {
+                            result.city = component.long_name;
+                        } else if (types.includes('administrative_area_level_1')) {
+                            result.state = component.short_name;
+                        } else if (types.includes('postal_code')) {
+                            result.zip = component.long_name;
+                        }
+                    });
+                    
+                    return result;
+                },
+                
+                duplicatePickup() {
+                    this.formData.pickups.push({
+                        pick_up: '',
+                        location_name: '',
+                        address: '',
+                        city: '',
+                        state: '',
+                        zip: '',
+                        appt_date: '',
+                        no_latter_than_date: '',
+                        no_latter_than_time: '',
+                        coordinates: null
+                    });
+                    this.saveProgress();
+                },
+                
+                removePickup(event) {
+                    if (this.formData.pickups.length > 1) {
+                        this.formData.pickups.pop();
+                        this.saveProgress();
+                        this.calculateCharges();
+                    }
+                },
+                
+                duplicateDropAt() {
+                    this.formData.dropoffs.push({
+                        drop_at: '',
+                        location_name: '',
+                        address: '',
+                        city: '',
+                        state: '',
+                        zip: '',
+                        appt_date: '',
+                        no_latter_than_date: '',
+                        no_latter_than_time: '',
+                        coordinates: null
+                    });
+                    this.saveProgress();
+                },
+                
+                removeDropAt(event) {
+                    if (this.formData.dropoffs.length > 1) {
+                        this.formData.dropoffs.pop();
+                        this.saveProgress();
+                        this.calculateCharges();
+                    }
+                },
+                
+                async calculateCharges() {
+                    // Reset charges
+                    this.totalDistance = 0;
+                    this.distanceCharge = 0;
+                    this.totalCharge = this.baseRate;
+                    
+                    // Get all locations with coordinates
+                    const pickupLocations = this.formData.pickups.filter(p => p.coordinates);
+                    const dropoffLocations = this.formData.dropoffs.filter(d => d.coordinates);
+
+                    console.log('pickupLocations:', pickupLocations);
+                    console.log('dropoffLocations:', dropoffLocations);
+
+                    
+                    console.log('Raw pickups:', this.formData.pickups);
+                    console.log('Raw dropoffs:', this.formData.dropoffs);
+                                        
+                    if (pickupLocations.length === 0 || dropoffLocations.length === 0) {
+                    
+                    this.formData.total_miles = '';
+                        return;
+                    }
+                    
+                    try {
+                        // Calculate distance for each pickup-dropoff pair
+                        let totalDistanceMeters = 0;
+                        
+                        for (const pickup of pickupLocations) {
+                            for (const dropoff of dropoffLocations) {
+                                const distance = await this.calculateDistance(pickup.coordinates, dropoff.coordinates);
+                                totalDistanceMeters += distance;
+                            }
+                        }
+
+                        console.log('totalDistanceMeters:', totalDistanceMeters);
+                        
+                        // Convert to miles and calculate charges
+                        this.totalDistance = Math.round((totalDistanceMeters * 0.000621371) * 100) / 100; // Convert meters to miles
+                        this.distanceCharge = this.totalDistance * this.pricePerMile;
+                        this.totalCharge = this.baseRate + this.distanceCharge;
+                        
+                        // Save the calculation
+                        //this.saveProgress();
+                        
+                    } catch (error) {
+                        console.error('Error calculating distance:', error);
+                    }
+                },
+                
+                calculateDistance(origin, destination) {
+                    return new Promise((resolve, reject) => {
+                        this.directionsService.route({
+                            origin: new google.maps.LatLng(origin.lat, origin.lng),
+                            destination: new google.maps.LatLng(destination.lat, destination.lng),
+                            travelMode: google.maps.TravelMode.DRIVING
+                        }, (response, status) => {
+                            if (status === 'OK') {
+                                const route = response.routes[0];
+                                const distance = route.legs.reduce((total, leg) => total + leg.distance.value, 0);
+                                resolve(distance);
+                            } else {
+                                reject(new Error('Distance calculation failed: ' + status));
+                            }
+                        });
+                    });
+                },
+                
+
+
               nextStep() {
                 if(this.userRole === 'customer') return;
                   this.step++;
@@ -1969,23 +2400,23 @@ fetchSettings().then(result => {
                   //alert("Progress saved successfully!");
                   createToast('success', 'Progress saved successfully');
               },
-              addTag() {
-                if (this.formData.tagsInput.trim()) {
-                    // Split by spaces and filter out empty strings
-                    const newTags = this.formData.tagsInput.split(' ')
-                    .map(tag => tag.trim())
-                    .filter(tag => tag.length > 0);
-                    
-                    // Add new tags to the array, avoiding duplicates
-                    newTags.forEach(tag => {
-                    if (!this.formData.tags.includes(tag)) {
-                        this.formData.tags.push(tag);
+                addTag() {
+                    if (this.formData.tagsInput.trim()) {
+                        // Split by spaces and filter out empty strings
+                        const newTags = this.formData.tagsInput.split(' ')
+                        .map(tag => tag.trim())
+                        .filter(tag => tag.length > 0);
+                        
+                        // Add new tags to the array, avoiding duplicates
+                        newTags.forEach(tag => {
+                        if (!this.formData.tags.includes(tag)) {
+                            this.formData.tags.push(tag);
+                        }
+                        });
+                        
+                        this.formData.tagsInput = '';
+                        //this.saveProgress();
                     }
-                    });
-                    
-                    this.formData.tagsInput = '';
-                    //this.saveProgress();
-                }
                 },
                 
                 removeTag(index) {
@@ -2207,63 +2638,7 @@ fetchSettings().then(result => {
                 this.formData.net_expense = (expenseTotal - creditTotal).toFixed(2);
             },
                 
-                // Initialize calculations
-                init() {
-                    // if(!this.formData.bill_tos){
-                    //     this.formData.bill_tos = [{
-                    //     bill_to: '',
-                    //     quick_note: ''
-                    //     }];
-                    // }
-                    if (!this.formData.charges) {
-                    this.formData.charges = [{
-                    charge_type: '',
-                    comment: '',
-                    units: '',
-                    rate: '',
-                    amount: '',
-                    discount: '',
-                    internal_notes: ''
-                    }];
-
-                }
-
-                // Initialize expenses if undefined (extra safety)
-                if (!this.formData.expenses) {
-                    this.formData.expenses = [{
-                    expense_type: '',
-                    expense_unit: '',
-                    expense_rate: '',
-                    expense_amount: '',
-                    credit_reimbursement_amount: '',
-                    vendor_invoice_number: '',
-                    payment_reference_note: '',
-                    disputed_note: '',
-                    expense_disputed: false,
-                    paid: false
-                    }];
-                }
-
-                // Calculate initial totals
-                this.calculateTotals();
-                this.calculateExpenseTotals();
                 
-                // Watch for changes in charges
-                this.$watch('formData.charges', () => {
-                    if (this.formData.charges) { // Added null check
-                    this.calculateTotals();
-                    }
-                }, { deep: true });
-
-                // Watch for changes in expenses
-                this.$watch('formData.expenses', () => {
-                    this.calculateExpenseTotals();
-                }, { deep: true });
-
-                this.fetchCustomers();
-                this.fetchOffices();
-                },
-
                 // Updated calculateTotals with null check
                 calculateTotals() {
                 if (!this.formData.charges) return;
@@ -2341,6 +2716,12 @@ fetchSettings().then(result => {
                     if (Array.isArray(this.formData.tags) && this.formData.tags.length > 0) {
                         formData.append('tags', this.formData.tags.join(','));
                     }
+                     // Append additional distance and charge fields
+                    formData.append('totalDistance', this.totalDistance || '');
+                    formData.append('totalCharge', this.totalCharge || '');
+                    formData.append('baseRate', this.baseRate || '');
+                    formData.append('distanceCharge', this.distanceCharge || '');
+                                    
 
                     //formData.append('tags', this.formData.tags.join(','));
                     //formData.append('tags', JSON.stringify(this.formData.tags));
@@ -2398,6 +2779,10 @@ fetchSettings().then(result => {
             }
         };
     }
+    // Initialize Alpine.js store for debugging
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('debug', false);
+        });
 
 
     //populate driver select

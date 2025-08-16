@@ -185,7 +185,17 @@
                               </div> -->
                               <div>
                                   <label class="block text-gray-700 dark:text-gray-300">Office Phone No</label>
-                                  <input type="text" x-model="formData.office_phone" id="office_phone" name="office_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                  <select x-model="formData.office_phone" name="office_phone" 
+                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="offices">
+                                    <option value="" selected disabled hidden>Select Office</option>
+                                    <template x-for="offic in offices" :key="offic.id">
+                                    <option :value="offic.short_name" 
+                                            x-text="offic.long_name">
+                                    </option>
+                                    </template>
+                                </select>
+
+                                  <!-- <input type="text" x-model="formData.office_phone" id="office_phone" name="office_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"> -->
                               </div>
                           </div>
                       
@@ -676,8 +686,10 @@
                 },
                 selectedDriver: null,
                 step: 1,
+                offices: [],
 
                 init() {
+                    this.fetchOffices();
                     //this.fetchData();
                     const urlParams = new URLSearchParams(window.location.search);
                     const encodedId = urlParams.get('id');
@@ -688,6 +700,29 @@
                         console.error('No ID found in the URL');
                     }
                 },
+
+                  async fetchOffices() {
+                    try {
+                        const response = await fetch(requestURL + '/users/get-offices', {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        }
+                        });
+                        
+                        if (!response.ok) {
+                        throw new Error('Failed to fetch offices');
+                        }
+                        
+                        const data = await response.json();
+                        this.offices = data.offices || [];
+                        console.log("Offices","this.offices");
+                    } catch (error) {
+                        console.error('Error fetching offices:', error);
+                        createToast('error', 'Failed to load office list');
+                    }
+                },
+
 
                 fetchData() {
                     fetch(requestURL + '/carriers/carrier/' + this.id, {

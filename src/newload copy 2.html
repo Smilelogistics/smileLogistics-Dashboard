@@ -5,6 +5,11 @@
 
         <include src="./partials/mainhead.html"> </include>
         <script src="./assets/js/main.js"></script>
+        <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Flatpickr Dark Theme CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+<!-- Flatpickr JS -->
         <script>
         // blow Up modal
         $(document).ready(function() {
@@ -119,10 +124,12 @@
                 </div>
             </div>
 
+            
+
 
             
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-              <div x-data="stepperForm" class="w-full mt-10 mx-auto px-4">
+              <div x-data="stepperForm()" class="w-full mt-10 mb-5 mx-auto px-4">
                 <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xs dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 rtl:space-x-reverse">
                     <template x-for="(heading, index) in ['Basic Info', 'Charges', 'Dispatch', 'Backup Docs', 'Expenses']" :key="index">
                         <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === index + 1, 'text-gray-500 dark:text-gray-400': step !== index + 1 }">
@@ -158,8 +165,9 @@
                         </div>
                     </div>
                     </div>
+                                
 
-                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="editloadForm">
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="newloadForm">
                     <!-- Step 1: Basic Info -->
                     <div x-show="step === 1" >
                                         
@@ -213,8 +221,8 @@
                                         <label class="block text-gray-700 dark:text-gray-300">Carrier Name</label>
                                         <select x-model="formData.carrier_name" name="carrier_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="carrier_name">
                                         <option value="" selected disabled>Selet carrier</option>
-                                        <option value="import">Joen Doe</option>
-                                        <option value="export">Export</option>
+                                        <!-- <option value="import">Joen Doe</option>
+                                        <option value="export">Export</option> -->
                                     </select>
                                     </div>
                                     <div>
@@ -268,7 +276,7 @@
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Name</label>
-                                            <input type="text" x-model="formData.second_notify_party_phone" name="second_notify_party_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="second_notify_party_phone">
+                                            <input type="text" x-model="formData.second_notify_party_name" name="second_notify_party_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="second_notify_party_name">
                                         </div>
                                         
                                         
@@ -291,8 +299,8 @@
                                             <label class="block text-gray-700 dark:text-gray-300">Pre Carried</label>
                                             <select x-model="formData.pre_carrier" name="pre_carrier" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="pre_carrier">
                                                 <option value="" selected disabled>Selet carrier</option>
-                                                <option value="import">Joen Doe</option>
-                                                <option value="export">Export</option>
+                                                <!-- <option value="import">Joen Doe</option>
+                                                <option value="export">Export</option> -->
                                             </select>
                                         </div>
                                         <div>
@@ -312,11 +320,11 @@
                                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Port Discharged</label>
-                                        <select x-model="formData.port_of_discharge" name="port_of_discharge" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="port_of_discharge">
-                                            <option value="" selected disabled>Selet carrier</option>
+                                        <input x-model="formData.port_of_discharge" name="port_of_discharge" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="port_of_discharge" />
+                                            <!-- <option value="" selected disabled>Selet carrier</option>
                                             <option value="import">Joen Doe</option>
                                             <option value="export">Export</option>
-                                        </select>
+                                        </input> -->
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Place of Delivery</label>
@@ -331,7 +339,7 @@
                                         <input type="text" x-model="formData.port_of_landing" name="port_of_landing" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="port_of_landing">
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Additional Note</label>
                                         <textarea type="text" rows="4" cols="4" x-model="formData.ocean_note" name="ocean_note" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_note"></textarea>
@@ -373,11 +381,11 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 mb-6">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Total</label>
-                                        <input type="text" x-model="formData.ocean_total" name="ocean_total" id="ocean_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_total" readonly>
+                                        <input type="text" x-model="formData.ocean_total" name="ocean_total" id="ocean_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_total">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Consignment Total</label>
-                                        <input type="text" x-model="formData.ocean_consignment_total" name="ocean_consignment_total" id="ocean_consignment_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_consignment_total" readonly>
+                                        <input type="text" x-model="formData.ocean_consignment_total" name="ocean_consignment_total" id="ocean_consignment_total" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_consignment_total">
                                     </div>
                                 </div>
                                 <div>
@@ -408,7 +416,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Payable at</label>
-                                            <input type="text" x-model="formData.original_bill_of_landing_payable_at" name="original_bill_of_landing_payable_at" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="original_bill_of_landing_payable_at">
+                                            <input type="text" x-model="formData.original_bill_of_landing_payable_at" name="original_bill_of_landing_payable_at" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white shipped_on_board_date" placeholder="" id="original_bill_of_landing_payable_at">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Freight Charges</label>
@@ -420,7 +428,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Shipped on board Date</label>
-                                            <input type="text" x-model="formData.shipped_on_board_date" id="shipped_on_board_date" name="shipped_on_board_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.shipped_on_board_date" id="shipped_on_board_date" name="shipped_on_board_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white shipped_on_board_date" placeholder="">
                                         </div>
                                     </div>
 
@@ -432,7 +440,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Signatory Company</label>
-                                            <input type="text" x-model="formData.signatory_company" name="signatory_company" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="signatory_company">
+                                            <input type="text" x-model="formData.signatory_company" name="signatory_company" class="w-full border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="signatory_company">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Authorize Signatory</label>
@@ -485,7 +493,8 @@
                                 <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Office</label>
-                                         <select x-model="formData.office" name="office" 
+
+                                        <select x-model="formData.office" name="office" 
                                                 class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="office">
                                             <option value="" selected disabled hidden>Select Office</option>
                                             <template x-for="offic in offices" :key="offic.id">
@@ -494,6 +503,7 @@
                                             </option>
                                             </template>
                                         </select>
+
                                         <!-- <input type="text" x-model="formData.office" name="office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter your name" id="office"> -->
                                     </div>
                                     <div>
@@ -529,8 +539,14 @@
                                             </label>
 
                                             <!-- Checkbox Option -->
+                                            <input type="hidden" name="brokered" x-model="formData.brokered" value="0">
                                             <label class="flex items-center space-x-2">
-                                                <input type="checkbox" x-model="formData.isBroker" name="isBroker" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                                <input 
+                                                    type="checkbox" 
+                                                    x-model="formData.brokered" 
+                                                    @change="formData.brokered = $event.target.checked ? 1 : 0"
+                                                    class="text-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                                                >
                                                 <span class="text-gray-700 dark:text-gray-300">Broker</span>
                                             </label>
                                         </div>
@@ -540,20 +556,10 @@
                             
 
                                 <!-- bill to -->
-                                <div>
-                                    <div id="billto">
-                                        <span onclick="duplicateBillto()" 
-                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
-                                            +
-                                        </span>
-                                        <span onclick="removeBillto(this)" 
-                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
-                                            x
-                                            <!-- 🗑 -->
-                                        </span>
-
-                                        <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                                             <div>
+                               <div>
+                                
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                                        <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Bill To</label>
                                         <select x-model="formData.bill_to" name="bill_to"  @change="fetchCustomerDetails($event.target.value)"
                                                 class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
@@ -565,18 +571,52 @@
                                             </template>
                                         </select>
                                         </div>
-                                            <!-- <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Bill to</label>
-                                                <input type="text" x-model="formData.bill_to" name="bill_to[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                            </div> -->
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Quick Note</label>
-                                                <input type="text" x-model="formData.quick_note" name="quick_note[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Notes">
-                                            </div>
+                                        <!-- <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Quick Note</label>
+                                        <input type="text" x-model="formData.quick_note" name="quick_note" 
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                placeholder="Enter quick note">
+                                        </div> -->
+                                    </div>
+                                <!-- <template x-for="(item, index) in formData.bill_tos" :key="index">
+                                    <div class="mb-6">
+                                    <div class="flex justify-end mb-2">
+                                        <span @click="addBillto()" 
+                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                        +
+                                        </span>
+                                        <span @click="removeBillto(index)" 
+                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500"
+                                            x-show="formData.bill_tos.length > 1">
+                                        x
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                                        <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Bill To</label>
+                                        <select x-model="item.bill_to" name="bill_to[]" 
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <option value="" selected disabled hidden>Select Customer</option>
+                                            <template x-for="customer in customers" :key="customer.id">
+                                            <option :value="customer.id" 
+                                                    x-text="customer.user.fname">
+                                            </option>
+                                            </template>
+                                        </select>
+                                        </div>
+                                        <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Quick Note</label>
+                                        <input type="text" x-model="item.quick_note" name="quick_note[]" 
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                placeholder="Enter quick note">
                                         </div>
                                     </div>
-                                <div id="billtoList"></div>
+                                    </div>
+                                </template> -->
                                 </div>
+
+                                
 
                                 <!-- container and chassis -->
                                 <div>
@@ -688,7 +728,7 @@
                                 </div>
                                 
                             <!-- numbers -->
-                            <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6" style="display: none;">
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Reference #</label>
                                     <input type="text" x-model="formData.reference_number" name="reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="reference_number">
@@ -746,8 +786,8 @@
                             <!-- numbers -->
                             <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                                 <div id="chosen-select">
-                                    <label class="block text-gray-700 dark:text-gray-300">OverWeight/Hazmat etc</label>
-                                    <select x-model="formData.over_weight" name="over_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select" multiple id="over_weight">
+                                    <label class="block text-gray-700 dark:text-gray-300 text-sm">OverWeight/Hazmat etc</label>
+                                    <select x-model="formData.over_weight" name="over_weight" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white  chosen-select" multiple id="over_weight">
                                         <!-- <option value="" selected disabled>Select Type</option> -->
                                         <option value="Tri-axle">Tri-axle</option>
                                         <option value="8-pin">8-pin</option>
@@ -844,12 +884,12 @@
                                             <option value="Other">Other</option>
                                         </select>
                                     </div>
-                                    <div>
+                                    <!-- <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Quick lookup</label>
                                         <select x-model="formData.look_up" name="look_up" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="look_up">
                                             <option value="" selected disabled></option>
                                         </select>
-                                    </div>
+                                    </div> -->
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
                                         <input type="text" x-model="formData.pick_up_location_name" name="pick_up_location_name[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
@@ -871,26 +911,15 @@
                                     <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300"> Appt</label>
-                                            <input type="text" x-model="formData.appt_date" name="appt_date[]" id="appt_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                        </div>
-                                        <div>
-                                            <label class="block text-gray-700 dark:text-gray-300">From</label>
-                                            <select x-model="formData.from" name="from[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                <option value="" selected disabled></option>
-                                            
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label class="block text-gray-700 dark:text-gray-300">To</label>
-                                            <input type="text" x-model="formData.to" name="to[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.appt_date" name="appt_date[]" id="appt_dates" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">No latter than</label>
-                                            <input type="text" x-model="formData.no_latter_than_date" name="no_latter_than_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.no_latter_than_date" name="no_latter_than_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white no_latter_than_date" placeholder="">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Time</label>
-                                            <input type="text" x-model="formData.no_latter_than_time" name="no_latter_than_time[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <input type="text" x-model="formData.no_latter_than_time" id="no_latter_than_time" name="no_latter_than_time[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                         </div>
                                     </div>
                                 </div>
@@ -929,13 +958,13 @@
                                                     <option value="Other">Other</option>
                                                 </select>
                                             </div>
-                                            <div>
+                                            <!-- <div>
                                                 <label class="block text-gray-700 dark:text-gray-300">Quick lookup</label>
                                                 <select x-model="formData.drop_at_look_up" name="drop_at_look_up[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                                     <option value="" selected disabled></option>
                                                 
                                                 </select>
-                                            </div>
+                                            </div> -->
                                             <div>
                                                 <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
                                                 <input type="text" x-model="formData.drop_at_location_name" name="drop_at_location_name[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
@@ -958,26 +987,15 @@
                                         <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
                                             <div>
                                                 <label class="block text-gray-700 dark:text-gray-300"> Appt</label>
-                                                <input type="text" x-model="formData.drop_at_appt_date" name="drop_at_appt_date[]" id="appt_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                            </div>
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">From</label>
-                                                <select x-model="formData.drop_at_from" name="drop_at_from[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                    <option value="" selected disabled></option>
-                                                
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">To</label>
-                                                <input type="text" x-model="formData.drop_at_to" name="drop_at_to[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                                <input type="text" x-model="formData.drop_at_appt_date" name="drop_at_appt_date[]" id="appt_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white drop_at_appt_date" placeholder="">
                                             </div>
                                             <div>
                                                 <label class="block text-gray-700 dark:text-gray-300">No latter than</label>
-                                                <input type="text" x-model="formData.drop_at_no_latter_than_date" name="drop_at_no_latter_than_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                                <input type="text" x-model="formData.drop_at_no_latter_than_date" name="drop_at_no_latter_than_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white drop_at_no_latter_than_date" placeholder="">
                                             </div>
                                             <div>
                                                 <label class="block text-gray-700 dark:text-gray-300">Time</label>
-                                                <input type="text" x-model="formData.drop_at_no_latter_than_time" name="drop_at_no_latter_than_time[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                                <input type="text" x-model="formData.drop_at_no_latter_than_time" name="drop_at_no_latter_than_time[]" id="drop_at_no_latter_than_time" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white drop_at_no_latter_than_time" placeholder="">
                                             </div>
                                         </div>
                                     </div>
@@ -992,16 +1010,23 @@
                                     });
                                 }) 
                             </script>
+                            
                             <div>
                                 <!-- <h4 class="mt-4 mb-3 block text-gray-700 dark:text-gray-300">Freight broker info ( if different from bill-to party )</h4> -->
-                                <div id="" class="grid grid-cols-1 md:grid-cols-10 gap-4 mb-6">
-                                    <div>
+                                <div>
+                                <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-2">
+                                    <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
+                                    <a href="https://www.google.com/maps/dir//" class="mt-4 mb-3 block text-blue-700  dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer" target="_blank">Show Route</a>
+                                </div>
+                                </div>
+                                <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-2">
+                                    <!-- <div>
                                         <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
                                         <a href="https://www.google.com/maps/dir//" class="mt-4 mb-3 block text-blue-700  dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer" target="_blank">Show Route</a>
-                                    </div>
+                                    </div> -->
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Total Miles</label>
-                                        <input type="text" x-model="formData.total_miles" name="total_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_miles">
+                                        <input type="text" min="200" x-model="formData.total_miles" name="total_miles" @change="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Min:200" id="total_miles">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Loaded Miles</label>
@@ -1017,23 +1042,37 @@
                                         <label class="block text-gray-700 dark:text-gray-300">D/H Miles</label>
                                         <input type="text" x-model="formData.dh_miles" name="dh_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="dh_miles">
                                     </div>
-                                    <div>
+                                    <!-- <div>
                                         <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
                                         <a href="https://www.eia.gov/petroleum/gasdiesel/" target="_blank" class="block text-blue-700 dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer">Fuel Rate</a>
-                                    </div>
+                                    </div> -->
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">$ / Gallon</label>
-                                        <input x-model="formData.fuel_rate_per_gallon" name="fuel_rate_per_gallon" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="fuel_rate_per_gallon" />
+                                        <input x-model="formData.fuel_rate_per_gallon" name="fuel_rate_per_gallon" @change="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="fuel_rate_per_gallon" />
                                     </div>
                                     
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">MPG</label>
-                                        <input type="text" x-model="formData.mpg" name="mpg" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="mpg" />
+                                        <input type="text" x-model="formData.mpg" name="mpg" @change="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="mpg" readonly />
                                     </div>
+                               
+                                    <!-- <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Seal #</label>
+                                        <input type="text" x-model="formData.seal_number" name="seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                    </div> -->
+                                </div>
+
+                                
+                                <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-2">
+                                    
                                 <!-- Load Note Radio Buttons and Checkbox -->
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Fuel cost</label>
-                                        <input type="text" x-model="formData.total_fuel_cost" name="total_fuel_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_fuel_cost" />
+                                        <input type="text" x-model="formData.total_fuel_cost" name="total_fuel_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_fuel_cost" readonly />
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Total shipping cost</label>
+                                        <input type="text" x-model="formData.total_shipping_cost" name="total_shipping_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_fuel_cost" readonly />
                                     </div>
                                     
                                     <!-- <div>
@@ -1041,6 +1080,13 @@
                                         <input type="text" x-model="formData.seal_number" name="seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                     </div> -->
                                 </div>
+                                
+                                <div>
+                                    <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-6">
+                                        <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
+                                        <a href="https://www.eia.gov/petroleum/gasdiesel/" target="_blank" class="block text-blue-700 dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer">Fuel Rate</a>
+                                    </div>
+                                    </div>
                             </div>
 
                             
@@ -1062,12 +1108,12 @@
                                     <!-- Load Note Radio Buttons and Checkbox -->
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Broker Ref #</label>
-                                            <input type="text" x-model="formData.broker_reference_number" name="broker_reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="broker_reference_number">
+                                            <input type="text" x-model="formData.broker_reference_number" name="broker_reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="broker_reference_number">
                                         </div>
                                         
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Batch #</label>
-                                            <input type="text" x-model="formData.batch_number" name="batch_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="batch_number">
+                                            <input type="number" x-model="formData.batch_number" name="batch_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="batch_number">
                                         </div>
                                     </div>
                                     <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -1077,14 +1123,13 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Sales Rep</label>
-                                            <select x-model="formData.sales_rep" name="sales_rep" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="sales_rep">
+                                            <input type="text" x-model="formData.sales_rep" name="sales_rep" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="sales_rep" />
                                                 <!-- <option value="" selected disabled>Select Type</option> -->
-                                            </select>
                                         </div>
                                         
-                                        <div>
+                                        <div style="display: none;">
                                             <label class="block text-gray-700 dark:text-gray-300">EDI/API Shipment #</label>
-                                            <input type="text" x-model="formData.edi_number" name="edi_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="edi_number">
+                                            <input type="text" x-model="formData.edi_number" name="edi_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="edi_number">
                                         </div>
                                     <!-- Load Note Radio Buttons and Checkbox -->
                                         <div>
@@ -1103,24 +1148,26 @@
                     </div>
 
                 
-                    <!-- Step 2: Charges -->
-                    <div x-show="step === 2" class="space-y-6">
-                        <template x-for="(charge, index) in formData.shipment_charges" :key="index">
-                            <div class="p-4 border rounded-lg bg-white dark:bg-gray-800 shadow-sm dark:border-gray-700">
-                                <div class="flex justify-between items-center mb-4">
-                                    <h3 class="font-medium text-gray-900 dark:text-gray-100">Charge #<span x-text="index + 1"></span></h3>
-                                    <button @click="removeCharge(index)" type="button" 
-                                            class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm">
-                                        Remove
-                                    </button>
-                                </div>
-
-                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                                    <!-- Charge Type -->
-                                    <div>
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Charge Type</label>
-                                        <select x-model="charge.charge_type" name="charge_type[]"
-                                                class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
+                        <!-- Step 2: Charges -->
+                        <div x-show="step === 2">
+                            <template x-for="(charge, index) in formData.charges" :key="index">
+                                <div class="mb-6 chargecalc">
+                                    <div class="flex justify-end mb-2">
+                                        <span @click="addCharge()" 
+                                              class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                            +
+                                        </span>
+                                        <span @click="removeCharge(index)" 
+                                              class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
+                                            x
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Charge Type</label>
+                                            <select x-model="charge.charge_type" name="charge_type[]" 
+                                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                                 <option value="" selected disabled></option>
                                                 <option value="drayage">Drayage</option>
                                                 <option value="fuel_surcharge">Fuel Surcharge</option>
@@ -1153,98 +1200,71 @@
                                                 <option value="storage">Storage</option>
                                                 <option value="toll">Toll</option>
                                                 <option value="triaxle">Triaxle</option>
-                                            <!-- Add other options -->
-                                        </select>
+                                                <!-- <option value="pickup">Pickup</option>
+                                                <option value="pickup loaded">Pickup Loaded</option> -->
+                                                <!-- Other options... -->
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Comment</label>
+                                            <input type="text" x-model="charge.comment" name="comment[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Units</label>
+                                            <input type="number" x-model="charge.units" @input="calculateAmount(charge)" 
+                                                   name="units[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Rate</label>
+                                            <input type="number" x-model="charge.rate" @input="calculateAmount(charge)" 
+                                                   name="rate[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
                                     </div>
-
-                                    <!-- Comment -->
-                                    <div>
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Comment</label>
-                                        <input type="text" x-model="charge.comment" name="comment[]"
-                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-
-                                    <!-- Units -->
-                                    <div>
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Units</label>
-                                        <input type="number" x-model="charge.units" name="units[]"
-                                            @change="calculateChargeAmount(index)"
-                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-
-                                    <!-- Rate -->
-                                    <div>
-                                        <!-- <span x-text="JSON.stringify(charge)"></span> -->
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Rate</label>
-                                        <input type="text" x-model="charge.rate" name="rate[]"
-                                            @change="calculateChargeAmount(index)"
-                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 numberOnly">
-                                    </div>
-                                </div>
-
-                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                    <!-- Amount -->
-                                    <div>
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Amount</label>
-                                        <input type="text" x-model="charge.amount" name="amount[]" readonly 
-                                            class="w-full rounded bg-gray-100 dark:bg-gray-600 dark:text-gray-200 border-gray-300 dark:border-gray-500 ">
-                                    </div>
-
-                                    <!-- Discount -->
-                                    <div>
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Discount</label>
-                                        <input type="text" x-model="charge.discount" name="discount[]"
-                                            @change="calculateTotals()"
-                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500 numberOnly">
-                                    </div>
-
-                                    <!-- Internal Notes -->
-                                    <div>
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Internal Notes</label>
-                                        <input type="text" x-model="charge.internal_notes" name="internal_notes[]"
-                                            class="w-full rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-
-                                    <!-- Billed -->
-                                    <div class="flex items-end">
-                                        <label class="flex items-center text-gray-700 dark:text-gray-300">
-                                            <input type="checkbox" x-model="charge.billed" name="billed[]"
-                                                class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-blue-600 focus:ring-blue-500">
-                                            <span class="ml-2 text-sm">Billed</span>
-                                        </label>
+                        
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Amount</label>
+                                            <input type="number" x-model="charge.amount" name="amount[]" readonly 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Discount</label>
+                                            <input type="number" x-model="charge.discount" @input="calculateTotals()" 
+                                                   name="discount[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Internal Note</label>
+                                            <input type="text" x-model="charge.internal_notes" name="internal_notes[]" 
+                                                   class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        </div>
                                     </div>
                                 </div>
+                            </template>
+                        
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Total</label>
+                                    <input type="number" x-model="formData.total" name="total" readonly 
+                                           class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Total Discount</label>
+                                    <input type="number" x-model="formData.total_discount" name="total_discount" readonly 
+                                           class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Net Total</label>
+                                    <input type="number" x-model="formData.net_total" name="net_total" readonly 
+                                           class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                </div>
                             </div>
-                        </template>
-
-                        <!-- Add Charge Button -->
-                        <button @click="addCharge" type="button"
-                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors">
-                            + Add New Charge
-                        </button>
-
-                        <!-- Totals Section -->
-                       <div class="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div>
-                                <label class="block font-medium text-gray-700 dark:text-gray-300">Total Charges</label>
-                                <div class="text-xl text-gray-900 dark:text-gray-100" 
-                                    x-text="'$' + formData.total"></div>
-                            </div>
-                            <div>
-                                <label class="block font-medium text-gray-700 dark:text-gray-300">Total Discount</label>
-                                <div class="text-xl text-gray-900 dark:text-gray-100" 
-                                    x-text="'$' + formData.total_discount"></div>
-                            </div>
-                            <div>
-                                <label class="block font-medium text-gray-700 dark:text-gray-300">Net Total</label>
-                                <div class="text-2xl font-bold text-gray-900 dark:text-gray-100" 
-                                    x-text="'$' + formData.net_total"></div>
-                            </div>
-                        </div>
+                            
                     </div>
 
+
                     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
-                    
+                  
                     <!-- Step 3: Dispatch -->
                     <div x-show="step === 3" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div x-data="{ formData: { delivery_type: '', driver_id: '' } }">
@@ -1277,9 +1297,11 @@
                             <div x-show="formData.delivery_type === 'Truck'" class="isDrive mt-4">
                                 <label class="block text-gray-700 dark:text-gray-300">Assign Driver</label>
                                 <select x-model="formData.driver_id" name="driver_id" id="driver_id"
-                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="truck_driver">
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Choose Driver</option>
-                                    
+                                    <!-- <option value="1">John Doe</option>
+                                    <option value="2">Billy John</option>
+                                    <option value="3">Jane Doe</option> -->
                                 </select>
                             </div>
                         
@@ -1313,146 +1335,135 @@
 
                     <!-- Step 4: Backup Docs -->
                     <div x-show="step === 4" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <template x-for="(upload, index) in formData.shipment_uploads" :key="index">
-                            <h3 class="font-medium text-gray-900 dark:text-gray-100">Document #<span x-text="index + 1"></span></h3>
-                            <img :src="`https://laravel-production-077b.up.railway.app/storage/${upload.file_path}`" class="w-32 h-32 object-cover rounded-md" alt="Document Image" />
-                        </template>
-                        <div>
-                            <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
-                            <input type="file" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount" id="file_path">
-                        </div>
+                      <div>
+                          <label class="block text-gray-700 dark:text-gray-300">Attach files</label>
+                          <input type="file" multiple name="file_path[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Enter charge amount" id="file_path">
+                      </div>
                     </div>
 
-                 <!-- Step 5: Expenses -->
-                    <div x-show="step === 5" class="space-y-6">
-                        <template x-for="(expense, index) in formData.shipment_expenses" :key="index">
-                            <div class="p-4 border rounded-lg bg-white dark:bg-gray-800 shadow-sm dark:border-gray-700 mb-6">
-                                <div class="flex justify-between items-center mb-4">
-                                    <h3 class="font-medium text-gray-900 dark:text-gray-100">Expense #<span x-text="index + 1"></span></h3>
-                                    <button @click="removeExpense(index)" type="button" 
-                                            class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm">
-                                        Remove
-                                    </button>
+                    <!-- Step 5: Expenses -->
+                    <div x-show="step === 5">
+                        <template x-for="(expense, index) in formData.expenses" :key="index">
+                            <div class="mb-6 Expensecalc">
+                                <div class="flex justify-end mb-2">
+                                    <span @click="addExpense()" 
+                                          class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                        +
+                                    </span>
+                                    <span @click="removeExpense(index)" 
+                                          class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
+                                        x
+                                    </span>
                                 </div>
-
+                                
                                 <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
-                                    <!-- Expense Type -->
                                     <div>
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Expense Type</label>
-                                        <select x-model="expense.expense_type" name="expense_type[]"
-                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-blue-500 focus:border-blue-500">
-                                       
-                                                <option value="chasis_rental">Chasis Rental</option>
-                                                <option value="detention">Detention</option>
-                                                <option value="fuel_cost">Fuel Cost</option>
-                                                <option value="misc_vendor_bills">Misc Vendor Bills</option>
-                                                <option value="perdiem_bills">Perdiem Bilss</option>
-                                                <option value="shop_repair_cost">Shop and Repair Cost</option>
-                                                <option value="toll">Toll</option>
-                                                <option value="pickup">Pickup</option>
-                                                <option value="pickup">Pickup</option>
-                                                <option value="pickup">Pickup</option>
-                                                <option value="pickup">Pickup</option>
-                                                <option value="pickup">Pickup</option>
+                                        <label class="block text-gray-700 dark:text-gray-300">Expense Type</label>
+                                        <select x-model="expense.expense_type" name="expense_type[]" 
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <option value="" selected disabled></option>
+                                            <option value="chasis_rental">Chasis Rental</option>
+                                            <option value="detention">Detention</option>
+                                            <option value="fuel_cost">Fuel Cost</option>
+                                            <option value="misc_vendor_bills">Misc Vendor Bills</option>
+                                            <option value="perdiem_bills">Perdiem Bilss</option>
+                                            <option value="shop_repair_cost">Shop and Repair Cost</option>
+                                            <option value="toll">Toll</option>
+                                            <option value="pickup">Pickup</option>
+                                            <!-- Other options... -->
                                         </select>
                                     </div>
-
-                                    <!-- Units -->
                                     <div>
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Units</label>
-                                        <input type="text" x-model="expense.expense_unit" name="expense_unit[]"
-                                            @change="calculateExpenseAmount(index)"
-                                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-blue-500 focus:border-blue-500">
+                                        <label class="block text-gray-700 dark:text-gray-300">Units</label>
+                                        <input type="number" x-model="expense.expense_unit" 
+                                               @input="calculateExpenseAmount(expense)" name="expense_unit[]" 
+                                               class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     </div>
-
-                                    <!-- Rate -->
                                     <div>
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Rate</label>
-                                        <input type="text" x-model="expense.expense_rate" name="expense_rate[]"
-                                            @change="calculateExpenseAmount(index)"
-                                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-blue-500 focus:border-blue-500">
+                                        <label class="block text-gray-700 dark:text-gray-300">Rate</label>
+                                        <input type="number" x-model="expense.expense_rate" 
+                                               @input="calculateExpenseAmount(expense)" name="expense_rate[]" 
+                                               class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     </div>
-
-                                    <!-- Amount -->
                                     <div>
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Amount</label>
-                                        <input type="text" x-model="expense.expense_amount" name="expense_amount[]" readonly
-                                            class="w-full p-2 border rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white bg-gray-100">
+                                        <label class="block text-gray-700 dark:text-gray-300">Amount</label>
+                                        <input type="number" x-model="expense.expense_amount" name="expense_amount[]" 
+                                               readonly class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     </div>
-
-                                    <!-- Credit/Reim Amount -->
                                     <div>
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Credit/Reim Amount</label>
-                                        <input type="text" x-model="expense.credit_reimbursement_amount" name="credit_reimbursement_amount[]"
-                                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-blue-500 focus:border-blue-500">
+                                        <label class="block text-gray-700 dark:text-gray-300">Credit/Reim Amount</label>
+                                        <input type="number" x-model="expense.credit_reimbursement_amount" 
+                                               @input="calculateExpenseTotals()" name="credit_reimbursement_amount[]" 
+                                               class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     </div>
                                 </div>
-
-                                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                                    <!-- Vendor Invoice # -->
-                                    <div>
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Vendor Invoice #</label>
-                                        <input type="text" x-model="expense.vendor_invoice_number" name="vendor_invoice_number[]"
-                                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-
-                                    <!-- Payment Reference Note -->
-                                    <div>
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Payment Reference Note</label>
-                                        <textarea x-model="expense.payment_reference_note" name="payment_reference_note[]"
-                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-blue-500 focus:border-blue-500"></textarea>
-                                    </div>
-
-                                    <!-- Disputed Note -->
-                                    <div x-show="expense.expense_disputed">
-                                        <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Disputed Note</label>
-                                        <textarea x-model="expense.disputed_note" name="disputed_note[]"
-                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-blue-500 focus:border-blue-500"></textarea>
-                                    </div>
-
-                                    <!-- Disputed Checkbox -->
-                                        <div class="flex items-center">
-                                            <input type="hidden" :name="`expense_disputed[${index}]`" :value="expense.expense_disputed ? '1' : '0'">
-                                            <label class="flex items-center text-gray-700 dark:text-gray-300">
-                                                <input type="checkbox" x-model="expense.expense_disputed" 
-                                                    @change="expense.expense_disputed = $event.target.checked"
-                                                    class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-blue-600 focus:ring-blue-500">
-                                                <span class="ml-2 text-sm">Disputed?</span>
-                                            </label>
-                                        </div>
-
-                                        <!-- Paid Checkbox -->
-                                        <div class="flex items-center">
-                                            <input type="hidden" :name="`paid[${index}]`" :value="expense.paid ? '1' : '0'">
-                                            <label class="flex items-center text-gray-700 dark:text-gray-300">
-                                                <input type="checkbox" x-model="expense.paid" 
-                                                    @change="expense.paid = $event.target.checked"
-                                                    class="rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-blue-600 focus:ring-blue-500">
-                                                <span class="ml-2 text-sm">Paid?</span>
-                                            </label>
-                                    </div>
+                                <div class="flex items-center space-x-4">
+                                    <input type="hidden" name="expense_disputed[]" :value="expense.expense_disputed ? '1' : '0'">
+                                    <label class="flex items-center space-x-2">
+                                        <input 
+                                            type="checkbox" 
+                                            x-model="expense.expense_disputed" 
+                                            @change="expense.expense_disputed = $event.target.checked"
+                                            class="text-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                                        >
+                                        <span class="text-gray-700 dark:text-gray-300">Disputed?</span>
+                                    </label>
+                                    
+                                    <input type="hidden" name="paid[]" :value="expense.paid ? '1' : '0'">
+                                    <label class="flex items-center space-x-2">
+                                        <input 
+                                            type="checkbox" 
+                                            x-model="expense.paid" 
+                                            @change="expense.paid = $event.target.checked"
+                                            class="text-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                                        >
+                                        <span class="text-gray-700 dark:text-gray-300">Paid?</span>
+                                    </label>
+                                </div>
+                                    <!-- <div class="flex items-center space-x-4">
+                                        <label class="flex items-center space-x-2">
+                                            <input type="checkbox" x-model="expense.expense_disputed" name="expense_disputed[]" 
+                                                   class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                            <span class="text-gray-700 dark:text-gray-300">Disputed?</span>
+                                        </label>
+                                        <label class="flex items-center space-x-2">
+                                            <input type="checkbox" x-model="expense.paid" name="paid[]" 
+                                                   class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                            <span class="text-gray-700 dark:text-gray-300">Paid?</span>
+                                        </label>
+                                    </div> -->
                                 </div>
                             </div>
                         </template>
-
-                        <!-- Add Expense Button -->
-                        <button @click="addExpense" type="button"
-                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded dark:bg-blue-700 dark:hover:bg-blue-800 transition-colors">
-                            + Add New Expense
-                        </button>
+                    
+                        <!-- Expense Totals -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Expense Total</label>
+                                <input type="number" x-model="formData.expense_total" readonly 
+                                       class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Credit Total</label>
+                                <input type="number" x-model="formData.credit_total" readonly 
+                                       class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Net Expense</label>
+                                <input type="number" x-model="formData.net_expense" readonly 
+                                       class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            </div>
+                        </div>
                     </div>
+
             
                     <!-- Navigation Buttons -->
-                    <div class="flex flex-wrap gap-2 mt-6 mb-10">
+                    <!-- <div class="flex flex-wrap gap-2 mt-6 mb-10">
                         <button
                             type="button"
                             class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white hover:bg-gray-300 hover:text-gray-700 dark:hover:bg-gray-600 dark:hover:text-white"
                             x-show="step > 1"
                             @click="prevStep">
-                            Previous
-                        </button>
-                        <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white"
-                            x-show="step > 1" @click="prevStep">
                             Previous
                         </button>
                         <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
@@ -1467,12 +1478,50 @@
                             x-show="step === 5">
                             Submit
                         </button>
-                    </div>
+                    </div> -->
+                    <div class="flex flex-wrap gap-2 mt-6 mb-10">
+                    <!-- Previous -->
+                    <button
+                        type="button"
+                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white hover:bg-gray-300 hover:text-gray-700 dark:hover:bg-gray-600 dark:hover:text-white"
+                        x-show="step > 1 && userRole !== 'customer'"
+                        @click="prevStep">
+                        Previous
+                    </button>
+
+                    <!-- Next -->
+                    <button
+                        type="button"
+                        class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
+                        x-show="step < 5 && userRole !== 'customer'"
+                        @click="nextStep">
+                        Next
+                    </button>
+
+                    <!-- Save (optional for customers, or hide entirely) -->
+                    <button
+                        type="button"
+                        class="px-4 py-2 bg-yellow-500 text-white rounded dark:bg-yellow-400"
+                        x-show="userRole !== 'customer'"
+                        @click="saveProgress">
+                        Save & Continue Later
+                    </button>
+
+                    <!-- Submit for final step OR directly in step 1 if customer -->
+                    <button
+                        type="submit"
+                        class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
+                        x-show="step === 5 || userRole === 'customer'">
+                        Submit
+                    </button>
+                </div>
+
                 </form>
             </div>
             
-        </div>
-    </div>
+           
+            </div>
+
           </div>
         </main>
         <!-- ===== Main Content End ===== -->
@@ -1480,12 +1529,15 @@
       <!-- ===== Content Area End ===== -->
     </div>
     <!-- ===== Page Wrapper End ===== -->
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
     <script>
-         populateCarrierSelect() 
+ populateCarrierSelect() 
 function populateCarrierSelect() {
       $.ajax({
-          url: requestGetURL + '/carriers/carriers',
+          url: requestURL + '/carriers/carriers',
           type: 'GET',
           headers: {
               'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
@@ -1558,7 +1610,7 @@ function populateCarrierSelect() {
               if (xhr.status === 401) {
                   alert("Session expired. Please log in again.");
                   localStorage.removeItem('auth_token');
-                  window.location.href = "/signin";
+                  window.location.href = "/signin.html";
               } else {
                   try {
                       let response = JSON.parse(xhr.responseText);
@@ -1571,23 +1623,151 @@ function populateCarrierSelect() {
           }
       });
   }
+    
+       // $(document).ready(function(){
+            
+       $("#no_latter_than_time").flatpickr({
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "h:i K",
+        time_24hr: false,
+        minuteIncrement: 15,
+        defaultHour: 12,
+        // onChange: function(selectedDates, dateStr, instance) {
+        //     // Update Alpine.js model when the time changes
+        //     const inputElement = instance.input;
+        //     const event = new Event('input', { bubbles: true });
+        //     inputElement.dispatchEvent(event);
+        // },
+        // onReady: function(dateObj, dateStr, instance) {
+        //     // Apply dark mode to Flatpickr if dark mode is active
+        //     if (document.documentElement.classList.contains('dark') || 
+        //         document.body.classList.contains('dark')) {
+        //         instance.calendarContainer.classList.add('dark-theme');
+        //     }
+        // }
+    });
 
+    $("#drop_at_no_latter_than_time").flatpickr({
+        enableTime: true,
+        noCalendar: true,   
+        dateFormat: "h:i K",
+        time_24hr: false,
+        minuteIncrement: 15,
+        defaultHour: 12,
+    });
+
+    
+    
+
+     flatpickr(".drop_at_no_latter_than_date", {
+                enableTime: false,
+                //timeFormat: 'HH:mm',
+            });
+    
+            flatpickr(".no_latter_than_date", {
+                enableTime: false,
+                //timeFormat: 'HH:mm',
+            });
+            flatpickr(".shipped_on_board_date", {
+                enableTime: false,
+                //timeFormat: 'HH:mm',
+            });
+            
+            flatpickr("#appt_dates", {
+                enableTime: false,
+                //timeFormat: 'HH:mm',
+            });
+            
+               flatpickr("#appt_date", {
+                enableTime: false,
+                //timeFormat: 'HH:mm',
+            });
+
+            // $("#appt_date").datepicker({
+            //     format: "yyyy-mm-dd",
+            //     autoclose: true,
+            //     todayHighlight: true,
+            // });
+            // $("#no_latter_than_date").datepicker({
+            //     format: "yyyy-mm-dd",
+            //     autoclose: true,
+            //     todayHighlight: true,
+            // });
+            //createToast('success', 'succesfuly loaded');
+            
+
+        //})
+
+        var mpgGoten = '';
+        var pricePerGallon = '';
+        var pricePerMile = '';
+        var userRole = localStorage.getItem('user_role')
+ 
+
+function fetchSettings() {
+    return fetch(requestURL + '/settings/data', {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(datas => {
+        let data = Array.isArray(datas) ? datas[0] : datas;
+        
+        console.log('FORM DATA', data);
+        mpgValue = document.getElementById('mpg');
+        pricePerGallonValue = document.getElementById('fuel_rate_per_gallon');
+        if(userRole == 'businessadministrator') {
+             mpgValue.value = data.mpg || 1;
+             pricePerGallonValue.value = data.price_per_gallon || 1;
+            mpgGoten = data.mpg || 1;
+            pricePerMile = data.price_per_mile || 1;
+            pricePerGallon = data.price_per_gallon || 1;
+            //console.log('mpgGoten inside fetch', pricePerGallon);
+        }else{
+             mpgValue.value = data.branch?.mpg || 1;
+             pricePerGallonValue.value = data.branch?.price_per_gallon || 1;
+            mpgGoten = data.branch?.mpg || 1;
+            pricePerMile = data.branch?.price_per_mile || 1;
+            pricePerGallon = data.branch?.price_per_gallon || 1;
+        
+        }
+       
+        //console.log('mpgGoten inside fetch', mpgGoten);
+    
+        //return mpgGoten;
+    })
+    .catch(error => {
+        console.error('Error fetching settings data:', error);
+    });
+}
+
+fetchSettings().then(result => {
+    console.log('mpgGoten outside fetch', pricePerGallon);
+});
+
+//console.log('mpgGoten immediately after fetch call (will be empty):', mpgGoten);
+       
         
 //var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
-document.addEventListener('alpine:init', () => {
-    Alpine.data('stepperForm', () => ({
-    step: localStorage.getItem('edit_load') ? parseInt(localStorage.getItem('edit_load')) : 1,
-
-        //isLoading: false,
-        formData: {
-            office: '',
+      function stepperForm() {
+          return {
+              step: localStorage.getItem('step') ? parseInt(localStorage.getItem('step')) : 1,
+              formData: JSON.parse(localStorage.getItem('formData')) || {
+                  office: '',
                   load_type: '',
                   load_type_note: '',
                   load_type_note_r: '',
-                  isBroker: '',
+                  brokered: 0,
                   shipment_type: '',
-                  bill_to: '',
-                  quick_note: '',
+                  //quick_note: '',
                   container: '',
                   container_size: '',
                   container_type: '',
@@ -1604,21 +1784,21 @@ document.addEventListener('alpine:init', () => {
                   commodity: '',
                   pieces: '',
                   pick_up_number: '',
-                  over_weight: [],
+                  over_weight: '',
                   tags: [],
                   tagsInput: '',
                   genset_number: '',
                   seal_number: '',
                   pick_up: '',
-                  look_up: '',
+                  //look_up: '',
                   pick_up_location_name: '',
                   pick_up_address:'',
                   pick_up_address: '',
                   pick_up_city: '',
                   zip: '',
                   appt_date: '',
-                  from: '',
-                  to: '',
+                //   from: '',
+                //   to: '',
                   no_latter_than_date: '',
                   drop_at_no_latter_than_time: '',
                   broker_name: '',
@@ -1632,8 +1812,8 @@ document.addEventListener('alpine:init', () => {
                   edi_number: '',
                   note: '',
 
-                   //miles
-                   total_miles:'',
+                  //miles
+                  total_miles:'',
                   loaded_miles:'',
                   empty_miles:'',
                   dh_miles:'',
@@ -1641,21 +1821,33 @@ document.addEventListener('alpine:init', () => {
                   mpg:'',
                   fuel_cototal_fuel_costst:'',
 
+                //   charge_type: '',
+                //   comment: '',
+                //   units: '',
+                //   rate: '',
+                //   amount: '',
+                //   discount: '',
+                //   internal_notes: '',
+                //   total: '',
+                //   total_discount: '',
+                //   net_total: '',
 
-
-                  charge_type: '',
-                  comment: '',
-                  units: '',
-                  rate: '',
-                  amount: '',
-                  discount: '',
-                  internal_notes: '',
-                  total: '',
-                  total_discount: '',
-                  net_total: '',
                   delivery_type: '',
                   driver_id: '',
                   carrier_id: '',
+                  
+                //   expense_type: '',
+                //   expense_unit: '',
+                //   expense_rate: '',
+                //   expense_amount: '',
+                //   credit_reimbursement_amount: '',
+                //   vendor_invoice_number: '',
+                //   payment_reference_note: '',
+                //   disputed_note: '',
+                //   expense_disputed: '',
+                //   paid: '',
+                //   currency: '',
+                  
                   shipment_type: '',
                     shipper_name: '',
                     ocean_shipper_address: '',
@@ -1690,31 +1882,72 @@ document.addEventListener('alpine:init', () => {
                     goods_name: '',
                     ocean_vin: '',
                     ocean_weight: '',
-                    shipment_charges: [],
-                    shipment_expenses: [],
-                    shipment_uploads: [],
-        },
-        
-        customers: [],
-        offices: [],
+                    expense_total: 0,
+                    //charges: [],
+                    //expenses: [],
+                    charges: [{
+                    charge_type: '',
+                    comment: '',
+                    units: '',
+                    rate: '',
+                    amount: '',
+                    discount: '',
+                    internal_notes: '',
 
-        step: 1,
+                    
+                    bill_to: '',
+                    //quick_note: '',
 
-        init() {
-            //this.fetchData();
-            this.fetchOffices();
-            this.fetchCustomers();
-            const urlParams = new URLSearchParams(window.location.search);
-            const encodedId = urlParams.get('id');
-            if (encodedId) {
-                this.id = atob(encodedId);
-                this.fetchData();
-            } else {
-                console.error('No ID found in the URL');
-            }
-        },
-        
-        addTag() {
+                    }],
+
+                credit_total: 0,
+                net_expense: 0,
+                total: 0,
+                total_discount: 0,
+                net_total: 0,
+
+                  
+                //   bill_tos: [{
+                //     bill_to: '',
+                //     quick_note: '',
+
+                //   }],
+
+              },
+                customers: [],
+                offices: [],
+
+                   
+                    expenses: [{
+                    expense_type: '',
+                    expense_unit: '',
+                    expense_rate: '',
+                    expense_amount: '',
+                    credit_reimbursement_amount: '',
+                    vendor_invoice_number: '',
+                    payment_reference_note: '',
+                    disputed_note: '',
+                    expense_disputed: false,
+                    paid: false
+                    }],
+                  
+                userRole: localStorage.getItem('user_role') || 'customer',
+              nextStep() {
+                if(this.userRole === 'customer') return;
+                  this.step++;
+                  localStorage.setItem('step', this.step);
+              },
+              prevStep() {
+                  this.step--;
+                  localStorage.setItem('step', this.step);
+              },
+              saveProgress() {
+                  localStorage.setItem('formData', JSON.stringify(this.formData));
+                  localStorage.setItem('step', this.step);
+                  //alert("Progress saved successfully!");
+                  createToast('success', 'Progress saved successfully');
+              },
+              addTag() {
                 if (this.formData.tagsInput.trim()) {
                     // Split by spaces and filter out empty strings
                     const newTags = this.formData.tagsInput.split(' ')
@@ -1744,264 +1977,49 @@ document.addEventListener('alpine:init', () => {
                     //this.saveProgress();
                 }
                 },
-
-                fetchData() {
-                    fetch(`${requestGetURL}/shipments/show/${this.id}`, {
-                        headers: {
-                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
-                            'Accept': 'application/json'
+                // calculateFuelCost() {
+                //     const totalMiles = parseFloat(this.formData.total_miles) || 0;
+                //     const fuelPerGallon = parseFloat(this.formData.fuel_rate_per_gallon) || 0;
+                //     const mpg = parseFloat(this.formData.mpg) || 1; 
+                //     // this calculation does not include round-trip, oops you must pay for it
+                //     this.formData.total_fuel_cost = (totalMiles * fuelPerGallon / mpg).toFixed(2);
+                // },
+                calculateFuelCost() {
+                    const totalMiles = parseFloat(this.formData.total_miles) || 0;
+                    setTimeout(() => {
+                        if(totalMiles < 200){
+                            document.getElementById('total_miles').style.borderColor = 'red';
+                            createToast('error', 'Total Miles must be greater than 200');
+                        ///alert("Total Miles must be greater than 200");
+                        return;
                         }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        this.formData = {
-                            ...this.formData,
-                            ...data,
-                            shipment_type: data.shipment_type || '',
-                            over_weight: data.over_weight || [],
-                            tags: data.tags || [],
-                            
-                            // Initialize charges with proper numeric values
-                            shipment_charges: data.shipment_charges?.map(charge => ({
-                                id: charge.id || '',
-                                charge_type: charge.type || '',
-                                comment: charge.comment || '',
-                                units: charge.unit ? parseFloat(charge.unit) : 0,
-                                rate: charge.rate ? parseFloat(charge.rate) : 0,
-                                amount: charge.amount ? parseFloat(charge.amount) : 0,
-                                discount: charge.discount ? parseFloat(charge.discount) : 0,
-                                internal_notes: charge.internal_notes || '',
-                                billed: charge.billed || false,
-                                invoice_date: charge.invoice_date || '',
-                                invoice_number: charge.invoice_number || ''
-                            })) || [],
-                            
-                            // Initialize expenses with proper numeric values
-                            shipment_expenses: data.shipment_expenses?.map(expense => ({
-                                id: expense.id || '',
-                                expense_type: expense.expense_type || '',
-                                expense_unit: expense.units ? parseFloat(expense.units) : 0,
-                                expense_rate: expense.rate ? parseFloat(expense.rate) : 0,
-                                expense_amount: expense.amount ? parseFloat(expense.amount) : 0,
-                                disputed_amount: expense.disputed_amount ? parseFloat(expense.disputed_amount) : 0,
-                                expense_billed: expense.billed || false,
-                                credit_reimbursement_amount: expense.credit_reimbursement_amount ? parseFloat(expense.credit_reimbursement_amount) : 0,
-                                vendor_invoice_number: expense.vendor_invoice_number || '',
-                                payment_reference_note: expense.payment_reference_note || '',
-                                disputed_note: expense.disputed_note || '',
-                                expense_disputed: expense.billed || false,
-                                vendor_invoice_name: expense.vendor_invoice_name || '',
-                                paid: expense.paid || false
-                            })) || [],
-                            
-                            // Other data
-                            shipment_notes: data.shipment_notes?.map(notes => ({
-                                id: notes.id || '',
-                                note: notes.note || '',
-                            })) || [],
-                            
-                            shipment_uploads: data.shipment_uploads?.map(upload => ({
-                                id: upload.id || '',
-                                file_name: upload.file_name || '',
-                                file_path: upload.file_path || '',
-                            })) || [],
-                        };
-                        
-                        // Calculate initial totals
-                        this.calculateChargeTotals();
-                        this.calculateExpenseTotals();
-                    })
-                    .catch(error => {
-                        console.error('Error fetching data:', error);
-                    });
+                        else{
+                            document.getElementById('total_miles').style.borderColor = '';
+                        }
+                    }, 500)
+
+                    const fuelPerGallon = parseFloat(this.formData.fuel_rate_per_gallon) || 0;
+                    const mpg = parseFloat(mpgGoten) || 1;
+                    const pricePerm = parseFloat(pricePerMile) || 1;
+                    // Updated to include round-trip
+                    this.formData.total_fuel_cost = ((totalMiles * 2) * fuelPerGallon / mpg).toFixed(2);
+                    this.formData.total_shipping_cost = ((totalMiles * 2) * pricePerMile).toFixed(2);
                 },
 
-        // fetchData() {
-        //     //this.isLoading = true;
-        //     fetch(`${requestGetURL}/shipments/show/${this.id}`, {
-        //         headers: {
-        //             'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
-        //             'Accept': 'application/json'
-        //         }
-        //     })
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             console.log('Fetched Data:', data);
-        //             localStorage.setItem('Fetched Data: ', data)
-        //             this.formData = {
-        //             ...this.formData,
-        //             ...data,
-        //             shipment_type: data.shipment_type || '',
-        //             over_weight: data.over_weight || [],
-        //             tags: data.tags || [],
-        //             shipment_charges: data.shipment_charges?.map(charge => ({
-        //                 id: charge.id || '',
-        //                 charge_type: charge.type || '',
-        //                 comment: charge.comment || '',
-        //                 units: charge.unit || '',
-        //                 rate: charge.rate || '',
-        //                 amount: charge.amount || '',
-        //                 discount: charge.discount || '',
-        //                 internal_notes: charge.internal_notes || '',
-        //                 billed: charge.billed || false,
-        //                 invoice_date: charge.invoice_date || '',
-        //                 invoice_number: charge.invoice_number || ''
-        //             })) || [],
-
-        //             //expenses
-        //             shipment_expenses: data.shipment_expenses?.map(expense => ({
-        //                 id: expense.id || '',
-        //                 expense_type: expense.expense_type || '',
-        //                 expense_unit: expense.units || '',
-        //                 expense_rate: expense.rate || '',
-        //                 expense_amount: expense.amount || '',
-        //                 expense_amount: expense.disputed_amount || '',
-        //                 expense_billed: expense.billed || '',
-        //                 credit_reimbursement_amount: expense.credit_reimbursement_amount || '',
-        //                 vendor_invoice_number: expense.vendor_invoice_number || '',
-        //                 payment_reference_note: expense.payment_reference_note || '',
-        //                 disputed_note: expense.disputed_note || '',
-        //                 expense_disputed: expense.expense_disputed || false,
-        //                 vendor_invoice_number: expense.vendor_invoice_number,
-        //                 vendor_invoice_name: expense.vendor_invoice_name,
-        //                 paid: expense.paid || false
-        //             })) || [],
-
-        //             //notes
-        //             shipment_notes: data.shipment_notes?.map(notes => ({
-        //                 id: notes.id || '',
-        //                 note: notes.note || '',
-        //             })) || [],
-
-        //             //docs
-        //             shipment_uploads: data.shipment_uploads?.map(upload => ({
-        //                 id: upload.id || '',
-        //                 file_name: upload.file_name || '',
-        //                 file_path: upload.file_path || '',
-        //             })) || [],
-        //         };
-        //         })
+                // addBillto() {
+                //     this.formData.bill_tos.push({
+                //         bill_to: '',
+                //         quick_note: ''
+                //     });
+                //     this.saveProgress();
+                // },
                 
-        //         .catch(error => {
-        //             console.error('Error fetching data:', error);
-        //         })
-                
-        //     .finally(() => {
-        //         //this.isLoading = false;
-        //     });
-        // },
-
-      
-
-        // Charge Management Methods
-        addCharge() {
-            this.formData.shipment_charges.push({
-                id: '',
-                charge_type: '',
-                comment: '',
-                units: 0,
-                rate: 0,
-                amount: 0,
-                discount: 0,
-                internal_notes: '',
-                billed: false,
-                invoice_date: '',
-                invoice_number: ''
-            });
-        },
-
-        removeCharge(index) {
-            this.formData.shipment_charges.splice(index, 1);
-            this.calculateChargeTotals();
-        },
-
-        calculateChargeAmount(index) {
-            const charge = this.formData.shipment_charges[index];
-            const units = parseFloat(charge.units) || 0;
-            const rate = parseFloat(charge.rate) || 0;
-            charge.amount = (units * rate).toFixed(2);
-            this.calculateChargeTotals();
-        },
-
-        calculateChargeTotals() {
-            const totals = this.formData.shipment_charges.reduce((acc, charge) => {
-                acc.total += parseFloat(charge.amount) || 0;
-                acc.discount += parseFloat(charge.discount) || 0;
-                return acc;
-            }, { total: 0, discount: 0 });
-
-            // Update the formData with the calculated totals
-            this.formData.total = totals.total.toFixed(2);
-            this.formData.total_discount = totals.discount.toFixed(2);
-            this.formData.net_total = (totals.total - totals.discount).toFixed(2);
-        },
-
-        // For Shipment Expenses
-        addExpense() {
-            this.formData.shipment_expenses.push({
-                id: '',
-                expense_type: '',
-                expense_unit: 0,
-                expense_rate: 0,
-                expense_amount: 0,
-                disputed_amount: 0,
-                expense_billed: false,
-                credit_reimbursement_amount: 0,
-                vendor_invoice_number: '',
-                payment_reference_note: '',
-                disputed_note: '',
-                expense_disputed: false,
-                vendor_invoice_name: '',
-                paid: false
-            });
-        },
-
-        removeExpense(index) {
-            this.formData.shipment_expenses.splice(index, 1);
-            this.calculateExpenseTotals();
-        },
-
-        calculateExpenseAmount(index) {
-            const expense = this.formData.shipment_expenses[index];
-            const units = parseFloat(expense.expense_unit) || 0;
-            const rate = parseFloat(expense.expense_rate) || 0;
-            expense.expense_amount = (units * rate).toFixed(2);
-            this.calculateExpenseTotals();
-        },
-
-        calculateExpenseTotals() {
-            const totals = this.formData.shipment_expenses.reduce((acc, expense) => {
-                acc.total += parseFloat(expense.expense_amount) || 0;
-                acc.credit += parseFloat(expense.credit_reimbursement_amount) || 0;
-                return acc;
-            }, { total: 0, credit: 0 });
-
-            this.formData.expenses_total = totals.total.toFixed(2);
-            this.formData.expenses_credit = totals.credit.toFixed(2);
-            this.formData.expenses_net_total = (totals.total - totals.credit).toFixed(2);
-        },
-
-        calculateExpenseTotals() {
-            // Implement if you need expense-specific totals
-        },
-
-        nextStep() {
-                  this.step++;
-                  localStorage.setItem('edit_load', this.step);
-              },
-              prevStep() {
-                  this.step--;
-                  localStorage.setItem('edit_load', this.step);
-              },
-
-      
-
-        saveProgress() {
-            localStorage.setItem('formData', JSON.stringify(this.formData));
-            alert("Progress saved successfully!");
-        },
-
-        
+                // removeBillto(index) {
+                //     if (this.formData.bill_tos.length > 1) {
+                //         this.formData.bill_tos.splice(index, 1);
+                //         this.saveProgress();
+                //     }
+                // },
 
                 isOpen: false,
                 popupTitle: 'Flash Message', // Renamed from 'title' to avoid conflicts
@@ -2071,8 +2089,180 @@ document.addEventListener('alpine:init', () => {
                         this.openPopup();
                     }
                     },
+              // Charge calculation methods
+                addCharge() {
+                    this.formData.charges.push({
+                        charge_type: '',
+                        comment: '',
+                        units: '',
+                        rate: '',
+                        amount: '',
+                        discount: '',
+                        internal_notes: ''
+                    });
+                    //this.saveProgress();
+                },
+                
+                removeCharge(index) {
+                    if (this.formData.charges.length > 1) {
+                        this.formData.charges.splice(index, 1);
+                        this.calculateTotals();
+                        //this.saveProgress();
+                    }
+                },
+                
+                calculateAmount(charge) {
+                    const units = parseFloat(charge.units) || 0;
+                    const rate = parseFloat(charge.rate) || 0;
+                    charge.amount = (units * rate).toFixed(2);
+                    this.calculateTotals();
+                    //this.saveProgress();
+                },
+                
+                calculateTotals() {
+                    let total = 0;
+                    let totalDiscount = 0;
+                    
+                    this.formData.charges.forEach(charge => {
+                        const amount = parseFloat(charge.amount) || 0;
+                        const discount = parseFloat(charge.discount) || 0;
+                        
+                        total += amount;
+                        totalDiscount += discount;
+                    });
+                    
+                    this.formData.total = total.toFixed(2);
+                    this.formData.total_discount = totalDiscount.toFixed(2);
+                    this.formData.net_total = (total - totalDiscount).toFixed(2);
+                },
 
-         async fetchCustomers() {
+                addExpense() {
+                this.formData.expenses.push({
+                    expense_type: '',
+                    expense_unit: '',
+                    expense_rate: '',
+                    expense_amount: '',
+                    credit_reimbursement_amount: '',
+                    vendor_invoice_number: '',
+                    payment_reference_note: '',
+                    disputed_note: '',
+                    expense_disputed: false,
+                    paid: false
+                });
+                //this.saveProgress();
+            },
+            
+            removeExpense(index) {
+                if (this.formData.expenses.length > 1) {
+                    this.formData.expenses.splice(index, 1);
+                    this.calculateExpenseTotals();
+                   // this.saveProgress();
+                }
+            },
+            
+            calculateExpenseAmount(expense) {
+                const units = parseFloat(expense.expense_unit) || 0;
+                const rate = parseFloat(expense.expense_rate) || 0;
+                expense.expense_amount = (units * rate).toFixed(2);
+                this.calculateExpenseTotals();
+                //this.saveProgress();
+            },
+            
+            calculateExpenseTotals() {
+                let expenseTotal = 0;
+                let creditTotal = 0;
+                
+                this.formData.expenses.forEach(expense => {
+                    const amount = parseFloat(expense.expense_amount) || 0;
+                    const credit = parseFloat(expense.credit_reimbursement_amount) || 0;
+                    
+                    expenseTotal += amount;
+                    creditTotal += credit;
+                });
+                
+                this.formData.expense_total = expenseTotal.toFixed(2);
+                this.formData.credit_total = creditTotal.toFixed(2);
+                this.formData.net_expense = (expenseTotal - creditTotal).toFixed(2);
+            },
+                
+                // Initialize calculations
+                init() {
+                    // if(!this.formData.bill_tos){
+                    //     this.formData.bill_tos = [{
+                    //     bill_to: '',
+                    //     quick_note: ''
+                    //     }];
+                    // }
+                    if (!this.formData.charges) {
+                    this.formData.charges = [{
+                    charge_type: '',
+                    comment: '',
+                    units: '',
+                    rate: '',
+                    amount: '',
+                    discount: '',
+                    internal_notes: ''
+                    }];
+
+                }
+
+                // Initialize expenses if undefined (extra safety)
+                if (!this.formData.expenses) {
+                    this.formData.expenses = [{
+                    expense_type: '',
+                    expense_unit: '',
+                    expense_rate: '',
+                    expense_amount: '',
+                    credit_reimbursement_amount: '',
+                    vendor_invoice_number: '',
+                    payment_reference_note: '',
+                    disputed_note: '',
+                    expense_disputed: false,
+                    paid: false
+                    }];
+                }
+
+                // Calculate initial totals
+                this.calculateTotals();
+                this.calculateExpenseTotals();
+                
+                // Watch for changes in charges
+                this.$watch('formData.charges', () => {
+                    if (this.formData.charges) { // Added null check
+                    this.calculateTotals();
+                    }
+                }, { deep: true });
+
+                // Watch for changes in expenses
+                this.$watch('formData.expenses', () => {
+                    this.calculateExpenseTotals();
+                }, { deep: true });
+
+                this.fetchCustomers();
+                this.fetchOffices();
+                },
+
+                // Updated calculateTotals with null check
+                calculateTotals() {
+                if (!this.formData.charges) return;
+                
+                let total = 0;
+                let totalDiscount = 0;
+                
+                this.formData.charges.forEach(charge => {
+                    const amount = parseFloat(charge.amount) || 0;
+                    const discount = parseFloat(charge.discount) || 0;
+                    
+                    total += amount;
+                    totalDiscount += discount;
+                });
+                
+                this.formData.total = total.toFixed(2);
+                this.formData.total_discount = totalDiscount.toFixed(2);
+                this.formData.net_total = (total - totalDiscount).toFixed(2);
+                },
+
+                async fetchCustomers() {
                     try {
                         const response = await fetch(requestURL + '/invoices/customer', {
                         headers: {
@@ -2115,62 +2305,34 @@ document.addEventListener('alpine:init', () => {
                     }
                 },
 
-        saveAndSubmit(e) {
-            console.log('Form Data:', this.formData);
-               // console.log("ID is",this.id)
-                // return;
+    
+
+              saveAndSubmit(e) {
+                //var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
                   localStorage.removeItem('formData');
                   localStorage.removeItem('step');
                   e.preventDefault();
-                  var shipment_type = document.getElementById("shipment_type").value
+                  var shipment_type = document.getAnimations("shipment_type").value
 
-                    let form = document.getElementById("editloadForm");
+                    let form = document.getElementById("newloadForm");
                     let formData = new FormData(form);
-                    formData.append('tags', this.formData.tags.join(','));
-                    // console.log('id is', this.id)
-                    // return
-                    // Ensure expenses are included
-                    // this.formData.shipment_expenses.forEach((expense, index) => {
-                    //     formData.append(`shipment_expenses[${index}][expense_type]`, expense.expense_type);
-                    //     formData.append(`shipment_expenses[${index}][expense_unit]`, expense.expense_unit);
-                    //     formData.append(`shipment_expenses[${index}][expense_rate]`, expense.expense_rate);
-                    //     formData.append(`shipment_expenses[${index}][expense_amount]`, expense.expense_amount);
-                    //     formData.append(`shipment_expenses[${index}][credit_reimbursement_amount]`, expense.credit_reimbursement_amount);
-                    //     formData.append(`shipment_expenses[${index}][vendor_invoice_number]`, expense.vendor_invoice_number);
-                    //     formData.append(`shipment_expenses[${index}][payment_reference_note]`, expense.payment_reference_note);
-                    //     formData.append(`shipment_expenses[${index}][disputed_note]`, expense.disputed_note);
-                    //     formData.append(`shipment_expenses[${index}][expense_disputed]`, expense.expense_disputed ? 1 : 0);
-                    //     formData.append(`shipment_expenses[${index}][paid]`, expense.paid ? 1 : 0);
-                    // });
-
-                    // this.formData.shipment_charges.forEach((charge, index) => {
-                    //     formData.append(`shipment_charges[${index}][charge_type]`, charge.charge_type);
-                    //     formData.append(`shipment_charges[${index}][comment]`, charge.comment);
-                    //     formData.append(`shipment_charges[${index}][units]`, charge.units);
-                    //     formData.append(`shipment_charges[${index}][rate]`, charge.rate);
-                    //     formData.append(`shipment_charges[${index}][amount]`, charge.amount);
-                    //     formData.append(`shipment_charges[${index}][discount]`, charge.discount);
-                    //     formData.append(`shipment_charges[${index}][internal_notes]`, charge.internal_notes);
-                    //     formData.append(`shipment_charges[${index}][billed]`, charge.billed ? 1 : 0);  // Convert checkbox boolean to 1/0
-                    // });
-
-
-          
-                    let fileInput = document.getElementById("file_path");
-                    if (fileInput.files.length > 0) {
-                        for (let i = 0; i < fileInput.files.length; i++) {
-                            formData.append(`shipment_uploads[${i}]`, fileInput.files[i]);
-                        }
+                    if (Array.isArray(this.formData.tags) && this.formData.tags.length > 0) {
+                        formData.append('tags', this.formData.tags.join(','));
                     }
-                    
 
+                    //formData.append('tags', this.formData.tags.join(','));
+                    //formData.append('tags', JSON.stringify(this.formData.tags));
+                    //Log FormData contents
+                    // console.log("FormData Contents:");
+                    
                     for (let pair of formData.entries()) {
                         console.log(pair[0] + ": " + pair[1]);
                     }
-                    //return
-                    formData.append("_method", "PUT");
+                    console.log(localStorage.getItem('auth_token'))
+                   // return
+
                     $.ajax({
-                        url: requestURL+'/shipments/update/'+this.id,
+                        url: requestURL+'/shipments/create',
                         type: 'POST',
                         data: formData,
                         processData: false,
@@ -2186,8 +2348,8 @@ document.addEventListener('alpine:init', () => {
 
                         success: (response) => {
                             document.getElementById("Ajaxbackdrop").style.display = 'none'
-                            //console.log('Form submitted successfully:', response);
-                            createToast('success', response.message);
+                            console.log('Form submitted successfully:', response);
+                            createToast('success', 'Shipment uploaded succesfully.');
                             localStorage.removeItem('formData');
                             localStorage.removeItem('step');
                         },
@@ -2211,14 +2373,90 @@ document.addEventListener('alpine:init', () => {
                         }
                     }
                 });
-             }
-        }));
+            }
+        };
+    }
+
+
+    //populate driver select
+
+populateDriverSelect();
+
+    function user()
+    {
+        $.ajax({
+        url: requestURL + '/user',
+        type: 'GET',
+        headers: {
+            'Authorization': 'Bearer'+ localStorage.getItem('auth_token')
+        },
+        success: (response) => {
+            console.log('user data:', response);
+            // alert('Login successful!');
+            // localStorage.setItem('auth_token', response.token);
+        },
+        error: (xhr, status, error) => {
+            console.error('Login failed:', xhr.responseText); // ✅ Log error details
+            //alert('Login failed. Please check your credentials.');
+            console.log(logins)
+        }
     });
+    }
 
-        //populate driver select
-    populateDriverSelect();
+    function login() {
+        var logins = JSON.stringify({email: "branch@gmail.com", password: "12345678" });
+    $.ajax({
+        url: requestURL + '/login',
+        type: 'POST',
+        data: logins,
+        dataType: 'json',
+        contentType: 'application/json', // ✅ Correct Content Type
+        success: (response) => {
+            console.log('Login successful:', response);
+            alert('Login successful!');
+            localStorage.setItem('auth_token', response.token);
+        },
+        error: (xhr, status, error) => {
+            console.error('Login failed:', xhr.responseText); // ✅ Log error details
+            //alert('Login failed. Please check your credentials.');
+            console.log(logins)
+        }
+    });
+}
 
+function register() {
+    $.ajax({
+        url: requestURL + '/register',
+        type: 'POST',
+        data: JSON.stringify({
+            fname: "John",
+            lname: "Doe",
+            email: "branch@gmail.com",
+            password: "12345678",
+            password_confirmation: "12345678",
+            user_type: "businessadministrator",
+            phone: "1234567890",
+            license_number: "123467",
+            address: "123 Main Street, City",
+            about_us: "We are a logistics company focused on efficiency."
+        }),
+        dataType: 'json',
+        contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer'+ localStorage.getItem('auth_token')
+        },
 
+        success: (response) => {
+            console.log('Login successful:', response);
+            alert('Login successful!');
+            localStorage.setItem('auth_token', response.token);
+        },
+        error: (xhr, status, error) => {
+            console.error('registeration failed:', xhr.responseText); // ✅ Log error details
+            //alert('Login failed. Please check your credentials.');
+        }
+    });
+}
 
 
       function handleLoadTypeChange(value) {
@@ -2262,7 +2500,16 @@ document.addEventListener('alpine:init', () => {
             var billtoList = document.getElementById("billtoList");
             var newBillto = billto.cloneNode(true);
             billtoList.appendChild(newBillto);
+            
+            populateCustomerSelect();
         }
+
+        function duplicateSelect(button) {
+  const wrapper = button.closest('.select-wrapper');
+  const clone = wrapper.cloneNode(true); // deep clone
+  clone.querySelector('select').value = ""; // reset selected value
+  document.getElementById('select-container').appendChild(clone);
+}
 
         function removeBillto(element)
         {

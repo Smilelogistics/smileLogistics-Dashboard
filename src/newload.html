@@ -1001,7 +1001,7 @@
                                 <input type="text" x-model="dropoff.state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly placeholder="Auto-filled">
                             </div>
                             <div>
-                                <label class="block text-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600">Zip</label>
+                                <label class="block text-gray-700 dark:text-gray-300">Zip</label>
                                 <input type="text" x-model="dropoff.zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly placeholder="Auto-filled">
                             </div>
                         </div>
@@ -1049,16 +1049,7 @@
             </div>
         </div>
 
-        <!-- Debug Information -->
-        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg mt-6" x-show="$store.debug">
-            <h6 class="font-medium mb-2 dark:text-white">Debug Information</h6>
-            <pre class="text-xs dark:text-gray-300" x-text="JSON.stringify({
-                pickups: formData.pickups,
-                dropoffs: formData.dropoffs,
-                totalDistance: totalDistance,
-                totalCharge: totalCharge
-            }, null, 2)"></pre>
-        </div>
+       
                             <script>
                                 $(document).ready(function () {
                         
@@ -2780,9 +2771,9 @@ fetchSettings().then(result => {
         };
     }
     // Initialize Alpine.js store for debugging
-        document.addEventListener('alpine:init', () => {
-            Alpine.store('debug', false);
-        });
+        // document.addEventListener('alpine:init', () => {
+        //     Alpine.store('debug', false);
+        // });
 
 
     //populate driver select

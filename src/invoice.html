@@ -117,7 +117,7 @@
                             </div> -->
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Invoice Date</label>
-                                <input type="text" x-model="formData.invoice_date" id="invoice_datepicker" name="invoice_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <input type="text" x-model="formData.invoice_date" id="invoice_datepicker" name="invoice_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white invoice_datepicker">
                         </div>
                        <div x-data="{ formData: { isFactored: 0 } }">
                             <label class="block text-gray-700 dark:text-gray-300">Is Factored?</label>
@@ -426,8 +426,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Payment Date</label>
-                                            <input type="text" x-model="paymnt.payment_date" name="payment_date[]"
-                                                   class="payment_date w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <input type="text" x-model="paymnt.payment_date"  x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" name="payment_date[]" class="payment_date w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                         </div>
                                         
                                         <div>
@@ -502,7 +501,7 @@
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Date</label>
-                                        <input type="text" x-model="formData.credit_date" id="credit_date" name="credit_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white credit_date" placeholder="">
+                                        <input type="text" x-model="formData.credit_date"  x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" id="credit_date" name="credit_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white credit_date" placeholder="">
                                     </div>
                                 </div>
                            </div>
@@ -589,6 +588,15 @@
                 enableTime: false,
                 //timeFormat: 'HH:mm',
             });
+
+            function initDatePicker(el, format = "Y-m-d", timeOnly = false) {
+            flatpickr(el, {
+                enableTime: timeOnly,
+                noCalendar: timeOnly,
+                dateFormat: format,
+                time_24hr: true
+            });
+        }
 
 
 function stepperForm() {
@@ -754,6 +762,10 @@ function stepperForm() {
                     processing_fee_flat: '',
                     payment_notes: ''
                 });
+                 this.$nextTick(() => {
+                document.querySelectorAll(".payment_date").forEach(el => initDatePicker(el, "Y-m-d"));
+                //document.querySelectorAll(".appt_time").forEach(el => initDatePicker(el, "H:i", true));
+            });
             this.saveProgress();
         },
         removePayment(index) {

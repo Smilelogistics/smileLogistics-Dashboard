@@ -316,7 +316,10 @@
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">settlement company </label>
-                                <input type="text" x-model="formData.print_settlements_under_this_company" name="print_settlements_under_this_company" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                <select x-model="formData.print_settlements_under_this_company" name="print_settlements_under_this_company" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled>Select Settlement Company</option>
+                                </select>
+                                <!-- <input type="text" x-model="formData.print_settlements_under_this_company" name="print_settlements_under_this_company" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> -->
                             </div>
                         </div>
 

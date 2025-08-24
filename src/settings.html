@@ -661,6 +661,16 @@
                                 <label class="block text-gray-700 text-gray-700 dark:text-gray-300">Price Per Gallon</label>
                                 <input x-model="formData.price_per_gallon" name="price_per_gallon" type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 numberOnly" placeholder="">
                               </div>
+
+                              <div>
+                                <label class="block text-gray-700 text-gray-700 dark:text-gray-300">Max Length (CM)</label>
+                                <input x-model="formData.max_length" name="max_length" type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 numberOnly" placeholder="">
+                              </div>
+
+                              <div>
+                                <label class="block text-gray-700 text-gray-700 dark:text-gray-300">Max Height(CM)</label>
+                                <input x-model="formData.max_height" name="max_height" type="text" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 numberOnly" placeholder="">
+                              </div>
                             
                             </div>
 
@@ -1760,6 +1770,8 @@
       handling_fee: '',
       price_per_mile: '',
       price_per_gallon: '',
+      max_height: '',
+      max_length: '',
 
       //Payment Account
       trucking_bank_name: '',
@@ -1961,6 +1973,8 @@
           const datas = await response.json();
           let data = Array.isArray(datas) ? datas[0] : datas;
           console.log("Settings data", data);
+
+          //localStorage.setItem('xxxxxx', JSON.stringify(data));
           
           console.log('FOMR DATA',data.phone);
         this.formData.phone = data.phone || '';
@@ -2005,6 +2019,8 @@
       this.formData.price_per_mile = data.price_per_mile || '';
       this.formData.price_per_gallon = data.price_per_gallon || '';
       this.formData.mpg = data.mpg || '';
+      this.formData.max_height = data.max_height || '';
+      this.formData.max_length = data.max_length || '';
       this.formData.discount = data.discount || '';
       this.formData.subscription_type = data.subscription_type || '';
       this.formData.subscription_count = data.subscription_count || '';

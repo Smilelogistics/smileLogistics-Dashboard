@@ -10,6 +10,39 @@
     <title>Edit Bike | </title>
     <include src="./partials/mainhead.html"> </include>
     <script src="./assets/js/main.js"></script>
+     <style>
+        .popup-overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .popup-content {
+            z-index: 1001;
+            max-width: 500px;
+            width: 90%;
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1002;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            color: white;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .toast.success {
+            background-color: #10B981;
+        }
+        .toast.error {
+            background-color: #EF4444;
+        }
+    </style>
 
     <script>
         // blow Up modal
@@ -124,6 +157,8 @@
             </div>
 
 
+
+
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
               <div x-data="stepperForm()" class="w-full mb-10 mt-10 mx-auto px-4">
                 <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xs dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 rtl:space-x-reverse">
@@ -160,6 +195,20 @@
                     </li>
                 </ol>
                 
+                  <!-- Popup Modal -->
+            <div x-show="showPopup" x-cloak class="fixed inset-0 popup-overlay flex items-center justify-center">
+                <div class="popup-content bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white" x-text="popupTitle"></h3>
+                    <p class="mb-4 text-gray-700 dark:text-gray-300" x-text="popupMessage"></p>
+                    <div class="flex justify-end">
+                        <button @click="showPopup = false" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">OK</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toast Notification -->
+            <div x-show="showToast" x-text="toastMessage" :class="{'success': toastType === 'success', 'error': toastType === 'error', 'show': showToast}" class="toast" x-transition>
+            </div>
             
                 <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="ConsolidateShipmentForm">
                     <!-- Step 1: Basic Info -->
@@ -259,11 +308,38 @@
                             </div>
                             
                         </div>
-
+                        
                         <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
                             <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Total Height (cm)</label>
+                                <input type="text" x-model="formData.total_height" name="total_height" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" @change="checkTotalHeight()" placeholder="">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Total length (cm)</label>
+                                <input type="text" x-model="formData.total_length" name="total_length" id="total_length" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" @change="checkTotalLength()" placeholder="">
+                            </div>
+                            <div id="">
+                                <label class="block text-gray-700 dark:text-gray-300">Pickup Type</label>
+                                <select required x-model="formData.pickup_type" name="pickup_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" @change="checkPickupType()">
+                                    <option value="" selected disabled>Select Type</option>
+                                    <option value="agent_pickup">Agent Pickup</option>
+                                    <option value="customer_dropoff">Customer Dropoff</option>
+                                </select>
+                            </div>
+
+                            
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Description</label>
+                                <textarea type="text" x-model="formData.description" name="description" id="description" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" cols="1" rows="1" placeholder="">
+                                    </textarea>
+                            </div>
+                            
+                        </div>
+
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6" x-show="userRole === 'businessadministrator'">
+                            <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Payment Status <span class="text-red-500 dark:text-red-400">*</span></label>
-                                <select required x-model="formData.payment_status" name="payment_status" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <select x-model="formData.payment_status" name="payment_status" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                     <option value="" selected disabled>Select Type</option>
                                     <option value="Paid">Paid</option>
                                     <option value="Pending">Pending</option>
@@ -496,14 +572,14 @@
                         <button
                             type="button"
                             class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white hover:bg-gray-300 hover:text-gray-700 dark:hover:bg-gray-600 dark:hover:text-white"
-                            x-show="step > 1"
+                            x-show="step > 1 && userRole !== 'customer'"
                             @click="prevStep">
                             Previous
                         </button>
 
                         <!-- Next Button (Shows on steps 1 and 2) -->
                         <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
-                            x-show="step < 4" @click="nextStep">
+                            x-show="step < 4 && userRole !== 'customer'" @click="nextStep">
                             Next
                         </button>
 
@@ -515,7 +591,7 @@
 
                         <!-- Submit Button (Only shows on final step) -->
                         <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
-                            x-show="step === 4">
+                            x-show="step === 4 || userRole === 'customer'">
                             Submit
                         </button>
                     </div>
@@ -607,6 +683,16 @@ function populateCarrierSelect() {
       });
   }
 
+  function createToast(type, message) {
+            const toast = document.querySelector('.toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            
+            setTimeout(() => {
+                toast.className = 'toast';
+            }, 3000);
+        }
+
         function stepperForm() {
           return {
               step: localStorage.getItem('consolidate_shipment_step') ? parseInt(localStorage.getItem('consolidate_shipment_step')) : 1,
@@ -626,6 +712,10 @@ function populateCarrierSelect() {
                     total_weight: '',
                     total_shipping_cost: '',
                     handling_fee: '',
+                    pickup_type: '',
+                    total_height: '',
+                    total_length: '',
+                    description: '',
                     payment_status: '',
                     payment_method: '',
                     internal_notes: '',
@@ -646,8 +736,22 @@ function populateCarrierSelect() {
                     total_amount: '',
                     total_discount: '',
                     net_total: '',
+                    
               },
+              
+                userRole: localStorage.getItem('user_role') || 'customer',
+                showPopup: false,
+                popupTitle: '',
+                popupMessage: '',
+                showToast: false,
+                toastMessage: '',
+                toastType: 'success',
+                settings: {
+                    max_height: 0,
+                    max_length: 0
+                },
               nextStep() {
+                if(this.userRole === 'customer') return;
                   this.step++;
                   localStorage.setItem('consolidate_shipment_step', this.step);
               },
@@ -704,6 +808,44 @@ function populateCarrierSelect() {
 
                 
                 },
+                checkTotalHeight() {
+                    const height = parseFloat(this.formData.total_height);
+                    if (!isNaN(height) && height > this.settings.max_height) {
+                        this.showNotification(
+                            'Height Limit Exceeded',
+                            `The height value (${height}cm) is too high. Kindly contact the branch or use a value below ${this.settings.max_height}cm.`
+                        );
+                        this.formData.total_height = '';
+                    }
+                },
+                
+                checkTotalLength() {
+                    const length = parseFloat(this.formData.total_length);
+                    if (!isNaN(length) && length > this.settings.max_length) {
+                        this.showNotification(
+                            'Length Limit Exceeded',
+                            `The length value (${length}cm) is too high. Kindly contact the branch or use a value below ${this.settings.max_length}cm.`
+                        );
+                        this.formData.total_length = '';
+                    }
+                },
+                
+                checkPickupType() {
+                    if (this.formData.pickup_type === 'agent_pickup') {
+                        this.showNotification(
+                            'Agent Pickup Selected',
+                            'Additional charges will apply for agent pickup. A detailed invoice will be sent to your email.'
+                        );
+                    }
+                },
+                
+                showNotification(title, message) {
+                    this.popupTitle = title;
+                    this.popupMessage = message;
+                    this.showPopup = true;
+                },
+
+
                   async fetchSettings() {
                     try {
                         const response = await fetch(requestURL + '/settings/data', {
@@ -723,9 +865,13 @@ function populateCarrierSelect() {
                         if(userRole == 'businessadministrator') {
                             this.handlingFee = parseFloat(data.handling_fee) || 1;
                             this.formData.handling_fee = this.handlingFee;
+                            this.settings.max_height = parseFloat(data.max_height) || 0;
+                            this.settings.max_length = parseFloat(data.max_length) || 0;
                         }else{
                             this.handlingFee = parseFloat(data.branch?.handling_fee) || 1;
-                            this.formData.handling_fee = this.branch?.handlingFee;
+                            this.formData.handling_fee = this.branch?.handling_fee;
+                            this.settings.max_height = parseFloat(data.branch?.max_height) || 0;
+                            this.settings.max_length = parseFloat(data.branch?.max_length) || 0;
                         }
                         
                         
@@ -818,11 +964,21 @@ function populateCarrierSelect() {
                         },
 
                         success: (response) => {
-                            document.getElementById("Ajaxbackdrop").style.display = 'none'
-                            console.log('Form submitted successfully:', response);
-                            createToast('success', response.message);
-                            localStorage.removeItem('formData');
-                            localStorage.removeItem('consolidate_shipment_step');
+                            if(response.error){
+                                
+                                document.getElementById("Ajaxbackdrop").style.display = 'none'
+                                //console.log('Form submitted successfully:', response);
+                                createToast('error', response.message);
+                                //localStorage.removeItem('formData');
+                                //localStorage.removeItem('consolidate_shipment_step');
+                            }
+                            else{
+                                document.getElementById("Ajaxbackdrop").style.display = 'none'
+                                console.log('Form submitted successfully:', response);
+                                createToast('success', response.message);
+                                localStorage.removeItem('formData');
+                                localStorage.removeItem('consolidate_shipment_step');
+                            }
                             //alert("Form submitted successfully!");
                         },
                          error: (xhr, status, error) => {

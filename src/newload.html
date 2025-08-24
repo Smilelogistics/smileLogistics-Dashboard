@@ -902,7 +902,7 @@
                                     :id="'pickup-address-' + index"
                                     @input="setupAutocomplete('pickup', index, $event.target)"
                                     class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white address-autocomplete" 
-                                    placeholder="Start typing address...">
+                                    placeholder="Start typing address..." autocomplete="off">
                             </div>
                         </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -924,15 +924,15 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Appt Date</label>
-                                <input type="date" x-model="pickup.appt_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <input type="text" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" x-model="pickup.appt_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">No latter than Date</label>
-                                <input type="date" x-model="pickup.no_latter_than_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <input type="text" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" x-model="pickup.no_latter_than_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Time</label>
-                                <input type="time" x-model="pickup.no_latter_than_time" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <input type="text" x-init="$nextTick(() => initDatePicker($el, 'H:i', true))" x-model="pickup.no_latter_than_time" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                             </div>
                         </div>
                     </div>
@@ -985,7 +985,7 @@
                                     :id="'dropoff-address-' + index"
                                     @input="setupAutocomplete('dropoff', index, $event.target)"
                                     class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white address-autocomplete" 
-                                    placeholder="Start typing address...">
+                                    placeholder="Start typing address..." autocomplete="off">
                             </div>
                         </div>
 
@@ -1009,15 +1009,18 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Appt Date</label>
-                                <input type="date" x-model="dropoff.appt_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <input type="text" x-model="dropoff.appt_date" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))"           class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">No latter than Date</label>
-                                <input type="date" x-model="dropoff.no_latter_than_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <input type="text" x-model="dropoff.no_latter_than_date" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))"  class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Time</label>
-                                <input type="time" x-model="dropoff.no_latter_than_time" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <input type="text" 
+                                    x-model="dropoff.no_latter_than_time"
+                                    x-init="$nextTick(() => initDatePicker($el, 'H:i', true))"
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                             </div>
                         </div>
                     </div>
@@ -1754,6 +1757,15 @@ function populateCarrierSelect() {
         var userRole = localStorage.getItem('user_role')
  
 
+        function initDatePicker(el, format = "Y-m-d", timeOnly = false) {
+        flatpickr(el, {
+            enableTime: timeOnly,
+            noCalendar: timeOnly,
+            dateFormat: format,
+            time_24hr: true
+        });
+    }
+
 function fetchSettings() {
     return fetch(requestURL + '/settings/data', {
         headers: {
@@ -2125,6 +2137,16 @@ fetchSettings().then(result => {
                         }
                     });
                 },
+                initFlatpickr(el, index, type, mode) {
+                    flatpickr(el, {
+                        enableTime: (mode === 'time'),
+                        noCalendar: (mode === 'time'),
+                        dateFormat: (mode === 'time') ? "H:i" : "Y-m-d",
+                        onChange: (selectedDates, dateStr) => {
+                            this[type][index] = dateStr;
+                        }
+                    });
+                },
                 clearPickupDropoffData() {
                 // Reset pickup and dropoff arrays to single empty entries
                 this.formData.pickups = [{
@@ -2177,7 +2199,7 @@ fetchSettings().then(result => {
                     // Create new autocomplete instance
                     const autocomplete = new google.maps.places.Autocomplete(inputElement, {
                         types: ['address'],
-                        componentRestrictions: { country: 'NG'} // Restrict to US addresses
+                        //componentRestrictions: { country: 'NG'} // Restrict to NG addresses
                     });
                     
                     this.autocompleteInstances[key] = autocomplete;
@@ -2272,6 +2294,10 @@ fetchSettings().then(result => {
                         no_latter_than_time: '',
                         coordinates: null
                     });
+                    this.$nextTick(() => {
+                        document.querySelectorAll(".appt_date, .no_latter_than_date").forEach(el => initDatePicker(el, "Y-m-d"));
+                        document.querySelectorAll(".appt_time").forEach(el => initDatePicker(el, "H:i", true));
+                    });
                     this.saveProgress();
                 },
                 
@@ -2295,6 +2321,10 @@ fetchSettings().then(result => {
                         no_latter_than_date: '',
                         no_latter_than_time: '',
                         coordinates: null
+                    });
+                    this.$nextTick(() => {
+                        document.querySelectorAll(".appt_date, .no_latter_than_date").forEach(el => initDatePicker(el, "Y-m-d"));
+                        document.querySelectorAll(".appt_time").forEach(el => initDatePicker(el, "H:i", true));
                     });
                     this.saveProgress();
                 },

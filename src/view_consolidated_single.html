@@ -172,6 +172,21 @@
                                       <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.handling_fee || 'N/A'"></p>
                                     </td>
                                   </tr>
+                                  
+                                  <tr>
+                                    <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                      <p class="text-xs text-gray-500 dark:text-gray-400">Total Height</p>
+                                      <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_height || 'N/A'"></p>
+                                    </td>
+                                    <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                      <p class="text-xs text-gray-500 dark:text-gray-400">Total Length</p>
+                                      <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_length || 'N/A'"></p>
+                                    </td>
+                                    <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                      <p class="text-xs text-gray-500 dark:text-gray-400">Pick Up Type</p>
+                                      <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.pickup_type || 'N/A'"></p>
+                                    </td>
+                                  </tr>
                                   <tr>
                                     <td class="border border-gray-300 dark:border-gray-600 p-3">
                                       <p class="text-xs text-gray-500 dark:text-gray-400">Payment Method</p>
@@ -182,8 +197,8 @@
                                       <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.payment_status || 'N/A'"></p>
                                     </td>
                                     <td class="border border-gray-300 dark:border-gray-600 p-3">
-                                      <p class="text-xs text-gray-500 dark:text-gray-400">Internal Notes</p>
-                                      <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.internal_notes || 'N/A'"></p>
+                                      <p class="text-xs text-gray-500 dark:text-gray-400">Description</p>
+                                      <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.description || 'N/A'"></p>
                                     </td>
                                   </tr>
                                 </table>
@@ -418,8 +433,12 @@
                 expected_arrival_date: data.consolidateShipment.expected_arrival_date || '',
                 expected_depature_date: data.consolidateShipment.expected_depature_date || '',
                 total_weight: data.consolidateShipment.total_weight || '',
-                total_shipment_cost: data.consolidateShipment.total_shipment_cost || '',
+                total_shipping_cost: data.consolidateShipment.total_shipping_cost || '',
                 handling_fee: data.consolidateShipment.handling_fee || '',
+                pickup_type: data.consolidateShipment.pickup_type || '',
+                total_height: data.consolidateShipment.total_height || '',
+                total_length: data.consolidateShipment.total_length || '',
+                description: data.consolidateShipment.description || '',
                 internal_notes: data.consolidateShipment.internal_notes || '',
                 updated_at: data.consolidateShipment.updated_at || '',
                 proof_of_delivery_path: data.consolidateShipment?.documents?.proof_of_delivery_path || '',

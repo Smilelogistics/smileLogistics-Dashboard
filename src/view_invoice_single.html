@@ -242,22 +242,22 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                       <div>
                         <p class="font-bold">TRUCKING SERVICES</p>
-                        <p>J P Morgan Chase Bank</p>
-                        <p>ACH PAYMENT</p>
-                        <p>ACCOUNT Name: SMILES MOTORS LLC</p>
-                        <p>ACCOUNT# 630368915</p>
-                        <p>ROUTING: 074000010</p>
-                        <p>Zelle: accounting@smileslogistics.com</p>
-                        <p>PayCargo: https://paycargo.com/vendors/smiles-motors/</p>
+                        <p x-text="bankData.trucking_bank_name"> </p>
+                        <!-- <p x-text="bankData.trucking_bank_type">ACH PAYMENT</p> -->
+                        <p>ACCOUNT Name: <span x-text="bankData.trucking_account_name"></span></p>
+                        <p>ACCOUNT# <span x-text="bankData.trucking_account_number"></span></p>
+                        <p>ROUTING: <span x-text="bankData.trucking_routing"></span></p>
+                        <p>Zelle: <span x-text="bankData.trucking_zelle"></span></p>
+                        <p>PayCargo: <span x-text="bankData.trucking_pay_cargo"></span></p>
                       </div>
                       <div>
                         <p class="font-bold">OCEAN TRANSPORTATION SERVICES</p>
-                        <p>JP Morgan Chase</p>
-                        <p>ACH PAYMENT</p>
-                        <p>ACCOUNT NAME: SMART MOVE LOGISTICS DBA SMILES LOGISTICS GROUP</p>
-                        <p>ACCOUNT# 613215220</p>
-                        <p>ROUTING: 074000010</p>
-                        <p>Zelle: admin@smileslogistics.com</p>
+                        <p x-text="bankData.ocean_bank_name"></p>
+                        <p x-text="bankData.ocean_bank_type"></p>
+                        <p>ACCOUNT NAME: <span x-text="bankData.ocean_account_name"></span></p>
+                        <p>ACCOUNT# <span x-text="bankData.ocean_account_number"></span></p>
+                        <p>ROUTING: <span x-text="bankData.ocean_routing"></span></p>
+                        <p>Zelle: <span x-text="bankData.ocean_zelle"></span></p>
                       </div>
                     </div>
                   </div>
@@ -308,8 +308,10 @@
           id: null,
           formData: '',
           isLoading: true,
+          bankData: '',
           
           init() {
+            this.fetchSettings();
             const urlParams = new URLSearchParams(window.location.search);
             const encodedId = urlParams.get('id');
             if (encodedId) {
@@ -320,34 +322,92 @@
             }
           },
             async downloadAsPDF() {
-  const element = document.getElementById('printableArea');
-  const clonedElement = element.cloneNode(true);
+              const element = document.getElementById('printableArea');
+              const clonedElement = element.cloneNode(true);
 
-  // Remove unwanted elements
-  const buttons = clonedElement.querySelectorAll('.no-print');
-  buttons.forEach(button => button.remove());
+              // Remove unwanted elements
+              const buttons = clonedElement.querySelectorAll('.no-print');
+              buttons.forEach(button => button.remove());
 
-  // Add title
-  const title = document.createElement('h1');
-  title.textContent = 'Invoice #' + (this.formData.id || 'N/A');
-  title.style.textAlign = 'center';
-  title.style.marginBottom = '20px';
-  clonedElement.insertBefore(title, clonedElement.firstChild);
+              // Add title
+              const title = document.createElement('h1');
+              title.textContent = 'Invoice #' + (this.formData.id || 'N/A');
+              title.style.textAlign = 'center';
+              title.style.marginBottom = '20px';
+              clonedElement.insertBefore(title, clonedElement.firstChild);
 
-  const opt = {
-    margin: 10,
-    filename: 'invoice_' + (new Date().toISOString().split('T')[0]) + '.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, logging: true, useCORS: true },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
+              const opt = {
+                margin: 10,
+                filename: 'invoice_' + (new Date().toISOString().split('T')[0]) + '.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, logging: true, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+              };
 
-  try {
-    await html2pdf().set(opt).from(clonedElement).save();
-  } catch (error) {
-    console.error('Error generating PDF:', error);
-  }
-},
+              try {
+                await html2pdf().set(opt).from(clonedElement).save();
+              } catch (error) {
+                console.error('Error generating PDF:', error);
+              }
+            },
+
+            async fetchSettings() {
+                    try {
+                        const response = await fetch(requestURL + '/settings/data', {
+                            headers: {
+                                'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                                'Accept': 'application/json'
+                            }
+                        });
+                        
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        
+                        const datas = await response.json();
+                        const data = Array.isArray(datas) ? datas[0] : datas;
+
+                        console.log('Bhg DATA', data);
+
+                        if(userRole == 'businessadministrator') {
+
+                            this.bankData = {
+                                ocean_account_name: data.ocean_account_name || '',
+                                ocean_account_number: data.ocean_account_number || '',
+                                ocean_bank_name: data.ocean_bank_name || '',
+                                ocean_routing: data.ocean_routing || '',
+                                ocean_zelle: data.ocean_zelle || '',
+
+                                trucking_account_name: data.trucking_account_name || '',
+                                trucking_account_number: data.trucking_account_number || '',
+                                trucking_bank_name: data.trucking_bank_name || '',
+                                trucking_routing: data.trucking_routing || '',
+                                trucking_pay_cargo: data.trucking_pay_cargo || '',
+                                trucking_zelle: data.trucking_zelle || '',
+                            }
+                        }else{
+                            this.bankData = {
+                                ocean_account_name: data.branch?.ocean_account_name || '',
+                                ocean_account_number: data.branch?.ocean_account_number || '',
+                                ocean_bank_name: data.branch?.ocean_bank_name || '',
+                                ocean_routing: data.branch?.ocean_routing || '',
+                                ocean_zelle: data.branch?.ocean_zelle || '',
+                                trucking_account_name: data.branch?.trucking_account_name || '',
+                                trucking_account_number: data.branch?.trucking_account_number || '',
+                                trucking_bank_name: data.branch?.trucking_bank_name || '',
+                                trucking_routing: data.branch?.trucking_routing || '',
+                                trucking_pay_cargo: data.branch?.trucking_pay_cargo || '',
+                                trucking_zelle: data.branch?.trucking_zelle || '',
+                            }
+                            
+                        }
+                        
+                        
+                        
+                    } catch (error) {
+                        console.error('Error fetching settings:', error);
+                        this.handlingFee = 1;
+                        this.formData.handling_fee = this.handlingFee;
+                    }
+                },
 
 
           fetchData() {

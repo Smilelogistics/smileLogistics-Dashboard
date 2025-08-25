@@ -111,7 +111,7 @@
                           
                         </div>
 
-                        <div id="" class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                        <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                            
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Driver Type</label>
@@ -203,8 +203,12 @@
                             <script>
                                 $(document).ready(function () {
                                     $(function () {
-                                        $("#hired_on").
-                                        datepicker();
+                                          $("#hired_on").datepicker({
+                                        dateFormat: "yy-mm-dd",
+                                        changeMonth: true,
+                                        changeYear: true,
+                                        //yearRange: "1900:2100"
+                                    });
                                     });
                                 }) 
                             </script>
@@ -788,7 +792,7 @@
                     <!-- Step 5: Backup Docs -->
                     <div x-show="step === 5" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <!-- <template x-for="(upload, index) in formData.driver_docs" :key="index"> -->
-                            <h3 class="font-medium text-gray-900 dark:text-gray-100">Document #<span x-text="index + 1"></span></h3>
+                            <h3 class="font-medium text-gray-900 dark:text-gray-100">Document #<span></span></h3>
                             <img :src="file_path" class="w-32 h-32 object-cover rounded-md" alt="Document Image" />
                         <!-- </template> -->
                         <div>

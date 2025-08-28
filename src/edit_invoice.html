@@ -499,15 +499,15 @@
                         <div class="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <label class="block font-medium text-gray-700 dark:text-gray-300">Total Charges</label>
-                                <div class="text-xl text-gray-900 dark:text-gray-100" x-text="'$' + formData.total"></div>
+                                <div class="text-xl text-gray-900 dark:text-gray-100" x-text="currency + ' ' + formData.total"></div>
                             </div>
                             <div>
                                 <label class="block font-medium text-gray-700 dark:text-gray-300">Total Discount</label>
-                                <div class="text-xl text-gray-900 dark:text-gray-100" x-text="'$' + formData.total_discount"></div>
+                                <div class="text-xl text-gray-900 dark:text-gray-100" x-text="currency + ' ' + formData.total_discount"></div>
                             </div>
                             <div>
                                 <label class="block font-medium text-gray-700 dark:text-gray-300">Net Total</label>
-                                <div class="text-2xl font-bold text-gray-900 dark:text-gray-100" x-text="'$' + formData.net_total"></div>
+                                <div class="text-2xl font-bold text-gray-900 dark:text-gray-100" x-text="currency + ' ' + formData.net_total"></div>
                             </div>
                         </div>
                     </div>
@@ -718,17 +718,17 @@
                         <div>
                             <label class="block font-medium text-gray-700 dark:text-gray-300">Total Payments</label>
                             <div class="text-xl text-gray-900 dark:text-gray-100" 
-                                x-text="'$' + (formData.totalPayments ?? 0)"></div>
+                                x-text="currency + ' ' + (formData.totalPayments ?? 0)"></div>
                         </div>
                         <!-- <div>
                             <label class="block font-medium text-gray-700 dark:text-gray-300">Total Fees</label>
                             <div class="text-xl text-gray-900 dark:text-gray-100" 
-                                x-text="'$' + (formData.totalProcessingFees ?? 0)"></div>
+                                x-text="currency + ' ' + (formData.totalProcessingFees ?? 0)"></div>
                         </div> -->
                         <div>
                             <label class="block font-medium text-gray-700 dark:text-gray-300">Net Received</label>
                             <div class="text-2xl font-bold text-gray-900 dark:text-gray-100" 
-                                x-text="'$' + (formData.netReceived ?? 0)"></div>
+                                x-text="currency + ' ' + (formData.netReceived ?? 0)"></div>
                         </div>
                     </div>
 
@@ -945,6 +945,7 @@ document.addEventListener('alpine:init', () => {
         totalProcessingFees: '0.00',
         netReceived: '0.00'
         },
+          currency: localStorage.getItem('currency') || 'USD',
 
         init() {
             this.calculateTotals();

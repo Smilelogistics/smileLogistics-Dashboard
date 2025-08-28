@@ -467,7 +467,7 @@
                                 <h4 class="text-lg font-semibold text-gray-800 dark:text-white/90">Payment Totals</h4>
                                 <div class="flex justify-between mt-2">
                                     <span class="text-gray-700 dark:text-gray-300">Total Payments:</span>
-                                    <span x-text="'$' + totalPayments.toFixed(2)" class="font-bold text-gray-900 dark:text-white"></span>
+                                    <span x-text="currency + ' ' + totalPayments.toFixed(2)" class="font-bold text-gray-900 dark:text-white"></span>
                                 </div>
                             </div>
                         </div>
@@ -663,6 +663,19 @@ function stepperForm() {
             
             return savedData ? {...defaultData, ...JSON.parse(savedData)} : defaultData;
         })(),
+
+        currency: localStorage.getItem('currency') || 'USD',
+
+        //  currencySymbol(code) {
+        //     const symbols = {
+        //         USD: '$',
+        //         EUR: '€',
+        //         GBP: '£',
+        //         NGN: '₦',
+        //         JPY: '¥'
+        //     };
+        //     return symbols[code] || code + ' ';
+        // },
         
         totalSteps: 3,
         

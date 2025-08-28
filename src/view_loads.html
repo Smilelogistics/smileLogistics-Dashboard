@@ -149,7 +149,7 @@
                                     </div>
                                   </td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100" x-text="item.shipment_tracking_number"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.bill_to"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.invoice?.customer?.user?.fname ? item.invoice.customer.user.fname : 'N/A'"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.container"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.total_miles"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.seal_number"></td>
@@ -157,11 +157,11 @@
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.booking_number"></td>
                     
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                    x-text="'$' + ((Number(item?.shipment_charges?.net_total) || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}))">
+                                    x-text="currency + ' ' + ((Number(item?.shipment_charges?.net_total) || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}))">
                                   </td>
 
                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                    x-text="'$' + ((Number(item?.shipment_charges?.net_total) || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}))">
+                                    x-text="currency + ' ' + ((Number(item?.shipment_charges?.net_total) || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}))">
                                   </td>
                     
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.broker_name"></td>
@@ -387,6 +387,7 @@
           perPage: 10,
           totalPages: 1,
           maxVisiblePages: 5,
+          currency: localStorage.getItem('currency') || 'USD',
           
           init() {
             this.fetchData();

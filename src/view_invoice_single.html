@@ -201,18 +201,18 @@
                           <tr>
                             <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-gray-800 dark:text-gray-200" x-text="charge.charge_type"></td>
                             <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center text-gray-800 dark:text-gray-200" x-text="charge.charge_units"></td>
-                            <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center text-gray-800 dark:text-gray-200" x-text="'$' + parseFloat(charge.charge_rate).toFixed(2)"></td>
-                            <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-right text-gray-800 dark:text-gray-200" x-text="'$' + parseFloat(charge.charge_amount).toFixed(2)"></td>
+                            <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-center text-gray-800 dark:text-gray-200" x-text="currency + ' ' + parseFloat(charge.charge_rate).toFixed(2)"></td>
+                            <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-right text-gray-800 dark:text-gray-200" x-text="currency + ' ' + parseFloat(charge.charge_amount).toFixed(2)"></td>
                           </tr>
                         </template>
                         <tr class="bg-gray-50 dark:bg-gray-800/50">
                           <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 font-bold text-gray-800 dark:text-gray-200" colspan="3">Total:</td>
-                          <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-right text-gray-800 dark:text-gray-200" x-text="'$' + parseFloat(formData.net_total).toFixed(2)"></td>
+                          <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-right text-gray-800 dark:text-gray-200" x-text="currency + ' ' + parseFloat(formData.net_total).toFixed(2)"></td>
                         </tr>
                         <template x-if="formData.total_discount > 0">
                           <tr class="bg-gray-50 dark:bg-gray-800/50">
                             <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 font-bold text-gray-800 dark:text-gray-200" colspan="3">Discount:</td>
-                            <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-right text-red-600 dark:text-red-400" x-text="'-$' + parseFloat(formData.total_discount).toFixed(2)"></td>
+                            <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-right text-red-600 dark:text-red-400" x-text="'-'+currency + ' ' + parseFloat(formData.total_discount).toFixed(2)"></td>
                           </tr>
                         </template>
                         <!-- <template x-for="(payment, index) in formData.invoicepayments" :key="index">
@@ -224,7 +224,7 @@
                         <tr class="bg-gray-100 dark:bg-gray-700">
                           <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 font-bold text-gray-800 dark:text-white" colspan="3">Balance Due:</td>
                           <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-right font-bold text-gray-800 dark:text-white" 
-                             x-text="'$' + (
+                             x-text="currency + ' ' + (
                               parseFloat(formData.net_total || 0) -
                               parseFloat(formData.total_discount || 0) -
                               (Array.isArray(formData.invoicepayments) 
@@ -309,6 +309,7 @@
           formData: '',
           isLoading: true,
           bankData: '',
+          currency: localStorage.getItem('currency') || 'USD',
           
           init() {
             this.fetchSettings();

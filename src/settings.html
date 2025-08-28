@@ -1977,6 +1977,7 @@
           //localStorage.setItem('xxxxxx', JSON.stringify(data));
           
           console.log('FOMR DATA',data.phone);
+          localStorage.setItem('currency', data.currency);
         this.formData.phone = data.phone || '';
       this.formData.address = data.address || '';
       this.formData.about_us = data.about_us || '';

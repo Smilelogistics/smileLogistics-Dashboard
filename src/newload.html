@@ -734,7 +734,7 @@
                                 </div>
                                 
                             <!-- numbers -->
-                            <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6" style="display: none;">
+                            <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Reference #</label>
                                     <input type="text" x-model="formData.reference_number" name="reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="reference_number">
@@ -1039,15 +1039,15 @@
                 </div>
                 <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
                     <div class="text-sm text-green-600 dark:text-green-400">Base Rate</div>
-                    <div class="text-2xl font-bold text-green-700 dark:text-green-300" x-text="'$' + baseRate.toFixed(2)"></div>
+                    <div class="text-2xl font-bold text-green-700 dark:text-green-300" x-text="currency + ' ' + baseRate.toFixed(2)"></div>
                 </div>
                 <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
                     <div class="text-sm text-yellow-600 dark:text-yellow-400">Distance Charge</div>
-                    <div class="text-2xl font-bold text-yellow-700 dark:text-yellow-300" x-text="'$' + distanceCharge.toFixed(2)"></div>
+                    <div class="text-2xl font-bold text-yellow-700 dark:text-yellow-300" x-text="currency + ' ' + distanceCharge.toFixed(2)"></div>
                 </div>
                 <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
                     <div class="text-sm text-purple-600 dark:text-purple-400">Total Charge</div>
-                    <div class="text-2xl font-bold text-purple-700 dark:text-purple-300" x-text="'$' + totalCharge.toFixed(2)"></div>
+                    <div class="text-2xl font-bold text-purple-700 dark:text-purple-300" x-text="currency + ' ' + totalCharge.toFixed(2)"></div>
                 </div>
             </div>
         </div>
@@ -1179,7 +1179,7 @@
                                                 <!-- <option value="" selected disabled>Select Type</option> -->
                                         </div>
                                         
-                                        <div style="display: none;">
+                                        <div style="display: ;">
                                             <label class="block text-gray-700 dark:text-gray-300">EDI/API Shipment #</label>
                                             <input type="text" x-model="formData.edi_number" name="edi_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="edi_number">
                                         </div>
@@ -2027,6 +2027,7 @@ fetchSettings().then(result => {
                     directionsService: null,
                   
                 userRole: localStorage.getItem('user_role') || 'customer',
+                currency: localStorage.getItem('currency') || 'USD',
 
                 // Initialize calculations
                 init() {
@@ -2541,6 +2542,8 @@ fetchSettings().then(result => {
                         // Update the bill_to field in the first charge
                         if (this.formData.charges.length > 0) {
                         this.formData.charges[0].bill_to = customerId;
+                        //console.log(customerId)
+                        //console.log("this is the first charge",this.formData.charges[0]);
                         this.saveProgress(); // Auto-save the selection
                         }
                         
@@ -2753,7 +2756,7 @@ fetchSettings().then(result => {
                         console.log(pair[0] + ": " + pair[1]);
                     }
                     console.log(localStorage.getItem('auth_token'))
-                   // return
+                    //return
 
                     $.ajax({
                         url: requestURL+'/shipments/create',

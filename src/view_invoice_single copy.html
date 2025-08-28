@@ -242,19 +242,19 @@
                                                 <div>
                                                   <p class="text-xs text-gray-500 dark:text-gray-400">Rate</p>
                                                   <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="charge.charge_rate ? '$' + parseFloat(charge.charge_rate).toFixed(2) : '0.00'"></p>
+                                                     x-text="charge.charge_rate ? currency + ' ' + parseFloat(charge.charge_rate).toFixed(2) : '0.00'"></p>
                                                 </div>
                                                 
                                                 <div>
                                                   <p class="text-xs text-gray-500 dark:text-gray-400">Amount</p>
                                                   <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="charge.charge_amount ? '$' + parseFloat(charge.charge_amount).toFixed(2) : '0.00'"></p>
+                                                     x-text="charge.charge_amount ? currency + ' ' + parseFloat(charge.charge_amount).toFixed(2) : '0.00'"></p>
                                                 </div>
                                                 
                                                 <div>
                                                   <p class="text-xs text-gray-500 dark:text-gray-400">Discount</p>
                                                   <p class="text-sm font-medium text-gray-900 dark:text-gray-100" 
-                                                     x-text="charge.discount ? '$' + parseFloat(charge.discount).toFixed(2) : '0.00'"></p>
+                                                     x-text="charge.discount ? currency + ' ' + parseFloat(charge.discount).toFixed(2) : '0.00'"></p>
                                                 </div>
                                                 
                                                 <div class="md:col-span-2">
@@ -275,16 +275,16 @@
                                       </template>
                                       <!-- <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Total</p>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_charges ? '$' + parseFloat(formData.total_charges).toFixed(2) : 'N/A'"></p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_charges ? currency + ' ' + parseFloat(formData.total_charges).toFixed(2) : 'N/A'"></p>
                                       </div>                                   -->
                                       <div>
                                         <p class="text-xl font-bold text-gray-500 dark:text-gray-400">Discount</p>
-                                        <p class="text-xl font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_discount ? '$' + parseFloat(formData.total_discount).toFixed(2) : '0.00'"></p>
+                                        <p class="text-xl font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_discount ? currency + ' ' + parseFloat(formData.total_discount).toFixed(2) : '0.00'"></p>
                                       </div>
                                         
                                       <div>
                                         <p class="text-xl font-bold text-gray-500 dark:text-gray-400">Net Total</p>
-                                        <p class="text-xl font-medium text-gray-900 dark:text-gray-100"  x-text="formData.net_total ? '$' + parseFloat(formData.net_total).toFixed(2) : '0.00'"></p>
+                                        <p class="text-xl font-medium text-gray-900 dark:text-gray-100"  x-text="formData.net_total ? currency + ' ' + parseFloat(formData.net_total).toFixed(2) : '0.00'"></p>
                                       </div>
                                   
                                     </div>
@@ -300,7 +300,7 @@
                                             <div class="flex justify-between items-start">
                                               <div>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">Credit Amountt</p>
-                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="payment.credit_amount ? '$' + parseFloat(payment.credit_amount).toFixed(2) : 'N/A'"></p>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="payment.credit_amount ? currency + ' ' + parseFloat(payment.credit_amount).toFixed(2) : 'N/A'"></p>
                                               </div>
                                             </div>
                                             
@@ -311,7 +311,7 @@
                                               </div>
                                               <div>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400">Amount</p>
-                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="'$' + (payment.amount || '0.00')"></p>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="currency + ' ' + (payment.amount || '0.00')"></p>
                                               </div>
                                             </div>
                                             
@@ -436,6 +436,7 @@
           id: null,
           formData: '',
           isLoading: false,
+          currency: localStorage.getItem('currency') || 'USD',
           
           init() {
             const urlParams = new URLSearchParams(window.location.search);

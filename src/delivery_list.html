@@ -184,7 +184,7 @@
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.customer_office ? item.customer_office : ' '"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.bill_of_landing_number ? item.bill_of_landing_number : ' '"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                      x-text="item.total ? '$' + parseFloat(item.total).toFixed(2) : '$0.00'">
+                                      x-text="item.total ? currency + ' ' + parseFloat(item.total).toFixed(2) : '$0.00'">
                                   </td>
                                   <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-3 py-1 text-xs font-semibold rounded-full border"
@@ -368,6 +368,7 @@ document.addEventListener('alpine:init', () => {
     perPage: 10,
     totalPages: 1,
     maxVisiblePages: 5,
+    currency: localStorage.getItem('currency') || 'USD',
     
     init() {
       this.fetchData();

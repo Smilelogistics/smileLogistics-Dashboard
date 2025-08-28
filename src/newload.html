@@ -900,7 +900,7 @@
                                     type="text" 
                                     x-model="pickup.address" 
                                     :id="'pickup-address-' + index"
-                                    @input="setupAutocomplete('pickup', index, $event.target)"
+                                    @click="setupAutocomplete('pickup', index, $event.target)"
                                     class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white address-autocomplete" 
                                     placeholder="Start typing address..." autocomplete="off">
                             </div>
@@ -983,7 +983,7 @@
                                     type="text" 
                                     x-model="dropoff.address" 
                                     :id="'dropoff-address-' + index"
-                                    @input="setupAutocomplete('dropoff', index, $event.target)"
+                                    @click="setupAutocomplete('dropoff', index, $event.target)"
                                     class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white address-autocomplete" 
                                     placeholder="Start typing address..." autocomplete="off">
                             </div>

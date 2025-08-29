@@ -88,8 +88,8 @@
                     <!-- Step 1: Basic Info -->
                     <div x-show="step === 1">
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
-                            <!-- <input type="text" id="lat">
-                            <input type="text" id="lon"> -->
+                            <input type="text" id="lat">
+                            <input type="text" id="lon">
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Pick up address</label>
                                 <input type="text" x-model="formData.from" 
@@ -165,7 +165,7 @@
                                 <div class="spinner"></div>
                                 <p class="text-sm text-gray-500 dark:text-gray-400">Calculating shipment cost...</p>
                             </div>
-
+                        
                             <div x-show="showResults" id="results" class="results">
                                 <h2 class="text-2xl font-bold mb-4 dark:text-white">Delivery Quote</h2>
                                 <p><strong class="font-bold dark:text-white ">Distance:</strong> <span x-text="distanceText" class="font-bold dark:text-white">-</span></p>
@@ -174,12 +174,10 @@
                                 <p><strong class="font-bold dark:text-white ">Service Type:</strong> <span x-text="serviceTypeText" class="font-bold dark:text-white">-</span></p>
                                 <p><strong class="font-bold dark:text-white">Total Cost:</strong> <span x-text="costText" class="font-weight:bold; font-size:1.2em; dark:text-white">-</span></p>
                             </div>
-
-                            <div class="md:col-start-2">
-                                <div id="map" class="w-full h-[300px]"></div>
+                            <div class="grid grid-cols-1 gap-3 mb-6">
+                                <div id="map" style="height: 300px;"></div>
                             </div>
                         </div>
-
                     </div>
 
                     <!-- Navigation Buttons -->
@@ -373,120 +371,65 @@
                 },
                 
                 saveAndSubmit() {
-                    // First calculate distance to get accurate cost
-                    if (!this.formData.from || !this.formData.drop_off_address) {
-                        createToast('error', 'Please enter both pickup and dropoff locations');
-                        return;
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition((position) => {
+                            let form = document.getElementById("deliveryForm");
+                            let formData = new FormData(form);
+
+                            for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
                     }
-                    
-                    if (!this.formData.package_weight) {
-                        createToast('error', 'Please enter package weight');
-                        return;
-                    }
-                    
-                    this.isCalculating = true;
-                    
-                    // Use the same calculation logic as in calculateDistance()
-                    const service = new google.maps.DistanceMatrixService();
-                    service.getDistanceMatrix({
-                        origins: [this.formData.from],
-                        destinations: [this.formData.drop_off_address],
-                        travelMode: 'DRIVING',
-                        unitSystem: google.maps.UnitSystem.METRIC
-                    }, (response, status) => {
-                        if (status === 'OK') {
-                            const element = response.rows[0].elements[0];
-                            if (element.status === 'OK') {
-                                const distanceKm = element.distance.value / 1000;
-                                
-                                // Get current position and submit form
-                                if (navigator.geolocation) {
-                                    navigator.geolocation.getCurrentPosition((position) => {
-                                        let formData = new FormData();
-                                        
-                                        // Add all form data
-                                        formData.append('from', this.formData.from);
-                                        formData.append('drop_off_address', this.formData.drop_off_address);
-                                        formData.append('package_description', this.formData.package_description || '');
-                                        formData.append('package_weight', this.formData.package_weight);
-                                        formData.append('isFragile', this.formData.isFragile || 'false');
-                                        formData.append('service_type', this.formData.service_type);
-                                        formData.append('latitude', position.coords.latitude);
-                                        formData.append('longitude', position.coords.longitude);
-                                        
-                                        // Add calculated distance (for verification)
-                                        formData.append('calculated_distance', distanceKm);
-                                        console.log(formData)
-                                        for (let pair of formData.entries()) {
-                                                console.log(pair[0] + ": " + pair[1]);
-                                            }
-                                            console.log(localStorage.getItem('auth_token'))
-                                            //return
-                                        
-                                        $.ajax({
-                                            url: requestURL + '/delivery/create',
-                                            type: 'POST',
-                                            data: formData,
-                                            processData: false,
-                                            contentType: false,
-                                            headers: {
-                                                'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
-                                                'Accept': 'application/json'
-                                            },
-                                            beforeSend: () => {
-                                                document.getElementById("Ajaxbackdrop").style.display = 'flex';
-                                                this.isCalculating = true;
-                                            },
-                                            success: (response) => {
-                                                document.getElementById("Ajaxbackdrop").style.display = 'none';
-                                                this.isCalculating = false;
-                                                
-                                                if (response.success) {
-                                                    createToast('success', response.message);
-                                                    localStorage.removeItem('formData');
-                                                    
-                                                    // Redirect or show success message
-                                                    console.log('Delivery created:', response.data);
-                                                } else {
-                                                    createToast('error', response.message);
-                                                }
-                                            },
-                                            error: (xhr, status, error) => {
-                                                document.getElementById("Ajaxbackdrop").style.display = 'none';
-                                                this.isCalculating = false;
-                                                
-                                                try {
-                                                    let response = JSON.parse(xhr.responseText);
-                                                    if (response.errors) {
-                                                        let messages = Object.values(response.errors).flat().join('<br>');
-                                                        createToast('error', messages);
-                                                    } else if (response.message) {
-                                                        createToast('error', response.message);
-                                                    } else {
-                                                        createToast('error', 'An unexpected error occurred. Please try again.');
-                                                    }
-                                                } catch (e) {
-                                                    createToast('error', 'An error occurred. Please check your input and try again.');
-                                                }
-                                            }
-                                        });
-                                    }, (error) => {
-                                        this.isCalculating = false;
-                                        createToast('error', 'Failed to retrieve your location. Please allow location access.');
-                                    });
-                                } else {
-                                    this.isCalculating = false;
-                                    createToast('error', 'Geolocation is not supported by your browser.');
+                    console.log(localStorage.getItem('auth_token'))
+                    //return
+
+                            // Append the latitude and longitude
+                            formData.append('latitude', position.coords.latitude);
+                            formData.append('longitude', position.coords.longitude);
+                            
+                            $.ajax({
+                                url: requestURL + '/delivery/create',
+                                type: 'POST',
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                headers: {
+                                    'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                                    'Accept': 'application/json'
+                                },
+                                beforeSend: function () {
+                                    document.getElementById("Ajaxbackdrop").style.display = 'flex'
+                                },
+                                success: (response) => {
+                                    document.getElementById("Ajaxbackdrop").style.display = 'none'
+                                    createToast('success', response.message);
+                                    localStorage.removeItem('formData');
+                                },
+                                error: (xhr, status, error) => {
+                                    document.getElementById("Ajaxbackdrop").style.display = 'none'
+                                    console.error('Form submission failed:', xhr.responseText);
+
+                                    try {
+                                        let response = JSON.parse(xhr.responseText);
+
+                                        if (response.errors) {
+                                            let messages = Object.values(response.errors).flat().join('<br>');
+                                            createToast('error', messages);
+                                        } else if (response.message) {
+                                            createToast('error', response.message);
+                                        } else {
+                                            createToast('error', 'An unexpected error occurred. Please try again.');
+                                        }
+                                    } catch (e) {
+                                        createToast('error', 'An error occurred. Please check your input and try again.');
+                                    }
                                 }
-                            } else {
-                                this.isCalculating = false;
-                                createToast('error', 'Could not calculate route between locations');
-                            }
-                        } else {
-                            this.isCalculating = false;
-                            createToast('error', 'Error calculating distance: ' + status);
-                        }
-                    });
+                            });
+                        }, (error) => {
+                            createToast('error', 'Failed to retrieve your location. Please allow location access.');
+                        });
+                    } else {
+                        createToast('error', 'Geolocation is not supported by your browser.');
+                    }
                 }
             }
         }

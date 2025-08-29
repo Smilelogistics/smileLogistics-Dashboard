@@ -241,11 +241,11 @@
               saveAndSubmit() {
                 let form = document.getElementById("newBike");
                     let formData = new FormData(form);
-                    // for (let pair of formData.entries()) {
-                    //     console.log(pair[0] + ": " + pair[1]);
-                    // }
-                    //  console.log(localStorage.getItem('auth_token'))
-                    // return
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+                     console.log(localStorage.getItem('auth_token'))
+                   // return
                     $.ajax({
                         url: requestURL+'/bikes/create',
                         type: 'POST',

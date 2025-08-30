@@ -196,6 +196,11 @@
                                         <option value="air">Air Freight</option>
                                     </select>
                                 </div>
+
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300">Booking #</label>
+                                    <input type="text" x-model="formData.booking_number" name="booking_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="booking_number">
+                                </div>
                             </div>
                             <div x-show="selectedOption === 'ocean'">
                                 <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -497,7 +502,7 @@
 
                             <div x-show="selectedOption === 'land'">
                                 <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                                    <div>
+                                    <div x-show="userRole === 'businessadministrator'">
                                         <label class="block text-gray-700 dark:text-gray-300">Office</label>
 
                                         <select x-model="formData.office" name="office" 
@@ -565,7 +570,7 @@
                                <div>
                                 
                                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                                        <div>
+                                        <div  x-show="userRole === 'businessadministrator'">
                                         <label class="block text-gray-700 dark:text-gray-300">Bill To</label>
                                         <select x-model="formData.bill_to" name="bill_to"  @change="fetchCustomerDetails($event.target.value)"
                                                 class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
@@ -739,10 +744,10 @@
                                     <label class="block text-gray-700 dark:text-gray-300">Reference #</label>
                                     <input type="text" x-model="formData.reference_number" name="reference_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="reference_number">
                                 </div>
-                                <div>
+                                <!-- <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Booking #</label>
                                     <input type="text" x-model="formData.booking_number" name="booking_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="booking_number">
-                                </div>
+                                </div> -->
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">BOL #</label>
                                     <input type="text" x-model="formData.bill_of_laden_number" name="bill_of_laden_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="bill_of_laden_number">
@@ -1100,7 +1105,7 @@
                                     </div> -->
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">$ / Gallon</label>
-                                        <input x-model="formData.fuel_rate_per_gallon" name="fuel_rate_per_gallon" @change="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="fuel_rate_per_gallon" />
+                                        <input x-model="formData.fuel_rate_per_gallon" name="fuel_rate_per_gallon" @change="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="fuel_rate_per_gallon" readonly/>
                                     </div>
                                     
                                     <div>

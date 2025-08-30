@@ -151,7 +151,7 @@
             return value === null || value === undefined || value === '';
           });
           
-          if (hasEmptyFields) {
+          if (hasEmptyFields && role ==="businessadministrator") {
             this.openPopup();
           }
           

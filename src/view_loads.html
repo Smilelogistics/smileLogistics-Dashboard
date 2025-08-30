@@ -138,7 +138,7 @@
                                           <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                                             <li><a href="#" x-on:click="editItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a></li>
                                             <li><a href="#" x-on:click="viewItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View</a></li>
-                                             <li>
+                                             <li x-show="userRole === 'businessadministrator' || userRole === 'driver' ">
                                             <a href="#" @click.prevent="$store.statusModal.openModal(item.id, item.shipment_status, item.shipment_tracking_number, item.shipment_type); open = false" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update Status</a>
                                           </li>
                                           </ul>
@@ -388,6 +388,7 @@
           totalPages: 1,
           maxVisiblePages: 5,
           currency: localStorage.getItem('currency') || 'USD',
+          userRole: localStorage.getItem('user_role'),
           
           init() {
             this.fetchData();

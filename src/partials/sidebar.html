@@ -1208,7 +1208,7 @@ try {
               
 
 
-              <!-- Menu item Carrier -->
+              <!-- Menu item Invoices -->
                <template x-if="userRole === 'businessadministrator' || userRole === 'customer'">
               <li>
                 <a href="#" @click.prevent="selected = (selected === 'Manage Invoice' ? '':'Manage Invoice')" class="menu-item group"
@@ -1250,7 +1250,7 @@ try {
                 >
                   <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                     class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
-                    <li>
+                    <li x-show="userRole === 'businessadministrator'">
                       <a href="invoice.html" class="menu-dropdown-item group" :class="page === 'invoice' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">New Invoice</a>
                     </li>
                     <li>

@@ -1,214 +1,145 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="x-apple-disable-message-reformatting">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Driver Account Created</title>
+  <title>Shipment Uploaded</title>
   <style>
-    /* Generic email-safe resets */
-    body, table, td, p { margin:0; padding:0; }
-    img { border:0; outline:none; text-decoration:none; display:block; }
-    table { border-collapse:collapse; }
-    a { text-decoration:none; }
-    /* Layout helpers */
-    .bg-page { background:#F5F7FB; }
-    .container { width:100%; max-width:640px; }
-    /* Card */
-    .card {
-      background:#FFFFFF;
-      border-radius:24px;
-      box-shadow: 0 2px 6px rgba(16,24,40,0.04);
-    }
-    /* Typography */
-    .h1 {
-      font-family: Arial, Helvetica, sans-serif;
-      font-weight:700;
-      font-size:24px;
-      line-height:32px;
-      color:#111827; /* near-black */
-      text-align:center;
-    }
-    .body {
-      font-family: Arial, Helvetica, sans-serif;
-      font-weight:400;
-      font-size:16px;
-      line-height:26px;
-      color:#6B7280; /* gray-500/600 */
-      text-align:center;
-    }
-    .small {
-      font-size:12px;
-      line-height:18px;
-      color:#6B7280;
-      text-align:center;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-    /* Blue panel */
-    .panel {
-      background:#1D4ED8; /* vivid brand blue */
-      color:#FFFFFF;
-      border-radius:16px;
-      text-align:center;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-    .panel p {
-      margin:0;
-      font-weight:700;
-      font-size:18px;
-      line-height:26px;
-    }
-    /* Important note */
-    .note-wrap { padding-left:14px; } /* space before the black bar */
-    .note {
-      background:#FEF3C7; /* soft amber */
-      border-radius:6px;
-      padding:14px 16px;
-      text-align:center;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-    .note-title {
-      font-weight:700;
-      font-size:13px;
-      color:#111827;
-      margin:0 0 4px 0;
-    }
-    .note-text {
-      font-size:13px;
-      line-height:20px;
-      color:#6B7280;
-      margin:0;
-    }
-    .black-bar {
-      width:6px;
-      background:#000000;
-      border-radius:3px;
-    }
-    /* Footer "Need Help?" */
-    .help {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size:22px;
-      line-height:28px;
-      color:#0F172A; /* slate-900 */
-      font-weight:800; /* bold like the mock */
-      margin:0;
-      text-align:center;
-    }
-    .help-call {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size:16px;
-      line-height:24px;
-      color:#6B7280;
-      margin:0;
-      text-align:center;
-    }
-    /* Spacing utilities (email-safe as table cells) */
-    .sp-8 { height:8px; line-height:8px; }
-    .sp-12 { height:12px; line-height:12px; }
-    .sp-16 { height:16px; line-height:16px; }
-    .sp-20 { height:20px; line-height:20px; }
-    .sp-24 { height:24px; line-height:24px; }
-    .sp-28 { height:28px; line-height:28px; }
-    .sp-32 { height:32px; line-height:32px; }
-    .sp-40 { height:40px; line-height:40px; }
-    .sp-48 { height:48px; line-height:48px; }
-    .sp-56 { height:56px; line-height:56px; }
-    /* Mobile width */
-    @media only screen and (max-width: 640px) {
-      .container { max-width:100% !important; }
-      .note-wrap { padding-left:10px !important; }
-    }
+    /* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f8f9fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Card Container */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 40px 30px;
+  text-align: center;
+  width: 500px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo */
+.logo img {
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+/* Heading */
+h2 {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: sans-serif;
+  margin-bottom: 15px;
+  padding: 10px;
+}
+
+/* Message */
+.message {
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Tracking Box */
+.tracking-box {
+  background: #153C96;
+  color: #fff;
+  font-weight: bold;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+/* Tracking Number */
+.tracking-number {
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+/* Barcode */
+.barcode img {
+  margin: 10px auto;
+  display: block;
+  height: 70px;
+}
+.barcode p {
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+/* Footer */
+.footer {
+  font-size: 14px;
+  margin-top: 20px;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+/* Help Section */
+.help {
+  font-size: 15px;
+}
+.help strong {
+  font-weight: bold;
+}
+
   </style>
 </head>
-<body class="bg-page" style="background:#F5F7FB;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="bg-page" style="background:#F5F7FB;">
-    <tr><td align="center" style="padding:24px 16px;">
-      <!-- Card -->
-      <table role="presentation" width="640" cellpadding="0" cellspacing="0" class="container card" style="width:100%; max-width:640px; background:#FFFFFF; border-radius:24px;">
-        <tr><td style="padding:32px 28px 28px 28px;">
-          <!-- Logo -->
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-            <tr>
-              <td align="center">
-                <img src="{{logo_url}}" width="140" alt="SMILES Logistics Group" style="width:140px; height:auto;">
-              </td>
-            </tr>
-          </table>
+<body>
+  <div class="card">
+    <!-- Logo -->
+    <div class="logo">
+      <img src="https://s3.eu-central-2.wasabisys.com/smileslogistics/assets/images/logo-dark.png" alt="Smiles Logistics Group">
+    </div>
 
-          <div class="sp-24"></div>
+    <!-- Heading -->
+    <h2>Consolidate Shipment Uploaded Successfully</h2>
 
-          <!-- Title -->
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-            <tr><td class="h1" style="font-family:Arial,Helvetica,sans-serif; font-weight:700; font-size:24px; line-height:32px; color:#111827; text-align:center;">
-              Driver Account Created Successfully!
-            </td></tr>
-          </table>
+    <!-- Message -->
+    <p class="message">
+      Hello Customer, your Shipment has been uploaded successfully with tracking number
+    </p>
 
-          <div class="sp-16"></div>
+    <!-- Tracking Box -->
+    <div class="tracking-box">
+      CNS-2791868163
+    </div>
 
-          <!-- Intro -->
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-            <tr><td class="body" style="font-family:Arial,Helvetica,sans-serif; font-size:16px; line-height:26px; color:#6B7280; text-align:center;">
-              Hello, your driver account has been successfully created.<br>
-              Kindly download the mobile app and change your<br>
-              password:
-            </td></tr>
-          </table>
+    <!-- Tracking Number -->
+    <p class="tracking-number">
+      Tracking Number: <span>CNS-2791868163</span>
+    </p>
 
-          <div class="sp-24"></div>
+    <!-- Barcode -->
+    <div class="barcode">
+      <img src="https://barcode.tec-it.com/barcode.ashx?data=CNS-2791868163&code=Code128&translate-esc=true" alt="barcode">
+      <p>CNS-2791868163</p>
+    </div>
 
-          <!-- Blue Panel -->
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="panel" style="background:#143D96; color:#FFFFFF; border-radius:16px;">
-            <tr><td style="padding:18px 16px;">
-              <p style="margin:0; font-family:Arial,Helvetica,sans-serif; font-weight:700; font-size:18px; line-height:26px;">Email: {{email}}</p>
-              <div class="sp-8"></div>
-              <p style="margin:0; font-family:Arial,Helvetica,sans-serif; font-weight:700; font-size:18px; line-height:26px;">Temporary Password: {{temp_password}}</p>
-            </td></tr>
-          </table>
+    <!-- Footer -->
+    <p class="footer">
+      Warm Regards,<br>
+      <strong>Smiles Logistics Group</strong>
+    </p>
 
-          <div class="sp-24"></div>
-
-          <!-- Important Note with black bar -->
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="note-wrap" style="padding-left:14px;">
-            <tr>
-              <td class="black-bar" width="6" style="width:6px; background:#000000; border-radius:3px;">&nbsp;</td>
-              <td width="12" style="width:12px;">&nbsp;</td>
-              <td class="note" style="background:#FEF3C7; border-radius:6px; padding:14px 16px;">
-                <p class="note-title" style="font-family:Arial,Helvetica,sans-serif; font-weight:700; font-size:13px; color:#111827; margin:0 0 4px 0;">Important:</p>
-                <p class="note-text" style="font-family:Arial,Helvetica,sans-serif; font-size:13px; line-height:20px; color:#6B7280; margin:0;">
-                  Please change your password after logging in for the first time.
-                </p>
-              </td>
-            </tr>
-          </table>
-
-          <div class="sp-28"></div>
-
-          <!-- Regards -->
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-            <tr><td class="body" style="font-family:Arial,Helvetica,sans-serif; font-size:16px; line-height:26px; color:#6B7280; text-align:center;">
-              Warm Regards,<br>
-              <span style="color:#111827;">Smiles Logistics Group</span>
-            </td></tr>
-          </table>
-
-          <div class="sp-32"></div>
-
-          <!-- Help -->
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-            <tr><td align="center">
-              <p class="help" style="font-family:Arial,Helvetica,sans-serif; font-weight:800; font-size:22px; line-height:28px; color:#0F172A; margin:0;">Need Help?</p>
-              <div class="sp-8"></div>
-              <p class="help-call" style="font-family:Arial,Helvetica,sans-serif; font-size:16px; line-height:24px; color:#6B7280; margin:0;">
-                Call: {{support_phone}}
-              </p>
-            </td></tr>
-          </table>
-
-        </td></tr>
-      </table>
-      <!-- /Card -->
-    </td></tr>
-  </table>
+    <!-- Help -->
+    <p class="help">
+      <strong>Need Help?</strong> &nbsp; Call: +100 000 000
+    </p>
+  </div>
 </body>
 </html>

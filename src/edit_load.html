@@ -5,6 +5,14 @@
 
         <include src="./partials/mainhead.html"> </include>
         <script src="./assets/js/main.js"></script>
+        <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Flatpickr Dark Theme CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkucOouQfm_4BEHGZbCphOp-xe4Mqvmv0&libraries=places"></script>
+
+        <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkucOouQfm_4BEHGZbCphOp-xe4Mqvmv0&libraries=places&v=weekly" async defer></script> -->
+<script type="module" src="https://unpkg.com/@googlemaps/extended-component-library@0.6"></script>
         <script>
         // blow Up modal
         $(document).ready(function() {
@@ -483,7 +491,7 @@
 
                             <div x-show="selectedOption === 'land'">
                                 <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                                    <div>
+                                    <div x-show="userRole === 'businessadministrator'">
                                         <label class="block text-gray-700 dark:text-gray-300">Office</label>
                                          <select x-model="formData.office" name="office" 
                                                 class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="office">
@@ -540,20 +548,10 @@
                             
 
                                 <!-- bill to -->
-                                <div>
-                                    <div id="billto">
-                                        <span onclick="duplicateBillto()" 
-                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
-                                            +
-                                        </span>
-                                        <span onclick="removeBillto(this)" 
-                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
-                                            x
-                                            <!-- 🗑 -->
-                                        </span>
-
-                                        <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                                             <div>
+                                 <div>
+                                
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                                        <div  x-show="userRole === 'businessadministrator'">
                                         <label class="block text-gray-700 dark:text-gray-300">Bill To</label>
                                         <select x-model="formData.bill_to" name="bill_to"  @change="fetchCustomerDetails($event.target.value)"
                                                 class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
@@ -565,17 +563,49 @@
                                             </template>
                                         </select>
                                         </div>
-                                            <!-- <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Bill to</label>
-                                                <input type="text" x-model="formData.bill_to" name="bill_to[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                            </div> -->
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Quick Note</label>
-                                                <input type="text" x-model="formData.quick_note" name="quick_note[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Notes">
-                                            </div>
+                                        <!-- <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Quick Note</label>
+                                        <input type="text" x-model="formData.quick_note" name="quick_note" 
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                placeholder="Enter quick note">
+                                        </div> -->
+                                    </div>
+                                <!-- <template x-for="(item, index) in formData.bill_tos" :key="index">
+                                    <div class="mb-6">
+                                    <div class="flex justify-end mb-2">
+                                        <span @click="addBillto()" 
+                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                        +
+                                        </span>
+                                        <span @click="removeBillto(index)" 
+                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500"
+                                            x-show="formData.bill_tos.length > 1">
+                                        x
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                                        <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Bill To</label>
+                                        <select x-model="item.bill_to" name="bill_to[]" 
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <option value="" selected disabled hidden>Select Customer</option>
+                                            <template x-for="customer in customers" :key="customer.id">
+                                            <option :value="customer.id" 
+                                                    x-text="customer.user.fname">
+                                            </option>
+                                            </template>
+                                        </select>
+                                        </div>
+                                        <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Quick Note</label>
+                                        <input type="text" x-model="item.quick_note" name="quick_note[]" 
+                                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                placeholder="Enter quick note">
                                         </div>
                                     </div>
-                                <div id="billtoList"></div>
+                                    </div>
+                                </template> -->
                                 </div>
 
                                 <!-- container and chassis -->
@@ -812,177 +842,200 @@
                                 </div>
                             </div>
                             <!-- Pick up Deliveries -->
-                            <div>
+                             <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6">
                                 <h6 class="text-md font-medium mb-3 dark:text-white">Pickup / Deliveries</h6>
-                                    <div id="pickUPP">
-                                        <span onclick="duplicatePickup()" 
-                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
-                                            +
-                                        </span>
-                                        <span onclick="removePickup(this)" 
-                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
-                                            x
-                                            <!-- 🗑 -->
-                                        </span>
-                                <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Pick up</label>
-                                        <select x-model="formData.pick_up" name="pick_up" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="pick_up">
-                                            <option value="" selected disabled></option>
-                                            <option value="pickup">Pickup</option>
-                                            <option value="pickup loaded">Pickup Loaded</option>
-                                            <option value="pickup empty">Pickup Empty</option>
-                                            <hr class="mt-3 mb-3 text-white">
-                                            <option value="deliver">Deliver</option>
-                                            <option value="load_at">Load at</option>
-                                            <hr>
-                                            <option value="drop_at">Drop at</option>
-                                            <option value="drop_empty">Drop Empty</option>
-                                            <option value="drop_loaded">Drop Loaded</option>
-                                            <option value="stop_off">Stop off</option>
-                                            <option value="scale_stop">Scale Stop</option>
-                                            <option value="Other">Other</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Quick lookup</label>
-                                        <select x-model="formData.look_up" name="look_up" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="look_up">
-                                            <option value="" selected disabled></option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
-                                        <input type="text" x-model="formData.pick_up_location_name" name="pick_up_location_name[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Address</label>
-                                        <input type="text" x-model="formData.pick_up_address" name="pick_up_address[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">City</label>
-                                        <input type="text" x-model="formData.pick_up_city" name="pick_up_city[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                    </div>
+                                <div id="pickUPP">
+                                    <span @click="duplicatePickup()" 
+                                        class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                        +
+                                    </span>
+                                    <span @click="removePickup($event)" 
+                                        class="ml-2 cursor-pointer text-lg font-bold text-red-600 dark:text-red-500">
+                                        ×
+                                    </span>
                                     
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Zip</label>
-                                        <input type="text" x-model="formData.zip" name="zip[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                    </div>
-                                </div>
-                                    <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
-                                        <div>
-                                            <label class="block text-gray-700 dark:text-gray-300"> Appt</label>
-                                            <input type="text" x-model="formData.appt_date" name="appt_date[]" id="appt_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                        </div>
-                                        <div>
-                                            <label class="block text-gray-700 dark:text-gray-300">From</label>
-                                            <select x-model="formData.from" name="from[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                <option value="" selected disabled></option>
+                                    <template x-for="(pickup, index) in formData.pickups" :key="'pickup-' + index">
+                                        <div class="pickup-section mb-6 p-4 border rounded-lg dark:border-gray-600">
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Pick up</label>
+                                                    <select x-model="pickup.pick_up" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                        <option value="" selected disabled></option>
+                                                        <option value="pickup">Pickup</option>
+                                                        <option value="pickup loaded">Pickup Loaded</option>
+                                                        <option value="pickup empty">Pickup Empty</option>
+                                                        <option value="deliver">Deliver</option>
+                                                        <option value="load_at">Load at</option>
+                                                        <option value="drop_at">Drop at</option>
+                                                        <option value="drop_empty">Drop Empty</option>
+                                                        <option value="drop_loaded">Drop Loaded</option>
+                                                        <option value="stop_off">Stop off</option>
+                                                        <option value="scale_stop">Scale Stop</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
+                                                    <input type="text" x-model="pickup.location_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Address *</label>
+                                                    <input 
+                                                        type="text" 
+                                                        x-model="pickup.address" 
+                                                        :id="'pickup-address-' + index"
+                                                        @click="setupAutocomplete('pickup', index, $event.target)"
+                                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white address-autocomplete" 
+                                                        placeholder="Start typing address..." autocomplete="off">
+                                                </div>
+                                            </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                             
-                                            </select>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">City</label>
+                                                    <input type="text" x-model="pickup.city" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly placeholder="Auto-filled">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">State</label>
+                                                    <input type="text" x-model="pickup.state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly placeholder="Auto-filled">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Zip</label>
+                                                    <input type="text" x-model="pickup.zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly placeholder="Auto-filled">
+                                                </div>
                                         </div>
-                                        <div>
-                                            <label class="block text-gray-700 dark:text-gray-300">To</label>
-                                            <input type="text" x-model="formData.to" name="to[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Appt Date</label>
+                                                    <input type="text" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" x-model="pickup.appt_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">No latter than Date</label>
+                                                    <input type="text" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" x-model="pickup.no_latter_than_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Time</label>
+                                                    <input type="text" x-init="$nextTick(() => initDatePicker($el, 'H:i', true))" x-model="pickup.no_latter_than_time" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label class="block text-gray-700 dark:text-gray-300">No latter than</label>
-                                            <input type="text" x-model="formData.no_latter_than_date" name="no_latter_than_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                        </div>
-                                        <div>
-                                            <label class="block text-gray-700 dark:text-gray-300">Time</label>
-                                            <input type="text" x-model="formData.no_latter_than_time" name="no_latter_than_time[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                        </div>
-                                    </div>
+                                    </template>
                                 </div>
-                                <div id="pickupList"></div>
                             </div>
 
-                            <div>
+                            <!-- Drop Location Section -->
+                            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6">
                                 <h6 class="text-md font-medium mb-3 dark:text-white">Drop Location</h6>
-                                    <div id="dropAt">
-                                        <span onclick="duplicateDropAt()" 
-                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
-                                            +
-                                        </span>
-                                        <span onclick="removeDropAt(this)" 
-                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
-                                            x
-                                            <!-- 🗑 -->
-                                        </span>
-                                        <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Drop At</label>
-                                                <select x-model="formData.drop_at" name="drop_at" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="drop_at">
-                                                    <option value="" selected disabled></option>
-                                                    <option value="pickup">Pickup</option>
-                                                    <option value="pickup loaded">Pickup Loaded</option>
-                                                    <option value="pickup empty">Pickup Empty</option>
-                                                    <hr class="mt-3 mb-3 text-white">
-                                                    <option value="deliver">Deliver</option>
-                                                    <option value="load_at">Load at</option>
-                                                    <hr>
-                                                    <option value="drop_at">Drop at</option>
-                                                    <option value="drop_empty">Drop Empty</option>
-                                                    <option value="drop_loaded">Drop Loaded</option>
-                                                    <option value="stop_off">Stop off</option>
-                                                    <option value="scale_stop">Scale Stop</option>
-                                                    <option value="Other">Other</option>
-                                                </select>
+                                <div id="dropAt">
+                                    <span @click="duplicateDropAt()" 
+                                        class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                        +
+                                    </span>
+                                    <span @click="removeDropAt($event)" 
+                                        class="ml-2 cursor-pointer text-lg font-bold text-red-600 dark:text-red-500">
+                                        ×
+                                    </span>
+
+                                    <template x-for="(dropoff, index) in formData.dropoffs" :key="'dropoff-' + index">
+                                        <div class="dropoff-section mb-6 p-4 border rounded-lg dark:border-gray-600">
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Drop At</label>
+                                                    <select x-model="dropoff.drop_at" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                        <option value="" selected disabled></option>
+                                                        <option value="pickup">Pickup</option>
+                                                        <option value="pickup loaded">Pickup Loaded</option>
+                                                        <option value="pickup empty">Pickup Empty</option>
+                                                        <option value="deliver">Deliver</option>
+                                                        <option value="load_at">Load at</option>
+                                                        <option value="drop_at">Drop at</option>
+                                                        <option value="drop_empty">Drop Empty</option>
+                                                        <option value="drop_loaded">Drop Loaded</option>
+                                                        <option value="stop_off">Stop off</option>
+                                                        <option value="scale_stop">Scale Stop</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
+                                                    <input type="text" x-model="dropoff.location_name" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Address *</label>
+                                                    <input 
+                                                        type="text" 
+                                                        x-model="dropoff.address" 
+                                                        :id="'dropoff-address-' + index"
+                                                        @click="setupAutocomplete('dropoff', index, $event.target)"
+                                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white address-autocomplete" 
+                                                        placeholder="Start typing address..." autocomplete="off">
+                                                </div>
                                             </div>
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Quick lookup</label>
-                                                <select x-model="formData.drop_at_look_up" name="drop_at_look_up[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                    <option value="" selected disabled></option>
+
+                                            
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                                 
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
-                                                <input type="text" x-model="formData.drop_at_location_name" name="drop_at_location_name[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                            </div>
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Address</label>
-                                                <input type="text" x-model="formData.drop_at_address" name="drop_at_address[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                            </div>
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">City</label>
-                                                <input type="text" x-model="formData.drop_at_city" name="drop_at_city[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">City</label>
+                                                    <input type="text" x-model="dropoff.city" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly placeholder="Auto-filled">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">State</label>
+                                                    <input type="text" x-model="dropoff.state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly placeholder="Auto-filled">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Zip</label>
+                                                    <input type="text" x-model="dropoff.zip" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly placeholder="Auto-filled">
+                                                </div>
                                             </div>
                                             
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Zip</label>
-                                                <input type="text" x-model="formData.drop_at_zip" name="drop_at_zip[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Appt Date</label>
+                                                    <input type="text" x-model="dropoff.appt_date" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))"           class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">No latter than Date</label>
+                                                    <input type="text" x-model="dropoff.no_latter_than_date" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))"  class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Time</label>
+                                                    <input type="text" 
+                                                        x-model="dropoff.no_latter_than_time"
+                                                        x-init="$nextTick(() => initDatePicker($el, 'H:i', true))"
+                                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                </div>
                                             </div>
                                         </div>
-                                
-                                        <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6">
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300"> Appt</label>
-                                                <input type="text" x-model="formData.drop_at_appt_date" name="drop_at_appt_date[]" id="appt_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                            </div>
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">From</label>
-                                                <select x-model="formData.drop_at_from" name="drop_at_from[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                    <option value="" selected disabled></option>
-                                                
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">To</label>
-                                                <input type="text" x-model="formData.drop_at_to" name="drop_at_to[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                            </div>
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">No latter than</label>
-                                                <input type="text" x-model="formData.drop_at_no_latter_than_date" name="drop_at_no_latter_than_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                            </div>
-                                            <div>
-                                                <label class="block text-gray-700 dark:text-gray-300">Time</label>
-                                                <input type="text" x-model="formData.drop_at_no_latter_than_time" name="drop_at_no_latter_than_time[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                            </div>
-                                        </div>
-                                    </div>
-                                <div id="dropAtList"></div>
+                                    </template>
+                                </div>
                             </div>
+
+                            <!-- Charge Calculation Display -->
+                            <!-- <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6" x-show="totalDistance > 0"> -->
+                            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6 hidden">
+                                <h6 class="text-md font-medium mb-3 dark:text-white">Shipping Charges</h6>
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                    <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                                        <div class="text-sm text-blue-600 dark:text-blue-400">Total Distance</div>
+                                        <div class="text-2xl font-bold text-blue-700 dark:text-blue-300" x-text="totalDistance + ' miles'"></div>
+                                    </div>
+                                    <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                                        <div class="text-sm text-green-600 dark:text-green-400">Base Rate</div>
+                                        <div class="text-2xl font-bold text-green-700 dark:text-green-300" x-text="currency + ' ' + baseRate.toFixed(2)"></div>
+                                    </div>
+                                    <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
+                                        <div class="text-sm text-yellow-600 dark:text-yellow-400">Distance Charge</div>
+                                        <div class="text-2xl font-bold text-yellow-700 dark:text-yellow-300" x-text="currency + ' ' + distanceCharge.toFixed(2)"></div>
+                                    </div>
+                                    <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                                        <div class="text-sm text-purple-600 dark:text-purple-400">Total Charge</div>
+                                        <div class="text-2xl font-bold text-purple-700 dark:text-purple-300" x-text="currency + ' ' + totalCharge.toFixed(2)"></div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <script>
                                 $(document).ready(function () {
                         
@@ -992,56 +1045,84 @@
                                     });
                                 }) 
                             </script>
-                            <div>
-                                <!-- <h4 class="mt-4 mb-3 block text-gray-700 dark:text-gray-300">Freight broker info ( if different from bill-to party )</h4> -->
-                                <div id="" class="grid grid-cols-1 md:grid-cols-10 gap-4 mb-6">
+                                <div>
+                                    <!-- <h4 class="mt-4 mb-3 block text-gray-700 dark:text-gray-300">Freight broker info ( if different from bill-to party )</h4> -->
                                     <div>
+                                    <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-2">
                                         <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
                                         <a href="https://www.google.com/maps/dir//" class="mt-4 mb-3 block text-blue-700  dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer" target="_blank">Show Route</a>
                                     </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Total Miles</label>
-                                        <input type="text" x-model="formData.total_miles" name="total_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_miles">
                                     </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Loaded Miles</label>
-                                        <input type="text" x-model="formData.loaded_miles" name="loaded_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="loaded_miles">
+                                    <div id="" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-2">
+                                        <!-- <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
+                                            <a href="https://www.google.com/maps/dir//" class="mt-4 mb-3 block text-blue-700  dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer" target="_blank">Show Route</a>
+                                        </div> -->
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Total Miles</label>
+                                            <input type="text" min="200" x-model="formData.total_miles" name="total_miles" @change="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Min:200" id="total_miles">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Loaded Miles</label>
+                                            <input type="text" x-model="formData.loaded_miles" name="loaded_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="loaded_miles">
+                                        </div>
+                                    <!-- Load Note Radio Buttons and Checkbox -->
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Empty Miles</label>
+                                            <input type="text" x-model="formData.empty_miles" name="empty_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="empty_miles">
+                                        </div>
+                                        
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">D/H Miles</label>
+                                            <input type="text" x-model="formData.dh_miles" name="dh_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="dh_miles">
+                                        </div>
+                                        <!-- <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
+                                            <a href="https://www.eia.gov/petroleum/gasdiesel/" target="_blank" class="block text-blue-700 dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer">Fuel Rate</a>
+                                        </div> -->
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">$ / Gallon</label>
+                                            <input x-model="formData.fuel_rate_per_gallon" name="fuel_rate_per_gallon" @change="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="fuel_rate_per_gallon" readonly/>
+                                        </div>
+                                        
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">MPG</label>
+                                            <input type="text" x-model="formData.mpg" name="mpg" @change="calculateFuelCost()" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="mpg" readonly />
+                                        </div>
+                                
+                                        <!-- <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Seal #</label>
+                                            <input type="text" x-model="formData.seal_number" name="seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        </div> -->
                                     </div>
-                                <!-- Load Note Radio Buttons and Checkbox -->
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Empty Miles</label>
-                                        <input type="text" x-model="formData.empty_miles" name="empty_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="empty_miles">
+
+                                    
+                                    <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-2">
+                                        
+                                    <!-- Load Note Radio Buttons and Checkbox -->
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Fuel cost</label>
+                                            <input type="text" x-model="formData.total_fuel_cost" name="total_fuel_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_fuel_cost" readonly />
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Total shipping cost</label>
+                                            <input type="text" x-model="formData.total_shipping_cost" name="total_shipping_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_fuel_cost" readonly />
+                                        </div>
+                                        
+                                        <!-- <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Seal #</label>
+                                            <input type="text" x-model="formData.seal_number" name="seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        </div> -->
                                     </div>
                                     
                                     <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">D/H Miles</label>
-                                        <input type="text" x-model="formData.dh_miles" name="dh_miles" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="dh_miles">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
-                                        <a href="https://www.eia.gov/petroleum/gasdiesel/" target="_blank" class="block text-blue-700 dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer">Fuel Rate</a>
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">$ / Gallon</label>
-                                        <input x-model="formData.fuel_rate_per_gallon" name="fuel_rate_per_gallon" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="fuel_rate_per_gallon" />
-                                    </div>
-                                    
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">MPG</label>
-                                        <input type="text" x-model="formData.mpg" name="mpg" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="mpg" />
-                                    </div>
-                                <!-- Load Note Radio Buttons and Checkbox -->
-                                    <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Fuel cost</label>
-                                        <input type="text" x-model="formData.total_fuel_cost" name="total_fuel_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_fuel_cost" />
-                                    </div>
-                                    
-                                    <!-- <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Seal #</label>
-                                        <input type="text" x-model="formData.seal_number" name="seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
-                                    </div> -->
+                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-6">
+                                            <label class="block text-gray-700 dark:text-gray-300">&nbsp;</label>
+                                            <a href="https://www.eia.gov/petroleum/gasdiesel/" target="_blank" class="block text-blue-700 dark:text-blue-300 inline-flex items-center mb-5 cursor-pointer">Fuel Rate</a>
+                                        </div>
+                                        </div>
                                 </div>
-                            </div>
+
 
                             
                                 <div>
@@ -1443,7 +1524,44 @@
                     </div>
             
                     <!-- Navigation Buttons -->
+                     
                     <div class="flex flex-wrap gap-2 mt-6 mb-10">
+                    <!-- Previous -->
+                    <button
+                        type="button"
+                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white hover:bg-gray-300 hover:text-gray-700 dark:hover:bg-gray-600 dark:hover:text-white"
+                        x-show="step > 1 && userRole !== 'customer'"
+                        @click="prevStep">
+                        Previous
+                    </button>
+
+                    <!-- Next -->
+                    <button
+                        type="button"
+                        class="px-4 py-2 bg-blue-600 text-white rounded dark:bg-blue-500"
+                        x-show="step < 5 && userRole !== 'customer'"
+                        @click="nextStep">
+                        Next
+                    </button>
+
+                    <!-- Save (optional for customers, or hide entirely) -->
+                    <button
+                        type="button"
+                        class="px-4 py-2 bg-yellow-500 text-white rounded dark:bg-yellow-400"
+                        x-show="userRole !== 'customer'"
+                        @click="saveProgress">
+                        Save & Continue Later
+                    </button>
+
+                    <!-- Submit for final step OR directly in step 1 if customer -->
+                    <button
+                        type="submit"
+                        class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
+                        x-show="step === 5 || userRole === 'customer'">
+                        Submit
+                    </button>
+                </div>
+                    <!-- <div class="flex flex-wrap gap-2 mt-6 mb-10">
                         <button
                             type="button"
                             class="px-4 py-2 bg-gray-300 text-gray-700 rounded dark:bg-gray-600 dark:text-white hover:bg-gray-300 hover:text-gray-700 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -1467,7 +1585,7 @@
                             x-show="step === 5">
                             Submit
                         </button>
-                    </div>
+                    </div> -->
                 </form>
             </div>
             
@@ -1571,6 +1689,69 @@ function populateCarrierSelect() {
           }
       });
   }
+
+   var mpgGoten = '';
+        var pricePerGallon = '';
+        var pricePerMile = '';
+        var userRole = localStorage.getItem('user_role')
+ 
+
+        function initDatePicker(el, format = "Y-m-d", timeOnly = false) {
+        flatpickr(el, {
+            enableTime: timeOnly,
+            noCalendar: timeOnly,
+            dateFormat: format,
+            time_24hr: true
+        });
+    }
+
+function fetchSettings() {
+    return fetch(requestURL + '/settings/data', {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(datas => {
+        let data = Array.isArray(datas) ? datas[0] : datas;
+        
+        console.log('FORM DATA', data);
+        mpgValue = document.getElementById('mpg');
+        pricePerGallonValue = document.getElementById('fuel_rate_per_gallon');
+        if(userRole == 'businessadministrator') {
+             mpgValue.value = data.mpg || 1;
+             pricePerGallonValue.value = data.price_per_gallon || 1;
+            mpgGoten = data.mpg || 1;
+            pricePerMile = data.price_per_mile || 1;
+            pricePerGallon = data.price_per_gallon || 1;
+            //console.log('mpgGoten inside fetch', pricePerGallon);
+        }else{
+             mpgValue.value = data.branch?.mpg || 1;
+             pricePerGallonValue.value = data.branch?.price_per_gallon || 1;
+            mpgGoten = data.branch?.mpg || 1;
+            pricePerMile = data.branch?.price_per_mile || 1;
+            pricePerGallon = data.branch?.price_per_gallon || 1;
+        
+        }
+       
+        //console.log('mpgGoten inside fetch', mpgGoten);
+    
+        //return mpgGoten;
+    })
+    .catch(error => {
+        console.error('Error fetching settings data:', error);
+    });
+}
+
+fetchSettings().then(result => {
+    console.log('mpgGoten outside fetch', pricePerGallon);
+});
 
         
 //var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";
@@ -1693,13 +1874,50 @@ document.addEventListener('alpine:init', () => {
                     shipment_charges: [],
                     shipment_expenses: [],
                     shipment_uploads: [],
+
+                    pickups: [{
+                        pick_up: '',
+                        location_name: '',
+                        address: '',
+                        city: '',
+                        state: '',
+                        zip: '',
+                        appt_date: '',
+                        no_latter_than_date: '',
+                        no_latter_than_time: '',
+                        coordinates: null
+                    }],
+                    dropoffs: [{
+                        drop_at: '',
+                        location_name: '',
+                        address: '',
+                        city: '',
+                        state: '',
+                        zip: '',
+                        appt_date: '',
+                        no_latter_than_date: '',
+                        no_latter_than_time: '',
+                        coordinates: null
+                    }]
         },
         
         customers: [],
         offices: [],
 
         step: 1,
-        currency: localStorage.getItem('currency') || 'USD',
+
+        baseRate: parseFloat(pricePerGallon) || 1,
+        pricePerMile: parseFloat(pricePerMile) || 1,
+        totalDistance: 0,
+        distanceCharge: 0,
+        totalCharge: 0,
+        
+        // Google Maps services
+        autocompleteInstances: {},
+        directionsService: null,
+        
+    userRole: localStorage.getItem('user_role') || 'customer',
+    currency: localStorage.getItem('currency') || 'USD',
 
         init() {
             //this.fetchData();
@@ -1713,7 +1931,309 @@ document.addEventListener('alpine:init', () => {
             } else {
                 console.error('No ID found in the URL');
             }
+            // Calculate initial totals
+                this.calculateTotals();
+                this.calculateExpenseTotals();
+                
+                // Watch for changes in charges
+                this.$watch('formData.charges', () => {
+                    if (this.formData.charges) { // Added null check
+                    this.calculateTotals();
+                    }
+                }, { deep: true });
+
+                // Watch for changes in expenses
+                this.$watch('formData.expenses', () => {
+                    this.calculateExpenseTotals();
+                }, { deep: true });
+
+                this.fetchCustomers();
+                this.fetchOffices();
+
+                // Initialize Google Maps services
+                    this.directionsService = new google.maps.DirectionsService();
+                    
+                    // Watch for address changes to recalculate charges
+                    this.$watch('formData.pickups', () => this.calculateCharges());
+                    this.$watch('formData.dropoffs', () => this.calculateCharges());
+                    
+                    // Initial calculation
+                    this.$nextTick(() => {
+                        this.calculateCharges();
+                    });
+
+                    this.$watch('totalDistance', (newDistance) => {
+                        if (newDistance > 0) {
+                            this.formData.total_miles = newDistance.toString();
+                            this.calculateFuelCost();
+                        } else {
+                            this.formData.total_miles = '';
+                        }
+                    });
+
+            
         },
+        initFlatpickr(el, index, type, mode) {
+                    flatpickr(el, {
+                        enableTime: (mode === 'time'),
+                        noCalendar: (mode === 'time'),
+                        dateFormat: (mode === 'time') ? "H:i" : "Y-m-d",
+                        onChange: (selectedDates, dateStr) => {
+                            this[type][index] = dateStr;
+                        }
+                    });
+                },
+
+                setupAutocomplete(type, index, inputElement) {
+                    // Clear existing autocomplete if any
+                    const key = `${type}-${index}`;
+                    if (this.autocompleteInstances[key]) {
+                        google.maps.event.clearInstanceListeners(this.autocompleteInstances[key]);
+                    }
+                    
+                    // Create new autocomplete instance
+                    const autocomplete = new google.maps.places.Autocomplete(inputElement, {
+                        types: ['address'],
+                        //componentRestrictions: { country: 'NG'} // Restrict to NG addresses
+                    });
+                    
+                    this.autocompleteInstances[key] = autocomplete;
+                    
+                    // Listen for place selection
+                    autocomplete.addListener('place_changed', () => {
+                        const place = autocomplete.getPlace();
+                        
+                        if (!place.geometry) {
+                            console.log('No geometry found for place');
+                            return;
+                        }
+                        
+                        // Extract address components
+                        const addressComponents = this.parseAddressComponents(place.address_components);
+
+                        console.log('Address components:', addressComponents);
+                        
+                        // Update the appropriate form data
+                        if (type === 'pickup') {
+                           // console.log('Pickup address:', place.formatted_address);
+                            this.formData.pickups[index] = {
+                                ...this.formData.pickups[index],
+                                address: place.formatted_address,
+                                //address: addressComponents.address,
+                                city: addressComponents.city,
+                                state: addressComponents.state,
+                                zip: addressComponents.zip,
+                                coordinates: {
+                                    lat: place.geometry.location.lat(),
+                                    lng: place.geometry.location.lng()
+                                }
+                            };
+                        } else {
+                            this.formData.dropoffs[index] = {
+                                ...this.formData.dropoffs[index],
+                                address: place.formatted_address,
+                                //address: addressComponents.address,
+                                city: addressComponents.city,
+                                state: addressComponents.state,
+                                zip: addressComponents.zip,
+                                coordinates: {
+                                    lat: place.geometry.location.lat(),
+                                    lng: place.geometry.location.lng()
+                                }
+                            };
+                            
+                                console.log('Dropoff address:', place.formatted_address),
+                                console.log('Dropoff coordinates:', place.geometry.location);
+                        }
+                        
+                        // Save to localStorage
+                        //this.saveProgress();
+                        
+                        // Recalculate charges
+                        this.calculateCharges();
+                    });
+                },
+                
+                parseAddressComponents(components) {
+                    const result = {
+                        city: '',
+                        state: '',
+                        zip: ''
+                    };
+                    
+                    components.forEach(component => {
+                        const types = component.types;
+                        
+                        if (types.includes('locality')) {
+                            result.city = component.long_name;
+                        } else if (types.includes('administrative_area_level_1')) {
+                            result.state = component.short_name;
+                        } else if (types.includes('postal_code')) {
+                            result.zip = component.long_name;
+                        }
+                    });
+                    
+                    return result;
+                },
+                
+                duplicatePickup() {
+                    this.formData.pickups.push({
+                        pick_up: '',
+                        location_name: '',
+                        address: '',
+                        city: '',
+                        state: '',
+                        zip: '',
+                        appt_date: '',
+                        no_latter_than_date: '',
+                        no_latter_than_time: '',
+                        coordinates: null
+                    });
+                    this.$nextTick(() => {
+                        document.querySelectorAll(".appt_date, .no_latter_than_date").forEach(el => initDatePicker(el, "Y-m-d"));
+                        document.querySelectorAll(".appt_time").forEach(el => initDatePicker(el, "H:i", true));
+                    });
+                    this.saveProgress();
+                },
+                
+                removePickup(event) {
+                    if (this.formData.pickups.length > 1) {
+                        this.formData.pickups.pop();
+                        this.saveProgress();
+                        this.calculateCharges();
+                    }
+                },
+                
+                duplicateDropAt() {
+                    this.formData.dropoffs.push({
+                        drop_at: '',
+                        location_name: '',
+                        address: '',
+                        city: '',
+                        state: '',
+                        zip: '',
+                        appt_date: '',
+                        no_latter_than_date: '',
+                        no_latter_than_time: '',
+                        coordinates: null
+                    });
+                    this.$nextTick(() => {
+                        document.querySelectorAll(".appt_date, .no_latter_than_date").forEach(el => initDatePicker(el, "Y-m-d"));
+                        document.querySelectorAll(".appt_time").forEach(el => initDatePicker(el, "H:i", true));
+                    });
+                    this.saveProgress();
+                },
+                
+                removeDropAt(event) {
+                    if (this.formData.dropoffs.length > 1) {
+                        this.formData.dropoffs.pop();
+                        this.saveProgress();
+                        this.calculateCharges();
+                    }
+                },
+                
+                async calculateCharges() {
+                    // Reset charges
+                    this.totalDistance = 0;
+                    this.distanceCharge = 0;
+                    this.totalCharge = this.baseRate;
+                    
+                    // Get all locations with coordinates
+                    const pickupLocations = this.formData.pickups.filter(p => p.coordinates);
+                    const dropoffLocations = this.formData.dropoffs.filter(d => d.coordinates);
+
+                    console.log('pickupLocations:', pickupLocations);
+                    console.log('dropoffLocations:', dropoffLocations);
+
+                    
+                    console.log('Raw pickups:', this.formData.pickups);
+                    console.log('Raw dropoffs:', this.formData.dropoffs);
+                                        
+                    if (pickupLocations.length === 0 || dropoffLocations.length === 0) {
+                    
+                    this.formData.total_miles = '';
+                        return;
+                    }
+                    
+                    try {
+                        // Calculate distance for each pickup-dropoff pair
+                        let totalDistanceMeters = 0;
+                        
+                        for (const pickup of pickupLocations) {
+                            for (const dropoff of dropoffLocations) {
+                                const distance = await this.calculateDistance(pickup.coordinates, dropoff.coordinates);
+                                totalDistanceMeters += distance;
+                            }
+                        }
+
+                        console.log('totalDistanceMeters:', totalDistanceMeters);
+                        
+                        // Convert to miles and calculate charges
+                        this.totalDistance = Math.round((totalDistanceMeters * 0.000621371) * 100) / 100; // Convert meters to miles
+                        this.distanceCharge = this.totalDistance * this.pricePerMile;
+                        this.totalCharge = this.baseRate + this.distanceCharge;
+                        
+                        // Save the calculation
+                        //this.saveProgress();
+                        
+                    } catch (error) {
+                        console.error('Error calculating distance:', error);
+                    }
+                },
+                
+                calculateDistance(origin, destination) {
+                    return new Promise((resolve, reject) => {
+                        this.directionsService.route({
+                            origin: new google.maps.LatLng(origin.lat, origin.lng),
+                            destination: new google.maps.LatLng(destination.lat, destination.lng),
+                            travelMode: google.maps.TravelMode.DRIVING
+                        }, (response, status) => {
+                            if (status === 'OK') {
+                                const route = response.routes[0];
+                                const distance = route.legs.reduce((total, leg) => total + leg.distance.value, 0);
+                                resolve(distance);
+                            } else {
+                                reject(new Error('Distance calculation failed: ' + status));
+                            }
+                        });
+                    });
+                },
+                calculateFuelCost() {
+                    const totalMiles = parseFloat(this.formData.total_miles) || 0;
+                    setTimeout(() => {
+                        if(totalMiles < 200){
+                            document.getElementById('total_miles').style.borderColor = 'red';
+                            createToast('error', 'Total Miles must be greater than 200');
+                        ///alert("Total Miles must be greater than 200");
+                        return;
+                        }
+                        else{
+                            document.getElementById('total_miles').style.borderColor = '';
+                        }
+                    }, 500)
+
+                    const fuelPerGallon = parseFloat(this.formData.fuel_rate_per_gallon) || 0;
+                    const mpg = parseFloat(mpgGoten) || 1;
+                    const pricePerm = parseFloat(pricePerMile) || 1;
+                    // Updated to include round-trip
+                    this.formData.total_fuel_cost = ((totalMiles * 2) * fuelPerGallon / mpg).toFixed(2);
+                    this.formData.total_shipping_cost = ((totalMiles * 2) * pricePerMile).toFixed(2);
+                },
+
+                // addBillto() {
+                //     this.formData.bill_tos.push({
+                //         bill_to: '',
+                //         quick_note: ''
+                //     });
+                //     this.saveProgress();
+                // },
+                
+                // removeBillto(index) {
+                //     if (this.formData.bill_tos.length > 1) {
+                //         this.formData.bill_tos.splice(index, 1);
+                //         this.saveProgress();
+                //     }
+                // },
         
         addTag() {
                 if (this.formData.tagsInput.trim()) {
@@ -1745,6 +2265,7 @@ document.addEventListener('alpine:init', () => {
                     //this.saveProgress();
                 }
                 },
+                
 
                 fetchData() {
                     fetch(`${requestGetURL}/shipments/show/${this.id}`, {
@@ -1986,6 +2507,26 @@ document.addEventListener('alpine:init', () => {
             // Implement if you need expense-specific totals
         },
 
+        // Updated calculateTotals with null check
+                calculateTotals() {
+                if (!this.formData.charges) return;
+                
+                let total = 0;
+                let totalDiscount = 0;
+                
+                this.formData.charges.forEach(charge => {
+                    const amount = parseFloat(charge.amount) || 0;
+                    const discount = parseFloat(charge.discount) || 0;
+                    
+                    total += amount;
+                    totalDiscount += discount;
+                });
+                
+                this.formData.total = total.toFixed(2);
+                this.formData.total_discount = totalDiscount.toFixed(2);
+                this.formData.net_total = (total - totalDiscount).toFixed(2);
+                },
+
         nextStep() {
                   this.step++;
                   localStorage.setItem('edit_load', this.step);
@@ -2154,7 +2695,11 @@ document.addEventListener('alpine:init', () => {
                     //     formData.append(`shipment_charges[${index}][internal_notes]`, charge.internal_notes);
                     //     formData.append(`shipment_charges[${index}][billed]`, charge.billed ? 1 : 0);  // Convert checkbox boolean to 1/0
                     // });
-
+                    // Append additional distance and charge fields
+                    formData.append('totalDistance', this.totalDistance || '');
+                    formData.append('totalCharge', this.totalCharge || '');
+                    formData.append('baseRate', this.baseRate || '');
+                    formData.append('distanceCharge', this.distanceCharge || '');
 
           
                     let fileInput = document.getElementById("file_path");

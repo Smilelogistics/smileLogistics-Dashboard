@@ -62,6 +62,38 @@
                   <!-- Inputs Container -->
                   <div class="border-t border-gray-100 p-5 dark:border-gray-800 sm:p-6">
 
+                    <form class="border-t border-gray-100 p-5 dark:border-gray-800 sm:p-6" @submit.prevent="UnlimitedAccess" x-show="userRole === 'superadministrator'">
+                      <!-- Loader -->
+                      <div x-show="isLoading" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                      </div>
+                      <div class="grid grid-cols-1 sm:grid-cols-5 gap-4">
+                        
+            
+                        <!-- Input 2 -->
+                        <div>
+                          <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                            Email Address
+                          </label>
+                          <input
+                            type="email" x-model="email" name="email"
+                            class="dark:bg-dark-900 h-9 w-full rounded-md border border-gray-300 bg-transparent px-3 py-1.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                          required />
+                        </div>
+            
+            
+                        <!-- Button -->
+                        <div class="flex items-end">
+                          <!--  bg-gradient-to-r from-cyan-900 via-cyan-900 to-cyan-500 -->
+                          <button x-show="userRole === 'superadministrator'" 
+                            class="h-9 w-100 rounded-md px-4 py-1.5 text-sm font-medium text-white shadow-md bg-brand-900 hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-800 dark:hover:bg-brand-900">
+                            Grant Access
+                          </button>
+                          
+                        </div>
+                      </div>
+                    </form>
+
                     <form class="border-t border-gray-100 p-5 dark:border-gray-800 sm:p-6" @submit.prevent="CreateUser">
                       <!-- Loader -->
                       <div x-show="isLoading" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -457,7 +489,7 @@
           }
         });
         const data = await response.json();
-        console.log(data);
+        console.log("users", data);
         
         // Combine customers and drivers into a single array
         const combinedItems = [];
@@ -524,6 +556,38 @@
     //     this.isLoading = false;
     //   }
     // },
+
+    async UnlimitedAccess() {
+      this.isLoading = true;
+      try {
+        const formData = new FormData();
+        formData.append('email', this.email);
+        
+        const response = await fetch(requestURL + '/users/unlimited-access', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+            'Accept': 'application/json'
+          }
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+          createToast('success', result.message || 'User Granted Unlimited Access');
+          this.email = '';
+          this.fetchData();
+        } else {
+          createToast('error', result.message || 'Failed to grant access');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        createToast('error', 'Network error while creating user');
+      } finally {
+        this.isLoading = false;
+      }
+    },
     
     async CreateUser() {
       this.isLoading = true;

@@ -811,11 +811,12 @@
                     //     formData.append(`insurances[${index}][policy_number]`, insurance.policy_number);
                     //     formData.append(`insurances[${index}][expires]`, insurance.expires);
                     // });
-                    // for (let pair of formData.entries()) {
-                    //     console.log(pair[0] + ": " + pair[1]);
-                    // }
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+                    
                      console.log(localStorage.getItem('auth_token'))
-                    // return
+                    //return
                     $.ajax({
                         url: requestURL+'/carriers/create',
                         type: 'POST',

@@ -117,7 +117,7 @@
                             </div> -->
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Invoice Date</label>
-                                <input type="text" x-model="formData.invoice_date" id="invoice_datepicker" name="invoice_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white invoice_datepicker">
+                                <input type="text" x-model="formData.invoice_date" id="invoice_datepicker" name="invoice_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white invoice_datepicker" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))">
                         </div>
                        <div x-data="{ formData: { isFactored: 0 } }">
                             <label class="block text-gray-700 dark:text-gray-300">Is Factored?</label>
@@ -176,7 +176,7 @@
                         </div> -->
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Invoice Due Date</label>
-                            <input type="text" x-model="formData.invoice_due_date" id="invoice_due_datepicker" name="invoice_due_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <input type="text" x-model="formData.invoice_due_date" id="invoice_due_datepicker" name="invoice_due_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" >
                         </div>
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Attention Invoice</label>
@@ -215,7 +215,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Move Date</label>
-                            <input type="text" x-model="formData.move_date" id="move_date_datepicker" name="move_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <input type="text" x-model="formData.move_date" id="move_date_datepicker" name="move_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" >
                         </div>
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Trailer</label>
@@ -476,36 +476,39 @@
 
                        <div>
                            <label class="block text-gray-700 dark:text-gray-300">Apply credit from credit memos</label>
-                           <div id="RecieveRepay">
-                                <span onclick="duplicateCreditMemo()" 
+                           <div id="">
+                                <span @click="addCreditMemo()" 
                                     class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
                                     +
                                 </span>
-                                <span onclick="removeRecieve(this)" 
+                                <span @click="removeCreditMemo($event)" 
                                     class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
                                     x
                                     <!-- 🗑 -->
                                 </span>
+                                <template x-for="creditmemo in formData.creditmemos" :key="'creditmemo-' + index">
                                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Credit Memo</label>
-                                        <input type="text" x-model="formData.credit_memo" name="credit_memo[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        <input type="text" x-model="creditmemo.credit_memo" name="credit_memo[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Credit Amount</label>
-                                        <input type="text" x-model="formData.credit_amount" name="credit_amount[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
+                                        <input type="text" x-model="creditmemo.credit_amount" name="credit_amount[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Note</label>
-                                        <textarea type="text" cols="1" rows="1" x-model="formData.credit_note" name="credit_note[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                                        <textarea type="text" cols="1" rows="1" x-model="creditmemo.credit_note" name="credit_note[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Date</label>
-                                        <input type="text" x-model="formData.credit_date"  x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" id="credit_date" name="credit_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white credit_date" placeholder="">
+                                        <input type="text" x-model="creditmemo.credit_date"  x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" name="credit_date[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white credit_date placeholder="">
                                     </div>
                                 </div>
+
+                                </template>
                            </div>
-                           <div id="RecieveRepayList"></div>
+                           <!-- <div id="RecieveRepayList"></div> -->
 
                            
 
@@ -648,17 +651,26 @@ function stepperForm() {
                     discount: '',
                     internal_notes: ''
                 }],
+                creditmemos: [{
+                    credit_memo: '',
+                    credit_amount: '',
+                    credit_note: '',
+                    credit_date: '',
+                    balance_before_credit: '',
+                    total_credit_applied: '',
+                    final_invoice_bal: ''
+                }],
                 total: 0,
                 total_discount: 0,
                 net_total: 0,
                 
-                credit_memo: [],
-                credit_amount: [],
-                credit_note: [],
-                credit_date: [],
-                balance_before_credit: [],
-                total_credit_applied: [],
-                final_invoice_bal: []
+                // credit_memo: [],
+                // credit_amount: [],
+                // credit_note: [],
+                // credit_date: [],
+                // balance_before_credit: [],
+                // total_credit_applied: [],
+                // final_invoice_bal: []
             };
             
             return savedData ? {...defaultData, ...JSON.parse(savedData)} : defaultData;
@@ -680,6 +692,18 @@ function stepperForm() {
         totalSteps: 3,
         
         init() {
+            if (!this.formData.creditmemos || this.formData.creditmemos.length === 0) {
+                    this.formData.charges = [{
+                     credit_memo: '',
+                    credit_amount: '',
+                    credit_note: '',
+                    credit_date: '',
+                    balance_before_credit: '',
+                    total_credit_applied: '',
+                    final_invoice_bal: ''
+                    }];
+
+                }
             // Initialize charges calculations
             if (!this.formData.charges || this.formData.charges.length === 0) {
                 this.formData.charges = [{
@@ -696,6 +720,12 @@ function stepperForm() {
             this.calculateTotalPayments();
             this.$watch('formData.charges', () => this.calculateTotals(), { deep: true });
             this.$watch('formData.paymnts', () => this.calculateTotalPayments(), { deep: true });
+
+            
+            this.$nextTick(() => {
+                document.querySelectorAll(".appt_date, .no_latter_than_date").forEach(el => initDatePicker(el, "Y-m-d"));
+                document.querySelectorAll(".appt_time").forEach(el => initDatePicker(el, "H:i", true));
+            });
         },
         
         nextStep() {
@@ -715,6 +745,31 @@ function stepperForm() {
         saveProgress() {
             localStorage.setItem('Invoice_step', this.step);
             localStorage.setItem('formData', JSON.stringify(this.formData));
+        },
+        
+        addCreditMemo(){
+            this.formData.creditmemos.push({
+                credit_memo: '',
+                credit_amount: '',
+                credit_note: '',
+                credit_date: '',
+                balance_before_credit: '',
+                total_credit_applied: '',
+                final_invoice_bal: ''
+            })
+            
+            this.$nextTick(() => {
+                document.querySelectorAll(".credit_date").forEach(el => initDatePicker(el, "Y-m-d"));
+                //document.querySelectorAll(".appt_time").forEach(el => initDatePicker(el, "H:i", true));
+            });
+        },
+
+        removeCreditMemo(index) {
+            if (this.formData.creditmemos.length > 1) {
+                this.formData.creditmemos.splice(index, 1);
+                this.calculateTotals();
+                this.saveProgress();
+            }
         },
         
         // Charge calculation methods
@@ -788,14 +843,21 @@ function stepperForm() {
                 this.saveProgress();
             }
         },
-
-         calculateTotalPayments() {
-            this.totalPayments = this.formData.paymnts.reduce((total, paymnt) => {
-                // Convert payment_amount to number (in case it's a string)
+        calculateTotalPayments() {
+            const payments = this.formData.paymnts ?? [];
+            this.totalPayments = payments.reduce((total, paymnt) => {
                 const amount = parseFloat(paymnt.payment_amount) || 0;
                 return total + amount;
             }, 0);
         },
+
+        //  calculateTotalPayments() {
+        //     this.totalPayments = this.formData.paymnts.reduce((total, paymnt) => {
+        //         // Convert payment_amount to number (in case it's a string)
+        //         const amount = parseFloat(paymnt.payment_amount) || 0;
+        //         return total + amount;
+        //     }, 0);
+        // },
         
         
         saveAndSubmit() {
@@ -1041,23 +1103,35 @@ function stepperForm() {
 
 
         
-                        $(function() {
-                            $("#move_date_datepicker").datepicker({
+                        // $(function() {
+                        //     $("#move_date_datepicker").datepicker({
                                 
-                            });
-                        });
+                        //     });
+                        // });
 
-                        $(function() {
-                            $("#invoice_due_datepicker").datepicker({
+                        // $(function() {
+                        //     $("#invoice_due_datepicker").datepicker({
                                 
-                            });
-                        });
+                        //     });
+                        // });
 
-                        $(function() {
-                            $("#invoice_datepicker").datepicker({
+                        // $(function() {
+                        //     $("#invoice_datepicker").datepicker({
+
                                 
-                            });
-                        });
+                        //     });
+                        // });
+
+                        //  $(document).ready(function () {
+                        //             $(function () {
+                        //                 $("#invoice_datepicker").
+                        //                 datepicker({
+                        //                     dateFormat: "yy-mm-dd",
+                        //                     changeMonth: true,
+                        //                     changeYear: true
+                        //                 });
+                        //             });
+                        //         })
               
                     function calculate() {
                     let units = parseFloat($("#unit").val()) || 0;

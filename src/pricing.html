@@ -271,10 +271,14 @@
             .then(response => response.json())
             .then(data => {
               if (data.payment_link) {
-                // Redirect to payment gateway
+                localStorage.setItem('paystack_ref', data.reference);
                 window.location.href = data.payment_link;
-              } else if (data.error) {
+              }  else if (data.error) {
                 createToast('error', data.error);
+              } else if (data.message) {
+                createToast('error', data.message);
+              } else {
+                createToast('error', 'Unexpected error during payment');
               }
             })
             .catch(error => {

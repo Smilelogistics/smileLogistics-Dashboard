@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Pricing |</title>
+    <include src="./partials/mainhead.html"> </include>
+    <script src="./assets/js/main.js"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+        .container * {
+          visibility: visible;
+        }
+        .container {
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
+      }
+    </style>
+  </head>
+  <body
+    x-data="{ page: 'pricing', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div x-data="receiptApp()" class="mx-auto max-w-screen-2xl p-4 md:p-6">
+            <!-- Breadcrumb Start -->
+            <div x-data="{ pageName: `Pricing`}">
+              <include src="./partials/breadcrumb.html" />
+            </div>
+            <!-- Breadcrumb End -->
+
+            <div
+              class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
+            >
+              <div x-data="{ show: true }" x-show="show" x-transition class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+      <div class="flex flex-col items-center">
+        <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
+        <p class="mt-4 text-gray-600">Verifying payment...</p>
+      </div>
+    </div>
+
+    <div x-data="receiptApp()" x-init="init()" class="container mx-auto px-4 py-8">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">Payment Receipt</h1>
+        <p class="text-gray-600">Thank you for your payment</p>
+      </div>
+
+      <!-- Receipt Card -->
+      <div x-show="payment" x-transition class="max-w-md mx-auto">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <!-- Success Header -->
+          <div class="bg-gradient-to-r from-green-400 to-green-600 px-8 py-6 text-center">
+            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-check text-green-500 text-2xl"></i>
+            </div>
+            <h2 class="text-white text-xl font-semibold">Payment Successful</h2>
+            <p class="text-green-100 text-sm mt-1">Your transaction has been completed</p>
+          </div>
+
+          <!-- Receipt Details -->
+          <div class="p-8">
+            <div class="space-y-4">
+              <!-- Amount -->
+              <div class="text-center pb-4 border-b border-gray-200">
+                <p class="text-gray-600 text-sm">Amount Paid</p>
+                <p class="text-3xl font-bold text-gray-800" x-text="payment.currency + ' ' + formatAmount(payment.amount)"></p>
+              </div>
+
+              <!-- Transaction Details -->
+              <div class="space-y-3">
+                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                  <span class="text-gray-600 font-medium">Reference</span>
+                  <span class="text-gray-800 font-mono text-sm" x-text="payment.reference"></span>
+                </div>
+                
+                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                  <span class="text-gray-600 font-medium">Email</span>
+                  <span class="text-gray-800 text-sm" x-text="payment.email"></span>
+                </div>
+                
+                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                  <span class="text-gray-600 font-medium">Payment Method</span>
+                  <span class="text-gray-800 capitalize" x-text="payment.gateway"></span>
+                </div>
+                
+                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                  <span class="text-gray-600 font-medium">Date & Time</span>
+                  <span class="text-gray-800 text-sm" x-text="formatDate(payment.date)"></span>
+                </div>
+                
+                <div class="flex justify-between items-center py-2 border-b border-gray-100" x-show="payment.plan">
+                  <span class="text-gray-600 font-medium">Subscription Plan</span>
+                  <span class="text-gray-800 capitalize" x-text="payment.plan"></span>
+                </div>
+                
+                <div class="flex justify-between items-center py-2">
+                  <span class="text-gray-600 font-medium">Status</span>
+                  <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
+                    <i class="fas fa-check-circle mr-1"></i>Completed
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-8 space-y-3">
+              <button @click="downloadPDF" 
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center">
+                <i class="fas fa-download mr-2"></i>
+                Download PDF Receipt
+              </button>
+              
+              <button @click="printReceipt" 
+                class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center">
+                <i class="fas fa-print mr-2"></i>
+                Print Receipt
+              </button>
+              
+              <a href="/dashboard.html" 
+                class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center text-center">
+                <i class="fas fa-arrow-right mr-2"></i>
+                Continue to Dashboard
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="mt-6 text-center text-gray-500 text-sm">
+          <p>Keep this receipt for your records</p>
+          <p class="mt-1">If you have any questions, please contact our support team</p>
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <div x-show="error" x-transition class="max-w-md mx-auto">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div class="bg-gradient-to-r from-red-400 to-red-600 px-8 py-6 text-center">
+            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-times text-red-500 text-2xl"></i>
+            </div>
+            <h2 class="text-white text-xl font-semibold">Verification Failed</h2>
+            <p class="text-red-100 text-sm mt-1" x-text="errorMessage"></p>
+          </div>
+          <div class="p-8 text-center">
+            <a href="/pricing.html" 
+              class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 inline-flex items-center">
+              <i class="fas fa-arrow-left mr-2"></i>
+              Back to Pricing
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+            </div>
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+  <script>
+    function receiptApp() {
+        return {
+          payment: null,
+          error: false,
+          errorMessage: '',
+          loading: true,
+
+          async init() {
+            try {
+              await this.verifyPayment();
+            } catch (err) {
+              console.error('Initialization error:', err);
+              this.showError('Failed to initialize receipt');
+            } finally {
+              this.loading = false;
+              // Hide loading spinner
+              setTimeout(() => {
+                document.querySelector('[x-show="show"]').__x.$data.show = false;
+              }, 500);
+            }
+          },
+
+          async verifyPayment() {
+            const params = new URLSearchParams(window.location.search);
+            const reference = params.get('reference') || params.get('trxref');
+
+            if (!reference) {
+              this.showError('No payment reference found in URL');
+              return;
+            }
+
+            try {
+              const token = localStorage.getItem('auth_token');
+              if (!token) {
+                this.showError('Authentication required');
+                return;
+              }
+
+              const response = await fetch(`${requestGetURL}/verify-paystack/${reference}`, {
+                method: 'GET',
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                }
+              });
+
+              const data = await response.json();
+              
+              if (response.ok && data.status === 'success') {
+                this.payment = data.payment;
+              } else {
+                this.showError(data.message || 'Payment verification failed');
+              }
+            } catch (err) {
+              console.error('Verification error:', err);
+              this.showError('Network error occurred during verification');
+            }
+          },
+
+          showError(message) {
+            this.error = true;
+            this.errorMessage = message;
+          },
+
+          formatAmount(amount) {
+            return parseFloat(amount).toLocaleString('en-US', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            });
+          },
+
+          formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            });
+          },
+
+          downloadPDF() {
+            if (!this.payment) return;
+            
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Header
+            doc.setFontSize(20);
+            doc.setFont(undefined, 'bold');
+            doc.text('PAYMENT RECEIPT', 105, 30, { align: 'center' });
+            
+            // Success indicator
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            doc.setTextColor(34, 197, 94);
+            doc.text('✓ Payment Successful', 105, 45, { align: 'center' });
+            
+            // Reset color
+            doc.setTextColor(0, 0, 0);
+            
+            // Amount
+            doc.setFontSize(16);
+            doc.setFont(undefined, 'bold');
+            doc.text(`Amount: ${this.payment.currency} ${this.formatAmount(this.payment.amount)}`, 20, 70);
+            
+            // Details
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'normal');
+            
+            const details = [
+              `Reference: ${this.payment.reference}`,
+              `Email: ${this.payment.email}`,
+              `Payment Method: ${this.payment.gateway}`,
+              `Date: ${this.formatDate(this.payment.date)}`,
+              `Status: Completed`
+            ];
+
+            if (this.payment.plan) {
+              details.push(`Subscription Plan: ${this.payment.plan}`);
+            }
+            
+            details.forEach((detail, index) => {
+              doc.text(detail, 20, 90 + (index * 10));
+            });
+            
+            // Footer
+            doc.setFontSize(8);
+            doc.setTextColor(128, 128, 128);
+            doc.text('Thank you for your business!', 105, 200, { align: 'center' });
+            doc.text('Keep this receipt for your records.', 105, 210, { align: 'center' });
+
+            doc.save(`receipt-${this.payment.reference}.pdf`);
+          },
+
+          printReceipt() {
+            window.print();
+          }
+        };
+      }
+
+  </script>
+  </body>
+</html>

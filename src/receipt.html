@@ -226,42 +226,61 @@
           async verifyPayment() {
             const params = new URLSearchParams(window.location.search);
             const reference = params.get('reference') || params.get('trxref');
-
+            const type = params.get('type');
+            console.log('type is', type);
             if (!reference) {
-              this.showError('No payment reference found in URL');
-              return;
+                this.showError('No payment reference found in URL');
+                return;
             }
 
             try {
-              const token = localStorage.getItem('auth_token');
-              if (!token) {
-                this.showError('Authentication required'); 
-                return;
-              }
-
-              const response = await fetch(`${requestGetURL}/verify-paystack/${reference}`, {
-                method: 'GET',
-                headers: {
-                  'Authorization': `Bearer ${token}`,
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
+                const token = localStorage.getItem('auth_token');
+                if (!token) {
+                    this.showError('Authentication required');
+                    return;
                 }
-              });
+                let endpoint = '';
+                switch (type) {
+                    case 'paystack':
+                        endpoint = `${requestGetURL}/verify-paystack/${reference}`;
+                        break;
+                    case 'flutterwave':
+                        endpoint = `${requestGetURL}/verify-flutterwave/${reference}`;
+                        break;
+                    case 'stripe':
+                        endpoint = `${requestGetURL}/verify-stripe/${reference}`;
+                        break;
+                    case 'paypal':
+                        endpoint = `${requestGetURL}/verify-paypal/${reference}`;
+                        break;
+                    default:
+                        this.showError('Unsupported payment type');
+                        return;
+                }
 
-              const data = await response.json();
+                const response = await fetch(endpoint, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
 
-              console.log(data);
-              
-              if (response.ok && data.status === 'success') {
-                this.payment = data.payment;
-              } else {
-                this.showError(data.message || 'Payment verification failed');
-              }
+                const data = await response.json();
+                console.log('Verification response:', data);
+
+                if (response.ok && data.status === 'success') {
+                    this.payment = data.payment;
+                } else {
+                    this.showError(data.message || 'Payment verification failed');
+                }
             } catch (err) {
-              console.error('Verification error:', err);
-              this.showError('Network error occurred during verification');
+                console.error('Verification error:', err);
+                this.showError('Network error occurred during verification');
             }
-          },
+        },
+
 
           showError(message) {
             this.error = true;

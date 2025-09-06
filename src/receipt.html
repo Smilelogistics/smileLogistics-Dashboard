@@ -101,34 +101,34 @@
               <!-- Amount -->
               <div class="text-center pb-4 border-b border-gray-200">
                 <p class="text-gray-600 text-sm">Amount Paid</p>
-                <p class="text-3xl font-bold text-gray-800" x-text="payment.currency + ' ' + formatAmount(payment.amount)"></p>
+                <p class="text-3xl font-bold text-gray-800" x-text="payment.currency || '' + ' ' + formatAmount(payment.amount || 0)"></p>
               </div>
 
               <!-- Transaction Details -->
               <div class="space-y-3">
                 <div class="flex justify-between items-center py-2 border-b border-gray-100">
                   <span class="text-gray-600 font-medium">Reference</span>
-                  <span class="text-gray-800 font-mono text-sm" x-text="payment.reference"></span>
+                  <span class="text-gray-800 font-mono text-sm" x-text="payment.reference || ''"></span>
                 </div>
                 
                 <div class="flex justify-between items-center py-2 border-b border-gray-100">
                   <span class="text-gray-600 font-medium">Email</span>
-                  <span class="text-gray-800 text-sm" x-text="payment.email"></span>
+                  <span class="text-gray-800 text-sm" x-text="payment.email || ''"></span>
                 </div>
                 
                 <div class="flex justify-between items-center py-2 border-b border-gray-100">
                   <span class="text-gray-600 font-medium">Payment Method</span>
-                  <span class="text-gray-800 capitalize" x-text="payment.gateway"></span>
+                  <span class="text-gray-800 capitalize" x-text="payment.gateway || ''"></span>
                 </div>
                 
                 <div class="flex justify-between items-center py-2 border-b border-gray-100">
                   <span class="text-gray-600 font-medium">Date & Time</span>
-                  <span class="text-gray-800 text-sm" x-text="formatDate(payment.date)"></span>
+                  <span class="text-gray-800 text-sm" x-text="formatDate(payment.date || '')"></span>
                 </div>
                 
                 <div class="flex justify-between items-center py-2 border-b border-gray-100" x-show="payment.plan">
                   <span class="text-gray-600 font-medium">Subscription Plan</span>
-                  <span class="text-gray-800 capitalize" x-text="payment.plan"></span>
+                  <span class="text-gray-800 capitalize" x-text="payment.plan || ''"></span>
                 </div>
                 
                 <div class="flex justify-between items-center py-2">
@@ -222,13 +222,32 @@
               // }, 500);
             }
           },
-
           async verifyPayment() {
             const params = new URLSearchParams(window.location.search);
-            const reference = params.get('reference') || params.get('trxref');
-            const type = params.get('type');
-            console.log('type is', type);
-            if (!reference) {
+            const reference = params.get('reference');
+            const transactionId = params.get('transaction_id');
+            const status = params.get('status');
+            const type = params.get('type') || 'flutterwave';
+
+            console.log('Payment verification params:', {
+                reference,
+                transactionId,
+                status,
+                type
+            });
+
+            // For Flutterwave, we need transaction_id and status
+            if (type === 'flutterwave') {
+                if (!transactionId || !status) {
+                    this.showError('Missing Flutterwave transaction parameters');
+                    return;
+                }
+
+                if (status !== 'successful') {
+                    this.showError(`Payment status: ${status}. Please try again.`);
+                    return;
+                }
+            } else if (!reference) {
                 this.showError('No payment reference found in URL');
                 return;
             }
@@ -239,13 +258,22 @@
                     this.showError('Authentication required');
                     return;
                 }
+
                 let endpoint = '';
+                let requestData = {};
+
                 switch (type) {
                     case 'paystack':
                         endpoint = `${requestGetURL}/verify-paystack/${reference}`;
                         break;
                     case 'flutterwave':
-                        endpoint = `${requestGetURL}/verify-flutterwave/${reference}`;
+                        endpoint = `${requestGetURL}/callback-flutterwave`;
+                        // For Flutterwave, we need to send both transaction_id and reference
+                        requestData = {
+                            transaction_id: transactionId,
+                            tx_ref: reference,
+                            status: status
+                        };
                         break;
                     case 'stripe':
                         endpoint = `${requestGetURL}/verify-stripe/${reference}`;
@@ -258,16 +286,23 @@
                         return;
                 }
 
-                const response = await fetch(endpoint, {
-                    method: 'GET',
+                const requestOptions = {
+                    method: type === 'flutterwave' ? 'GET' : 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     }
-                });
+                };
 
+                // Add body for POST requests (Flutterwave)
+                // if (type === 'flutterwave') {
+                //     requestOptions.body = JSON.stringify(requestData);
+                // }
+
+                const response = await fetch(endpoint, requestOptions);
                 const data = await response.json();
+
                 console.log('Verification response:', data);
 
                 if (response.ok && data.status === 'success') {
@@ -280,6 +315,64 @@
                 this.showError('Network error occurred during verification');
             }
         },
+
+        //   async verifyPayment() {
+        //     const params = new URLSearchParams(window.location.search);
+        //     const reference = params.get('reference') || params.get('trxref');
+        //     const type = params.get('type');
+        //     console.log('type is', type);
+        //     if (!reference) {
+        //         this.showError('No payment reference found in URL');
+        //         return;
+        //     }
+
+        //     try {
+        //         const token = localStorage.getItem('auth_token');
+        //         if (!token) {
+        //             this.showError('Authentication required');
+        //             return;
+        //         }
+        //         let endpoint = '';
+        //         switch (type) {
+        //             case 'paystack':
+        //                 endpoint = `${requestGetURL}/verify-paystack/${reference}`;
+        //                 break;
+        //             case 'flutterwave':
+        //                 endpoint = `${requestGetURL}/callback-flutterwave`;
+        //                 break;
+        //             case 'stripe':
+        //                 endpoint = `${requestGetURL}/verify-stripe/${reference}`;
+        //                 break;
+        //             case 'paypal':
+        //                 endpoint = `${requestGetURL}/verify-paypal/${reference}`;
+        //                 break;
+        //             default:
+        //                 this.showError('Unsupported payment type');
+        //                 return;
+        //         }
+
+        //         const response = await fetch(endpoint, {
+        //             method: 'GET',
+        //             headers: {
+        //                 'Authorization': `Bearer ${token}`,
+        //                 'Accept': 'application/json',
+        //                 'Content-Type': 'application/json'
+        //             }
+        //         });
+
+        //         const data = await response.json();
+        //         console.log('Verification response:', data);
+
+        //         if (response.ok && data.status === 'success') {
+        //             this.payment = data.payment;
+        //         } else {
+        //             this.showError(data.message || 'Payment verification failed');
+        //         }
+        //     } catch (err) {
+        //         console.error('Verification error:', err);
+        //         this.showError('Network error occurred during verification');
+        //     }
+        // },
 
 
           showError(message) {

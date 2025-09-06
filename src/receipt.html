@@ -68,12 +68,13 @@
             <div
               class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
             >
-              <div x-data="{ show: true }" x-show="show" x-transition class="fixed inset-0 bg-white z-50 flex items-center justify-center">
-      <div class="flex flex-col items-center">
-        <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
-        <p class="mt-4 text-gray-600">Verifying payment...</p>
-      </div>
-    </div>
+              <div x-show="loading" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+            <div class="flex flex-col items-center">
+              <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
+              <p class="mt-4 text-gray-600">Verifying payment...</p>
+            </div>
+          </div>
+
 
     <div x-data="receiptApp()" x-init="init()" class="container mx-auto px-4 py-8">
       <!-- Header -->
@@ -216,9 +217,9 @@
             } finally {
               this.loading = false;
               // Hide loading spinner
-              setTimeout(() => {
-                document.querySelector('[x-show="show"]').__x.$data.show = false;
-              }, 500);
+              // setTimeout(() => {
+              //   document.querySelector('[x-show="show"]').__x.$data.show = false;
+              // }, 500);
             }
           },
 
@@ -248,6 +249,8 @@
               });
 
               const data = await response.json();
+
+              console.log(data);
               
               if (response.ok && data.status === 'success') {
                 this.payment = data.payment;

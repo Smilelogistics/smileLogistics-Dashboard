@@ -873,6 +873,9 @@
                                         <div class="pickup-section mb-6 p-4 border rounded-lg dark:border-gray-600">
                                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                                 <div>
+                        <input type="hidden" name="pickups[latitude][]" x-model="pickup.latitude">
+                        <input type="hidden" name="pickups[longitude][]" x-model="pickup.longitude">
+
                                                     <label class="block text-gray-700 dark:text-gray-300">Pick up</label>
                                                     <select x-model="pickup.pick_up" name="pickups[pick_up][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                                         <option value="" selected disabled></option>
@@ -951,6 +954,9 @@
                                         <div class="dropoff-section mb-6 p-4 border rounded-lg dark:border-gray-600">
                                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                                 <div>
+                                                    
+                        <input type="hidden" name="dropoffs[latitude][]" x-model="dropoff.latitude">
+                        <input type="hidden" name="dropoffs[longitude][]" x-model="dropoff.longitude">
                                                     <label class="block text-gray-700 dark:text-gray-300">Drop At</label>
                                                     <select x-model="dropoff.drop_at" name="dropoffs[drop_at][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                                         <option value="" selected disabled></option>
@@ -1973,7 +1979,9 @@ fetchSettings().then(result => {
                         appt_date: '',
                         no_latter_than_date: '',
                         no_latter_than_time: '',
-                        coordinates: null
+                        coordinates: null,
+                        latitude: '',
+                        longitude: ''
                     }],
                     dropoffs: [{
                         drop_at: '',
@@ -1985,7 +1993,9 @@ fetchSettings().then(result => {
                         appt_date: '',
                         no_latter_than_date: '',
                         no_latter_than_time: '',
-                        coordinates: null
+                        coordinates: null,
+                        latitude: '',
+                        longitude: ''
                     }]
 
               },
@@ -2039,7 +2049,9 @@ fetchSettings().then(result => {
                         appt_date: '',
                         no_latter_than_date: '',
                         no_latter_than_time: '',
-                        coordinates: null
+                        coordinates: null,
+                        latitude: '',
+                        longitude: ''
                     }];
                 }
                 
@@ -2054,7 +2066,9 @@ fetchSettings().then(result => {
                         appt_date: '',
                         no_latter_than_date: '',
                         no_latter_than_time: '',
-                        coordinates: null
+                        coordinates: null,
+                        latitude: '',
+                        longitude: ''
                     }];
                 }
                     if (!this.formData.charges) {
@@ -2150,7 +2164,9 @@ fetchSettings().then(result => {
                     appt_date: '',
                     no_latter_than_date: '',
                     no_latter_than_time: '',
-                    coordinates: null
+                    coordinates: null,
+                        latitude: '',
+                        longitude: ''
                 }];
                 
                 this.formData.dropoffs = [{
@@ -2163,7 +2179,9 @@ fetchSettings().then(result => {
                     appt_date: '',
                     no_latter_than_date: '',
                     no_latter_than_time: '',
-                    coordinates: null
+                    coordinates: null,
+                        latitude: '',
+                        longitude: ''
                 }];
                 
                 // Clear distance calculations
@@ -2219,6 +2237,8 @@ fetchSettings().then(result => {
                                 city: addressComponents.city,
                                 state: addressComponents.state,
                                 zip: addressComponents.zip,
+                                latitude: place.geometry.location.lat(),
+                                longitude: place.geometry.location.lng(),  
                                 coordinates: {
                                     lat: place.geometry.location.lat(),
                                     lng: place.geometry.location.lng()
@@ -2232,6 +2252,8 @@ fetchSettings().then(result => {
                                 city: addressComponents.city,
                                 state: addressComponents.state,
                                 zip: addressComponents.zip,
+                                latitude: place.geometry.location.lat(),
+                                longitude: place.geometry.location.lng(),
                                 coordinates: {
                                     lat: place.geometry.location.lat(),
                                     lng: place.geometry.location.lng()
@@ -2283,7 +2305,9 @@ fetchSettings().then(result => {
                         appt_date: '',
                         no_latter_than_date: '',
                         no_latter_than_time: '',
-                        coordinates: null
+                        coordinates: null,
+                        latitude: '',
+                        longitude: ''
                     });
                     this.$nextTick(() => {
                         document.querySelectorAll(".appt_date, .no_latter_than_date").forEach(el => initDatePicker(el, "Y-m-d"));
@@ -2311,7 +2335,9 @@ fetchSettings().then(result => {
                         appt_date: '',
                         no_latter_than_date: '',
                         no_latter_than_time: '',
-                        coordinates: null
+                        coordinates: null,
+                        latitude: '',
+                        longitude: ''
                     });
                     this.$nextTick(() => {
                         document.querySelectorAll(".appt_date, .no_latter_than_date").forEach(el => initDatePicker(el, "Y-m-d"));

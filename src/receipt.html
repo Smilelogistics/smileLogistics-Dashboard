@@ -226,7 +226,7 @@
             const params = new URLSearchParams(window.location.search);
             const reference = params.get('reference');
             const transactionId = params.get('transaction_id');
-            const flutterRef = params.get('tx_ref');
+            const flutterRef = params.get('tx_ref'); // This is the correct parameter name from URL
             const status = params.get('status');
             const type = params.get('type');
 
@@ -240,7 +240,7 @@
 
             // For Flutterwave, we need transaction_id and tx_ref
             if (type === 'flutterwave') {
-                if (!transactionId || !status) {
+                if (!transactionId || !flutterRef || !status) {
                     this.showError('Missing Flutterwave transaction parameters');
                     return;
                 }
@@ -269,7 +269,7 @@
                         break;
                     case 'flutterwave':
                         // Build URL with query parameters for GET request
-                         endpoint = `${requestGetURL}/verify-payment/flutterwave?transaction_id=${transactionId}&tx_ref=${flutterRef}`;
+                        endpoint = `${requestGetURL}/verify-payment/flutterwave?transaction_id=${transactionId}&tx_ref=${flutterRef}&status=${status}`;
                         break;
                     case 'stripe':
                         endpoint = `${requestGetURL}/verify-stripe/${reference}`;

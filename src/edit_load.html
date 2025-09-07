@@ -171,7 +171,7 @@
                     <!-- Step 1: Basic Info -->
                     <div x-show="step === 1" >
                                         
-                        <div x-data="{ selectedOption: 'ocean'}">
+                        <div >
                             <div  class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                 <!-- <div x-data="{ isAuthenticated: false }">
                                     <span x-show="!isAuthenticated" onclick="user()" class="cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">Get User
@@ -183,7 +183,7 @@
                                 </div> -->
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Type</label>
-                                        <select x-model="selectedOption" name="shipment_type" id="shipment_type" onchange="handleShipmentType(this.value)" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <select x-model="formData.shipment_type" name="shipment_type" id="shipment_type" onchange="handleShipmentType(this.value)" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                         <option value="" selected disabled>Select</option>
                                         <option value="land">Land</option>
                                         <option value="ocean">Ocean</option>
@@ -191,7 +191,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div x-show="selectedOption === 'ocean'">
+                            <div x-show="formData.shipment_type === 'ocean'">
                                 <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                     
                                     <div>
@@ -489,7 +489,7 @@
                                 </div>
                             </div>
 
-                            <div x-show="selectedOption === 'land'">
+                            <div x-show="formData.shipment_type === 'land'">
                                 <div id="" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                     <div x-show="userRole === 'businessadministrator'">
                                         <label class="block text-gray-700 dark:text-gray-300">Office</label>
@@ -1837,7 +1837,7 @@ document.addEventListener('alpine:init', () => {
                   delivery_type: '',
                   driver_id: '',
                   carrier_id: '',
-                  shipment_type: '',
+                  //shipment_type: '',
                     shipper_name: '',
                     ocean_shipper_address: '',
                     ocean_shipper_reference_number: '',
@@ -2276,6 +2276,7 @@ document.addEventListener('alpine:init', () => {
                     })
                     .then(response => response.json())
                     .then(data => {
+                         //console.log("XXXXXXXX Response:", data); 
                         this.formData = {
                             ...this.formData,
                             ...data,

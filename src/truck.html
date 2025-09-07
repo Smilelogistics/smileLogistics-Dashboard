@@ -199,6 +199,7 @@
                 make_model: '',
                 vehicle_number: '',
                 license_plate_number: '',
+                //file: '',
               },
               offices: [],
               init() {
@@ -241,6 +242,11 @@
               saveAndSubmit() {
                   let form = document.getElementById("newTruckForm");
                     let formData = new FormData(form);
+                    //formData.append('file', this.formData.file);\
+                     for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+                    //return;
                     $.ajax({
                         url: requestURL+'/trucks/create',
                         type: 'POST',

@@ -250,7 +250,7 @@
 
                         this.formData = {
                             truck_type: truck.truck_type,
-                            truck_office: truck.truck_office,
+                            truck_office: truck.office,
                             driver_id: truck.driver_id,
                             make_model: truck.make_model,
                             vehicle_number: truck.vehicle_number,
@@ -314,7 +314,7 @@
                                     
                         let currentDriverId = this.formData.driver_id || null;
                     let currentTruckType = this.formData.truck_type || null;
-                    let currentOffice = this.formData.truck_office || null;
+                    let currentOffice = this.formData.office || null;
 
                     let driverId = formData.get("driver_id") || currentDriverId;
                     let truckType = formData.get("truck_type") || currentTruckType;

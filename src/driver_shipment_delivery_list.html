@@ -139,7 +139,7 @@
                                     </div>
                                   </td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                      x-text="item.delivery_accepted_status == 1 ? 'Accepted' : 'Pending'">
+                                      x-text="item.dispatcher_accepted_status == 1 ? 'Accepted' : 'Pending'">
                                   </td>
 
 
@@ -158,8 +158,8 @@
                                 <td class="py-3">
                                   <span 
                                     class="rounded-full px-2 py-0.5 text-theme-xs font-medium" 
-                                    :class="getStatusBadge(item.status).class"
-                                    x-text="getStatusBadge(item.status).text"
+                                    :class="getStatusBadge(item.shipment_status).class"
+                                    x-text="getStatusBadge(item.shipment_status).text"
                                   ></span>
                                 </td>
                                   <!-- <td class="px-6 py-4 whitespace-nowrap">
@@ -502,7 +502,7 @@
             this.isUpdating = true;
             
             try {
-              const response = await fetch(`${requestURL}/consolidate/acceptDelivery/${this.currentShipmentId}`, {
+              const response = await fetch(`${requestURL}/shipments/acceptDelivery/${this.currentShipmentId}`, {
                 method: 'PUT',
                 headers: {
                   'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),

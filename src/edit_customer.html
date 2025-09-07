@@ -269,7 +269,20 @@
                           <div id="" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                               <div>
                                   <label class="block text-gray-700 dark:text-gray-300">Factoring Company</label>
-                                  <input type="text" x-model="formData.factoringCompany" name="factoringCompany" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                  <!-- <input type="text" x-model="formData.factoringCompany" name="factoringCompany" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> -->
+                                    <select x-model="formData.factoringCompany" name="factoringCompany" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <option value="" selected disabled hidden>Select Company</option>
+                                    <option value="Advance Business Capital LLC">Advance Business Capital LLC</option>
+                                    <option value="ECAPITAL FREIGHT">ECAPITAL FREIGHT </option>
+                                    <option value="First line Funding Group">First line Funding Group</option>
+                                    <option value="Freight Funding">Freight Funding </option>
+                                    <option value="RTS Financial Service">RTS Financial Service</option>
+                                    <option value="Sunbelt Finance">Sunbelt Finance</option>
+                                    <option value="TBS FACTORING SERVICE LLC">TBS FACTORING SERVICE LLC</option>
+                                    <option value="Thunder Funding">Thunder Funding</option>
+                                    <option value="Compass Funding">Compass Funding</option>
+                                    <option value="England Carrier Services">England Carrier Services</option>
+                                </select>
                               </div>
                               <div>
                                   <!-- <label class="block text-gray-700 dark:text-gray-300">Load Note</label> -->

@@ -226,17 +226,19 @@
             const params = new URLSearchParams(window.location.search);
             const reference = params.get('reference');
             const transactionId = params.get('transaction_id');
+            const flutterRef = params.get('tx_ref');
             const status = params.get('status');
-            const type = params.get('type') || 'flutterwave';
+            const type = params.get('type');
 
             console.log('Payment verification params:', {
                 reference,
                 transactionId,
+                flutterRef,
                 status,
                 type
             });
 
-            // For Flutterwave, we need transaction_id and status
+            // For Flutterwave, we need transaction_id and tx_ref
             if (type === 'flutterwave') {
                 if (!transactionId || !status) {
                     this.showError('Missing Flutterwave transaction parameters');
@@ -260,20 +262,14 @@
                 }
 
                 let endpoint = '';
-                let requestData = {};
 
                 switch (type) {
                     case 'paystack':
                         endpoint = `${requestGetURL}/verify-paystack/${reference}`;
                         break;
                     case 'flutterwave':
-                        endpoint = `${requestGetURL}/callback-flutterwave`;
-                        // For Flutterwave, we need to send both transaction_id and reference
-                        requestData = {
-                            transaction_id: transactionId,
-                            tx_ref: reference,
-                            status: status
-                        };
+                        // Build URL with query parameters for GET request
+                         endpoint = `${requestGetURL}/verify-payment/flutterwave?transaction_id=${transactionId}&tx_ref=${flutterRef}`;
                         break;
                     case 'stripe':
                         endpoint = `${requestGetURL}/verify-stripe/${reference}`;
@@ -286,23 +282,15 @@
                         return;
                 }
 
-                const requestOptions = {
-                    method: type === 'flutterwave' ? 'GET' : 'GET',
+                const response = await fetch(endpoint, {
+                    method: 'GET', // Always GET
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
                     }
-                };
+                });
 
-                // Add body for POST requests (Flutterwave)
-                // if (type === 'flutterwave') {
-                //     requestOptions.body = JSON.stringify(requestData);
-                // }
-
-                const response = await fetch(endpoint, requestOptions);
                 const data = await response.json();
-
                 console.log('Verification response:', data);
 
                 if (response.ok && data.status === 'success') {

@@ -114,11 +114,13 @@
                               
                               <div id="chosen-select">
                                   <label class="block text-gray-700 dark:text-gray-300">Sales Rep</label>
-                                  <select x-model="formData.customer_sales_rep" name="customer_sales_rep" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select">
-                                      <!-- <option value="" selected disabled>Select Type</option> -->
+                                  
+                                <input type="text" x-model="formData.customer_sales_rep" name="customer_sales_rep" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+
+                                  <!-- <select x-model="formData.customer_sales_rep" name="customer_sales_rep" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white chosen-select">
                                       <option value="IN">IN</option>
                                      
-                                  </select>
+                                  </select> -->
                               </div>
                             
                           </div>
@@ -153,9 +155,11 @@
                               </div>
                               <div>
                                   <label class="block text-gray-700 dark:text-gray-300">State</label>
-                                  <select x-model="formData.customer_state" name="customer_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                <input x-model="formData.customer_state" name="customer_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+
+                                  <!-- <select x-model="formData.customer_state" name="customer_state" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                   <option value="" selected disabled>Select Type</option>
-                              </select>
+                              </select> -->
                               </div>
                               <div>
                                   <label class="block text-gray-700 dark:text-gray-300">Zip</label>
@@ -226,7 +230,7 @@
                                   <div>
                                       <label class="block text-gray-700 dark:text-gray-300">Parent Account</label>
                                        <select x-model="formData.subAccount_of" name="subAccount_of" 
-                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="branches">
+                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="customers">
                                     <option value="" selected disabled hidden>Select Account</option>
                                     <template x-for="customer in customers" :key="customer.user.id">
                                     <option :value="customer.user.email" 

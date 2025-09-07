@@ -200,11 +200,11 @@
                             <div id="chosen-select">
                                 <label class="block text-gray-700 dark:text-gray-300">Send invoices under this company</label>
                                 <select x-model="formData.send_invoice_under_this_company" name="send_invoice_under_this_company" 
-                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="customers">
+                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="branches">
                                     <option value="" selected disabled hidden>Select Comapny</option>
-                                    <template x-for="customer in customers" :key="customer.user.id">
-                                    <option :value="customer.user.email" 
-                                            x-text="customer.user.fname">
+                                    <template x-for="branch in branches" :key="branch.user.id">
+                                    <option :value="branch.user.email" 
+                                            x-text="branch.user.fname">
                                     </option>
                                     </template>
                                 </select>
@@ -228,11 +228,11 @@
                                 <div>
                                     <label class="block text-gray-700 dark:text-gray-300">Parent Account</label>
                                     <select x-model="formData.subAccount_of" name="subAccount_of" 
-                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="branches">
+                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="customers">
                                     <option value="" selected disabled hidden>Select Account</option>
-                                    <template x-for="branche in branches" :key="branche.user.id">
-                                    <option :value="branche.user.email" 
-                                            x-text="branche.user.fname">
+                                    <template x-for="customer in customers" :key="customer.user.id">
+                                    <option :value="customer.user.email" 
+                                            x-text="customer.user.fname">
                                     </option>
                                     </template>
                                 </select>

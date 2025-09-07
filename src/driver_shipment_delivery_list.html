@@ -363,7 +363,7 @@
       })
       .then(data => {
         console.log('Delivery list', data.shipments);
-        this.items = Array.isArray(data.data) ? data.data : [];
+        this.items = Array.isArray(data.shipments) ? data.shipments : [];
         // if (Array.isArray(data.data)) {
         //   this.items = data.data;
         // } else if (data.data && typeof data.data === 'object') {

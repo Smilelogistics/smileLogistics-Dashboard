@@ -74,7 +74,7 @@
                               </div>
 
                               <div>
-                              <img :src="formData.invoice_logo" alt="Logo"  class="max-h-full max-w-full object-contain"
+                              <img :src="formData.invoice_logo_url" alt="Logo"  class="w-36 h-36 object-contain"
                                                  >
                               </div>
                             </div>
@@ -997,6 +997,7 @@
                 office: data.office || '',
 
                 invoice_logo: data.branch?.invoice_logo || '',
+                invoice_logo_url:data.branch?.invoice_logo_url || '',
 
                 shipment_charges:data.shipment_charges?.map(charge => ({
                   id: charge.id || '',

@@ -2151,11 +2151,11 @@ document.addEventListener('alpine:init', () => {
                     console.log('Raw pickups:', this.formData.pickups);
                     console.log('Raw dropoffs:', this.formData.dropoffs);
                                         
-                    if (pickupLocations.length === 0 || dropoffLocations.length === 0) {
+                    // if (pickupLocations.length === 0 || dropoffLocations.length === 0) {
                     
-                    this.formData.total_miles = '';
-                        return;
-                    }
+                    // this.formData.total_miles = '';
+                    //     return;
+                    // }
                     
                     try {
                         // Calculate distance for each pickup-dropoff pair
@@ -2278,20 +2278,22 @@ document.addEventListener('alpine:init', () => {
                     })
                     .then(response => response.json())
                     .then(data => {
-                         //console.log("XXXXXXXX Response:", data); 
+                         console.log("XXXXXXXX Response:", data); 
                          //console.log('toor', data.total_miles);
                         this.formData = {
                             ...this.formData,
                             ...data,
-                            total_miles: data.total_miles || '',
+                            //total_miles: data.total_miles || '',
                             shipment_type: data.shipment_type || '',
+                            total_shipping_cost: data.total_shipment_cost || '',
                             over_weight: data.over_weight || [],
                             tags: data.tags || [],
+                            load_weight: data.shipment_weight || '',
                             
                             // Initialize charges with proper numeric values
                             shipment_charges: data.shipment_charges?.map(charge => ({
                                 id: charge.id || '',
-                                charge_type: charge.type || '',
+                                charge_type: charge.charge_type || '',
                                 comment: charge.comment || '',
                                 units: charge.unit ? parseFloat(charge.unit) : 0,
                                 rate: charge.rate ? parseFloat(charge.rate) : 0,

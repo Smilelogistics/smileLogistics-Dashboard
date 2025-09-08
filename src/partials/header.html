@@ -653,7 +653,7 @@ function logout() {
   .then(data => {
     
     // Clear local storage
-    ['auth_token', 'userLoggedIn', 'Driver_step', 'step', 'invoice_step', '_x_selected', 'carrier_step', 'darkMode']
+    ['auth_token', 'userLoggedIn', 'Driver_step', 'step', 'invoice_step', '_x_selected', 'carrier_step', 'darkMode', 'currency']
       .forEach(key => localStorage.removeItem(key));
   localStorage.removeItem('auth_token');
 

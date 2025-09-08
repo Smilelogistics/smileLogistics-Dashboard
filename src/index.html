@@ -136,6 +136,7 @@
           const datas = await response.json();
           const data = Array.isArray(datas) ? datas[0] : datas;
           console.log("Settings data", data);
+          localStorage.setItem('currency', data.currency);
           
           // Check if any required fields are empty
           const requiredFields = [

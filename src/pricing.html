@@ -143,8 +143,18 @@
                             </div>
                           </div>
                           
-                          <button type="submit" class="px-4 py-2 h-9 w-40 rounded-md px-4 py-1.5 text-sm font-medium text-white shadow-md bg-brand-900 hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:bg-brand-800 dark:hover:bg-brand-900">
-                            Get started
+                            <button 
+                            type="submit" 
+                            id="paybtn"
+                            :disabled="isLoading"
+                            class="px-4 py-2 h-9 w-40 rounded-md text-sm font-medium text-white shadow-md 
+                                  bg-brand-900 hover:bg-brand-600 
+                                  focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 
+                                  dark:bg-brand-800 dark:hover:bg-brand-900 
+                                  disabled:opacity-50 disabled:cursor-not-allowed">
+
+                            <span x-show="!isLoading">Pay now</span>
+                            <span x-show="isLoading">Processing...</span>
                           </button>
                         </form>
                       </div>

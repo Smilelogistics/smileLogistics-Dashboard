@@ -980,6 +980,7 @@
           id: null,
           isLoading: true,
           currency: localStorage.getItem('currency') || 'USD',
+          userRole: localStorage.getItem('user_role'),
 
           init() {
             const urlParams = new URLSearchParams(window.location.search);

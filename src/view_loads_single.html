@@ -96,6 +96,12 @@
                                         </td>
                                       </tr>
                                       <tr>
+                                        
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Bill To</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.bill_to || 'N/A'"></p>
+                                        </td>
+
                                         <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
                                           <p class="text-xs text-gray-500 dark:text-gray-400">Office</p>
                                           <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.office || 'N/A'"></p>
@@ -104,10 +110,7 @@
                                           <p class="text-xs text-gray-500 dark:text-gray-400">Load Type</p>
                                           <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.load_type || 'N/A'"></p>
                                         </td>
-                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
-                                          <p class="text-xs text-gray-500 dark:text-gray-400">Is Broker?</p>
-                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.isBroker == 1 ? 'Yes' : 'No'"></p>
-                                        </td>
+                                       
                                       </tr>
                                       <tr>
                                         <td class="border border-gray-300 dark:border-gray-600 p-3">
@@ -221,6 +224,21 @@
                                           <p class="text-xs text-gray-500 dark:text-gray-400">Batch #</p>
                                           <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.broker_batch_number || 'N/A'"></p>
                                         </td>
+                                      </tr>
+
+                                      <tr>
+                                         <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Is Broker?</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.isBroker == 1 ? 'Yes' : 'No'"></p>
+                                        </td>
+                                        <!-- <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Seal #</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.seal_number || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Batch #</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.broker_batch_number || 'N/A'"></p>
+                                        </td> -->
                                       </tr>
 
                                     </table>
@@ -1094,6 +1112,7 @@
               // Initialize formData with all required properties
               this.formData = {
                 id:data.id || '',
+                bill_to: data.invoice?.customer.user.fname || '',
                 shipment_type:data.shipment_type || '',
                 shipment_tracking_number: data.shipment_tracking_number || '',
                 load_type: data.load_type || '',
@@ -1105,11 +1124,12 @@
                 carrier_name: data.carrier_name || '',
                 carrier_reference_number: data.carrier_reference_number || '',
                 bill_of_laden_number: data.bill_of_laden_number || '',
+                reference_number: data.reference_number || '',
                 pick_up: data.pick_up || '',
                 pick_up_address: data.pick_up_address || '',
                 pieces: data.pieces || '',
                 commodity: data.commodity || '',
-                load_weight: data.load_weight || '',
+                load_weight: data.shipment_weight || '',
                 booking_number: data.booking_number || '',
                 genset_number: data.genset_number || '',
                 reefer_temp: data.reefer_temp || '',

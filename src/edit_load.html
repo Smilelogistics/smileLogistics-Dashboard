@@ -1713,9 +1713,12 @@ function fetchSettings() {
         
         console.log('FORM DATA', data);
         mpgValue = document.getElementById('mpg');
+        // if(mpgValue){
+        //     alert('dom')
+        // }
         pricePerGallonValue = document.getElementById('fuel_rate_per_gallon');
         if(userRole == 'businessadministrator') {
-             mpgValue.value = data.mpg || 1;
+             mpgValue = data.mpg || 1;
              pricePerGallonValue.value = data.price_per_gallon || 1;
             mpgGoten = data.mpg || 1;
             pricePerMile = data.price_per_mile || 1;
@@ -2216,7 +2219,8 @@ document.addEventListener('alpine:init', () => {
 
                     const fuelPerGallon = parseFloat(this.formData.fuel_rate_per_gallon) || 0;
                     const mpg = parseFloat(mpgGoten) || 1;
-                    const pricePerm = parseFloat(pricePerMile) || 1;
+                    console.log("fjedhff", mpgGoten);
+                    //const pricePerm = parseFloat(pricePerMile) || 1;
                     // Updated to include round-trip
                     this.formData.total_fuel_cost = ((totalMiles * 2) * fuelPerGallon / mpg).toFixed(2);
                     this.formData.total_shipping_cost = ((totalMiles * 2) * pricePerMile).toFixed(2);

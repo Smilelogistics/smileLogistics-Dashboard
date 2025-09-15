@@ -73,7 +73,7 @@
                   <div>
                     <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Invoice Details</h2>
                     <p class="text-sm text-gray-500 dark:text-gray-300"
-                      x-text="'Reference #: ' + (formData.invoice_prefix || '') + (formData.id ? formData.id : 'N/A')"></p>
+                      x-text="'Reference #: ' + (formData.reference_number ? formData.reference_number : 'N/A')"></p>
                   </div>
                   <div>
                     <template x-if="formData.invoice_logo">
@@ -107,7 +107,7 @@
                   <!-- Invoice Info -->
                   <div class="flex justify-between mb-6 text-gray-800 dark:text-gray-200">
                     <div>
-                      <p><strong>Invoice No.:</strong> <span x-text="formData.invoice_prefix + formData.id"></span></p>
+                      <p><strong>Invoice No.:</strong> <span x-text="formData.invoice_prefix + formData.invoice_number"></span></p>
                       <p><strong>Invoice Date:</strong> <span x-text="formData.invoice_date"></span></p>
                       <p><strong>Due Date:</strong> <span x-text="formData.invoice_due_date"></span></p>
                     </div>
@@ -449,6 +449,7 @@
               this.formData = {
                 // Basic Information
                id: data.invoice.id ? String(data.invoice.id).padStart(3, '0') : '',
+               invoice_number: data.invoice?.invoice_number || '',
                 invoice_prefix: (data.invoice.branch?.invoice_prefix || '') + '-' || '',
                 invoice_logo: data.invoice.branch?.invoice_logo || '',
                 invoice_type: data.invoice.invoice_type || '',

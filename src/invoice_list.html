@@ -178,10 +178,10 @@
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.invoice_date ? item.invoice_date : ' '"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.invoice_due_date ? item.invoice_due_date : ' '"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
-                                      x-text="item.customer_name ? item.customer_name : ' '">
+                                      x-text="item.customer?.user?.fname ? item.customer?.user?.fname : ' '">
                                   </td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.customer_office ? item.customer_office : ' '"></td>
-                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.bill_of_landing_number ? item.bill_of_landing_number : ' '"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.customer?.user?.email ? item.customer?.user?.email : ' '"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" x-text="item.bill_of_landing_number ?? item.shipment?.bill_of_laden_number ?? ' '"></td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400" 
                                     x-text="parseFloat(item.net_total) !== 0 
                                         ? currency + ' ' + parseFloat(item.net_total).toFixed(2) 

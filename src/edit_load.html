@@ -537,10 +537,21 @@
                                             </label>
 
                                             <!-- Checkbox Option -->
+                                              <!-- Checkbox Option -->
+                                            <input type="hidden" name="brokered" x-model="formData.brokered" value="0">
                                             <label class="flex items-center space-x-2">
-                                                <input type="checkbox" x-model="formData.isBroker" name="isBroker" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                                <input 
+                                                    type="checkbox" 
+                                                    x-model="formData.brokered" 
+                                                    @change="formData.brokered = $event.target.checked ? 1 : 0"
+                                                    class="text-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                                                >
                                                 <span class="text-gray-700 dark:text-gray-300">Broker</span>
                                             </label>
+                                            <!-- <label class="flex items-center space-x-2">
+                                                <input type="checkbox" x-model="formData.isBroker" name="isBroker" class="text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                                                <span class="text-gray-700 dark:text-gray-300">Broker</span>
+                                            </label> -->
                                         </div>
                                     </div>
                                 </div>
@@ -1758,7 +1769,7 @@ document.addEventListener('alpine:init', () => {
                   load_type: '',
                   load_type_note: '',
                   load_type_note_r: '',
-                  isBroker: '',
+                  brokered: '',
                   shipment_type: '',
                   bill_to: '',
                   quick_note: '',

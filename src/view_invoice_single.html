@@ -135,12 +135,30 @@
                       <tbody>
                         <tr>
                           <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-gray-800 dark:text-gray-200">
-                            <span x-text="formData.from_address || ''"></span><br>
+                            <template x-for="(pickup, index) in formData.pickups" :key="index">
+                              <tr>
+                                <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                  <div x-text="pickup.address || pickup.address || ''"></div>
+                                </td>
+                                
+
+                              </tr>
+                            </template>
+                            <!-- <span x-text="formData.from_address || ''"></span><br> -->
                             <!-- <span x-text="formData.to_address || ''"></span><br>
                             <span x-text="formData.other_stops || ''"></span> -->
                           </td>
                           <td class="border border-gray-400 dark:border-gray-600 px-2 py-1 text-gray-800 dark:text-gray-200">
-                            <span x-text="formData.to_address|| ''"></span><br>
+                            <template x-for="(dropoff, index) in formData.dropoffs" :key="index">
+                              <tr>
+                                <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                  <div x-text="dropoff.address || dropoff.address || ''"></div>
+                                </td>
+                                
+
+                              </tr>
+                            </template>
+                            <!-- <span x-text="formData.to_address|| ''"></span><br> -->
                             <!-- <span x-text="formData.customer_address || ''"></span><br>
                             <span x-text="formData.customer_state_data || ''"></span> -->
                           </td>
@@ -494,6 +512,34 @@
                 credit_note:payment.credit_note,
                 credit_date:payment.credit_date,
               })) || [],
+
+              pickups: data.invoice?.shipment?.pickups?.map(pickup => ({
+                  id: pickup.id,
+                  address: pickup.address,
+                  city: pickup.city,
+                  state:pickup.state,
+                  zip: pickup.zip,
+                  location_name: pickup.location_name,
+                  no_latter_than_date: pickup.no_latter_than_date,
+                  no_latter_than_time: pickup.no_latter_than_time,
+                  pick_up_type:pickup.pick_up_type,
+                  appt_date: pickup.appt_date,
+
+                })) || [],
+
+                dropoffs: data.invoice?.shipment?.dropoffs?.map(dropoff => ({
+                  id: dropoff.id,
+                  address: dropoff.address,
+                  city: dropoff.city,
+                  state:dropoff.state,
+                  zip: dropoff.zip,
+                  location_name: dropoff.location_name,
+                  no_latter_than_date: dropoff.no_latter_than_date,
+                  no_latter_than_time: dropoff.no_latter_than_time,
+                  drop_at_type:dropoff.drop_at_type,
+                  appt_date: dropoff.appt_date,
+
+                })) || [],
                 
                 
                 //shipment_expenses: data.shipment_expenses || [],

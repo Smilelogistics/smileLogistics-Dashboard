@@ -120,7 +120,7 @@
     
     async checkSettings() {
       const role = localStorage.getItem('user_role');
-      if (role === 'businessadministrator') {
+      //if (role === 'businessadministrator') {
         try {
           const response = await fetch(requestURL + '/settings/data', {
             headers: {
@@ -136,8 +136,14 @@
           const datas = await response.json();
           const data = Array.isArray(datas) ? datas[0] : datas;
           console.log("Settings data", data);
-          localStorage.setItem('currency', data.currency);
-          
+          if(role === 'businessadministrator' || role === 'superadministrator'){
+
+            localStorage.setItem('currency', data.currency);
+          }
+          else if(role === 'driver' || role === 'customer')
+          {
+            localStorage.setItem('currency', data.branch.currency);
+          }
           // Check if any required fields are empty
           const requiredFields = [
             'base_fee', 
@@ -162,7 +168,7 @@
           this.message = 'Error checking your settings. Please try again.';
           this.openPopup();
         }
-      }
+      //}
     },
     
     openPopup() {

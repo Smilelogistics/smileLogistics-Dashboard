@@ -68,6 +68,7 @@
                           <!-- Main Card -->
                           <div id="printableArea1" class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700" x-show="!isLoading && formData">
                             <!-- Header -->
+                             <div id="printableArea">
                             <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-600 flex justify-between items-center">
                               <div>
                                 <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Shipment Details</h2>
@@ -80,7 +81,7 @@
                             </div>
                             
                             <!-- Content -->
-                            <div class="p-6" id="printableArea">
+                            <div class="p-6" >
                               <div >
                                 <template x-if="formData.shipment_type === 'land'">
                                   <div class="md:col-span-2 lg:col-span-3 font-sans border border-gray-300 dark:border-gray-600 p-4 rounded-lg">
@@ -97,16 +98,21 @@
                                       </tr>
                                       <tr>
                                         
-                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/4">
                                           <p class="text-xs text-gray-500 dark:text-gray-400">Bill To</p>
                                           <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.bill_to || 'N/A'"></p>
                                         </td>
 
-                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/4">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Shipment Type</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.shipment_type || 'N/A'"></p>
+                                        </td>
+
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/4">
                                           <p class="text-xs text-gray-500 dark:text-gray-400">Office</p>
                                           <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.office || 'N/A'"></p>
                                         </td>
-                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/4">
                                           <p class="text-xs text-gray-500 dark:text-gray-400">Load Type</p>
                                           <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.load_type || 'N/A'"></p>
                                         </td>
@@ -488,15 +494,20 @@
                                         </td>
                                       </tr>
                                       <tr>
-                                        <td class="border border-gray-800 dark:border-gray-600 p-1.5 w-1/3">
+                                          <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/4">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Shipment Type</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.shipment_type || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-800 dark:border-gray-600 p-1.5 w-1/4">
                                           <p class="text-xs text-gray-600 dark:text-gray-400">Shipper Name</p>
                                           <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData && formData.shipper_name || 'N/A'"></p>
                                         </td>
-                                        <td class="border border-gray-800 dark:border-gray-600 p-1.5 w-1/3">
+                                        
+                                        <td class="border border-gray-800 dark:border-gray-600 p-1.5 w-1/4">
                                           <p class="text-xs text-gray-600 dark:text-gray-400">Shipper Address</p>
                                           <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.ocean_shipper_address || 'N/A'"></p>
                                         </td>
-                                        <td class="border border-gray-800 dark:border-gray-600 p-1.5 w-1/3">
+                                        <td class="border border-gray-800 dark:border-gray-600 p-1.5 w-1/4">
                                           <p class="text-xs text-gray-600 dark:text-gray-400">Shipper Reference #</p>
                                           <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.ocean_shipper_reference_number || 'N/A'"></p>
                                         </td>
@@ -695,7 +706,7 @@
                                <div class="md:col-span-2 mt-10 lg:col-span-3">
                                 <div class="flex flex-wrap gap-6"> <!-- Increased gap for better spacing -->
                                   <!-- Charges Information (Column 1) -->
-                                  <div class="flex-1 min-w-[300px]"> <!-- Wider minimum width -->
+                                  <div class="flex-1 min-w-[300px]" x-show="userRole === 'businessadministrator' || userRole === 'customer'"> <!-- Wider minimum width -->
                                     <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 mb-4">Charges Information</h3>
                                     
                                     <template x-if="Array.isArray(formData.shipment_charges) && formData.shipment_charges.length">
@@ -744,7 +755,7 @@
                                   </div>
 
                                   <!-- Expense INFO (Column 2) -->
-                                  <div class="flex-1 min-w-[300px]">
+                                  <div class="flex-1 min-w-[300px]" x-show="userRole === 'businessadministrator' || userRole === 'customer'">
                                     <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 mb-4">Expense INFO</h3>
                                     
                                     <template x-if="formData.shipment_expenses && formData.shipment_expenses.length > 0">
@@ -819,7 +830,7 @@
                                 </div>
                               </div>
                                <!-- Totals (Column 3) -->
-                                  <div class="flex-1 min-w-[300px] mt-10">
+                                  <div class="flex-1 min-w-[300px] mt-10" x-show="userRole === 'businessadministrator' || userRole === 'customer'">
                                     <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 mb-4">Shipment Totals</h3>
                                     <div class="grid grid-cols-2 gap-3">
                                       <div class="border rounded-lg p-2">
@@ -837,6 +848,7 @@
                                     </div>
                                   </div>
                             </div>
+                            </div>
                             
 
                                    <!-- Footer -->
@@ -846,7 +858,7 @@
                                       <button @click="downloadAsPDF('printableArea')" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition mr-2 no-print">
                                         Download PDF
                                       </button>
-                                      <button onclick="printDiv('printableArea')" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition no-print">
+                                      <button onclick="printDiv('printableArea')" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition no-print print-btn">
                                         Print
                                       </button>
                                     </div>
@@ -1307,15 +1319,99 @@
           }
         }));
       });
+
+   function printDiv(divId) {
+    const printElement = document.getElementById(divId);
+    const printContents = printElement.innerHTML;
+    const originalContents = document.body.innerHTML;
+    
+    // Replace document body with only the printable area
+    document.body.innerHTML = printContents;
+    
+    // Function to check if all images are loaded
+    function checkAllImagesLoaded() {
+        return new Promise((resolve) => {
+            const images = document.querySelectorAll('img');
+            let loadedCount = 0;
+            const totalImages = images.length;
+            
+            if (totalImages === 0) {
+                resolve();
+                return;
+            }
+            
+            images.forEach(img => {
+                if (img.complete) {
+                    loadedCount++;
+                    if (loadedCount === totalImages) resolve();
+                } else {
+                    img.addEventListener('load', () => {
+                        loadedCount++;
+                        if (loadedCount === totalImages) resolve();
+                    });
+                    img.addEventListener('error', () => {
+                        loadedCount++;
+                        if (loadedCount === totalImages) resolve();
+                    });
+                }
+            });
+        });
+    }
+    
+    // Wait for images to load, then print
+    checkAllImagesLoaded().then(() => {
+        // Small delay to ensure rendering is complete
+        setTimeout(() => {
+            window.print();
+            // Restore the original document contents
+            document.body.innerHTML = originalContents;
+            // Since we've replaced the innerHTML, we need to reattach the event listener
+            const printButton = document.querySelector('.print-btn');
+            if (printButton) {
+                printButton.onclick = function() {
+                    printDiv('printableArea');
+                };
+            }
+        }, 500);
+    });
+}   function printDiv(divId) {
+            // Store original document contents
+            const originalContents = document.body.innerHTML;
+            
+            // Get the printable area HTML
+            const printElement = document.getElementById(divId);
+            const printContents = printElement.innerHTML;
+            
+            // Replace document body with only the printable area
+            document.body.innerHTML = printContents;
+            
+            // Trigger the print dialog
+            window.print();
+            
+            // Restore the original document contents
+            document.body.innerHTML = originalContents;
+            
+            // Since we've replaced the innerHTML, we need to reattach the event listener
+            // Alternatively, we could use event delegation or a different approach
+            const printButton = document.querySelector('.print-btn');
+            if (printButton) {
+                printButton.onclick = function() {
+                  setTimeout(function(){
+
+                    printDiv('printableArea');
+                  }, 5000)
+                };
+            }
+        }
       
-      function printDiv(divId) {
-        const printContents = document.getElementById(divId).innerHTML;
-        const originalContents = document.body.innerHTML;
-        document.body.innerHTML = printContents;
-        window.print();
-        document.body.innerHTML = originalContents;
-        location.reload();
-      }
+      // function printDiv(divId) {
+      //   const printContents = document.getElementById(divId).innerHTML;
+      //   const originalContents = document.body.innerHTML;
+      //   document.body.innerHTML = printContents;
+      //   window.print();
+      //   document.body.innerHTML = originalContents;
+      //   location.reload();
+      // }
 
       async function downloadAsPDF12() {
   try {

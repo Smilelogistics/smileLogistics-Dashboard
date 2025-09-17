@@ -155,8 +155,8 @@
                         <div x-show="shouldShowDriverField()">
                             <label class="block text-gray-700 dark:text-gray-300">Driver</label>
                               <select x-model="formData.driver_id" id="driver_id" name="driver_id" @change="fetchDriverFlash($event.target.value)"
-                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="office">
-                                    <option value="" selected disabled hidden>Select Office</option>
+                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="">
+                                    <option value="" selected disabled hidden>Select Driver</option>
                                     <template x-for="driver in drivers" :key="driver.id">
                                     <option :value="driver.id" 
                                             x-text="driver.user.fname">
@@ -931,6 +931,7 @@
                         // this.formData.charges[0].bill_to = customerId;
                         // this.saveProgress();
                         // }
+                        console.log("Flash raw:", flash);
                         
                         // Show modal with dynamic flash message if it exists
                         if (flash) {
@@ -940,7 +941,7 @@
                         console.log("This is the flash message",flash);
                         this.openPopup("Flash Note", flash, false);
                         } else {
-                        createToast('info', 'No special instructions for this customer');
+                        //createToast('error', 'No special instructions for this driver');
                         }
                         
                     } catch (error) {
@@ -948,7 +949,7 @@
                         this.title = 'Error';
                         this.message = 'Failed to load customer details';
                         this.hasAction = false;
-                        this.openPopup();
+                        //this.openPopup();
                     }
                     },
                 init() {

@@ -96,10 +96,19 @@
                         <!-- Your existing fields -->
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Office</label>
-                            <select x-model="formData.office" name="office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                              <select x-model="formData.office" name="office" 
+                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="office">
+                                    <option value="" selected disabled hidden>Select Office</option>
+                                    <template x-for="offic in offices" :key="offic.id">
+                                    <option :value="offic.short_name" 
+                                            x-text="offic.long_name">
+                                    </option>
+                                    </template>
+                                </select>
+                            <!-- <select x-model="formData.office" name="office" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                 <option value="" selected disabled>Select Office</option>
                                 <option value="IN">IN</option>
-                            </select>
+                            </select> -->
                         </div>
                         <!-- <div>
                             <label class="block text-gray-700 dark:text-gray-300">Settlement #</label>
@@ -129,11 +138,15 @@
                         <!-- Conditional fields -->
                         <div x-show="shouldShowDriverField()">
                             <label class="block text-gray-700 dark:text-gray-300">Driver</label>
-                            <select x-model="formData.driver_id" id="driver_id" name="driver_id" 
-                                class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" >
-                                <option value="" selected disabled>Select</option>
-                            
-                            </select>
+                             <select x-model="formData.driver_id" id="driver_id" name="driver_id" @change="fetchDriverFlash($event.target.value)"
+                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="">
+                                    <option value="" selected disabled hidden>Select Driver</option>
+                                    <template x-for="driver in drivers" :key="driver.id">
+                                    <option :value="driver.id" 
+                                            x-text="driver.user.fname">
+                                    </option>
+                                    </template>
+                                </select>
                         </div>
                         
                         <div x-show="shouldShowTruckField()">
@@ -284,9 +297,7 @@
                     <div x-show="step === 2">
                         <div>
                             <h4 class="mb-1 text-sm font-medium text-gray-800 dark:text-white/90">Payments</h4>
-                            <template x-for="(payment, index) in formData.payments" :key="index">
-                                <div class="mb-6">
-                                    <div class="flex justify-end mb-2">
+                            <div class="flex justify-end mb-2">
                                         <span @click="addPayment()" 
                                               class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
                                             +
@@ -296,11 +307,14 @@
                                             x
                                         </span>
                                     </div>
+                            <template x-for="(payment, index) in formData.payments" :key="index">
+                                <div class="mb-6">
+                                    
                                     
                                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 paymentcalc">
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Payment Type</label>
-                                      <select x-model="payment.payment_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                      <select x-model="payment.payment_type" name="payment_type[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                         <option value="" selected disabled>Select</option>
                                         <option value="trip_pay">Trip Pay</option>
                                         <option value="fuel_surcharge">Fuel Surcharge</option>
@@ -414,7 +428,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Realease this amount</label>
-                                            <input type="number" x-model="escrow.escrow_release_amount" 
+                                            <input type="number" x-model="escrow.escrow_release_amount" name="escrow_release_amount[]"
                                             @input="calculateTotalRelease()"
                                             class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                         </div>
@@ -578,7 +592,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-gray-700 dark:text-gray-300">Amount</label>
-                                            <input type="number" x-model="deduction.deduction_amount" 
+                                            <input type="number" x-model="deduction.deduction_amount" name="deduction_amount[]" 
                                             @input="calculateTotalDeduction()"
                                             class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                                         </div>
@@ -667,9 +681,9 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('stepperForm', () => ({
         step: localStorage.getItem('edit_settlement') ? parseInt(localStorage.getItem('edit_settlement')) : 1,
         formData: {
-            office: '',
+            // office: '',
             settlement_date: '',
-            driver_id: '',
+            // driver_id: '',
             truck_id: '',
             carrier_id: '',
             settlement_type: '',
@@ -714,6 +728,8 @@ document.addEventListener('alpine:init', () => {
         },
         weeks: [],
         id: null,
+        offices: [],
+        drivers: [],
 
         handleSettlementTypeChange() {
             this.formData.driver_id = '';
@@ -828,6 +844,35 @@ document.addEventListener('alpine:init', () => {
         
         init() {
             this.generateWeeks();
+            
+            this.fetchOffices();
+            this.fetchDrivers();
+            if (!this.formData.payments || this.formData.payments.length === 0) {
+                        this.formData.payments = [{
+                            payment_type: '',
+                            comment: '',
+                            units: '',
+                            rate: '',
+                            amount: '',
+                        }];
+                    }
+                    if (!this.formData.escrow || this.formData.escrow.length === 0) {
+                        this.formData.escrows = [{
+                            escrow_release_account: '',
+                            escrow_release_amount: '',
+                            escrow_release_comment: '',
+                            escrow_release_note: ''
+                        }];
+                    }
+
+                    if (!this.formData.deduction || this.formData.deduction.length === 0) {
+                        this.formData.deductions = [{
+                            deduction_type: '',
+                            deduction_amount: '',
+                            deduction_comment: '',
+                            deduction_note: ''
+                        }];
+                    }
             
             // Initialize watchers for calculations
             this.$watch('formData.payments', () => this.calculateTotals(), { deep: true });
@@ -989,7 +1034,7 @@ document.addEventListener('alpine:init', () => {
                     }],
                     
                     // Map escrows
-                    escrow: data.settlement_escrow?.map(escrow => ({
+                    escrows: data.settlement_escrow?.map(escrow => ({
                         escrow_release_account: escrow.escrow_release_account || '',
                         escrow_release_amount: escrow.escrow_release_amount || 0,
                         escrow_release_comment: escrow.escrow_release_comment || '',
@@ -1002,7 +1047,7 @@ document.addEventListener('alpine:init', () => {
                     }],
                     
                     // Map deductions
-                    deduction: data.settlement_deduction?.map(deduction => ({
+                    deductions: data.settlement_deduction?.map(deduction => ({
                         deduction_type: deduction.deduction_type || '',
                         deduction_amount: deduction.deduction_amount || 0,
                         deduction_comment: deduction.deduction_comment || '',
@@ -1069,6 +1114,92 @@ document.addEventListener('alpine:init', () => {
             this.step--;
             localStorage.setItem('edit_settlement', this.step);
         },
+
+        async fetchDrivers() {
+                    try {
+                        const response = await fetch(requestURL + '/drivers/driver', {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        }
+                        });
+                        
+                        if (!response.ok) {
+                        throw new Error('Failed to fetch offices');
+                        }
+                        
+                        const data = await response.json();
+                        //this.drivers = data.drivers || [];
+                        console.log("drivers",data);
+                    } catch (error) {
+                        console.error('Error fetching drivers:', error);
+                        createToast('error', 'Failed to load drivers list');
+                    }
+                },
+                 async fetchOffices() {
+                    try {
+                        const response = await fetch(requestURL + '/users/get-offices', {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        }
+                        });
+                        
+                        if (!response.ok) {
+                        throw new Error('Failed to fetch offices');
+                        }
+                        
+                        const data = await response.json();
+                        this.offices = data.offices || [];
+                        console.log("Offices","this.offices");
+                    } catch (error) {
+                        console.error('Error fetching offices:', error);
+                        createToast('error', 'Failed to load office list');
+                    }
+                },
+                async fetchDriverFlash(customerId) {
+                    if (!customerId) return;
+                    
+                    try {
+                        const response = await fetch(requestURL + `/drivers/get-flash-message-accounting/${customerId}`, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        }
+                        });
+                        
+                        if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                        }
+                        
+                        const { flash } = await response.json();
+                        
+                        // Update the bill_to field in the first charge
+                        // if (this.formData.charges.length > 0) {
+                        // this.formData.charges[0].bill_to = customerId;
+                        // this.saveProgress();
+                        // }
+                        console.log("Flash raw:", flash);
+                        
+                        // Show modal with dynamic flash message if it exists
+                        if (flash) {
+                        this.title = 'Customer Note';
+                        this.message = flash;
+                        this.hasAction = false;
+                        console.log("This is the flash message",flash);
+                        this.openPopup("Flash Note", flash, false);
+                        } else {
+                        //createToast('error', 'No special instructions for this driver');
+                        }
+                        
+                    } catch (error) {
+                        console.error('Error fetching customer details:', error);
+                        this.title = 'Error';
+                        this.message = 'Failed to load customer details';
+                        this.hasAction = false;
+                        //this.openPopup();
+                    }
+                    },
         
         saveProgress() {
             localStorage.setItem('formData', JSON.stringify(this.formData));
@@ -1089,6 +1220,11 @@ document.addEventListener('alpine:init', () => {
             if (this.formData.tags && this.formData.tags.length > 0) {
                 formData.append('tags', JSON.stringify(this.formData.tags));
             }
+             for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+                    console.log(localStorage.getItem('auth_token'));
+                    //return
 
             // Append files
             let fileInput = document.querySelector("input[name='file_path[]']");
@@ -1099,7 +1235,7 @@ document.addEventListener('alpine:init', () => {
             }
 
             $.ajax({
-                url: requestURL + "/settlements/update/" + this.id,
+                url: requestURL + "/settlements/settlements/" + this.id,
                 type: "POST",
                 data: formData,
                 processData: false, 
@@ -1125,6 +1261,8 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 });
+
+    populateDriverSelect();
         
                         $(function() {
                             $(".move_date_datepicker").datepicker({
@@ -1276,7 +1414,7 @@ document.addEventListener('alpine:init', () => {
             element.parentElement.parentElement.remove();
         }
 
-        populateCustomerSelect();
+        // populateCustomerSelect();
     </script>
       
   </body>

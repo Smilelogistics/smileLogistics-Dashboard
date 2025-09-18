@@ -538,7 +538,11 @@ $(document).ready(function() {
       if (lastActivity) {
           const elapsed = Date.now() - parseInt(lastActivity, 10);
           if (elapsed > INACTIVITY_LIMIT) {
-              createToast("error", "Sorry we have to this😢 but you've been away for too long, logging out...");
+            // Clear local storage
+          ['auth_token', 'userLoggedIn', 'Driver_step', 'step', 'invoice_step', '_x_selected', 'carrier_step', 'darkMode', 'currency', 'edit_consolidate_shipment_step', 'consolidate_shipment_step', 'edit_customer', 'edit_invoice', 'edit_load', 'edit_settlement', 'edit_truck', 'user_role']
+            .forEach(key => localStorage.removeItem(key));
+
+              //createToast("error", "Sorry we have to this😢 but you've been away for too long, logging out...");
               localStorage.removeItem(TOKEN_KEY);
               localStorage.removeItem("last_activity");
               window.location.href = "/signin.html";

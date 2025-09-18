@@ -2579,7 +2579,7 @@ fetchSettings().then(result => {
                         this.title = 'Error';
                         this.message = 'Failed to load customer details';
                         this.hasAction = false;
-                        this.openPopup();
+                        //this.openPopup();
                     }
                     },
               // Charge calculation methods
@@ -2907,7 +2907,7 @@ function register() {
 
 
       function handleLoadTypeChange(value) {
-    if (value === 'import') {
+    if (value === 'import' || value === 'export') {
         console.log(`Load type changed to ${value}`);
         // You can add specific logic for import/export here
         // For example, show/hide specific form sections

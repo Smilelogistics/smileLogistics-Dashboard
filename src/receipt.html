@@ -101,7 +101,7 @@
               <!-- Amount -->
               <div class="text-center pb-4 border-b border-gray-200">
                 <p class="text-gray-600 text-sm">Amount Paid</p>
-                <p class="text-3xl font-bold text-gray-800" x-text="payment.currency || '' + ' ' + formatAmount(payment.amount || 0)"></p>
+                <p x-text="(payment.currency || '') + ' ' + formatAmount(payment.amount || 0)"></p>
               </div>
 
               <!-- Transaction Details -->
@@ -293,12 +293,22 @@
 
                 const data = await response.json();
                 console.log('Verification response:', data);
-
-                if (response.ok && data.status === 'success') {
-                    this.payment = data.payment;
+                if (data.status === 'success') {
+                    if (!this.payment) {
+                        this.payment = data.payment;
+                    }
                 } else {
-                    this.showError(data.message || 'Payment verification failed');
+                    // Ignore errors if we already have a success
+                    if (!this.payment) {
+                        this.showError(data.message || 'Payment verification failed');
+                    }
                 }
+
+                // if (response.ok && data.status === 'success') {
+                //     this.payment = data.payment;
+                // } else {
+                //     this.showError(data.message || 'Payment verification failed');
+                // }
             } catch (err) {
                 console.error('Verification error:', err);
                 this.showError('Network error occurred during verification');

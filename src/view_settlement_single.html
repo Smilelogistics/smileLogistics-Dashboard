@@ -320,6 +320,7 @@
           formData: '',
           isLoading: false,
           currencyValue: 'USD',
+          userRole: localStorage.getItem('user_role'),
           
           init() {
             const urlParams = new URLSearchParams(window.location.search);

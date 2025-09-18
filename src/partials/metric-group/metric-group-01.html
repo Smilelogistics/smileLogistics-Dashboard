@@ -176,10 +176,16 @@
                                 },
                                 
                                 {
-                                    title: 'Total Revenue',
-                                    value: data.data.grand_total_amount || 0,
+                                    title: 'Total Paid Invoice',
+                                    value: data.data.paidInvoiceCount || 0,
                                     icon: 'building',
                                     bgColor: 'bg-blue-500'
+                                },
+                                 {
+                                    title: 'Total Unpaid Invoice',
+                                    value: data.data.unPaidInvoiceCount || 0,
+                                    icon: 'building',
+                                    bgColor: 'bg-orange-400'
                                 }
                             );
                         }

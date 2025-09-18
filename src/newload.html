@@ -2908,6 +2908,7 @@ function register() {
 
       function handleLoadTypeChange(value) {
     if (value === 'import' || value === 'export') {
+        const container = document.getElementById('container');
         console.log(`Load type changed to ${value}`);
         // You can add specific logic for import/export here
         // For example, show/hide specific form sections
@@ -2918,6 +2919,8 @@ function register() {
         // You could show/hide specific form sections
         // document.getElementById('importSection').style.display = value === 'import' ? 'block' : 'none';
         // document.getElementById('exportSection').style.display = value === 'export' ? 'block' : 'none';
+    }else {
+        container.style.display = 'none';
     }
     
     // Trigger auto-save when selection changes

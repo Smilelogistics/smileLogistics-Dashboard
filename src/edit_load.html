@@ -1929,6 +1929,8 @@ document.addEventListener('alpine:init', () => {
 
         init() {
             //this.fetchData();
+            
+        //populate driver select
             this.fetchOffices();
             this.fetchCustomers();
             const urlParams = new URLSearchParams(window.location.search);
@@ -2293,7 +2295,9 @@ document.addEventListener('alpine:init', () => {
                     })
                     .then(response => response.json())
                     .then(data => {
-                         console.log("XXXXXXXX Response:", data); 
+                         console.log("XXXXXXXX Response:", data);
+                         
+                        populateDriverSelect(data.driver_id);
                          //console.log('toor', data.total_miles);
                         this.formData = {
                             ...this.formData,
@@ -2304,13 +2308,14 @@ document.addEventListener('alpine:init', () => {
                             over_weight: data.over_weight || [],
                             tags: data.tags || [],
                             load_weight: data.shipment_weight || '',
+                            driver_id: data.driver_id || '',
                             
                             // Initialize charges with proper numeric values
                             shipment_charges: data.shipment_charges?.map(charge => ({
                                 id: charge.id || '',
                                 charge_type: charge.charge_type || '',
                                 comment: charge.comment || '',
-                                units: charge.unit ? parseFloat(charge.unit) : 0,
+                                units: charge.units ? parseFloat(charge.units) : 0,
                                 rate: charge.rate ? parseFloat(charge.rate) : 0,
                                 amount: charge.amount ? parseFloat(charge.amount) : 0,
                                 discount: charge.discount ? parseFloat(charge.discount) : 0,
@@ -2815,8 +2820,6 @@ document.addEventListener('alpine:init', () => {
         }));
     });
 
-        //populate driver select
-    populateDriverSelect();
 
 
 

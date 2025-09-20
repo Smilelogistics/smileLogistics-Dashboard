@@ -1366,14 +1366,14 @@ try {
                   <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                     class="flex flex-col gap-1 mt-2 menu-dropdown pl-9">
                     <li>
-                      <a href="consolidate_shipment.html" class="menu-dropdown-item group" :class="page === 'Consolidate Shipment' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Consolidate Shipment</a>
+                      <a x-show="userRole === 'businessadministrator' || userRole === 'customer'" href="consolidate_shipment.html" class="menu-dropdown-item group" :class="page === 'Consolidate Shipment' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Consolidate Shipment</a>
                     </li>
                     <!-- <li>
                       <a href="shipment.html" class="menu-dropdown-item group" :class="page === 'Revenue' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">Create Multiple Shipment</a>
                     </li> -->
                     <a href="consolidate_list.html" class="menu-dropdown-item group" :class="page === 'Consolidate Shipment' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">List of Shipment</a>
                   </li>
-                  <a href="consolidate_payments_list.html" class="menu-dropdown-item group" :class="page === 'Consolidate Shipment' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">List of Payments</a>
+                  <a x-show="userRole === 'businessadministrator'" href="consolidate_payments_list.html" class="menu-dropdown-item group" :class="page === 'Consolidate Shipment' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">List of Payments</a>
                 </li>
                 
                  <template x-if="userRole === 'driver'"> 

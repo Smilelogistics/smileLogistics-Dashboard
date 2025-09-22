@@ -190,7 +190,7 @@
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-300">Invoice Date</label>
-                                <input type="text" x-model="formData.invoice_date" id="invoice_datepicker" name="invoice_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white invoice_datepicker">
+                                <input type="text" x-model="formData.invoice_date" id="" name="invoice_date" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" autocomplete="off">
                         </div>
                       <div>
                         <label class="block text-gray-700 dark:text-gray-300">Is Factored?</label>
@@ -249,7 +249,7 @@
                         </div> -->
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Invoice Due Date</label>
-                            <input type="text" x-model="formData.invoice_due_date" id="invoice_due_datepicker" name="invoice_due_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white invoice_due_datepicker">
+                            <input type="text" x-model="formData.invoice_due_date" name="invoice_due_date" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Attention Invoice</label>
@@ -288,7 +288,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Move Date</label>
-                            <input type="text" x-model="formData.move_date" id="move_date_datepicker" name="move_date" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white move_date_datepicker">
+                            <input type="text" x-model="formData.move_date" name="move_date" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" autocomplete="off">
                         </div>
                         <div>
                             <label class="block text-gray-700 dark:text-gray-300">Trailer</label>
@@ -580,7 +580,7 @@
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Date</label>
                                         <input type="text" 
-                                               x-model="repay.credit_date" name="credit_date[]" class="credit_date w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                               x-model="repay.credit_date" name="credit_date[]" class="credit_date w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" autocomplete="off">
                                     </div>
                                 </div>
                     
@@ -675,7 +675,7 @@
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Payment Date</label>
                                         <input type="text" x-model="paymnt.payment_date" name="payment_date[]"
-                                            class="payment_date w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            class="payment_date w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" autocomplete="off">
                                     </div>
                                     
                                     <div>
@@ -891,6 +891,15 @@
                 //timeFormat: 'HH:mm',
             });
             
+
+            function initDatePicker(el, format = "Y-m-d", timeOnly = false) {
+        flatpickr(el, {
+            enableTime: timeOnly,
+            noCalendar: timeOnly,
+            dateFormat: format,
+            time_24hr: true
+        });
+    }
 
 </script>
     <script>
@@ -1185,6 +1194,9 @@ document.addEventListener('alpine:init', () => {
         async submitStep(formType) {
             this.isLoading = true;
             let endpoint, formData;
+
+            // console.log(formType)
+            // return;
             
             try {
                 // Create FormData object
@@ -1377,23 +1389,29 @@ document.addEventListener('alpine:init', () => {
     }));
 });
         
-                        $(function() {
-                            $(".move_date_datepicker").datepicker({
-                                
-                            });
-                        });
+                        // $(function() {
+                        //     $(".move_date_datepicker").datepicker({
+                        //         dateFormat: "yy-mm-dd",
+                        //         changeMonth: true,
+                        //         changeYear: true,
+                        //     });
+                        // });
 
-                        $(function() {
-                            $(".invoice_due_datepicker").datepicker({
-                                
-                            });
-                        });
+                        // $(function() {
+                        //     $(".invoice_due_datepicker").datepicker({
+                        //         dateFormat: "yy-mm-dd",
+                        //         changeMonth: true,
+                        //         changeYear: true,
+                        //     });
+                        // });
 
-                        $(function() {
-                            $(".invoice_datepicker").datepicker({
-                                
-                            });
-                        });
+                        // $(function() {
+                        //     $(".invoice_datepicker").datepicker({
+                        //         dateFormat: "yy-mm-dd",
+                        //         changeMonth: true,
+                        //         changeYear: true,
+                        //     });
+                        // });
 
                        
               

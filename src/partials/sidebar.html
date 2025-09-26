@@ -843,6 +843,11 @@ try {
                     <li>
                       <a href="view_loads.html" class="menu-dropdown-item group" :class="page === 'view load' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">View Load</a>
                     </li>
+                     <template x-if="userRole === 'businessadministrator'">
+                    <li>
+                      <a href="quotes_list.html" class="menu-dropdown-item group" :class="page === 'view quotes' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'">View Quotes</a>
+                    </li>
+                    </template>
                     
                  <template x-if="userRole === 'driver'"> 
                   <li>

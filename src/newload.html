@@ -203,6 +203,56 @@
                                 </div>
                             </div>
                             <div x-show="selectedOption === 'ocean'">
+
+                                 <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                    
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Type of Shipment</label>
+                                        <select x-model="formData.ocean_shippment_type" name="ocean_shippment_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" id="ocean_shippment_type">
+                                        <option value="" selected disabled>Select Type</option>
+                                        <option value="DAP">DAP</option>
+                                        <option value="DPP">DPP</option>
+                                        <option value="IEXW">IEXW</option>
+                                        <option value="Commodity">Commodity</option>
+                                    </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Estimated Loading Date</label>
+                                        <input type="text" x-model="formData.ocean_estimated_loading_date" name="ocean_estimated_loading_date" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_estimated_loading_date">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Prefered Shipping Line</label>
+                                        <input type="text" x-model="formData.ocean_shipment_line" name="ocean_shipment_line" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_shipment_line">
+                                    </div>
+                                </div>
+
+                                
+                                <div class="mb-6">
+                                    <!-- <span class="block text-gray-700 dark:text-gray-300  mt-6 text-lg font-bold">Consignee Details</span> -->
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Consignee</label>
+                                            <input type="text" x-model="formData.consignee" name="consignee" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="consignee">
+                                        </div> 
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Phone #</label>
+                                            <input type="text" x-model="formData.consignee_phone" name="consignee_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="consignee_phone">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Email</label>
+                                            <input type="email" x-model="formData.consignee_email" name="consignee_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="consignee_email">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                    <div>
+                                        <label class="block text-gray-700 dark:text-gray-300">Address</label>
+                                        <textarea type="text" rows="4" cols="4" x-model="formData.consignee_address" name="consignee_address" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="consignee_address"></textarea>
+                                    </div>
+                                </div> -->
+
+
                                 <div id="" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                                     
                                     <div>
@@ -243,23 +293,6 @@
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">BOL #</label>
                                         <input type="text" x-model="formData.ocean_bill_of_ladening_number" name="ocean_bill_of_ladening_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white numberOnly" placeholder="" id="bill_of_ladening_number">
-                                    </div>
-                                </div>
-                                <div>
-                                    <span class="block text-gray-700 dark:text-gray-300  mt-6 text-lg font-bold">Consignee Details</span>
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <div>
-                                            <label class="block text-gray-700 dark:text-gray-300">Consignee</label>
-                                            <input type="text" x-model="formData.consignee" name="consignee" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="consignee">
-                                        </div> 
-                                        <div>
-                                            <label class="block text-gray-700 dark:text-gray-300">Phone #</label>
-                                            <input type="text" x-model="formData.consignee_phone" name="consignee_phone" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="consignee_phone">
-                                        </div>
-                                        <div>
-                                            <label class="block text-gray-700 dark:text-gray-300">Email</label>
-                                            <input type="email" x-model="formData.consignee_email" name="consignee_email" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="consignee_email">
-                                        </div>
                                     </div>
                                 </div>
                                 
@@ -497,6 +530,171 @@
                                         </div>
                                     </div>
                                 <div id="goodsList"></div>
+                                </div>
+                            </div>
+
+
+
+
+                             <!-- Pick up Deliveries -->
+                            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6">
+                                <h6 class="text-md font-medium mb-3 dark:text-white">Pickup / Deliveries</h6>
+                                <div id="pickUPP">
+                                    <span @click="duplicatePickup()" class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">+</span>
+                                    <span @click="removePickup($event)" class="ml-2 cursor-pointer text-lg font-bold text-red-600 dark:text-red-500">×</span>
+                                    
+                                    <template x-for="(pickup, index) in formData.pickups" :key="'pickup-' + index">
+                                        <div class="pickup-section mb-6 p-4 border rounded-lg dark:border-gray-600">
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                                <div>
+                        <input type="hidden" name="pickups[latitude][]" x-model="pickup.latitude">
+                        <input type="hidden" name="pickups[longitude][]" x-model="pickup.longitude">
+
+                                                    <label class="block text-gray-700 dark:text-gray-300">Pick up</label>
+                                                    <select x-model="pickup.pick_up" name="pickups[pick_up][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                        <option value="" selected disabled></option>
+                                                        <option value="pickup">Pickup</option>
+                                                        <option value="pickup loaded">Pickup Loaded</option>
+                                                        <option value="pickup empty">Pickup Empty</option>
+                                                        <option value="deliver">Deliver</option>
+                                                        <option value="load_at">Load at</option>
+                                                        <option value="drop_at">Drop at</option>
+                                                        <option value="drop_empty">Drop Empty</option>
+                                                        <option value="drop_loaded">Drop Loaded</option>
+                                                        <option value="stop_off">Stop off</option>
+                                                        <option value="scale_stop">Scale Stop</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
+                                                    <input type="text" x-model="pickup.location_name" name="pickups[location_name][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Address *</label>
+                                                    <input 
+                                                        type="text" 
+                                                        x-model="pickup.address" 
+                                                        name="pickups[address][]"
+                                                        :id="'pickup-address-' + index"
+                                                        @click="setupAutocomplete('pickup', index, $event.target)"
+                                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white address-autocomplete" 
+                                                        placeholder="Start typing address..." autocomplete="off">
+                                                </div>
+                                            </div>
+
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">City</label>
+                                                    <input type="text" x-model="pickup.city" name="pickups[city][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">State</label>
+                                                    <input type="text" x-model="pickup.state" name="pickups[state][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Zip</label>
+                                                    <input type="text" x-model="pickup.zip" name="pickups[zip][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly>
+                                                </div>
+                                            </div>
+
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Appt Date</label>
+                                                    <input type="text" x-model="pickup.appt_date" name="pickups[appt_date][]" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">No latter than Date</label>
+                                                    <input type="text" x-model="pickup.no_latter_than_date" name="pickups[no_latter_than_date][]" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Time</label>
+                                                    <input type="text" x-model="pickup.no_latter_than_time" name="pickups[no_latter_than_time][]" x-init="$nextTick(() => initDatePicker($el, 'H:i', true))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <!-- Drop Location Section -->
+                            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6">
+                                <h6 class="text-md font-medium mb-3 dark:text-white">Drop Location</h6>
+                                <div id="dropAt">
+                                    <span @click="duplicateDropAt()" class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">+</span>
+                                    <span @click="removeDropAt($event)" class="ml-2 cursor-pointer text-lg font-bold text-red-600 dark:text-red-500">×</span>
+
+                                    <template x-for="(dropoff, index) in formData.dropoffs" :key="'dropoff-' + index">
+                                        <div class="dropoff-section mb-6 p-4 border rounded-lg dark:border-gray-600">
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                                <div>
+                                                    
+                        <input type="hidden" name="dropoffs[latitude][]" x-model="dropoff.latitude">
+                        <input type="hidden" name="dropoffs[longitude][]" x-model="dropoff.longitude">
+                                                    <label class="block text-gray-700 dark:text-gray-300">Drop At</label>
+                                                    <select x-model="dropoff.drop_at" name="dropoffs[drop_at][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                        <option value="" selected disabled></option>
+                                                        <option value="pickup">Pickup</option>
+                                                        <option value="pickup loaded">Pickup Loaded</option>
+                                                        <option value="pickup empty">Pickup Empty</option>
+                                                        <option value="deliver">Deliver</option>
+                                                        <option value="load_at">Load at</option>
+                                                        <option value="drop_at">Drop at</option>
+                                                        <option value="drop_empty">Drop Empty</option>
+                                                        <option value="drop_loaded">Drop Loaded</option>
+                                                        <option value="stop_off">Stop off</option>
+                                                        <option value="scale_stop">Scale Stop</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
+                                                    <input type="text" x-model="dropoff.location_name" name="dropoffs[location_name][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Address *</label>
+                                                    <input 
+                                                        type="text" 
+                                                        x-model="dropoff.address" 
+                                                        name="dropoffs[address][]"
+                                                        :id="'dropoff-address-' + index"
+                                                        @click="setupAutocomplete('dropoff', index, $event.target)"
+                                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white address-autocomplete" 
+                                                        placeholder="Start typing address..." autocomplete="off">
+                                                </div>
+                                            </div>
+
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">City</label>
+                                                    <input type="text" x-model="dropoff.city" name="dropoffs[city][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">State</label>
+                                                    <input type="text" x-model="dropoff.state" name="dropoffs[state][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Zip</label>
+                                                    <input type="text" x-model="dropoff.zip" name="dropoffs[zip][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly>
+                                                </div>
+                                            </div>
+
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Appt Date</label>
+                                                    <input type="text" x-model="dropoff.appt_date" name="dropoffs[appt_date][]" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">No latter than Date</label>
+                                                    <input type="text" x-model="dropoff.no_latter_than_date" name="dropoffs[no_latter_than_date][]" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-gray-700 dark:text-gray-300">Time</label>
+                                                    <input type="text" x-model="dropoff.no_latter_than_time" name="dropoffs[no_latter_than_time][]" x-init="$nextTick(() => initDatePicker($el, 'H:i', true))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
                                 </div>
                             </div>
 
@@ -862,167 +1060,8 @@
                                     <input type="text" x-model="formData.seal_number" name="seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="seal_number">
                                 </div>
                             </div>
-                            <!-- Pick up Deliveries -->
-                            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6">
-                                <h6 class="text-md font-medium mb-3 dark:text-white">Pickup / Deliveries</h6>
-                                <div id="pickUPP">
-                                    <span @click="duplicatePickup()" class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">+</span>
-                                    <span @click="removePickup($event)" class="ml-2 cursor-pointer text-lg font-bold text-red-600 dark:text-red-500">×</span>
-                                    
-                                    <template x-for="(pickup, index) in formData.pickups" :key="'pickup-' + index">
-                                        <div class="pickup-section mb-6 p-4 border rounded-lg dark:border-gray-600">
-                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                                <div>
-                        <input type="hidden" name="pickups[latitude][]" x-model="pickup.latitude">
-                        <input type="hidden" name="pickups[longitude][]" x-model="pickup.longitude">
-
-                                                    <label class="block text-gray-700 dark:text-gray-300">Pick up</label>
-                                                    <select x-model="pickup.pick_up" name="pickups[pick_up][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                        <option value="" selected disabled></option>
-                                                        <option value="pickup">Pickup</option>
-                                                        <option value="pickup loaded">Pickup Loaded</option>
-                                                        <option value="pickup empty">Pickup Empty</option>
-                                                        <option value="deliver">Deliver</option>
-                                                        <option value="load_at">Load at</option>
-                                                        <option value="drop_at">Drop at</option>
-                                                        <option value="drop_empty">Drop Empty</option>
-                                                        <option value="drop_loaded">Drop Loaded</option>
-                                                        <option value="stop_off">Stop off</option>
-                                                        <option value="scale_stop">Scale Stop</option>
-                                                        <option value="Other">Other</option>
-                                                    </select>
-                                                </div>
-                                                <div>
-                                                    <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
-                                                    <input type="text" x-model="pickup.location_name" name="pickups[location_name][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                </div>
-                                                <div>
-                                                    <label class="block text-gray-700 dark:text-gray-300">Address *</label>
-                                                    <input 
-                                                        type="text" 
-                                                        x-model="pickup.address" 
-                                                        name="pickups[address][]"
-                                                        :id="'pickup-address-' + index"
-                                                        @click="setupAutocomplete('pickup', index, $event.target)"
-                                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white address-autocomplete" 
-                                                        placeholder="Start typing address..." autocomplete="off">
-                                                </div>
-                                            </div>
-
-                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                                <div>
-                                                    <label class="block text-gray-700 dark:text-gray-300">City</label>
-                                                    <input type="text" x-model="pickup.city" name="pickups[city][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly>
-                                                </div>
-                                                <div>
-                                                    <label class="block text-gray-700 dark:text-gray-300">State</label>
-                                                    <input type="text" x-model="pickup.state" name="pickups[state][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly>
-                                                </div>
-                                                <div>
-                                                    <label class="block text-gray-700 dark:text-gray-300">Zip</label>
-                                                    <input type="text" x-model="pickup.zip" name="pickups[zip][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly>
-                                                </div>
-                                            </div>
-
-                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                                <div>
-                                                    <label class="block text-gray-700 dark:text-gray-300">Appt Date</label>
-                                                    <input type="text" x-model="pickup.appt_date" name="pickups[appt_date][]" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                </div>
-                                                <div>
-                                                    <label class="block text-gray-700 dark:text-gray-300">No latter than Date</label>
-                                                    <input type="text" x-model="pickup.no_latter_than_date" name="pickups[no_latter_than_date][]" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                </div>
-                                                <div>
-                                                    <label class="block text-gray-700 dark:text-gray-300">Time</label>
-                                                    <input type="text" x-model="pickup.no_latter_than_time" name="pickups[no_latter_than_time][]" x-init="$nextTick(() => initDatePicker($el, 'H:i', true))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </template>
-                                </div>
-                            </div>
-
-                            <!-- Drop Location Section -->
-                            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6">
-                                <h6 class="text-md font-medium mb-3 dark:text-white">Drop Location</h6>
-                                <div id="dropAt">
-                                    <span @click="duplicateDropAt()" class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">+</span>
-                                    <span @click="removeDropAt($event)" class="ml-2 cursor-pointer text-lg font-bold text-red-600 dark:text-red-500">×</span>
-
-                                    <template x-for="(dropoff, index) in formData.dropoffs" :key="'dropoff-' + index">
-                                        <div class="dropoff-section mb-6 p-4 border rounded-lg dark:border-gray-600">
-                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                                <div>
-                                                    
-                        <input type="hidden" name="dropoffs[latitude][]" x-model="dropoff.latitude">
-                        <input type="hidden" name="dropoffs[longitude][]" x-model="dropoff.longitude">
-                                                    <label class="block text-gray-700 dark:text-gray-300">Drop At</label>
-                                                    <select x-model="dropoff.drop_at" name="dropoffs[drop_at][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                        <option value="" selected disabled></option>
-                                                        <option value="pickup">Pickup</option>
-                                                        <option value="pickup loaded">Pickup Loaded</option>
-                                                        <option value="pickup empty">Pickup Empty</option>
-                                                        <option value="deliver">Deliver</option>
-                                                        <option value="load_at">Load at</option>
-                                                        <option value="drop_at">Drop at</option>
-                                                        <option value="drop_empty">Drop Empty</option>
-                                                        <option value="drop_loaded">Drop Loaded</option>
-                                                        <option value="stop_off">Stop off</option>
-                                                        <option value="scale_stop">Scale Stop</option>
-                                                        <option value="Other">Other</option>
-                                                    </select>
-                                                </div>
-                                                <div>
-                                                    <label class="block text-gray-700 dark:text-gray-300">Location Name</label>
-                                                    <input type="text" x-model="dropoff.location_name" name="dropoffs[location_name][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                </div>
-                                                <div>
-                                                    <label class="block text-gray-700 dark:text-gray-300">Address *</label>
-                                                    <input 
-                                                        type="text" 
-                                                        x-model="dropoff.address" 
-                                                        name="dropoffs[address][]"
-                                                        :id="'dropoff-address-' + index"
-                                                        @click="setupAutocomplete('dropoff', index, $event.target)"
-                                                        class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white address-autocomplete" 
-                                                        placeholder="Start typing address..." autocomplete="off">
-                                                </div>
-                                            </div>
-
-                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                                <div>
-                                                    <label class="block text-gray-700 dark:text-gray-300">City</label>
-                                                    <input type="text" x-model="dropoff.city" name="dropoffs[city][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly>
-                                                </div>
-                                                <div>
-                                                    <label class="block text-gray-700 dark:text-gray-300">State</label>
-                                                    <input type="text" x-model="dropoff.state" name="dropoffs[state][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly>
-                                                </div>
-                                                <div>
-                                                    <label class="block text-gray-700 dark:text-gray-300">Zip</label>
-                                                    <input type="text" x-model="dropoff.zip" name="dropoffs[zip][]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-gray-100 dark:bg-gray-600" readonly>
-                                                </div>
-                                            </div>
-
-                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                                                <div>
-                                                    <label class="block text-gray-700 dark:text-gray-300">Appt Date</label>
-                                                    <input type="text" x-model="dropoff.appt_date" name="dropoffs[appt_date][]" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                </div>
-                                                <div>
-                                                    <label class="block text-gray-700 dark:text-gray-300">No latter than Date</label>
-                                                    <input type="text" x-model="dropoff.no_latter_than_date" name="dropoffs[no_latter_than_date][]" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                </div>
-                                                <div>
-                                                    <label class="block text-gray-700 dark:text-gray-300">Time</label>
-                                                    <input type="text" x-model="dropoff.no_latter_than_time" name="dropoffs[no_latter_than_time][]" x-init="$nextTick(() => initDatePicker($el, 'H:i', true))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </template>
-                                </div>
-                            </div>
+                           
+                            <!-- pick up and drop off where here -->
 
         <!-- Charge Calculation Display -->
         <!-- <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6" x-show="totalDistance > 0"> -->
@@ -1820,6 +1859,9 @@ fetchSettings().then(result => {
                   office: '',
                   load_type: '',
                   load_type_note: '',
+                  ocean_shipment_line: '',
+                  ocean_estimated_loading_date:'',
+                  ocean_shippment_type: '',
                   load_type_note_r: '',
                   brokered: 0,
                   shipment_type: '',

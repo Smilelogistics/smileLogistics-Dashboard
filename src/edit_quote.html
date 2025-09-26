@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Bike delivery | </title>
+    <include src="./partials/mainhead.html"> </include>
+    <script src="./assets/js/main.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkucOouQfm_4BEHGZbCphOp-xe4Mqvmv0&libraries&libraries=places"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Removed vanilla JS code as we're converting to AlpineJS
+        });
+    </script>
+  </head>
+  <body
+    x-data="{ page: 'Delivery', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-init="
+         darkMode = JSON.parse(localStorage.getItem('darkMode'));
+         $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark bg-gray-900': darkMode === true}"
+  >
+    <!-- ===== Preloader Start ===== -->
+    <include src="./partials/preloader.html"></include>
+    <!-- ===== Preloader End ===== -->
+
+    <!-- ===== Page Wrapper Start ===== -->
+    <div class="flex h-screen overflow-hidden">
+      <!-- ===== Sidebar Start ===== -->
+      <include src="./partials/sidebar.html"></include>
+      <!-- ===== Sidebar End ===== -->
+
+      <!-- ===== Content Area Start ===== -->
+      <div
+        class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden"
+      >
+        <!-- Small Device Overlay Start -->
+        <include src="./partials/overlay.html" />
+        <!-- Small Device Overlay End -->
+
+        <!-- ===== Header Start ===== -->
+        <include src="./partials/header.html" />
+        <!-- ===== Header End ===== -->
+
+        <!-- ===== Main Content Start ===== -->
+        <main>
+          <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
+            <!-- Breadcrumb Start -->
+            <div x-data="{ pageName: `Delivery`}">
+              <include src="./partials/breadcrumb.html" />
+            </div>
+            <!-- Breadcrumb End -->
+
+            <!-- Modal -->
+            <div id="modal" class="modal">
+                <div class="modal-content">
+                <span id="closeModal" class="close">&times;</span>
+                <h2>Sign and Save, then upload the signed signature</h2>
+                <div id="signature-pad" class="signature-pad">
+                    <canvas id="signature_pad" width="400" height="200"></canvas>
+                    <div class="buttons">
+                        <button type="button" id="clear" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Reset</button>
+
+                        <button type="button" id="save" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Save</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+              <div x-data="quoteApp()" class="w-full mt-10 mb-10 mx-auto px-4">
+                <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xs dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 rtl:space-x-reverse">
+                    <li class="flex-1 flex items-center justify-center" :class="{ 'text-blue-600 dark:text-blue-500': step === 1, 'text-gray-500 dark:text-gray-400': step !== 1 }">
+                        <span class="flex items-center justify-center w-6 h-6 text-xs font-bold border rounded-full"
+                            :class="{ 'border-blue-600 bg-blue-600 text-white dark:border-blue-500': step === 1, 'border-gray-500 dark:border-gray-400': step !== 1 }">
+                            1
+                        </span>
+                        <span class="ml-2 hidden sm:inline">Quotes</span>
+                    </li>
+                </ol>
+                
+                <form x-show="userRole === 'businessadministrator'" class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="deliveryForm">
+                    <!-- Step 1: Basic Info -->
+                    <div x-show="step === 1">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                            <!-- <input type="text" id="lat">
+                            <input type="text" id="lon"> -->
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Port Cut Off</label>
+                                <input type="text" x-model="formData.port_cut_off" name="port_cut_off" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="port_cut_off">
+                            </div>
+                             <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Ramp Cut Off</label>
+                                <input type="text" x-model="formData.ramp_cut_off" name="ramp_cut_off" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ramp_cut_off">
+                            </div>
+                             <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Earliest Receivable Date</label>
+                                <input type="text" x-model="formData.earliest_recievable_date" name="earliest_recievable_date" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="earliest_recievable_date">
+                            </div>
+                             <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Docs Cut Off</label>
+                                <input type="text" x-model="formData.docs_cut_off" name="docs_cut_off" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="docs_cut_off">
+                            </div>
+                        </div>
+
+                         <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                            <!-- <input type="text" id="lat">
+                            <input type="text" id="lon"> -->
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Original title Cut Off</label>
+                                <input type="text" x-model="formData.original_title_cut_off" name="original_title_cut_off" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="original_title_cut_off">
+                            </div>
+                             <div>
+                                <label class="block text-gray-700 dark:text-gray-300">ETA</label>
+                                <input type="text" x-model="formData.eta" name="eta" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="">
+                            </div>
+                             <div>
+                                <label class="block text-gray-700 dark:text-gray-300">ETD/Sailing Date</label>
+                                <input type="text" x-model="formData.sailing_date" name="sailing_date" x-init="$nextTick(() => initDatePicker($el, 'Y-m-d'))" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="sailing_date">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Quote Amount</label>
+                                <input type="number" x-model="formData.quoted_amount" 
+                                    name="quoted_amount" 
+                                    class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                                    placeholder="" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="flex justify-between mt-6">
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500">
+                            Send
+                        </button>
+                    </div>
+                </form>
+            </div>
+            </div>
+          </div>
+        </main>
+        <!-- ===== Main Content End ===== -->
+      </div>
+      <!-- ===== Content Area End ===== -->
+    </div>
+    <!-- ===== Page Wrapper End ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <script>
+         function initDatePicker(el, format = "Y-m-d", timeOnly = false) {
+        flatpickr(el, {
+            enableTime: timeOnly,
+            noCalendar: timeOnly,
+            dateFormat: format,
+            time_24hr: true
+        });
+    }
+        function quoteApp() {
+            return {
+                step: localStorage.getItem('quotes') ? parseInt(localStorage.getItem('quotes')) : 1,
+               formData: JSON.parse(localStorage.getItem('formData')) || {
+                    eta: '',
+                    sailing_date: '',
+                    docs_cut_off: '',
+                    original_title_cut_off: '',
+                    earliest_recievable_date: '',
+                    ramp_cut_off: '',
+                    port_cut_off: '',
+                    quoted_amount: '',
+
+               },
+               userRole: localStorage.getItem('user_role'),
+
+               init() {
+                    //this.fetchData();
+                    
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const encodedId = urlParams.get('id');
+                    if (encodedId) {
+                        this.id = atob(encodedId);
+                        this.fetchData();
+                    } else {
+                        console.error('No ID found in the URL');
+                    }
+                },
+                fetchData() {
+                    fetch(requestURL + '/quote/quote/' + this.id, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('show Driver Data:', data.driver);
+                        this.formData = {
+                            fname: data.driver.user.fname || '',
+                           
+
+                            //truck_driver: truckDriver,
+                            tags: Array.isArray(data.driver.tags) 
+                            ? data.driver.tags 
+                            : (data.driver.tags ? data.driver.tags.split(/\s*,\s*/) : []),
+                            providers: data.driver.providers?.map(p => ({
+                                app_provider: p.app_provider || '',
+                                card_device_linking_number: p.card_device_linking_number || '',
+                                quick_note: p.quick_note || '',
+                            })),
+                            driver_docs: data.driver.driver_docs?.map(tdoc => ({
+                                id: tdoc.id || '',
+                                file_path: tdoc.file || 'Unknown',
+                            })) || [],
+                        };
+
+                        // Set the selected driver (if available)
+                        // this.selectedDriver = truckDriver || { fname: 'No Driver', lname: '' };
+                        // this.formData.driver_id = this.selectedDriver.id || '';
+                        
+                    })
+                },
+        }
+    }
+    </script>
+      
+    <script src="./assets/js/newload.js"></script>
+    <include src="./partials/footer.html"></include>
+  </body>
+</html>

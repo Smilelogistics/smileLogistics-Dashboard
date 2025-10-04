@@ -103,6 +103,7 @@
                               <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Action</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tracking #</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" x-show="userRole === 'businessadministrator'">Send BOL</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Bill-To</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Created At</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Container</th>
@@ -150,6 +151,26 @@
                                     </div>
                                   </td>
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100" x-text="item.shipment_tracking_number"></td>
+                                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+    <template x-if="userRole === 'businessadministrator' && item.shipment_type === 'ocean'">
+      <!-- x-if="userRole === 'businessadministrator' && item.shipment_type === 'ocean'" -->
+        <div class="flex justify-center">
+            <button @click="SendBOL(item.id)" 
+                    class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200"
+                    title="Send Bill of Lading">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                </svg>
+            </button>
+        </div>
+    </template>
+    <template x-if="!(userRole === 'businessadministrator' && item.shipment_type === 'ocean')">
+        <div class="invisible">
+            &nbsp;
+        </div>
+    </template>
+</td>
+
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400"
                                     x-text="item.invoice?.customer?.user?.fname 
                                         ? item.invoice.customer.user.fname 
@@ -402,6 +423,79 @@
           
           init() {
             this.fetchData();
+          },
+          SendBOL(shipmentId) {
+              if (!shipmentId) {
+                  console.error('No shipment ID provided');
+                  return;
+              }
+
+              // Find the table cell for this shipment
+              const cell = event.target.closest('td');
+              const originalContent = cell.innerHTML;
+              
+              // Show loader
+              cell.innerHTML = `
+                  <div class="flex justify-center items-center">
+                      <div class="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-blue-500"></div>
+                  </div>
+              `;
+
+              // Make the API request
+              fetch(`${requestURL}/send-bol/${shipmentId}`, {
+                  method: 'POST',
+                  headers: {
+                      'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/json'
+                  }
+              })
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error('Network response was not ok');
+                  }
+                  return response.json();
+              })
+              .then(data => {
+                  // Show success message
+                  cell.innerHTML = `
+                      <div class="flex items-center justify-center text-green-600">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                          </svg>
+                          <span class="text-sm font-medium">BOL Sent</span>
+                      </div>
+                  `;
+
+                  // Reset to original content after 5 seconds
+                  setTimeout(() => {
+                      cell.innerHTML = originalContent;
+                  }, 5000);
+
+                  // Show success toast
+                  createToast('success', data.message || 'Bill of Lading sent successfully');
+              })
+              .catch(error => {
+                  console.error('Error sending BOL:', error);
+                  
+                  // Show error message
+                  cell.innerHTML = `
+                      <div class="flex items-center justify-center text-red-600">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                          </svg>
+                          <span class="text-sm font-medium">Failed</span>
+                      </div>
+                  `;
+
+                  // Reset to original content after 5 seconds
+                  setTimeout(() => {
+                      cell.innerHTML = originalContent;
+                  }, 5000);
+
+                  // Show error toast
+                  createToast('error', 'Failed to send Bill of Lading');
+              });
           },
           
           fetchData() {

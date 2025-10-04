@@ -5,10 +5,10 @@
 
     <include src="./partials/mainhead.html"> </include>
     <script src="./assets/js/main.js"></script>
-    <title>Invoice List | </title>
+    <title>Quotes List | </title>
   </head>
   <body
-    x-data="{ page: 'invoice_list', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-data="{ page: 'quote_list', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
     x-init="
          darkMode = JSON.parse(localStorage.getItem('darkMode'));
          $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
@@ -40,7 +40,7 @@
         <main>
           <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
             <!-- Breadcrumb Start -->
-            <div x-data="{ pageName: `Invoice List`}">
+            <div x-data="{ pageName: `Quotes List`}">
               <include src="./partials/breadcrumb.html" />
             </div>
             <!-- Breadcrumb End -->
@@ -50,7 +50,7 @@
                 <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] p-2">
                   <div class="px-5 py-4 sm:px-6 sm:py-5">
                     <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
-                      All Invoices
+                      All Quotes
                     </h3>
                   </div>
 
@@ -164,8 +164,8 @@
                                           <!-- <li><a href="#" x-on:click="viewItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View</a></li> -->
                                        
                                           <li><a href="#" x-show="userRole === 'businessadministrator'" x-on:click="editItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a></li>
-                                          <li>
-                                            <a href="#" x-show="userRole === 'businessadministrator'" @click.prevent="$store.statusModal.openModal(item.shipment_id, item.status); open = false" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update Status</a>
+                                          <li x-show="userRole === 'customer'">
+                                            <a href="#"  @click.prevent="$store.statusModal.openModal(item.shipment_id, item.status); open = false" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update Status</a>
                                           </li>
                                       
                                         </ul>
@@ -314,12 +314,30 @@
                           <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 dark:bg-gray-800">
                             <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4">Accept / Reject Quote</h3>
                             
-                            <div class="mb-4">
-                              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Status</label>
+                            
+                            <div class="mb-4 hidden">
+                              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Current Status
+                              </label>
                               <div class="px-3 py-2 rounded border bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                                <span x-text="$store.statusModal.currentStatus ? $store.statusModal.currentStatus.charAt(0).toUpperCase() + $store.statusModal.currentStatus.slice(1) : 'N/A'"></span>
+                                <span 
+                                  :class="{
+                                    'text-yellow-500': $store.statusModal.currentStatus == 0,
+                                    'text-green-600': $store.statusModal.currentStatus == 1,
+                                    'text-red-600': $store.statusModal.currentStatus != 0 && $store.statusModal.currentStatus != 1
+                                  }"
+                                  x-text="
+                                    $store.statusModal.currentStatus == 0 
+                                      ? 'Awaiting Response' 
+                                      : ($store.statusModal.currentStatus == 1 
+                                          ? 'Accepted' 
+                                          : 'Rejected')
+                                  ">
+                                </span>
+
                               </div>
                             </div>
+
                             
                             <div class="mb-4">
                               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">New Status</label>
@@ -495,9 +513,9 @@ document.addEventListener('alpine:init', () => {
     },
     
     deleteItem(id) {
-      if (confirm('Are you sure you want to delete this invoice?')) {
+      if (confirm('Are you sure you want to delete this Quotes?')) {
         this.isLoading = true;
-        fetch(`${requestURL}/invoices/delete/${id}`, {
+        fetch(`${requestURL}/quotes/delete/${id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
@@ -506,12 +524,12 @@ document.addEventListener('alpine:init', () => {
         })
         .then(response => {
           if (!response.ok) throw new Error('Delete failed');
-          createToast('success', 'Invoice deleted successfully');
+          createToast('success', 'Quotes deleted successfully');
           this.fetchData();
         })
         .catch(error => {
           console.error('Error:', error);
-          createToast('error', 'Failed to delete invoice');
+          createToast('error', 'Failed to delete Quotes');
         })
         .finally(() => {
           this.isLoading = false;

@@ -103,7 +103,7 @@
                               <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Action</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tracking #</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" x-show="userRole === 'businessadministrator'">Send BOL</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Send BOL</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Bill-To</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Created At</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Container</th>
@@ -138,13 +138,13 @@
                                    
                                       <div x-show="open" @click.away="open = false" class="absolute left-0 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">
                                           <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
-                                            <li><a href="#" x-on:click="editItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a></li>
+                                            <li x-show="userRole === 'businessadministrator' || userRole === 'customer' "><a href="#" x-on:click="editItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a></li>
                                             <li><a href="#" x-on:click="viewItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View</a></li>
                                              <li x-show="userRole === 'businessadministrator' || userRole === 'driver' ">
                                             <a href="#" @click.prevent="$store.statusModal.openModal(item.id, item.shipment_status, item.shipment_tracking_number, item.shipment_type); open = false" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update Status</a>
                                           </li>
                                           </ul>
-                                          <div class="py-2">
+                                          <div class="py-2" x-show="userRole === 'businessadministrator' || userRole === 'customer'">
                                             <a href="#" x-on:click="deleteItem(item.id)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
                                           </div>
                                       </div>

@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'>
     <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -179,24 +180,135 @@
           border-radius: 4px;
       }
     
-      @media screen and (max-width: 530px) {
+      @media screen and (max-width: 768px) {
           .Toastnotifications {
-              width: 80%;
+              width: 90%;
+              right: 5%;
           }
           
           .Toastnotifications .Toasttoast {
               width: 100%;
               font-size: 1rem;
-              margin-left: 20px;
+              margin-left: 0;
           }
           
           .Toastbuttons .Toastbtn {
               margin: 0 1px;
-              font-sze: 1.1rem;
+              font-size: 1.1rem;
               padding: 8px 15px;
           }
       }
 
+      /* Mobile Responsive Styles */
+      @media screen and (max-width: 768px) {
+        .relative.p-6.bg-white {
+          padding: 1rem !important;
+        }
+        
+        .flex.flex-col.justify-center.w-full.h-screen {
+          height: auto !important;
+          min-height: 100vh;
+        }
+        
+        .flex.flex-col.flex-1.w-full {
+          padding: 1rem 0;
+        }
+        
+        .w-full.max-w-md.mx-auto {
+          max-width: 100% !important;
+          padding: 0 1rem;
+        }
+        
+        .space-y-5 > div {
+          margin-bottom: 1.25rem;
+        }
+        
+        .h-11 {
+          height: 3rem !important;
+          font-size: 16px; /* Prevents zoom on iOS */
+        }
+        
+        .flex.items-center.justify-between {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+        
+        .text-sm.font-normal.text-center.text-gray-700 {
+          text-align: center !important;
+        }
+        
+        .fixed.z-50.hidden.bottom-6.right-6 {
+          display: flex !important;
+          bottom: 1rem;
+          right: 1rem;
+        }
+        
+        .size-14 {
+          width: 3rem !important;
+          height: 3rem !important;
+        }
+        
+        /* Form container improvements */
+        .flex-1.w-full {
+          padding-top: 1rem;
+        }
+        
+        /* Button improvements for touch */
+        button.w-full {
+          padding: 0.875rem 1rem !important;
+          font-size: 1rem;
+        }
+        
+        /* Input improvements */
+        input {
+          padding: 0.75rem 1rem !important;
+        }
+        
+        /* Logo sizing */
+        img[src*="logo"] {
+          max-width: 150px;
+          height: auto;
+        }
+      }
+      
+      @media screen and (max-width: 480px) {
+        .mb-5.sm\\:mb-8 {
+          margin-bottom: 1.5rem !important;
+        }
+        
+        h1.mb-2 {
+          font-size: 1.5rem !important;
+          margin-bottom: 0.5rem !important;
+        }
+        
+        .text-sm.text-gray-500 {
+          font-size: 0.875rem;
+        }
+        
+        .space-y-5 > div {
+          margin-bottom: 1rem;
+        }
+      }
+      
+      /* Ensure form elements are properly sized for mobile */
+      input, button, a {
+        -webkit-tap-highlight-color: transparent;
+      }
+      
+      /* Improve touch targets */
+      button, a, .cursor-pointer {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      /* Prevent horizontal scrolling */
+      body, html {
+        overflow-x: hidden;
+        width: 100%;
+      }
     </style>
     <script>
       //var requestURL = "https://laravel-production-077b.up.railway.app/api/v1";

@@ -167,7 +167,144 @@
                     </div>
                     </div>
 
-                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="editloadForm">
+                    <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmitDriver" enctype="multipart/form-data" id="editloadFormDriver" x-show="userRole === 'driver' && formData.shipment_type === 'ocean'">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <!-- <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Container #</label>
+                                <input type="text" x-model="formData.ocean_container_number" name="ocean_container_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_container_number">
+                            </div> -->
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Seal #</label>
+                                <input type="text" x-model="formData.ocean_seal_number" name="ocean_seal_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_seal_number">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">Equipment Size</label>
+                                <input type="text" x-model="formData.equipment_size" name="equipment_size" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="equipment_size">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300">No containers or packages in word</label>
+                                <input type="text" x-model="formData.ocean_total_containers_in_words" name="ocean_total_containers_in_words" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="ocean_total_containers_in_words">
+                            </div>
+                        </div>
+
+                          <!-- container and chassis -->
+                                <div>
+                                    <!-- Hidden Container (Template for Cloning) -->
+                                    <div id="container" style="display: non;">
+                                        <span onclick="duplicateContainer()" 
+                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-blue-400">
+                                            +
+                                        </span>
+                                        <span onclick="removeContainer(this)" 
+                                            class="ml-2 cursor-pointer text-lg font-bold text-blue-600 dark:text-red-500">
+                                            x
+                                            <!-- 🗑 -->
+                                        </span>
+
+                                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Container</label>
+                                            <input type="text" x-model="formData.container" name="container[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        </div>
+                                        
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Size</label>
+                                            <select x-model="formData.container_size" name="container_size[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <option value="" selected disabled>Select Size</option>
+                                            <option value="20">20<sup>'</sup></option>
+                                            <option value="40">40<sup>'</sup></option>
+                                            <option value="45">45<sup>'</sup></option>
+                                            <option value="48">48<sup>'</sup></option>
+                                            <option value="53">53<sup>'</sup></option>
+                                            <option value="20/40">20<sup>'</sup>/40<sup>'</sup></option>
+                                            <option value="40/45">40<sup>'</sup>/45<sup>'</sup></option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Type</label>
+                                            <select x-model="formData.container_type" name="container_type[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <option value="" selected disabled>Select Type</option>
+                                            <option value="ST">ST</option>
+                                            <option value="HC">HC</option>
+                                            <option value="RF">RF</option>
+                                            <option value="truckload">Truckload</option>
+                                            <option value="RHC">RHC</option>
+                                            <option value="OT">OT</option>
+                                            <option value="FR">FR</option>
+                                            <option value="Tank">Tank</option>
+                                            <option value="ISO Tank">ISO Tank</option>
+                                            <option value="FB">FB</option>
+                                            <option value="Stepdeck">Stepdeck</option>
+                                            <option value="Dounble drop RGN">Dounble drop RGN</option>
+                                        </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Chasis</label>
+                                            <input type="text" x-model="formData.chasis" name="chasis[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        </div>
+                                    </div>
+            
+            
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Loaded/Empty? Flio Chasis</label>
+                                            <textarea type="text" x-model="formData.isLoaded" name="isLoaded[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder=""> </textarea>
+                                        </div>
+                                        
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Size</label>
+                                            <select x-model="formData.chasis_size" name="chasis_size[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <option value="" selected disabled>Select Size</option>
+                                            <option value="20">20<sup>'</sup></option>
+                                            <option value="40">40<sup>'</sup></option>
+                                            <option value="45">45<sup>'</sup></option>
+                                            <option value="48">48<sup>'</sup></option>
+                                            <option value="53">53<sup>'</sup></option>
+                                            <option value="20/40">20<sup>'</sup>/40<sup>'</sup></option>
+                                            <option value="40/45">40<sup>'</sup>/45<sup>'</sup></option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Type</label>
+                                            <select x-model="formData.chasis_type" name="chasis_type[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                            <option value="" selected disabled>Select Type</option>
+                                            <option value="Tri-axle">Tri-axle</option>
+                                            <option value="8-pin">8-pin</option>
+                                            <option value="Flatbed">Flatbed</option>
+                                            <option value="Deck combo chasis">Deck combo chasis</option>
+                                            <option value="Drop Deck">Drop Deck</option>
+                                            <option value="ISO Chasis">ISO Chasis</option>
+                                            <option value="Slider Chasis">Slider Chasis</option>
+                                            <option value="Gooseneck">Gooseneck</option>
+                                            <option value="Dolly">Dolly</option>
+                                            <option value="Reefer">Reefer</option>
+                                            <option value="2 axle p/u">2 axle p/u</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 dark:text-gray-300">Chasis Vendor</label>
+                                            <input type="text" x-model="formData.chasis_vendor" name="chasis_vendor[]" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="">
+                                        </div>
+                                    </div>
+                                    </div>
+                                    
+                                
+                                    <!-- Duplicated Containers Appear Here -->
+                                    <div id="containerList"></div>
+                                </div>
+
+                         <button
+                        type="submit"
+                        class="px-4 py-2 bg-green-600 text-white rounded dark:bg-green-500"
+                        ">
+                        Update
+                    </button>
+                    </form>
+
+                <form class="mt-6 bg-white p-6 rounded-lg shadow dark:bg-gray-800 w-full border border-gray-200 dark:border-gray-700" @submit.prevent="saveAndSubmit" enctype="multipart/form-data" id="editloadForm" x-show="userRole !== 'driver'">
                     <!-- Step 1: Basic Info -->
                     <div x-show="step === 1" >
                                         
@@ -329,7 +466,7 @@
                                         </input> -->
                                     </div>
                                     <div>
-                                        <label class="block text-gray-700 dark:text-gray-300">Equipment Type/label>
+                                        <label class="block text-gray-700 dark:text-gray-300">Equipment Type </label>
                                         <input type="text" x-model="formData.equipment_type" name="equipment_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="equipment_type">
                                     </div>
                                     <div>
@@ -2877,7 +3014,71 @@ document.addEventListener('alpine:init', () => {
                         }
                     }
                 });
+             },
+
+             saveAndSubmitDriver(e) {
+            console.log('Form Data:', this.formData);
+               // console.log("ID is",this.id)
+                // return;
+                  localStorage.removeItem('formData');
+                  localStorage.removeItem('step');
+                  e.preventDefault();
+
+                    let form = document.getElementById("editloadFormDriver");
+                    let formData = new FormData(form);
+                  
+                    
+
+                    for (let pair of formData.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+                    //return
+                    formData.append("_method", "PUT");
+                    $.ajax({
+                        url: requestURL+'/shipments/driver-shipment-update/'+this.id,
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                            'Accept': 'application/json'
+                        },
+
+                        beforeSend:function(){
+                            document.getElementById("Ajaxbackdrop").style.display = 'flex'
+                        },
+
+                        success: (response) => {
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+                            //console.log('Form submitted successfully:', response);
+                            createToast('success', response.message);
+                            localStorage.removeItem('formData');
+                            localStorage.removeItem('step');
+                        },
+                         error: (xhr, status, error) => {
+                        console.error('Form submission failed:', xhr.responseText);
+                            document.getElementById("Ajaxbackdrop").style.display = 'none'
+
+                        try {
+                            let response = JSON.parse(xhr.responseText);
+                            
+                            if (response.errors) {
+                                let messages = Object.values(response.errors).flat().join('<br>'); // Combines multiple errors
+                                createToast('error', messages);
+                            } else if (response.message) {
+                                createToast('error', response.message);
+                            } else {
+                                createToast('error', 'An unexpected error occurred. Please try again.');
+                            }
+                        } catch (e) {
+                            createToast('error', 'An error occurred. Please check your input and try again.', + e);
+                        }
+                    }
+                });
              }
+
+
         }));
     });
 

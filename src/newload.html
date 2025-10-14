@@ -1016,11 +1016,11 @@
                                 <!-- Load Note Radio Buttons and Checkbox -->
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Fuel cost</label>
-                                        <input type="text" x-model="formData.total_fuel_cost" name="total_fuel_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_fuel_cost" readonly />
+                                        <input type="text" x-model="formData.total_fuel_cost" name="total_fuel_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="" readonly />
                                     </div>
                                     <div>
                                         <label class="block text-gray-700 dark:text-gray-300">Total shipping cost</label>
-                                        <input type="text" x-model="formData.total_shipping_cost" name="total_shipping_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_fuel_cost" readonly />
+                                        <input type="text" x-model="formData.total_shipping_cost" name="total_shipping_cost" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="" id="total_shipping_cost" readonly />
                                     </div>
                                     
                                     <!-- <div>
@@ -1861,7 +1861,7 @@ function fetchSettings() {
         
         }
        
-        //console.log('mpgGoten inside fetch', mpgGoten);
+        //console.log('mpgGoten inside fetch', pricePerMile);
     
         //return mpgGoten;
     })
@@ -1871,7 +1871,7 @@ function fetchSettings() {
 }
 
 fetchSettings().then(result => {
-    console.log('mpgGoten outside fetch', pricePerGallon);
+    console.log('mpgGoten outside fetch', pricePerMile);
 });
 
 //console.log('mpgGoten immediately after fetch call (will be empty):', mpgGoten);
@@ -1942,7 +1942,8 @@ fetchSettings().then(result => {
                   dh_miles:'',
                   fuel_rate_per_gallon:'',
                   mpg:'',
-                  fuel_cototal_fuel_costst:'',
+                  total_fuel_cost:'',
+                  total_shipping_cost:'',
 
                 //   charge_type: '',
                 //   comment: '',
@@ -2540,13 +2541,6 @@ fetchSettings().then(result => {
                     //this.saveProgress();
                 }
                 },
-                // calculateFuelCost() {
-                //     const totalMiles = parseFloat(this.formData.total_miles) || 0;
-                //     const fuelPerGallon = parseFloat(this.formData.fuel_rate_per_gallon) || 0;
-                //     const mpg = parseFloat(this.formData.mpg) || 1; 
-                //     // this calculation does not include round-trip, oops you must pay for it
-                //     this.formData.total_fuel_cost = (totalMiles * fuelPerGallon / mpg).toFixed(2);
-                // },
                 calculateFuelCost() {
                     const totalMiles = parseFloat(this.formData.total_miles) || 0;
                     setTimeout(() => {
@@ -2561,12 +2555,12 @@ fetchSettings().then(result => {
                         }
                     }, 500)
 
-                    const fuelPerGallon = parseFloat(this.formData.fuel_rate_per_gallon) || 0;
+                    const fuelPerGallon = parseFloat(pricePerGallon) || 0;
                     const mpg = parseFloat(mpgGoten) || 1;
                     const pricePerm = parseFloat(pricePerMile) || 1;
                     // Updated to include round-trip
                     this.formData.total_fuel_cost = ((totalMiles * 2) * fuelPerGallon / mpg).toFixed(2);
-                    this.formData.total_shipping_cost = ((totalMiles * 2) * pricePerMile).toFixed(2);
+                    this.formData.total_shipping_cost = ((totalMiles * 2) * pricePerm).toFixed(2);
                 },
 
                 // addBillto() {

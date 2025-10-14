@@ -141,9 +141,9 @@
                                           <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                                             <li x-show="userRole === 'businessadministrator' || userRole === 'customer' || userRole === 'driver' "><a href="#" x-on:click="editItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a></li>
                                             <li><a href="#" x-on:click="viewItem(item.id)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View</a></li>
-                                             <li x-show="userRole === 'businessadministrator' || userRole === 'driver' ">
+                                             <!-- <li x-show="userRole === 'businessadministrator' || userRole === 'driver' "> -->
                                             <a href="#" @click.prevent="$store.statusModal.openModal(item.id, item.shipment_status, item.shipment_tracking_number, item.shipment_type); open = false" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update Status</a>
-                                          </li>
+                                          <!-- </li> -->
                                           </ul>
                                           <div class="py-2" x-show="userRole === 'businessadministrator' || userRole === 'customer'">
                                             <a href="#" x-on:click="deleteItem(item.id)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
@@ -155,26 +155,33 @@
                                   
                                   <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100" x-text="item.shipment_tracking_number"></td> -->
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                  <a 
-                                    href="#" 
-                                    x-on:click="track_driver(item.id)" 
-                                    class="inline-block px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rounded"
-                                  >
-                                    <svg 
-                                      xmlns="http://www.w3.org/2000/svg" 
-                                      fill="none" 
-                                      viewBox="0 0 24 24" 
-                                      stroke-width="1.5" 
-                                      stroke="currentColor" 
-                                      class="w-6 h-6"
+                                  <template x-if="userRole === 'customer' && item.shipment_status === 'On the final leg for delivery to the consignee' && item.driver?.user !== null ">
+                                    <a 
+                                      href="#" 
+                                      x-on:click="track_driver(item.id)" 
+                                      class="inline-block px-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rounded"
                                     >
-                                      <path 
-                                        stroke-linecap="round" 
-                                        stroke-linejoin="round" 
-                                        d="M7.5 3.75H6A2.25 2.25 0 0 0 3.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0 1 20.25 6v1.5m0 9V18A2.25 2.25 0 0 1 18 20.25h-1.5m-9 0H6A2.25 2.25 0 0 1 3.75 18v-1.5M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" 
-                                      />
-                                    </svg>
-                                  </a>
+                                      <svg 
+                                        xmlns="http://www.w3.org/2000/svg" 
+                                        fill="none" 
+                                        viewBox="0 0 24 24" 
+                                        stroke-width="1.5" 
+                                        stroke="currentColor" 
+                                        class="w-6 h-6"
+                                      >
+                                        <path 
+                                          stroke-linecap="round" 
+                                          stroke-linejoin="round" 
+                                          d="M7.5 3.75H6A2.25 2.25 0 0 0 3.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0 1 20.25 6v1.5m0 9V18A2.25 2.25 0 0 1 18 20.25h-1.5m-9 0H6A2.25 2.25 0 0 1 3.75 18v-1.5M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" 
+                                        />
+                                      </svg>
+                                    </a>
+                                  </template>
+                                  <template x-if="!(userRole === 'customer' && item.shipment_status === 'On the final leg for delivery to the consignee')">
+                                        <div class="invisible">
+                                            &nbsp;
+                                        </div>
+                                    </template>
                                 </td>
 
                                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">

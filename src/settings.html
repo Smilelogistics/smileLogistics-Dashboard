@@ -1488,7 +1488,7 @@
                                   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                       <div>
                                           <label class="block mb-2 text-gray-700 dark:text-gray-300">Driver Type:</label>
-                                          <select type="text" x-model="formData.driver_type" name="driver_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                          <select type="text" x-model="formData.driver_type" name="driver_type" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="" disabled>
                                             <option value="" selected disabled> Choose</option>
                                             <option value="1">Owner Operator (single Truck)</option>
                                             <option value="2">Company Driver</option>
@@ -1512,12 +1512,12 @@
                                       </script>
                                       <div>
                                         <label class="block mb-2 text-gray-700 dark:text-gray-300">Hired on:</label>
-                                        <input type="text" x-model="formData.hired_on" name="hired_on" id="hired_on" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                        <input type="text" x-model="formData.hired_on" name="hired_on" id="hired_on" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="" readonly>
                                     </div>
 
                                     <div>
                                         <label class="block mb-2 text-gray-700 dark:text-gray-300">terminated_on:</label>
-                                        <input type="text" x-model="formData.terminated_on" name="terminated_on" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                        <input type="text" x-model="formData.terminated_on" name="terminated_on" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="" readonly>
                                     </div>
                                   </div> <!-- ✅ Correctly closed grid div -->
                               </div>
@@ -1569,7 +1569,7 @@
                                     </div>
                                     <div>
                                         <label class="block mb-2 text-gray-700 dark:text-gray-300">Rating:</label>
-                                        <input type="text" x-model="formData.rating" name="rating" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                        <input type="text" x-model="formData.rating" name="rating" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="" readonly>
                                     </div>
                                   </div>
                               </div>
@@ -1600,7 +1600,7 @@
                                       <input type="text" x-model="formData.company_name_paid_to" name="company_name_paid_to" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
                                   </div>
                                   <div>
-                                      <label class="block mb-2 text-gray-700 dark:text-gray-300">Employer ID #</label>:</label>
+                                      <label class="block mb-2 text-gray-700 dark:text-gray-300">Employer ID #</label>
                                       <input type="text" x-model="formData.employer_identification_number" name="employer_identification_number" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 numberOnly" placeholder="">
                                   </div>
                                   </div>
@@ -1619,11 +1619,11 @@
                                     </div>
                                     <div>
                                       <label class="block mb-2 text-gray-700 dark:text-gray-300">Flash notes to dispatch:</label>
-                                      <input type="text" x-model="formData.flash_notes_to_dispatch" name="flash_notes_to_dispatch" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                      <input type="text" x-model="formData.flash_notes_to_dispatch" name="flash_notes_to_dispatch" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="" readonly>
                                   </div>
                                   <div>
                                       <label class="block mb-2 text-gray-700 dark:text-gray-300">Flash notes to payroll:</label>
-                                      <input type="text" x-model="formData.flash_notes_to_payroll" name="flash_notes_to_payroll" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 numberOnly" placeholder="">
+                                      <input type="text" x-model="formData.flash_notes_to_payroll" name="flash_notes_to_payroll" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300 numberOnly" placeholder="" readonly>
                                   </div>
                                   </div>
                               </div>
@@ -1634,11 +1634,11 @@
                                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                                     <div>
                                         <label class="block mb-2 text-gray-700 dark:text-gray-300">internal_notes:</label>
-                                        <input type="text" x-model="formData.internal_notes" name="internal_notes" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                        <input type="text" x-model="formData.internal_notes" name="internal_notes" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="" readonly>
                                     </div>
                                     <div>
                                         <label class="block mb-2 text-gray-700 dark:text-gray-300">Driver Status:</label>
-                                        <select type="text" x-model="formData.driver_status" name="driver_status" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="">
+                                        <select type="text" x-model="formData.driver_status" name="driver_status" class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-gray-300" placeholder="" disabled>
                                           <option value="active">Active</option>
                                           <option value="Inactive">Inactive</option>
                                         </select>
@@ -1976,7 +1976,7 @@
 
           //localStorage.setItem('xxxxxx', JSON.stringify(data));
           
-          console.log('FOMR DATA',data.phone);
+          console.log('FOMR DATA',data);
           localStorage.setItem('currency', data.currency);
         this.formData.phone = data.phone || '';
       this.formData.address = data.address || '';
@@ -2052,6 +2052,20 @@
       this.formData.credit_limit = data.credit_limit || '';
       this.formData.alert_percentage = data.alert_percentage || '';
 
+      //driver 
+      this.formData.driver_type = data.driver_type || '';
+      this.formData.emergency_contact_info = data.emergency_contact_info || '',
+      this.formData.hired_on = data.hired_on || '',
+      this.formData.terminated_on = data.terminated_on || '',
+      this.formData.endorsements = data.endorsements || '';
+      this.formData.years_of_experience = data.years_of_experience || '';
+      this.formData.pay_via = data.pay_via || '';
+      this.formData.employer_identification_number = data.employer_identification_number || '';
+      this.formData.rating = data.rating || '';
+      this.formData.notes_about_the_choices_made = data.notes_about_the_choices_made || '';
+      this.formData.isAccessToMobileApp = data.isAccessToMobileApp || '';
+      this.formData.mobile_settings = data.mobile_settings || '';
+
       this.formData.trucking_account_name = data.trucking_account_name || '';
       this.formData.trucking_account_number = data.trucking_account_number || '';
       this.formData.trucking_routing = data.trucking_routing || '';
@@ -2089,11 +2103,11 @@
       const formData = new FormData(form);
       //console.log(tabName);
       // console.log("FormData Contents:");
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ": " + pair[1]);
-        }
-              console.log(localStorage.getItem('auth_token'))
-         //return
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0] + ": " + pair[1]);
+        // }
+        //       console.log(localStorage.getItem('auth_token'))
+        //  return
          
         //formData.append('tags', this.formData.tags.join(','));
       try {
@@ -2121,42 +2135,116 @@
       }
     },
 
-    
     async submitDriverForm(tabName) {
-      this.isLoading = true;
-      const form = this.$refs[`${tabName}Form`];
-      const formData = new FormData(form);
-      //console.log(tabName);
-      // console.log("FormData Contents:");
-        // for (let pair of formData.entries()) {
-        //     console.log("SubmitForm data ",pair[0] + ": " + pair[1]);
-        // }
-        //       console.log(localStorage.getItem('auth_token'))
-        //  return
-      try {
-        const response = await fetch(`${requestURL}/settings/${tabName}`, {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
-            'Accept': 'application/json',
-          }
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok) {
-          createToast('success', data.message);	
-        } else {
-          createToast('error', data.message);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        createToast('error','Network error. Please try again.');
-      } finally {
-        this.isLoading = false;
+  this.isLoading = true;
+  
+  // Create FormData and manually populate from Alpine.js state
+  const formData = new FormData();
+  
+  // Add all driver form fields manually
+  if (tabName === 'Daddress') {
+    formData.append('driver_phone', this.formData.driver_phone || '');
+    formData.append('driver_phone_carrier', this.formData.driver_phone_carrier || '');
+    formData.append('driver_primary_address', this.formData.driver_primary_address || '');
+    formData.append('driver_secondary_address', this.formData.driver_secondary_address || '');
+    formData.append('driver_country', this.formData.driver_country || '');
+    formData.append('driver_state', this.formData.driver_state || '');
+    formData.append('driver_city', this.formData.driver_city || '');
+    formData.append('driver_zip', this.formData.driver_zip || '');
+    formData.append('office', this.formData.office || '');
+  } 
+  else if (tabName === 'Dbasic') {
+    formData.append('driver_type', this.formData.driver_type || '');
+    formData.append('emergency_contact_info', this.formData.emergency_contact_info || '');
+    formData.append('hired_on', this.formData.hired_on || '');
+    formData.append('terminated_on', this.formData.terminated_on || '');
+    formData.append('years_of_experience', this.formData.years_of_experience || '');
+    formData.append('endorsements', this.formData.endorsements || '');
+    formData.append('rating', this.formData.rating || '');
+    formData.append('notes_about_the_choices_made', this.formData.notes_about_the_choices_made || '');
+    formData.append('pay_via', this.formData.pay_via || '');
+    formData.append('company_name_paid_to', this.formData.company_name_paid_to || '');
+    formData.append('employer_identification_number', this.formData.employer_identification_number || '');
+    formData.append('send_settlements_mail', this.formData.send_settlements_mail || '');
+    formData.append('print_settlements_under_this_company', this.formData.print_settlements_under_this_company || '');
+    formData.append('flash_notes_to_dispatch', this.formData.flash_notes_to_dispatch || '');
+    formData.append('flash_notes_to_payroll', this.formData.flash_notes_to_payroll || '');
+    formData.append('internal_notes', this.formData.internal_notes || '');
+    formData.append('driver_status', this.formData.driver_status || '');
+  }
+  else if (tabName === 'Dother') {
+    formData.append('isAccessToMobileApp', this.formData.isAccessToMobileApp ? '1' : '0');
+    formData.append('mobile_settings', this.formData.mobile_settings ? '1' : '0');
+  }
+
+  console.log("FormData Contents:");
+  for (let pair of formData.entries()) {
+    console.log(pair[0] + ": " + pair[1]);
+  }
+
+  //return;
+
+  try {
+    const response = await fetch(`${requestURL}/settings/${tabName}`, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+        'Accept': 'application/json',
       }
-    },
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      createToast('success', data.message);	
+    } else {
+      createToast('error', data.message);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    createToast('error','Network error. Please try again.');
+  } finally {
+    this.isLoading = false;
+  }
+},
+
+    
+    // async submitDriverForm(tabName) {
+    //   this.isLoading = true;
+    //   const form = this.$refs[`${tabName}Form`];
+    //   const formData = new FormData(form);
+    //   //console.log(tabName);
+    //   //console.log("FormData Contents:");
+    //     // for (let pair of formData.entries()) {
+    //     //     console.log("SubmitForm data ",pair[0] + ": " + pair[1]);
+    //     // }
+    //     //       console.log(localStorage.getItem('auth_token'))
+    //     //  return
+    //   try {
+    //     const response = await fetch(`${requestURL}/settings/${tabName}`, {
+    //       method: 'POST',
+    //       body: formData,
+    //       headers: {
+    //         'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+    //         'Accept': 'application/json',
+    //       }
+    //     });
+        
+    //     const data = await response.json();
+        
+    //     if (response.ok) {
+    //       createToast('success', data.message);	
+    //     } else {
+    //       createToast('error', data.message);
+    //     }
+    //   } catch (error) {
+    //     console.error('Error:', error);
+    //     createToast('error','Network error. Please try again.');
+    //   } finally {
+    //     this.isLoading = false;
+    //   }
+    // },
 
     async submitForm(tabName) {
       this.isLoading = true;

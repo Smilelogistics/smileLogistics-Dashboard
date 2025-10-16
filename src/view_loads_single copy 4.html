@@ -6,41 +6,6 @@
     <script src="./assets/js/main.js"></script>
     <title>Loads | </title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-    <style>
-@media print {
-  body {
-    -webkit-print-color-adjust: exact !important; /* Force background colors */
-    print-color-adjust: exact !important;
-  }
-
-  /* Hide buttons or elements with the class "no-print" */
-  .no-print {
-    display: none !important;
-  }
-
-  /* Ensure Tailwind colors and dark mode still appear */
-  html {
-    color-scheme: light dark;
-  }
-
-  /* Optional: Make sure tables don't break */
-  table {
-    border-collapse: collapse !important;
-    page-break-inside: avoid !important;
-  }
-
-  /* Optional: Maintain spacing & rounding */
-  .rounded-lg, .rounded-xl {
-    border-radius: 0.75rem !important;
-  }
-
-  .shadow-md, .shadow-lg {
-    box-shadow: none !important; /* Or adjust if you prefer */
-  }
-}
-</style>
-
   </head>
   <body
     x-data="{ page: 'view_loads', 'loaded': true, 'darkMode': false, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
@@ -104,333 +69,417 @@
                           <div id="printableArea1" class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700" x-show="!isLoading && formData">
                             <!-- Header -->
                              <div id="printableArea">
+                            <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-600 flex justify-between items-center">
+                              <div>
+                                <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Shipment Details</h2>
+                              </div>
+
+                              <div>
+                              <img :src="formData.invoice_logo_url" alt="Logo"  class="w-36 h-36 object-contain"
+                                                 >
+                              </div>
+                            </div>
                             
                             <!-- Content -->
                             <div class="p-2" >
                               <div >
                                 <template x-if="formData.shipment_type === 'land'">
-                                  <div class="flex justify-between items-start mb-6">
-                                    <!-- Left Side -->
-                                    <div class="flex-1">
-                                        <!-- Logo -->
-                                        <div class="flex items-center gap-3 mb-8">
-                                            <div class="w-[70px] h-[70px] rounded-xl flex items-center justify-center">
-                                                 <div>
-                                                  <img :src="formData.invoice_logo_url" alt="Logo"  class="w-36 h-36 object-contain"
-                                                                    >
-                                                  </div>
-                                            </div>
-                                            <!-- <div>
-                                                <div class="text-[28px] font-bold text-blue-700 dark:text-blue-400 leading-none">SMILES</div>
-                                                <div class="text-[11px] font-bold text-blue-700 dark:text-blue-400 tracking-wide">LOGISTICS GROUP</div>
-                                            </div> -->
-                                        </div>
+                                  <div class="md:col-span-2 lg:col-span-3 font-sans border border-gray-300 dark:border-gray-600 p-4 rounded-lg">
+                                    <h1 class="text-center border-b-2 border-gray-300 dark:border-gray-600 pb-3 mb-4 text-lg font-bold text-gray-800 dark:text-white/90">
+                                      LAND SHIPMENT DETAILS
+                                    </h1>
 
-                                        <!-- Info Lines -->
-                                        <div class="space-y-[2px] text-[13px]">
-                                            <div class="dark:text-gray-200"><span class="font-semibold">Shipment Type:</span> <span x-text="formData.shipment_type"></span></div>
-                                            <div class="dark:text-gray-200"><span class="font-semibold">Date:</span> <span x-text="formData.created_at"></span></div>
-                                            <div class="dark:text-gray-200"><span class="font-semibold">Office:</span> <span x-text="formData.office"></span></div>
-                                            <div class="dark:text-gray-200"><span class="font-semibold">Bill To:</span> <span x-text="formData.bill_to"></span></div>
-                                            <div class="dark:text-gray-200"><span class="font-semibold">Sales Rep:</span> <span x-text="formData.broker_sales_rep"></span></div>
-                                            <div class="dark:text-gray-200"><span class="font-semibold">Driver:</span> <span x-text="formData.driver?driver.user?.name:'N/A'"></span></div>
-                                        </div>
+                                    <!-- Basic Information Section -->
+                                    <table class="w-full border-collapse mb-6">
+                                      <tr>
+                                        <td colspan="3" class="border border-gray-300 dark:border-gray-600 p-3 bg-gray-100 dark:bg-gray-800">
+                                          <strong class="text-sm text-gray-800 dark:text-white/90">SHIPPERS DECLARATION</strong>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        
+                                        <td class="border border-gray-900 dark:border-gray-600 px-1 py-1 w-1/4">
+                                        <p class="text-[11px] text-gray-500 dark:text-gray-400">Bill To</p>
+                                        <p class="text-xs font-medium text-gray-900 dark:text-gray-100" x-text="formData.bill_to || 'N/A'"></p>
+                                      </td>
 
-                                        <!-- Commodity Info -->
-                                        <div class="mt-5 text-[13px] dark:text-gray-200">
-                                            <span class="font-semibold">Commodity:</span> <span x-text="formData.commodity ? formData.commodity : 'N/A'"></span> &nbsp;&nbsp;&nbsp;&nbsp;
-                                            <span class="font-semibold">Load Weight:</span> <span x-text="formData.load_weight ? formData.load_weight : 'N/A'"></span> &nbsp;&nbsp;&nbsp;&nbsp;
-                                            <span class="font-semibold">Pieces:</span> <span x-text="formData.pieces ? formData.pieces : 'N/A'"></span> &nbsp;&nbsp;&nbsp;&nbsp;
-                                            <span class="font-semibold">Reefer Temp:</span> <span x-text="formData.reefer_temp || 'N/A'"></span>&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <span class="font-semibold">Broker Name:</span> <span x-text="formData.broker_name || 'N/A'"></span>&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <span class="font-semibold">Broker Email:</span> <span x-text="formData.broker_email || 'N/A'"></span>&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <span class="font-semibold">Broker Phone Number:</span> <span x-text="formData.broker_phone || 'N/A'"></span>
-                                        </div>
-                                    </div>
 
-                                    <!-- Right Side -->
-                                    <div class="text-right ml-8">
-                                        <h1 class="text-[22px] font-bold mb-6 dark:text-white">LAND SHIPMENT DETAILS</h1>
-                                        <div class="space-y-[2px] text-[13px]">
-                                            <div class="flex justify-between gap-12">
-                                                <span class="font-semibold dark:text-gray-200">Reference #:</span>
-                                                <span class="dark:text-gray-200" x-text="formData.reference_number || 'N/A'"></span>
-                                            </div>
-                                            <div class="flex justify-between gap-12">
-                                                <span class="font-semibold dark:text-gray-200">Booking #:</span>
-                                                <span class="dark:text-gray-200" x-text="formData.booking_number || 'N/A'"></span>
-                                            </div>
-                                            <div class="flex justify-between gap-12">
-                                                <span class="font-semibold dark:text-gray-200">BOL #:</span>
-                                                <span class="dark:text-gray-200" x-text="formData.bill_of_laden_number || 'N/A'"></span>
-                                            </div>
-                                            <div class="flex justify-between gap-12">
-                                                <span class="font-semibold dark:text-gray-200">PO #:</span>
-                                                <span class="dark:text-gray-200" x-text="formData.po_number || 'N/A'"></span>
-                                            </div>
-                                            <div class="flex justify-between gap-12">
-                                                <span class="font-semibold dark:text-gray-200">Batch #:</span>
-                                                <span class="dark:text-gray-200" x-text="formData.batch_number || 'N/A'"></span>
-                                            </div>
-                                            <div class="flex justify-between gap-12">
-                                                <span class="font-semibold dark:text-gray-200">Genset #:</span>
-                                                <span class="dark:text-gray-200" x-text="formData.genset_number || 'N/A'"></span>
-                                            </div>
-                                            <div class="flex justify-between gap-12">
-                                                <span class="font-semibold dark:text-gray-200">Seal #:</span>
-                                                <span class="dark:text-gray-200" x-text="formData.seal_number || 'N/A'"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                              </template>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/4">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Shipment Type</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.shipment_type || 'N/A'"></p>
+                                        </td>
 
-                                <!-- Pickup Address -->
-                                <div class="mb-6">
-                                  <h2 class="text-[16px] font-bold mb-3 dark:text-white">Pickup Address</h2>
-                                  <!-- Check if pickups exist -->
-                                  <template x-if="Array.isArray(formData.pickups) && formData.pickups.length > 0">
-                                    <table class="w-full text-[12px] border-collapse">
-                                      <thead>
-                                        <tr class="bg-blue-900 dark:bg-blue-800 text-white">
-                                          <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Type</th>
-                                          <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Location Name</th>
-                                          <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Address</th>
-                                          <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">City</th>
-                                          <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Zip</th>
-                                          <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">State</th>
-                                          <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Appointment Date</th>
-                                          <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Not Later Than</th>
-                                          <th class="px-3 py-2 text-left font-semibold">Not Later Time</th>
-                                        </tr>
-                                      </thead>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/4">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Office</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.office || 'N/A'"></p>
+                                        </td>
+                                       
+                                      </tr>
+                                      <tr>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Reference #</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.reference_number || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Booking #</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.booking_number || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">PO #</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.po_number || 'N/A'"></p>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Load Weight</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.load_weight || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Commodity</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.commodity || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Pieces</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.pieces || 'N/A'"></p>
+                                        </td>
+                                      </tr>
+                                    <!-- </table> -->
 
-                                      <tbody class="dark:text-gray-200">
-                                        <template x-for="(pickup, index) in formData.pickups" :key="index">
-                                          <tr class="border-b border-gray-300 dark:border-gray-700">
-                                            <td class="px-3 py-2" x-text="pickup.pick_up_type || 'N/A'"></td>
-                                            <td class="px-3 py-2" x-text="pickup.location_name || 'N/A'"></td>
-                                            <td class="px-3 py-2" x-text="pickup.address || 'N/A'"></td>
-                                            <td class="px-3 py-2" x-text="pickup.city || 'N/A'"></td>
-                                            <td class="px-3 py-2" x-text="pickup.zip || 'N/A'"></td>
-                                            <td class="px-3 py-2" x-text="pickup.state || 'N/A'"></td>
-                                            <td class="px-3 py-2" x-text="pickup.appt_date ? new Date(pickup.appt_date).toLocaleDateString() : ''"></td>
-                                            <td class="px-3 py-2" x-text="pickup.no_latter_than_date ? new Date(pickup.no_latter_than_date).toLocaleDateString() : ''"></td>
-                                            <td class="px-3 py-2" x-text="pickup.no_latter_than_time ? new Date('1970-01-01T' + pickup.no_latter_than_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''"></td>
-                                          </tr>
-                                        </template>
-                                      </tbody>
+                                    <!-- Additional Info Section -->
+                                    <!-- <table class="w-full border-collapse mb-6"> -->
+                                      <!-- <tr>
+                                        <td colspan="3" class="border border-gray-300 dark:border-gray-600 p-3 bg-gray-100 dark:bg-gray-800">
+                                          <strong class="text-sm text-gray-700 dark:text-gray-300">ADDITIONAL INFO</strong>
+                                        </td>
+                                      </tr> -->
+                                      <tr>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Genset #</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.genset_number || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Refeer Temp</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.reefer_temp || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Pickup / Deliveries</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="Array.isArray(formData.pick_up) ? formData.pick_up.join(', ') : (formData.pick_up ?? 'N/A')"></p>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">BOL #</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.bill_of_laden_number || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Broker Name</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.broker_name || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Broker Email</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.broker_email || 'N/A'"></p>
+                                        </td>
+                                      </tr>
+
+                                        <tr>
+                                       <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">EDI/API</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.broker_edi_api_shipment_number || 'N/A'"></p>
+                                        </td>
+
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Broker Phone Number</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.broker_phone || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Sales Rep</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.broker_sales_rep || 'N/A'"></p>
+                                        </td>
+                                      </tr>
+
+
+                                      
+                                      <tr>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Pickup #</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.pickup_number || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Seal #</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.seal_number || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Batch #</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.broker_batch_number || 'N/A'"></p>
+                                        </td>
+                                      </tr>
+
+                                      <!-- <tr>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Pickup #</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.pickup_number || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Seal #</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.seal_number || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Batch #</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.broker_batch_number || 'N/A'"></p>
+                                        </td>
+                                      </tr> -->
+
+                                      <tr>
+                                         <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Is Broker?</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.isBroker == 1 ? 'Yes' : 'No'"></p>
+                                        </td>
+                                        
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/4">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Load Type</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.load_type || ''"></p>
+                                        </td>
+                                        <!-- <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Seal #</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.seal_number || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Batch #</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.broker_batch_number || 'N/A'"></p>
+                                        </td> -->
+                                      </tr>
+
+                                    <!-- </table> -->
+
+                                    <!-- Additional Information Section -->
+                                    <!-- <table class="w-full border-collapse mb-6"> -->
+                                      <!-- <tr>
+                                        <td colspan="3" class="border border-gray-300 dark:border-gray-600 p-3 bg-gray-100 dark:bg-gray-800">
+                                          <strong class="text-sm text-gray-700 dark:text-gray-300">ADDITIONAL INFORMATION</strong>
+                                        </td>
+                                      </tr> -->
+                                      <tr>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Total Miles</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_miles || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Loaded Miles</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.loaded_miles || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3 w-1/3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Empty Miles</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.empty_miles || 'N/A'"></p>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">$/Gallon</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.fuel_rate_per_gallon || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">MPG</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.mpg || 'N/A'"></p>
+                                        </td>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Fuel Cost</p>
+                                          <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.fuel_rate_per_gallon || 'N/A'"></p>
+                                        </td>
+                                      </tr>
                                     </table>
-                                  </template>
 
-                                  <!-- Message when no pickups found -->
-                                  <template x-if="!formData.pickups || formData.pickups.length === 0">
-                                    <div class="p-4 text-center text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 rounded-md">
-                                      🚚 No pickups found.
-                                    </div>
-                                  </template>
-                                </div>
-
-
-                                 <div class="mb-6">
-                                  <h2 class="text-[16px] font-bold mb-3 dark:text-white">Dropoff Address</h2>
-
-                                  <template x-if="Array.isArray(formData.dropoffs) && formData.dropoffs.length > 0">
-                                    <table class="w-full text-[12px] border-collapse">
-                                      <thead>
-                                        <tr class="bg-blue-900 dark:bg-blue-800 text-white">
-                                          <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Type</th>
-                                          <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Location Name</th>
-                                          <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Address</th>
-                                          <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">City</th>
-                                          <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Zip</th>
-                                          <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">State</th>
-                                          <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Appointment Date</th>
-                                          <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Not Later Than</th>
-                                          <th class="px-3 py-2 text-left font-semibold">Not Later Time</th>
-                                        </tr>
-                                      </thead>
-
-                                      <tbody class="dark:text-gray-200">
-                                        <template x-for="(dropoff, index) in formData.dropoffs" :key="index">
-                                          <tr>
-                                            <td class="px-3 py-2" x-text="dropoff?.drop_at_type || 'N/A'"></td>
-                                            <td class="px-3 py-2" x-text="dropoff?.location_name || 'N/A'"></td>
-                                            <td class="px-3 py-2" x-text="dropoff?.address || 'N/A'"></td>
-                                            <td class="px-3 py-2" x-text="dropoff?.city || 'N/A'"></td>
-                                            <td class="px-3 py-2">
-                                              <span x-text="dropoff?.zip || 'N/A'"></span>
-                                              <span class="text-[10px]" x-text="dropoff?.state || 'N/A'"></span>
-                                            </td>
-                                            <td class="px-3 py-2"></td>
-                                            <td class="px-3 py-2" x-text="dropoff?.appt_date ? new Date(dropoff.appt_date).toLocaleDateString() : ''"></td>
-                                            <td class="px-3 py-2" x-text="dropoff?.no_latter_than_date ? new Date(dropoff.no_latter_than_date).toLocaleDateString() : ''"></td>
-                                            <td class="px-3 py-2" x-text="dropoff?.no_latter_than_time ? new Date('1970-01-01T' + dropoff.no_latter_than_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''"></td>
-                                          </tr>
-                                        </template>
-                                      </tbody>
-                                    </table>
-                                  </template>
-
-                                  <template x-if="!formData.dropoffs || formData.dropoffs.length === 0">
-                                    <div 
-                                      x-transition
-                                      class="p-4 text-center text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 rounded-md"
-                                    >
-                                      📦 No dropoffs found.
-                                    </div>
-                                  </template>
-                                </div>
-
-
-
-
-                                   <!-- Charges and Expenses -->
-                                <div class="grid grid-cols-2 gap-8 mb-6" x-show="userRole === 'businessadministrator' || userRole === 'customer'">
-                                    <!-- Charges Information -->
-                                    <div>
-                                        <h2 class="text-[16px] font-bold mb-3 dark:text-white">Charges Information</h2>
-                                        <template x-if="Array.isArray(formData.shipment_charges) && formData.shipment_charges.length">
-                                        <table class="w-full text-[12px] border-collapse">
-                                            <thead>
-                                                <tr class="bg-blue-900 dark:bg-blue-800 text-white">
-                                                    <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Type</th>
-                                                    <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Unit</th>
-                                                    <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Rate</th>
-                                                    <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Amount</th>
-                                                    <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Discount</th>
-                                                    <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Notes</th>
-                                                    <th class="px-3 py-2 text-left font-semibold">Comments</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="dark:text-gray-200">
-                                               <template x-for="(charge, index) in formData.shipment_charges" :key="index">
-                                                <tr>
-                                                    <td class="px-3 py-2" x-text="charge.charge_type || charge.type || 'N/A'"></td>
-                                                    <td class="px-3 py-2" x-text="charge.unit || 'N/A'"></td>
-                                                    <td class="px-3 py-2" x-text="charge.charge_rate ? currency + ' ' + parseFloat(charge.charge_rate).toFixed(2) : 'N/A'"></td>
-                                                    <td class="px-3 py-2" x-text="charge.charge_amount ? currency + ' ' + parseFloat(charge.charge_amount).toFixed(2) : 'N/A'"></td>
-                                                    <td class="px-3 py-2" x-text="charge.discount ? currency + ' ' + parseFloat(charge.discount).toFixed(2) : 'N/A'"></td>
-                                                    <!-- <td class="px-3 py-2"></td> -->
-                                                    <td class="px-3 py-2" x-text="charge.internal_note || 'N/A'"></td>
-                                                    <td class="px-3 py-2" x-text="charge.comment || 'N/A'"></td>
-                                                </tr>
-                                                </template>
-                                            </tbody>
-                                        </table>
-                                        </template>
-                                    </div>
-
-                                    <!-- Expenses Information -->
-                                    <div>
-                                        <h2 class="text-[16px] font-bold mb-3 dark:text-white">Expenses Information</h2>
-                                          <template x-if="formData.shipment_expenses && formData.shipment_expenses.length > 0">
-                                        <table class="w-full text-[12px] border-collapse">
-                                            <thead>
-                                                <tr class="bg-blue-900 dark:bg-blue-800 text-white">
-                                                    <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Type</th>
-                                                    <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Unit</th>
-                                                    <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Rate</th>
-                                                    <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Amount</th>
-                                                    <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Discount</th>
-                                                    <th class="px-3 py-2 text-left font-semibold border-r border-blue-600">Paid?</th>
-                                                    <th class="px-3 py-2 text-left font-semibold">Billed?</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="dark:text-gray-200">
-                                                <template x-for="(expense, index) in formData.shipment_expenses" :key="expense.id || index">
-                                                <tr>
-                                                    <td class="px-3 py-2" x-text="expense.expense_type || 'N/A'"></td>
-                                                    <td class="px-3 py-2" x-text="expense.unit || 'N/A'"></td>
-                                                    <td class="px-3 py-2" x-text="expense.expense_rate ? currency + ' ' + parseFloat(expense.expense_rate).toFixed(2) : 'N/A'"></td>
-                                                    <td class="px-3 py-2" x-text="expense.expense_amount ? currency + ' ' + parseFloat(expense.expense_amount).toFixed(2) : 'N/A'"></td>
-                                                    <td class="px-3 py-2" x-text="expense.discount ? currency + ' ' + parseFloat(expense.discount).toFixed(2) : 'N/A'"></td>
-                                                    <td class="px-3 py-2"  :class="{
-                                                        'bg-blue-100 text-blue-800': expense.billed,
-                                                        'bg-gray-100 text-gray-800': !expense.billed
-                                                      }"
-                                                      x-text="expense.billed ? 'Billed' : 'Unbilled'"></td>
-                                                    <td class="px-3 py-2" :class="{
-                                                        'bg-green-100 text-green-800': expense.paid,
-                                                        'bg-yellow-100 text-yellow-800': !expense.paid
-                                                      }"
-                                                      x-text="expense.paid ? 'Paid' : 'Unpaid'">N/A</td>
-                                                </tr>
-                                                </template>
-                                            </tbody>
-                                        </table>
-                                        </template>
-                                    </div>
-                                </div>
-
-                                <!-- Backup Docs -->
-                                <div class="mb-6">
-                                    <h2 class="text-[16px] font-bold mb-3 dark:text-white">Backup Docs</h2>
-                                    <template x-if="Array.isArray(formData.shipment_uploads) && formData.shipment_uploads.length > 0">
-                                      <div class="w-12 h-12 border-2 border-gray-300 dark:border-gray-600 rounded flex items-center justify-center bg-gray-50 dark:bg-gray-800">
-                                          <div class="grid grid-cols-2 gap-3">
-                                        <template x-for="doc in formData.shipment_uploads" :key="doc.id">
-                                          <div class="border rounded-lg p-2">
-                                            <div class="relative h-32 bg-gray-100 dark:bg-gray-700 rounded-md flex items-center justify-center">
-                                              <img :src="doc.file_path" 
-                                                  class="max-h-full max-w-full object-contain"
-                                                  @error="doc.file_path = '/path/to/placeholder-image.png'">
-                                              <a :href="doc.file_path" target="_blank" class="absolute top-2 right-2 text-blue-600 hover:text-blue-800 dark:text-blue-400">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
-                                                </svg>
-                                              </a>
+                                    <!-- Special Fields Section -->
+                                    <table class="w-full border-collapse mb-4">
+                                      <tr>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">OverWeight/Hazmat etc</p>
+                                          <template x-if="formData.over_weight && formData.over_weight.length > 0">
+                                            <div class="flex flex-wrap gap-1">
+                                              <template x-for="(item, index) in formData.over_weight" :key="index">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                                  <span x-text="item"></span>
+                                                </span>
+                                              </template>
                                             </div>
-                                            <p x-text="doc.file_title || 'Untitled'" class="text-xs mt-1 truncate text-center"></p>
-                                          </div>
-                                        </template>
-                                      </div>
-                                      </div>
-                                    </template>
-                                </div>
+                                          </template>
+                                          <template x-if="!formData.over_weight || formData.over_weight.length === 0">
+                                            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">N/A</p>
+                                          </template>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="border border-gray-300 dark:border-gray-600 p-3">
+                                          <p class="text-xs text-gray-500 dark:text-gray-400">Tags</p>
+                                          <template x-if="formData.tags && formData.tags.length > 0">
+                                            <div class="flex flex-wrap gap-1">
+                                              <template x-for="(tag, index) in formData.tags" :key="index">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
+                                                  <span x-text="tag"></span>
+                                                </span>
+                                              </template>
+                                            </div>
+                                          </template>
+                                          <template x-if="!formData.tags || formData.tags.length === 0">
+                                            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">N/A</p>
+                                          </template>
+                                        </td>
+                                        
+                                      </tr>
+                                    </table>
 
-                                <!-- Black Line Separator -->
-                                <div class="w-full h-[3px] bg-black dark:bg-gray-700 mb-6"></div>
 
-                                   <div class="mb-6">
-                                      <h2 class="text-[16px] font-bold mb-4 dark:text-white">Shipment Totals</h2>
-                                      <div class="space-y-2 text-[13px]">
-                                          <div class="flex justify-between dark:text-gray-200">
-                                              <span>Shipping Cost</span>
-                                              <span class="font-semibold" x-text="currency + ' ' + (formData.shipping_cost || '0.00')"></span>
-                                          </div>
-                                          <div class="flex justify-between dark:text-gray-200">
-                                              <span>Total Fuel Charges (Total Miles: 891.24*$ / Gallon: 3.24/MPG: 6*2)</span>
-                                              <span class="font-semibold" x-text="currency + ' ' + (formData.total_fuel_cost || '0.00')"></span>
-                                          </div>
-                                          <div class="flex justify-between dark:text-gray-200">
-                                              <span>Total Charges Cost</span>
-                                              <span class="font-semibold" x-text="formData.net_total_charges ? currency + ' ' + parseFloat(formData.net_total_charges).toFixed(2) : 'N/A'"></span>
-                                          </div>
-                                          <!-- <div class="flex justify-between dark:text-gray-200">
-                                              <span>Total Expenses Cost</span>
-                                              <span class="font-semibold">USD 1200.00</span>
-                                          </div> -->
-                                          <div class="flex justify-between font-bold text-[14px] pt-2 dark:text-white">
-                                              <span>Total Shipment Cost</span>
-                                              <span x-text="currency + ' ' + (formData.total_shipment_cost || '0.00')"></span>
-                                          </div>
+                                    <div class="md:col-span-1 mt-10 lg:col-span-3">
+                                      <div class="flex flex-wrap gap-6"> <!-- Increased gap for better spacing -->
+                                        <!-- Charges Information (Column 1) -->
+                                        <div class="flex-1 min-w-[300px]"> <!-- Wider minimum width -->
+                                          <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 mb-4">Pickup Address</h3>
+                                          
+                                          <template x-if="Array.isArray(formData.pickups) && formData.pickups.length">
+                                            <table class="w-full border border-gray-200 dark:border-gray-700">
+                                              <thead class="bg-gray-50 dark:bg-gray-800">
+                                                <tr>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Type</th>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Location Name</th>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Address</th>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">City</th>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Zip</th>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">state</th>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Appointment Date</th>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Not Latter Than</th>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Not Latter Time</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                                                <template x-for="(pickup, index) in formData.pickups" :key="index">
+                                                  <tr>
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="pickup.pick_up_type || pickup.pick_up_type || 'N/A'"></div>
+                                                    </td>
+
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="pickup.location_name || pickup.location_name || ''"></div>
+                                                    </td>
+
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="pickup.address || pickup.address || ''"></div>
+                                                    </td>
+                                                    
+
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="pickup.city || pickup.city || ''"></div>
+                                                    </td>
+                                                    
+
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="pickup.zip || pickup.zip || ''"></div>
+                                                    </td>
+                                                    
+
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="pickup.state || pickup.state || ''"></div>
+                                                      </td>
+
+                                                      
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="pickup.appt_date ? new Date(pickup.appt_date).toLocaleDateString() : ''"></div>
+                                                    </td>
+
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="pickup.no_latter_than_date ? new Date(pickup.no_latter_than_date).toLocaleDateString() : ''"></div>
+                                                    </td>
+
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="pickup.no_latter_than_time ? new Date('1970-01-01T' + pickup.no_latter_than_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''"></div>
+                                                    </td>
+
+                                                  </tr>
+                                                </template>
+                                              </tbody>
+                                            </table>
+                                          </template>
+
+                                        </div>
                                       </div>
+                                    </div>
+
+
+                                    
+                                    <div class="md:col-span-1 mt-10 lg:col-span-3">
+                                      <div class="flex flex-wrap gap-6"> <!-- Increased gap for better spacing -->
+                                        <!-- Charges Information (Column 1) -->
+                                        <div class="flex-1 min-w-[300px]"> <!-- Wider minimum width -->
+                                          <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 mb-4">Dropoff Address</h3>
+                                          
+                                          <template x-if="Array.isArray(formData.pickups) && formData.pickups.length">
+                                            <table class="w-full border border-gray-200 dark:border-gray-700">
+                                              <thead class="bg-gray-50 dark:bg-gray-800">
+                                                <tr>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Type</th>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Location Name</th>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Address</th>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">City</th>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Zip</th>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">state</th>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Appointment Date</th>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Not Latter Than</th>
+                                                  <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Not Latter Time</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                                                <template x-for="(dropoff, index) in formData.dropoffs" :key="index">
+                                                  <tr>
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="dropoff.drop_at_type || dropoff.drop_at_type || 'N/A'"></div>
+                                                    </td>
+
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="dropoff.location_name || dropoff.location_name || ''"></div>
+                                                    </td>
+
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="dropoff.address || dropoff.address || ''"></div>
+                                                    </td>
+                                                    
+
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="dropoff.city || dropoff.city || ''"></div>
+                                                    </td>
+                                                    
+
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="dropoff.zip || dropoff.zip || ''"></div>
+                                                    </td>
+                                                    
+
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="dropoff.state || dropoff.state || ''"></div>
+                                                      </td>
+
+                                                      
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="dropoff.appt_date ? new Date(dropoff.appt_date).toLocaleDateString() : ''"></div>
+                                                    </td>
+
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div x-text="dropoff.no_latter_than_date ? new Date(dropoff.no_latter_than_date).toLocaleDateString() : ''"></div>
+                                                    </td>
+
+                                                    <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                      <div
+                                                          x-text="dropoff.no_latter_than_time ? new Date('1970-01-01T' + dropoff.no_latter_than_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''"></div>
+                                                    </td>
+
+                                                  </tr>
+                                                </template>
+                                              </tbody>
+                                            </table>
+                                          </template>
+
+                                        </div>
+                                      </div>
+                                    </div>
                                   </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                                </template>
 
 
                                 <template x-if="formData.shipment_type === 'ocean'">
@@ -653,7 +702,153 @@
                                 </template>
                               </div>
 
-                              
+                              <!-- General  -->
+
+                                <!-- <div>This is ocean shipment</div> -->
+                               <div class="md:col-span-2 mt-10 lg:col-span-3">
+                                <div class="flex flex-wrap gap-6"> <!-- Increased gap for better spacing -->
+                                  <!-- Charges Information (Column 1) -->
+                                  <div class="flex-1 min-w-[300px]" x-show="userRole === 'businessadministrator' || userRole === 'customer'"> <!-- Wider minimum width -->
+                                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 mb-4">Charges Information</h3>
+                                    
+                                    <template x-if="Array.isArray(formData.shipment_charges) && formData.shipment_charges.length">
+                                      <table class="w-full border border-gray-200 dark:border-gray-700">
+                                        <thead class="bg-gray-50 dark:bg-gray-800">
+                                          <tr>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Type</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Rate</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Amount</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Notes</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                                          <template x-for="(charge, index) in formData.shipment_charges" :key="index">
+                                            <tr>
+                                              <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                <div x-text="charge.charge_type || charge.type || 'N/A'"></div>
+                                                <div class="text-xs text-gray-500 dark:text-gray-400" x-text="charge.charge_unit || ''"></div>
+                                              </td>
+                                              <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                <div x-text="charge.charge_rate ? currency + ' ' + parseFloat(charge.charge_rate).toFixed(2) : 'N/A'"></div>
+                                                <div class="text-xs text-gray-500 dark:text-gray-400" x-text="charge.discount ? 'Disc: $' + parseFloat(charge.discount).toFixed(2) : ''"></div>
+                                              </td>
+                                              <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700" 
+                                                  x-text="charge.charge_amount ? currency + ' ' + parseFloat(charge.charge_amount).toFixed(2) : 'N/A'"></td>
+                                              <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                <div x-text="charge.comment || ''"></div>
+                                                <div class="text-xs text-gray-500 dark:text-gray-400" x-text="charge.internal_notes || charge.internal_note || ''"></div>
+                                              </td>
+                                            </tr>
+                                          </template>
+                                        </tbody>
+                                      </table>
+                                    </template>
+
+                                    <div class="mt-4 space-y-2 border-t pt-4">
+                                      <div class="flex justify-between">
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Total:</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.total_charges ? currency + ' ' + parseFloat(formData.total_charges).toFixed(2) : 'N/A'"></p>
+                                      </div>
+                                      <div class="flex justify-between">
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">Net Total:</p>
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-100" x-text="formData.net_total_charges ? currency + ' ' + parseFloat(formData.net_total_charges).toFixed(2) : 'N/A'"></p>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <!-- Expense INFO (Column 2) -->
+                                  <div class="flex-1 min-w-[300px]" x-show="userRole === 'businessadministrator' || userRole === 'customer'">
+                                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 mb-4">Expense INFO</h3>
+                                    
+                                    <template x-if="formData.shipment_expenses && formData.shipment_expenses.length > 0">
+                                      <table class="w-full border border-gray-200 dark:border-gray-700">
+                                        <thead class="bg-gray-50 dark:bg-gray-800">
+                                          <tr>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Type</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Amount</th>
+                                            <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700">Status</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                                          <template x-for="(expense, index) in formData.shipment_expenses" :key="expense.id || index">
+                                            <tr>
+                                              <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                <div x-text="expense.expense_type || 'N/A'"></div>
+                                                <div class="text-xs text-gray-500 dark:text-gray-400" x-text="expense.vendor_invoice_number ? 'Inv: ' + expense.vendor_invoice_number : ''"></div>
+                                              </td>
+                                              <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                <div x-text="currency + ' ' + (expense.expense_amount || '0.00')"></div>
+                                                <div class="text-xs text-gray-500 dark:text-gray-400" x-show="expense.expense_rate" x-text="'Rate: $' + expense.expense_rate"></div>
+                                              </td>
+                                              <td class="px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700">
+                                                <span class="block px-2 py-1 text-xs rounded-full mb-1" 
+                                                      :class="{
+                                                        'bg-green-100 text-green-800': expense.paid,
+                                                        'bg-yellow-100 text-yellow-800': !expense.paid
+                                                      }"
+                                                      x-text="expense.paid ? 'Paid' : 'Unpaid'">
+                                                </span>
+                                                <span class="block px-2 py-1 text-xs rounded-full"
+                                                      :class="{
+                                                        'bg-blue-100 text-blue-800': expense.billed,
+                                                        'bg-gray-100 text-gray-800': !expense.billed
+                                                      }"
+                                                      x-text="expense.billed ? 'Billed' : 'Unbilled'">
+                                                </span>
+                                              </td>
+                                            </tr>
+                                          </template>
+                                        </tbody>
+                                      </table>
+                                    </template>
+                                  </div>
+
+                                  <!-- Backup Docs (Column 3) -->
+                                  <div class="flex-1 min-w-[300px]">
+                                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 mb-4">Backup Docs</h3>
+                                    <template x-if="Array.isArray(formData.shipment_uploads) && formData.shipment_uploads.length > 0">
+                                      <div class="grid grid-cols-2 gap-3">
+                                        <template x-for="doc in formData.shipment_uploads" :key="doc.id">
+                                          <div class="border rounded-lg p-2">
+                                            <div class="relative h-32 bg-gray-100 dark:bg-gray-700 rounded-md flex items-center justify-center">
+                                              <img :src="doc.file_path" 
+                                                  class="max-h-full max-w-full object-contain"
+                                                  @error="doc.file_path = '/path/to/placeholder-image.png'">
+                                              <a :href="doc.file_path" target="_blank" class="absolute top-2 right-2 text-blue-600 hover:text-blue-800 dark:text-blue-400">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                                                </svg>
+                                              </a>
+                                            </div>
+                                            <p x-text="doc.file_title || 'Untitled'" class="text-xs mt-1 truncate text-center"></p>
+                                          </div>
+                                        </template>
+                                      </div>
+                                    </template>
+                                  </div>
+
+
+                                  
+                                </div>
+                              </div>
+                               <!-- Totals (Column 3) -->
+                                  <div class="flex-1 min-w-[300px] mt-10" x-show="userRole === 'businessadministrator' || userRole === 'customer'">
+                                    <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 border-b pb-2 mb-4">Shipment Totals</h3>
+                                    <div class="grid grid-cols-2 gap-3">
+                                      <div class="border rounded-lg p-2">
+                                        <p class="text-xl font-medium text-gray-500 dark:text-gray-400">Shipping Cost</p>
+                                        <p class="text-lg font-semibold text-gray-900 dark:text-gray-100" x-text="currency + ' ' + (formData.shipping_cost || '0.00')"></p>
+                                      </div>
+                                      <div class="border rounded-lg p-2">
+                                        <p class="text-xl font-medium text-gray-500 dark:text-gray-400">Total Fuel Charges</p>
+                                        <p class="text-lg font-semibold text-gray-900 dark:text-gray-100" x-text="currency + ' ' + (formData.total_fuel_cost || '0.00')"></p>
+                                      </div>
+                                      <div class="border rounded-lg p-2">
+                                        <p class="text-xl font-medium text-gray-500 dark:text-gray-400">Total Shipment Cost</p>
+                                        <p class="text-lg font-semibold text-gray-900 dark:text-gray-100" x-text="currency + ' ' + (formData.total_shipment_cost || '0.00')"></p>
+                                      </div>
+                                    </div>
+                                  </div>
                             </div>
                             </div>
                             

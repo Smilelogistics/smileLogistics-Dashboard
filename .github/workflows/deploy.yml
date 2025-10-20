@@ -21,57 +21,74 @@ jobs:
     - name: Install NPM dependencies and build
       run: |
         npm ci
-        npm run build
+        npm run start
 
-    - name: Create deployment artifacts (Webpack)
+    - name: Verify build output
+      run: |
+        echo "Build output directory contents:"
+        ls -la dist/ 2>/dev/null || ls -la build/ 2>/dev/null || echo "No dist/ or build/ directory found"
+        echo "Public directory contents:"
+        ls -la public/
+
+    - name: Create deployment artifacts
       run: |
         mkdir deployment
-        cp -R dist/* deployment/
         
-        # Copy only frontend build files
+        # Copy built files (Webpack typically outputs to dist/)
         if [ -d "dist" ]; then
+          echo "Copying dist/ directory"
           cp -R dist/* deployment/
         elif [ -d "build" ]; then
+          echo "Copying build/ directory"
           cp -R build/* deployment/
-        elif [ -d "public" ]; then
-          cp -R public/* deployment/
         else
-          # Copy common frontend files
-          cp -R *.html deployment/ 2>/dev/null || true
-          cp -R *.css deployment/ 2>/dev/null || true
-          cp -R *.js deployment/ 2>/dev/null || true
-          cp -R assets deployment/ 2>/dev/null || true
-          cp -R images deployment/ 2>/dev/null || true
-          cp -R css deployment/ 2>/dev/null || true
-          cp -R js deployment/ 2>/dev/null || true
+          echo "No build directory found, copying public/ and compiled assets"
+          # Copy compiled CSS/JS from potential build locations
+          cp -R public/* deployment/ 2>/dev/null || true
+          # Look for compiled assets in other common locations
+          find . -name "*.css" -path "*/css/*" -exec cp --parents {} deployment/ \; 2>/dev/null || true
+          find . -name "*.js" -path "*/js/*" -exec cp --parents {} deployment/ \; 2>/dev/null || true
         fi
         
-        # Create .htaccess for clean URLs (if using Apache)
-        cat > deployment/.htaccess << 'EOF'
-        <IfModule mod_rewrite.c>
-          RewriteEngine On
-          
-          # Handle client-side routing for SPAs
-          RewriteCond %{REQUEST_FILENAME} !-f
-          RewriteCond %{REQUEST_FILENAME} !-d
-          RewriteRule . /index.html [L]
-          
-          # Enable compression
-          <IfModule mod_deflate.c>
-            AddOutputFilterByType DEFLATE text/html text/plain text/css application/json
-            AddOutputFilterByType DEFLATE application/javascript text/javascript
+        # Ensure essential files exist
+        if [ ! -f "deployment/index.html" ] && [ -f "public/index.html" ]; then
+          cp public/index.html deployment/
+        fi
+        
+        # Copy your existing .htaccess
+        if [ -f ".htaccess" ]; then
+          cp .htaccess deployment/
+        else
+          # Create .htaccess for SPA routing
+          cat > deployment/.htaccess << 'EOF'
+          <IfModule mod_rewrite.c>
+            RewriteEngine On
+            
+            # Handle client-side routing
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteCond %{REQUEST_FILENAME} !-d
+            RewriteRule . /index.html [L]
+            
+            # Enable compression
+            <IfModule mod_deflate.c>
+              AddOutputFilterByType DEFLATE text/html text/plain text/css application/json
+              AddOutputFilterByType DEFLATE application/javascript text/javascript
+            </IfModule>
+            
+            # Cache control
+            <IfModule mod_expires.c>
+              ExpiresActive on
+              ExpiresByType text/css "access plus 1 month"
+              ExpiresByType application/javascript "access plus 1 month"
+              ExpiresByType image/png "access plus 1 month"
+              ExpiresByType image/jpeg "access plus 1 month"
+            </IfModule>
           </IfModule>
-          
-          # Set caching headers
-          <IfModule mod_expires.c>
-            ExpiresActive on
-            ExpiresByType text/css "access plus 1 month"
-            ExpiresByType application/javascript "access plus 1 month"
-            ExpiresByType image/png "access plus 1 month"
-            ExpiresByType image/jpeg "access plus 1 month"
-          </IfModule>
-        </IfModule>
-        EOF
+          EOF
+        fi
+        
+        echo "Deployment directory contents:"
+        ls -la deployment/
 
     - name: Deploy to server
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -88,4 +105,9 @@ jobs:
           **/*.md
           .github/
           .gitignore
+          src/
+          webpack.config.js
+          postcss.config.js
+          tailwind.config.js
+          package*
         log-level: verbose

@@ -1127,6 +1127,7 @@
               this.formData = {
                 id:data.id || '',
                 bill_to: data.invoice?.customer.user.fname || '',
+                driver: data.driver?.user.fname || '',
                 shipment_type:data.shipment_type || '',
                 shipment_tracking_number: data.shipment_tracking_number || '',
                 load_type: data.load_type || '',

@@ -133,7 +133,7 @@
                                             <div class="dark:text-gray-200"><span class="font-semibold">Office:</span> <span x-text="formData.office"></span></div>
                                             <div class="dark:text-gray-200"><span class="font-semibold">Bill To:</span> <span x-text="formData.bill_to"></span></div>
                                             <div class="dark:text-gray-200"><span class="font-semibold">Sales Rep:</span> <span x-text="formData.broker_sales_rep"></span></div>
-                                            <div class="dark:text-gray-200"><span class="font-semibold">Driver:</span> <span x-text="formData.driver?driver.user?.name:'N/A'"></span></div>
+                                            <div class="dark:text-gray-200"><span class="font-semibold">Driver:</span> <span x-text="formData.driver ? formData.driver : 'N/A'"></span></div>
                                         </div>
 
                                         <!-- Commodity Info -->
@@ -932,6 +932,7 @@
               this.formData = {
                 id:data.id || '',
                 bill_to: data.invoice?.customer.user.fname || '',
+                driver: data.driver?.user.fname || '',
                 shipment_type:data.shipment_type || '',
                 shipment_tracking_number: data.shipment_tracking_number || '',
                 load_type: data.load_type || '',

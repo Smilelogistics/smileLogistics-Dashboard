@@ -100,7 +100,7 @@ jobs:
         echo "=== Deployment directory contents ==="
         ls -la deployment/
         echo ""
-        echo "=== Checking for index.html in deployment ===" 
+        echo "=== Checking for index.html in deployment ==="
         [ -f "deployment/index.html" ] && echo "✓ index.html found" || echo "✗ index.html NOT found"
 
     - name: Deploy to server
@@ -109,8 +109,8 @@ jobs:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: /
-        server-dir: ${{ secrets.FTP_TARGET }}
+        local-dir: ./
+        server-dir: ${{ secrets.FTP_TARGET }}/
         exclude: |
           **/.git*
           **/.git*/**

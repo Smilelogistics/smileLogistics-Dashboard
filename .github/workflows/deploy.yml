@@ -21,7 +21,7 @@ jobs:
     - name: Install NPM dependencies and build
       run: |
         npm ci
-        npm run buil
+        npm install
 
     - name: Verify build output
       run: |

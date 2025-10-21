@@ -1146,7 +1146,7 @@
                             formData.append(`tags[${index}]`, tag);
                         });
                     }
-
+ 
                     formData.append("_method", "PUT");
                     for (let pair of formData.entries()) {
                         console.log(pair[0] + ": " + pair[1]);

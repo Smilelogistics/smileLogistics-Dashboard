@@ -111,16 +111,16 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./
         server-dir: ${{ secrets.FTP_TARGET }}/
-        exclude: |
-          **/.git*
-          **/.git*/**
-          **/node_modules/**
-          **/*.md
-          .github/
-          .gitignore
-          src/
-          webpack.config.js
-          postcss.config.js
-          tailwind.config.js
-          package*.json
+        # exclude: |
+        #   **/.git*
+        #   **/.git*/**
+        #   **/node_modules/**
+        #   **/*.md
+        #   .github/
+        #   .gitignore
+        #   src/
+        #   webpack.config.js
+        #   postcss.config.js
+        #   tailwind.config.js
+        #   package*.json
         log-level: verbose

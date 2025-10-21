@@ -97,7 +97,7 @@ jobs:
         fi
         
         echo ""
-        echo "=== Deployment directory contents ==="
+        echo "=== Deployment directory contents ===" 
         ls -la deployment/
         echo ""
         echo "=== Checking for index.html in deployment ==="

@@ -100,7 +100,7 @@ jobs:
         echo "=== Deployment directory contents ==="
         ls -la deployment/
         echo ""
-        echo "=== Checking for index.html in deployment ==="
+        echo "=== Checking for index.html in deployment ===" 
         [ -f "deployment/index.html" ] && echo "✓ index.html found" || echo "✗ index.html NOT found"
 
     - name: Deploy to server

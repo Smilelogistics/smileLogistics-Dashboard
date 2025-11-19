@@ -58,7 +58,7 @@
 
         <!-- ===== Main Content Start ===== -->
         <main>
-          <div x-data="receiptApp()" class="mx-auto max-w-screen-2xl p-4 md:p-6">
+          <div x-data="receiptApp()" x-init="init()" class="mx-auto max-w-screen-2xl p-4 md:p-6">
             <!-- Breadcrumb Start -->
             <div x-data="{ pageName: `Pricing`}">
               <include src="./partials/breadcrumb.html" />
@@ -75,8 +75,8 @@
             </div>
           </div>
 
-
-    <div x-data="receiptApp()" x-init="init()" class="container mx-auto px-4 py-8">
+<!-- x-data="receiptApp()" x-init="init()"  -->
+    <div class="container mx-auto px-4 py-8">
       <!-- Header -->
       <div class="text-center mb-8">
         <h1 class="text-3xl font-bold text-gray-800 mb-2">Payment Receipt</h1>
@@ -101,7 +101,7 @@
               <!-- Amount -->
               <div class="text-center pb-4 border-b border-gray-200">
                 <p class="text-gray-600 text-sm">Amount Paid</p>
-                <p x-text="(payment.currency || '') + ' ' + formatAmount(payment.amount || 0)"></p>
+               <p x-text="`${payment?.currency || ''} ${formatAmount(payment?.amount || 0)}`"></p>
               </div>
 
               <!-- Transaction Details -->

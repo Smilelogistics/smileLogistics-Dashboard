@@ -349,7 +349,7 @@
             <img src="./assets/images/user/owner.jpg" alt="User" />
           </span> -->
 
-          <span class="block mr-1 font-medium text-theme-sm"  x-text="user?.fname || user?.lname ? `${user.fname}` : 'Guest'"></span>
+          <span class="block mr-1 font-medium text-theme-sm"  x-text="user?.fname ? `${user.fname}` : 'Guest'"></span>
 
           <svg
             :class="dropdownOpen && 'rotate-180'"
